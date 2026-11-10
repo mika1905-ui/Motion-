@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Porsche Motion Spot</title>
+<style>
+  @font-face{font-family:'Mont';src:url(fonts/montserrat-latin-300-normal.woff2) format('woff2');font-weight:300}
+  @font-face{font-family:'Mont';src:url(fonts/montserrat-latin-500-normal.woff2) format('woff2');font-weight:500}
+  @font-face{font-family:'Mont';src:url(fonts/montserrat-latin-800-normal.woff2) format('woff2');font-weight:800}
+  html,body{margin:0;height:100%;background:#000;color:#fff;font-family:'Mont',system-ui,sans-serif}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{position:relative;width:min(100vw,calc(100vh*16/9));aspect-ratio:16/9}
+  canvas{width:100%;height:100%;display:block}
+  #play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;
+    background:radial-gradient(circle at 50% 55%,rgba(255,40,50,.18),rgba(0,0,0,.85) 60%);cursor:pointer;
+    letter-spacing:.35em;font-weight:500;font-size:clamp(11px,1.2vw,16px);text-transform:uppercase;border:0;color:#fff;width:100%}
+  #play .btn{width:clamp(56px,7vw,96px);aspect-ratio:1;border-radius:50%;border:1.5px solid rgba(255,255,255,.8);display:grid;place-items:center}
+  #play .btn::after{content:'';margin-left:12%;border-style:solid;border-width:clamp(10px,1.3vw,18px) 0 clamp(10px,1.3vw,18px) clamp(16px,2.1vw,28px);border-color:transparent transparent transparent #fff}
+  #play[hidden]{display:none}
+  body.render #play{display:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="c" width="1920" height="1080"></canvas>
+  <button id="play" type="button"><span class="btn"></span><span>Spot abspielen · 0:13</span></button>
+</div>
+<audio id="snd" src="audio/soundtrack.wav" preload="auto"></audio>
+<script>
+'use strict';
+/* =====================================================================
+   PORSCHE – 13s Motion Spot (inoffizielles Konzept)
+   Alles prozedural: Canvas 2D, deterministisch über renderAt(t).
+   ===================================================================== */
+const W = 1920, H = 1080, DUR = 13;
+const INTRO_END = 1.8, SCENE_D = 1.4, N_MODELS = 6;
+const OUTRO_START = INTRO_END + N_MODELS * SCENE_D;          // 10.2 s
+const CUTS = Array.from({length: N_MODELS + 1}, (_, i) => INTRO_END + i * SCENE_D);
+const BAR = 78;                                                // Letterbox
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const mk = () => { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; };
+const txtCv = mk(), txtCtx = txtCv.getContext('2d');
+
+/* ---------- Mathe & Easing ---------- */
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const inv = (a, b, v) => clamp((v - a) / (b - a));
+const eOut3 = t => 1 - Math.pow(1 - t, 3);
+const eOut4 = t => 1 - Math.pow(1 - t, 4);
+const eIn4 = t => t * t * t * t;
+const eInOut3 = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const eOutExpo = t => t >= 1 ? 1 : 1 - Math.pow(2, -10 * t);
+const eOutBack = t => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${n >> 8 & 255},${n & 255},${a})`; }
+
+/* ---------- Modelle (echte Fotos, Wikimedia Commons / eigenes Foto) ----------
+   cx, cy = Fahrzeugmitte im Foto (0…1), vw = sichtbare Bildbreite (Anteil) */
+const MODELS = [
+  { name: '911', sub: 'Turbo', tag: 'Die Ikone.', fact: 'Heckmotor · seit 1963', img: 'photos/911.jpg',
+    cx: .53, cy: .55, vw: .8, accent: '#9be15d' },
+  { name: 'Taycan', sub: '', tag: 'Elektrisierend.', fact: 'Vollelektrisch · 800 Volt', img: 'photos/taycan.jpg',
+    cx: .52, cy: .55, vw: .94, accent: '#ff3b47' },
+  { name: 'Panamera', sub: '', tag: 'Gran Turismo.', fact: 'Viertürer · Sportwagen', img: 'photos/panamera.jpg',
+    cx: .5, cy: .52, vw: .92, accent: '#dfe8f0' },
+  { name: 'Cayenne', sub: '', tag: 'Souverän. Überall.', fact: 'SUV · seit 2002', img: 'photos/cayenne.jpg',
+    cx: .5, cy: .6, vw: .9, accent: '#b9c3cc' },
+  { name: 'Macan', sub: '', tag: 'Agilität, neu gedacht.', fact: 'Vollelektrisch · neue Generation', img: 'photos/macan.jpg',
+    cx: .52, cy: .52, vw: .9, accent: '#ffd21f' },
+  { name: '718', sub: 'Cayman', tag: 'Pures Fahren.', fact: 'Mittelmotor · Zweisitzer', img: 'photos/cayman.jpg',
+    cx: .52, cy: .55, vw: .92, accent: '#3ad0ff' },
+];
+
+// Fotos laden, einmalig graden (Kontrast/Sättigung) + unscharfe Hintergrundversion erzeugen
+function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+async function prepPhotos() {
+  await Promise.all(MODELS.map(async m => {
+    const im = await loadImg(m.img);
+    const g = document.createElement('canvas'); g.width = im.width; g.height = im.height;
+    const gc = g.getContext('2d'); gc.filter = 'contrast(1.12) saturate(1.15) brightness(.92)'; gc.drawImage(im, 0, 0);
+    m.photo = g;
+    const b = document.createElement('canvas'); b.width = 480; b.height = 270;
+    const bc = b.getContext('2d'); bc.filter = 'blur(14px) brightness(.45) saturate(1.2)';
+    const sc = Math.max(480 / im.width, 270 / im.height) * 1.2;
+    bc.drawImage(im, 240 - im.width * sc / 2, 135 - im.height * sc / 2, im.width * sc, im.height * sc);
+    m.blur = b;
+  }));
+}
+
+// Zeichnet ein Foto: Fahrzeugmitte auf (px,py), Zoomfaktor z; füllt Lücken mit Unschärfe
+function drawPhoto(g, m, px, py, z, opts = {}) {
+  const P = m.photo, sc = W / (m.vw * P.width) * z;
+  const dw = P.width * sc, dh = P.height * sc;
+  const x = px - m.cx * dw, y = py - m.cy * dh;
+  if (opts.bg !== false && (y > 0 || y + dh < H || x > 0 || x + dw < W)) g.drawImage(m.blur, 0, 0, W, H);
+  g.save();
+  if (y > 0 || y + dh < H) { // weiche Kanten oben/unten
+    g.drawImage(P, x, y, dw, dh);
+    const fadeH = 90;
+    // Kanten weich in den Hintergrund auslaufen lassen
+    const top = g.createLinearGradient(0, y - 2, 0, y + fadeH);
+    top.addColorStop(0, 'rgba(8,8,10,1)'); top.addColorStop(1, 'rgba(8,8,10,0)');
+    g.fillStyle = top; g.fillRect(x, y - 2, dw, fadeH + 2);
+    const bot = g.createLinearGradient(0, y + dh - fadeH, 0, y + dh + 2);
+    bot.addColorStop(0, 'rgba(8,8,10,0)'); bot.addColorStop(1, 'rgba(8,8,10,1)');
+    g.fillStyle = bot; g.fillRect(x, y + dh - fadeH, dw, fadeH + 2);
+  } else g.drawImage(P, x, y, dw, dh);
+  g.restore();
+}
+
+/* ---------- Text ---------- */
+function text(g, str, x, y, font, color, o = {}) {
+  const { align = 'left', ls = 0, alpha = 1, reveal = 1 } = o;
+  if (alpha <= 0 || reveal <= 0) return;
+  g.save();
+  g.font = font; g.letterSpacing = ls + 'px'; g.textAlign = align; g.textBaseline = 'alphabetic';
+  g.globalAlpha *= alpha; g.fillStyle = color;
+  if (align === 'center') x += ls / 2;
+  if (reveal < 1) {
+    const mt = g.measureText(str), asc = mt.actualBoundingBoxAscent + 8, desc = mt.actualBoundingBoxDescent + 8, w = mt.width + 80;
+    const x0 = align === 'left' ? x - 40 : align === 'center' ? x - w / 2 : x - w;
+    g.beginPath(); g.rect(x0, y - asc, w, asc + desc); g.clip();
+    y += (1 - reveal) * (asc + desc);
+  }
+  g.fillText(str, x, y); g.restore();
+}
+
+/* ---------- Atmosphäre ---------- */
+const STREAKS = (() => { const r = rng(7); return Array.from({length: 70}, () => ({ y: lerp(170, 940, r()), len: lerp(120, 760, r()), sp: lerp(2200, 5600, r()), a: lerp(.05, .3, r()), w: r() < .15 ? 2 : 1, ph: r() * 5000, white: r() < .55 })); })();
+const GRAIN = (() => { const r = rng(42); return Array.from({length: 6}, () => {
+  const c = document.createElement('canvas'); c.width = 640; c.height = 360; const g = c.getContext('2d');
+  const id = g.createImageData(640, 360);
+  for (let i = 0; i < id.data.length; i += 4) { const v = r() * 255; id.data[i] = id.data[i + 1] = id.data[i + 2] = v; id.data[i + 3] = 255; }
+  g.putImageData(id, 0, 0); return c; }); })();
+
+function drawStreaks(g, t, color, intensity, yMin = 0, yMax = H) {
+  g.save(); g.globalCompositeOperation = 'lighter';
+  for (const s of STREAKS) {
+    if (s.y < yMin || s.y > yMax) continue;
+    const span = W + s.len * 2;
+    const x = ((s.ph - t * s.sp) % span + span) % span - s.len;
+    const gr = g.createLinearGradient(x, 0, x + s.len, 0);
+    const c = s.white ? '#ffffff' : color;
+    gr.addColorStop(0, hexA(c, s.a * intensity)); gr.addColorStop(1, hexA(c, 0));
+    g.fillStyle = gr; g.fillRect(x, s.y, s.len, s.w);
+  }
+  g.restore();
+}
+
+/* ---------- Szene: Modell ---------- */
+const sceneCv = mk(), sceneCtx = sceneCv.getContext('2d');
+const smearCv = mk(), smearCtx = smearCv.getContext('2d');
+function drawModelScene(i, lt, t) {
+  const m = MODELS[i];
+  const g = sceneCtx;
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#08080a'; g.fillRect(0, 0, W, H);
+
+  // Kamera: Ken-Burns (Zoom raus + Drift nach rechts, wie mitfahrend)
+  const kb = inv(0, SCENE_D, lt);
+  const z = lerp(1.1, 1.0, eOut3(kb));
+  const px = W / 2 + lerp(-40, 40, kb), py = H / 2 + 10;
+  drawPhoto(g, m, px, py, z);
+
+  // Farbstimmung: Akzent-Glow + Abdunklung für Typo
+  g.save(); g.globalCompositeOperation = 'soft-light';
+  let rg = g.createRadialGradient(W * .7, H * .5, 50, W * .7, H * .5, 1100);
+  rg.addColorStop(0, hexA(m.accent, .45)); rg.addColorStop(1, 'rgba(0,0,0,.6)');
+  g.fillStyle = rg; g.fillRect(0, 0, W, H); g.restore();
+  let lg = g.createLinearGradient(0, 0, W * .55, 0);
+  lg.addColorStop(0, 'rgba(0,0,0,.72)'); lg.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = lg; g.fillRect(0, 0, W, H);
+  lg = g.createLinearGradient(0, 0, 0, 520);
+  lg.addColorStop(0, 'rgba(0,0,0,.55)'); lg.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = lg; g.fillRect(0, 0, W, 520);
+
+  // Licht-Sweep über das Bild
+  const sw = inv(.35, 1.15, lt);
+  if (sw > 0 && sw < 1) {
+    const sx = lerp(-500, W + 500, eInOut3(sw));
+    g.save(); g.globalCompositeOperation = 'screen';
+    const sg = g.createLinearGradient(sx - 260, 0, sx + 260, 0);
+    sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,255,255,.16)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = sg; g.beginPath(); g.moveTo(sx - 60, 0); g.lineTo(sx + 460, 0); g.lineTo(sx + 60, H); g.lineTo(sx - 460, H); g.fill();
+    g.restore();
+  }
+  drawStreaks(g, t, m.accent, .35 + .35 * inv(.3, .7, lt), BAR, H - BAR);
+
+  // Großer Modellname als Outline (Parallaxe)
+  g.save();
+  g.font = '800 420px Mont'; g.letterSpacing = '-8px';
+  const bw = g.measureText(m.name.toUpperCase()).width;
+  g.font = `800 ${Math.min(420, 420 * 1800 / bw)}px Mont`; g.textAlign = 'center';
+  const bga = inv(.1, .45, lt) * (1 - inv(1.1, 1.35, lt));
+  g.globalCompositeOperation = 'overlay';
+  g.strokeStyle = `rgba(255,255,255,${.5 * bga})`; g.lineWidth = 2.5;
+  g.strokeText(m.name.toUpperCase(), W / 2 + 160 - lt * 220, H - BAR - 40);
+  g.restore();
+
+  // --- Komposition auf die Hauptfläche: Slice-Reveal rein, Whip-Pan raus ---
+  const N = 6, enterD = .42;
+  const outU = eIn4(inv(1.1, SCENE_D, lt));
+  const shift = -outU * W * 1.15;
+    const skew = 220;
+  for (let k = 0; k < N; k++) {
+    const e = eOut4(inv(k * .035, enterD - (N - 1 - k) * .01, lt));
+    if (e <= 0) continue;
+    const dir = k % 2 ? 1 : -1;
+    const dy = (1 - e) * H * 1.1 * dir;
+    const x0 = (k / N) * (W + skew) - skew / 2, x1 = ((k + 1) / N) * (W + skew) - skew / 2;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x0 + skew / 2 + shift, 0); ctx.lineTo(x1 + skew / 2 + 1 + shift, 0);
+    ctx.lineTo(x1 - skew / 2 + 1 + shift, H); ctx.lineTo(x0 - skew / 2 + shift, H); ctx.closePath();
+    ctx.clip();
+    // Bewegungsunschärfe der Slices beim Reinfahren
+    const vy = (1 - e) > .02 ? H * .12 * (1 - e) * dir : 0;
+    if (vy) for (let q = 3; q >= 1; q--) { ctx.globalAlpha = .18; ctx.drawImage(sceneCv, shift, dy + vy * q); }
+    ctx.globalAlpha = 1;
+    ctx.drawImage(sceneCv, shift, dy);
+    ctx.restore();
+    // Lichtkante an der Slice-Grenze
+    if (e < 1) {
+      ctx.save(); ctx.strokeStyle = hexA(m.accent, .9 * (1 - e)); ctx.lineWidth = 3; ctx.shadowColor = m.accent; ctx.shadowBlur = 20;
+      ctx.beginPath(); ctx.moveTo(x1 + skew / 2 + shift, dy); ctx.lineTo(x1 - skew / 2 + shift, H + dy); ctx.stroke(); ctx.restore();
+    }
+  }
+  // Whip-Pan: echte horizontale Bewegungsunschärfe (horizontal stauchen + strecken)
+  const wb = inv(1.12, 1.3, lt);
+  if (wb > 0) {
+    const sw = Math.max(12, Math.round(W / (4 + 60 * wb)));
+    smearCtx.clearRect(0, 0, smearCv.width, H);
+    smearCtx.imageSmoothingQuality = 'high';
+    smearCtx.drawImage(sceneCv, 0, 0, sw, H);
+    ctx.save(); ctx.globalAlpha = Math.min(1, wb * 1.6); ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(smearCv, 0, 0, sw, H, shift, 0, W, H);
+    ctx.drawImage(smearCv, 0, 0, sw, H, shift + W, 0, W, H);
+    ctx.restore();
+  }
+
+  // Info-Block oben links (nach der Vignette)
+  UI = () => {
+    const outA = 1 - inv(1.08, 1.28, lt);
+    const lx = 140;
+    ctx.save(); ctx.globalAlpha = outA;
+    ctx.fillStyle = m.accent; ctx.fillRect(lx, 172, 46 * eOut3(inv(.2, .45, lt)), 2);
+    text(ctx, `0${i + 1}  /  06`, lx + 62, 181, '500 20px Mont', 'rgba(255,255,255,.8)', { ls: 6, alpha: inv(.2, .4, lt) });
+    ctx.save(); ctx.font = '800 104px Mont'; ctx.letterSpacing = '2px'; const nw = ctx.measureText(m.name).width; ctx.restore();
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 30;
+    text(ctx, m.name, lx - 4, 300, '800 104px Mont', '#fff', { ls: 2, reveal: eOut4(inv(.26, .58, lt)) });
+    if (m.sub) text(ctx, m.sub, lx + nw + 18, 300, '300 58px Mont', 'rgba(255,255,255,.9)', { ls: 2, reveal: eOut4(inv(.32, .64, lt)) });
+    text(ctx, m.tag, lx, 362, '300 38px Mont', '#fff', { ls: 1, reveal: eOut4(inv(.36, .7, lt)) });
+    ctx.restore();
+    text(ctx, m.fact.toUpperCase(), lx, 410, '500 17px Mont', m.accent, { ls: 5, alpha: inv(.48, .75, lt) });
+    ctx.restore();
+    for (let k = 0; k < N_MODELS; k++) {
+      const x = W - 140 - (N_MODELS - k) * 46;
+      ctx.fillStyle = k === i ? m.accent : 'rgba(255,255,255,.3)';
+      ctx.fillRect(x, H - BAR - 46, k === i ? 34 * eOut3(inv(0, .5, lt)) : 34, 3);
+    }
+  };
+}
+let UI = null;
+
+/* ---------- Intro ---------- */
+function drawIntro(t) {
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const red = '#ff2a3a';
+  const lw = eOutExpo(inv(.1, 1.0, t)) * 1500 * (1 - eIn4(inv(1.5, 1.8, t)) * .95);
+  const glow = inv(.1, .6, t);
+  const rg = ctx.createRadialGradient(W / 2, 540, 10, W / 2, 540, 900);
+  rg.addColorStop(0, hexA(red, .22 * glow)); rg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+  // Herzschlag-Puls
+  const pulse = Math.exp(-Math.max(0, t - .5) * 9) * (t > .5) + Math.exp(-Math.max(0, t - 1.1) * 9) * (t > 1.1);
+  ctx.save(); ctx.shadowColor = red; ctx.shadowBlur = 30 + pulse * 40;
+  const hl = ctx.createLinearGradient(W / 2 - lw / 2, 0, W / 2 + lw / 2, 0);
+  hl.addColorStop(0, 'rgba(255,255,255,0)'); hl.addColorStop(.5, `rgba(255,255,255,${.95})`); hl.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = hl; ctx.fillRect(W / 2 - lw / 2, 539, lw, 2 + pulse * 2); ctx.restore();
+  // Glanzpunkt, der über die Linie läuft
+  const gx = W / 2 + Math.sin(t * 2.2 - 1.2) * lw * .45;
+  const gp = ctx.createRadialGradient(gx, 540, 0, gx, 540, 90);
+  gp.addColorStop(0, `rgba(255,255,255,${.7 * glow})`); gp.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.save(); ctx.translate(gx, 540); ctx.scale(1, .25); ctx.translate(-gx, -540); ctx.fillStyle = gp; ctx.fillRect(gx - 100, 440, 200, 200); ctx.restore();
+
+  drawStreaks(ctx, t, red, inv(.6, 1.6, t) * .8, 200, 880);
+
+  const out = 1 - inv(1.5, 1.72, t);
+  text(ctx, 'SECHS CHARAKTERE.', W / 2, 500, '300 46px Mont', '#fff', { align: 'center', ls: lerp(34, 16, eOut3(inv(.3, 1.2, t))), reveal: eOut4(inv(.3, .75, t)), alpha: out });
+  text(ctx, 'EIN HERZSCHLAG.', W / 2, 628, '800 70px Mont', '#fff', { align: 'center', ls: lerp(20, 8, eOut3(inv(.85, 1.6, t))), reveal: eOut4(inv(.85, 1.25, t)), alpha: out });
+}
+
+/* ---------- Outro ---------- */
+function drawOutro(lt, t) {
+  ctx.fillStyle = '#020203'; ctx.fillRect(0, 0, W, H);
+  const red = '#ff2a3a';
+  const rg = ctx.createRadialGradient(W / 2, 600, 10, W / 2, 600, 950);
+  rg.addColorStop(0, hexA(red, .16 * inv(.6, 1.4, lt))); rg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+
+  // Montage: alle sechs Modelle als Streifen, danach Kollaps zur Lichtlinie
+  const col = inv(.82, 1.12, lt), colE = eInOut3(col);
+  const stripH = (H - BAR * 2) * (1 - colE), cy = 600;
+  if (stripH > 1) {
+    const sw = W / 6;
+    MODELS.forEach((m, k) => {
+      const e = eOut4(inv(k * .05, .4 + k * .05, lt));
+      const dir = k % 2 ? 1 : -1;
+      const x0 = k * sw, y0 = lerp(BAR, cy - stripH / 2, colE) + (1 - e) * H * dir;
+      ctx.save(); ctx.beginPath(); ctx.rect(x0 + 2, y0, sw - 4, stripH); ctx.clip();
+      const P = m.photo, sc = (H - BAR * 2) / P.height * lerp(1.25, 1.12, inv(0, 1, lt));
+      const dw = P.width * sc, dh = P.height * sc;
+      ctx.globalAlpha = e;
+      ctx.drawImage(P, x0 + sw / 2 - m.cx * dw + lerp(30, -30, lt), (y0 + stripH / 2) - m.cy * dh, dw, dh);
+      const gr = ctx.createLinearGradient(0, y0 + stripH * .55, 0, y0 + stripH);
+      gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.85)');
+      ctx.fillStyle = gr; ctx.fillRect(x0, y0, sw, stripH);
+      ctx.restore();
+      text(ctx, m.name.toUpperCase(), x0 + sw / 2, y0 + stripH - 40, '800 26px Mont', '#fff', { align: 'center', ls: 6, alpha: e * (1 - inv(.7, .85, lt)) * inv(.2 + k * .05, .5 + k * .05, lt) });
+      ctx.fillStyle = hexA(m.accent, e * (1 - inv(.7, .85, lt))); ctx.fillRect(x0 + sw / 2 - 18, y0 + stripH - 24, 36, 2);
+    });
+  }
+  // Lichtlinie
+  const gw = W * (1 - .3 * eOut3(inv(1.1, 1.8, lt)));
+  if (col > 0) {
+    ctx.save(); ctx.shadowColor = red; ctx.shadowBlur = 30;
+    const hl = ctx.createLinearGradient(W / 2 - gw / 2, 0, W / 2 + gw / 2, 0);
+    hl.addColorStop(0, 'rgba(255,255,255,0)'); hl.addColorStop(.5, `rgba(255,255,255,${col})`); hl.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = hl; ctx.fillRect(W / 2 - gw / 2, cy - 1, gw, 2); ctx.restore();
+  }
+
+  // Wortmarke (Buchstabe für Buchstabe) oberhalb der Linie
+  txtCtx.clearRect(0, 0, W, H);
+  txtCtx.save(); txtCtx.font = '800 130px Mont'; txtCtx.textBaseline = 'alphabetic';
+  const word = 'PORSCHE', sp = 40 + 16 * (1 - eOut3(inv(1.0, 2.1, lt)));
+  const ws = [...word].map(ch => txtCtx.measureText(ch).width);
+  const total = ws.reduce((a, b) => a + b, 0) + sp * (word.length - 1);
+  let x = W / 2 - total / 2;
+  [...word].forEach((ch, k) => {
+    const q = eOut4(inv(.95 + k * .05, 1.35 + k * .05, lt));
+    txtCtx.globalAlpha = q; txtCtx.fillStyle = '#fff';
+    txtCtx.fillText(ch, x, cy - 50 + (1 - q) * 60);
+    x += ws[k] + sp;
+  });
+  txtCtx.restore();
+  const sw2 = inv(1.7, 2.3, lt);
+  if (sw2 > 0 && sw2 < 1) {
+    txtCtx.save(); txtCtx.globalCompositeOperation = 'source-atop';
+    const bx = lerp(W / 2 - total / 2 - 200, W / 2 + total / 2 + 200, eInOut3(sw2));
+    const gr = txtCtx.createLinearGradient(bx - 120, 0, bx + 120, 0);
+    gr.addColorStop(0, 'rgba(255,60,70,0)'); gr.addColorStop(.5, 'rgba(255,90,100,1)'); gr.addColorStop(1, 'rgba(255,60,70,0)');
+    txtCtx.fillStyle = gr; txtCtx.fillRect(bx - 160, cy - 220, 320, 220); txtCtx.restore();
+  }
+    ctx.drawImage(txtCv, 0, 0);
+
+  text(ctx, 'FAHRSPASS. IN JEDER FORM.', W / 2, cy + 110, '300 32px Mont', '#fff', { align: 'center', ls: lerp(22, 11, eOut3(inv(1.3, 2.1, lt))), reveal: eOut4(inv(1.3, 1.7, lt)) });
+  text(ctx, '911  ·  TAYCAN  ·  PANAMERA  ·  CAYENNE  ·  MACAN  ·  718', W / 2, cy + 176, '500 17px Mont', 'rgba(255,255,255,.55)', { align: 'center', ls: 6, alpha: eOut3(inv(1.6, 2.05, lt)) });
+}
+
+/* ---------- Übergänge ---------- */
+function accentAt(t) {
+  if (t < INTRO_END) return MODELS[0].accent;
+  const i = Math.floor((t - INTRO_END) / SCENE_D);
+  return i < N_MODELS ? MODELS[i].accent : '#ff2a3a';
+}
+function drawTransitions(t) {
+  for (const T of CUTS) {
+    const u = inv(T - .16, T + .1, t);
+    if (u > 0 && u < 1) {
+      const c = accentAt(T + .01);
+      const cx = lerp(-900, W + 900, eInOut3(u)), bw = 560, sk = 460;
+      ctx.save();
+      const gr = ctx.createLinearGradient(cx - bw, 0, cx + bw, 0);
+      gr.addColorStop(0, hexA(c, 0)); gr.addColorStop(.45, hexA(c, .85)); gr.addColorStop(.55, hexA(c, .85)); gr.addColorStop(1, hexA(c, 0));
+      ctx.fillStyle = gr;
+      ctx.beginPath(); ctx.moveTo(cx - bw / 2 + sk, 0); ctx.lineTo(cx + bw / 2 + sk, 0); ctx.lineTo(cx + bw / 2 - sk, H); ctx.lineTo(cx - bw / 2 - sk, H); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 3;
+      for (const o of [-bw * .62, bw * .62]) { ctx.beginPath(); ctx.moveTo(cx + o + sk, 0); ctx.lineTo(cx + o - sk, H); ctx.stroke(); }
+      ctx.restore();
+    }
+    if (t >= T && t < T + .5) {
+      ctx.fillStyle = `rgba(255,255,255,${.5 * Math.exp(-(t - T) * 13)})`;
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
+}
+
+/* ---------- Post ---------- */
+function drawPost(t, frame, sx, sy) {
+  ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .09;
+  ctx.drawImage(GRAIN[frame % GRAIN.length], 0, 0, W, H); ctx.restore();
+  const vg = ctx.createRadialGradient(W / 2, H / 2, H * .35, W / 2, H / 2, H * 1.05);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.7)');
+  ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  if (UI) { ctx.save(); ctx.translate(sx * .4, sy * .4); UI(); ctx.restore(); UI = null; }
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, BAR); ctx.fillRect(0, H - BAR, W, BAR);
+  // kleine Wortmarke oben rechts während der Modellszenen
+  const a = inv(INTRO_END, INTRO_END + .4, t) * (1 - inv(OUTRO_START - .2, OUTRO_START, t));
+  text(ctx, 'PORSCHE', W - 140, BAR + 64, '800 22px Mont', '#fff', { align: 'right', ls: 10, alpha: a * .9 });
+  // Ein-/Ausblende
+  const fade = Math.max(1 - inv(0, .25, t), inv(DUR - .28, DUR, t));
+  if (fade > 0) { ctx.fillStyle = `rgba(0,0,0,${fade})`; ctx.fillRect(0, 0, W, H); }
+}
+
+/* ---------- Hauptrender ---------- */
+function renderAt(t) {
+  t = clamp(t, 0, DUR);
+  const frame = Math.floor(t * 30);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  // Kamera-Shake an den Schnitten
+  let sx = 0, sy = 0;
+  for (const T of CUTS) if (t >= T) { const k = Math.exp(-(t - T) * 9) * 9; sx += Math.sin((t - T) * 63) * k; sy += Math.cos((t - T) * 51) * k * .6; }
+  ctx.save(); ctx.translate(W / 2 + sx, H / 2 + sy);
+  const zoom = t < INTRO_END ? 1 + t * .012 : t < OUTRO_START ? 1.01 + ((t - INTRO_END) % SCENE_D) * .018 : 1 + (t - OUTRO_START) * .01;
+  ctx.scale(zoom, zoom); ctx.translate(-W / 2, -H / 2);
+  if (t < INTRO_END) drawIntro(t);
+  else if (t < OUTRO_START) { const i = Math.floor((t - INTRO_END) / SCENE_D); drawModelScene(i, t - INTRO_END - i * SCENE_D, t); }
+  else drawOutro(t - OUTRO_START, t);
+  ctx.restore();
+  drawTransitions(t);
+  drawPost(t, frame, sx, sy);
+}
+
+/* ---------- Bootstrap ---------- */
+window.renderAt = renderAt;
+window.DURATION = DUR;
+window.__ready = Promise.all([prepPhotos(), ...['300', '500', '800'].map(w => document.fonts.load(`${w} 40px Mont`))]).then(() => { renderAt(0.0001); return true; });
+
+const isRender = new URLSearchParams(location.search).has('render');
+if (isRender) document.body.classList.add('render');
+else {
+  const snd = document.getElementById('snd'), btn = document.getElementById('play');
+  let start = 0, playing = false;
+  window.__ready.then(() => renderAt(OUTRO_START + 2.2));
+  const loop = () => {
+    if (!playing) return;
+    const t = (!snd.paused && snd.currentTime > 0) ? snd.currentTime : (performance.now() - start) / 1000;
+    renderAt(t);
+    if (t >= DUR) { playing = false; btn.hidden = false; return; }
+    requestAnimationFrame(loop);
+  };
+  btn.addEventListener('click', () => {
+    btn.hidden = true; playing = true; start = performance.now();
+    snd.currentTime = 0; snd.play().catch(() => {});
+    requestAnimationFrame(loop);
+  });
+}
+</script>
+</body>
+</html>
