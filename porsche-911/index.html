@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>911 Motion</title>
+<style>
+  :root{
+    --bg:#05060a; --panel:#0c0e13; --panel2:#12151c; --line:rgba(255,255,255,.08);
+    --txt:#f2f4f8; --mut:#8a909c; --red:#e0242c; --blue:#4da3ff; --gold:#d8b26a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#000;height:100%;overflow:hidden}
+  body{font-family:"Inter",system-ui,sans-serif;color:var(--txt);-webkit-font-smoothing:antialiased}
+  #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  #stage{position:relative;width:1920px;height:1080px;background:var(--bg);overflow:hidden;transform-origin:center center;flex:none}
+  .scene{position:absolute;inset:0;opacity:0;will-change:transform,opacity,filter}
+  canvas#fx{position:absolute;inset:0;z-index:5;pointer-events:none}
+  #flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:20;pointer-events:none}
+  #vignette{position:absolute;inset:0;z-index:19;pointer-events:none;
+    background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%)}
+  #grain{position:absolute;inset:-50%;z-index:18;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+  .stripe{display:flex;height:4px;border-radius:2px;overflow:hidden}
+  .stripe i{flex:1}
+  .stripe i:nth-child(1){background:#f4f4f4}.stripe i:nth-child(2){background:var(--red)}.stripe i:nth-child(3){background:var(--gold)}
+
+  .badge{width:150px;height:150px;border-radius:34px;background:linear-gradient(160deg,#20242d,#0a0c10);
+    border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.12);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+  .badge b{font-family:"Inter Display","Inter";font-weight:900;font-style:italic;font-size:54px;letter-spacing:-1px}
+  .badge .stripe{width:70px}
+
+  /* garage card */
+  #sC1{display:flex;align-items:center;justify-content:center}
+  .card{width:700px;border-radius:28px;background:linear-gradient(180deg,#191c24,#101218);border:1px solid var(--line);
+    box-shadow:0 40px 120px rgba(0,0,0,.7);padding:34px 40px 40px}
+  .dots{display:flex;gap:10px;margin-bottom:34px}.dots i{width:13px;height:13px;border-radius:50%;background:#2c2f37}
+  .row{display:flex;align-items:center;gap:18px}
+  .mini{width:56px;height:56px;border-radius:14px;background:#0a0b0f;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:900;font-style:italic;font-size:19px}
+  .h1{font-size:40px;font-weight:800;letter-spacing:-.5px}
+  .lbl{color:var(--red);font-weight:600;font-size:22px;margin:24px 0 26px}
+  .cfg{display:flex;align-items:center;gap:16px;font-size:26px;font-weight:600;color:var(--blue)}
+  .spin{width:30px;height:30px;border-radius:50%;border:3px solid rgba(77,163,255,.2);border-top-color:var(--blue)}
+  .sub{color:var(--mut);font-size:20px;margin:6px 0 0 46px}
+
+  /* chat */
+  .win{position:absolute;left:110px;top:70px;width:1700px;height:940px;border-radius:26px;background:var(--panel);
+    border:1px solid var(--line);overflow:hidden;box-shadow:0 50px 140px rgba(0,0,0,.7)}
+  .bar{height:58px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:10px}
+  .bar .t{flex:1;text-align:center;color:var(--mut);font-size:17px;font-weight:500;margin-right:60px}
+  .side{position:absolute;left:0;top:58px;bottom:0;width:330px;border-right:1px solid var(--line);padding:30px 26px;background:#0a0c10}
+  .side h3{font-size:24px;font-weight:800;margin-bottom:30px}
+  .side p{font-size:19px;color:var(--mut);padding:13px 14px;border-radius:12px;margin-bottom:6px;display:flex;justify-content:space-between}
+  .side p.on{background:#151922;color:#fff}
+  .side p.on span{color:var(--blue)}
+  .main{position:absolute;left:330px;right:0;top:58px;bottom:0;padding:64px 120px}
+  .q{text-align:center;font-size:40px;font-weight:800;letter-spacing:-.5px;margin-bottom:46px}
+  .prompt{position:relative;border-radius:22px;background:var(--panel2);border:1px solid rgba(255,255,255,.12);padding:28px 110px 28px 34px;
+    font-size:28px;line-height:1.45;font-weight:500;min-height:136px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .prompt .ic{position:absolute;left:34px;top:34px}
+  .prompt .txt{padding-left:52px}
+  .send{position:absolute;right:28px;bottom:26px;width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+  .send:after{content:"";width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:13px solid #000;margin-top:-3px}
+  .caret{display:inline-block;width:3px;height:1.05em;background:#fff;vertical-align:-4px;margin-left:2px}
+  .hl{color:#6fcf4a}
+  .checks{margin-top:44px;display:flex;flex-direction:column;gap:20px;font-size:26px;font-weight:600}
+  .checks div{display:flex;align-items:center;gap:16px}
+  .ok{width:34px;height:34px;border-radius:50%;background:rgba(77,200,120,.15);color:#4dd38a;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900}
+  .tag{position:absolute;right:50px;top:40px;font-size:22px;font-weight:700;color:#fff}
+  .ico{display:inline-flex;gap:3px;transform:skewX(-18deg)}
+  .ico i{width:6px;height:22px;border-radius:1px}
+  .ico i:nth-child(1){background:#f4f4f4}.ico i:nth-child(2){background:var(--red)}.ico i:nth-child(3){background:var(--gold)}
+
+  /* configurator */
+  #sD .win{background:#0b0d12}
+  .floor{position:absolute;left:330px;right:0;top:58px;bottom:0;overflow:hidden;
+    background:radial-gradient(ellipse 60% 55% at 50% 38%,#2a2f3a 0%,#11141a 55%,#0b0d12 100%)}
+  .spot{position:absolute;left:50%;top:-10%;width:1100px;height:900px;transform:translateX(-50%);
+    background:radial-gradient(ellipse 45% 60% at 50% 0%,rgba(255,255,255,.18),transparent 70%)}
+  .carbox{position:absolute;left:40px;right:40px;top:90px;bottom:140px;border-radius:20px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .carbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 60%}
+  .carbox:after{content:"";position:absolute;inset:0;z-index:3;background:linear-gradient(180deg,rgba(0,0,0,.25),transparent 30%,transparent 75%,rgba(0,0,0,.45))}
+  .sweep{position:absolute;top:90px;bottom:140px;width:30%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);z-index:2;mix-blend-mode:screen;pointer-events:none}
+  .thumb{width:300px;height:120px;border-radius:16px;background:url(assets/911-python-green.jpg) 58% 62%/220% auto no-repeat}
+  .hero{position:absolute;inset:0;background:url(assets/911-python-green.jpg) 55% 60%/cover no-repeat}
+  .hero:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 45%,rgba(5,6,10,.55),rgba(5,6,10,.92))}
+  .swatches{position:absolute;left:50%;bottom:48px;transform:translateX(-50%);display:flex;gap:30px}
+  .sw{width:46px;height:46px;border-radius:50%;border:3px solid transparent;box-shadow:0 0 0 0 #fff;position:relative}
+  .sw:before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--c)}
+  .ctl{position:absolute;left:30px;top:120px;width:270px}
+  .tog{width:66px;height:36px;border-radius:18px;background:#2a2e38;position:relative;margin:18px 0 40px}
+  .tog i{position:absolute;top:4px;width:28px;height:28px;border-radius:50%;background:#fff}
+  .sl{height:6px;border-radius:3px;background:#2a2e38;position:relative}
+  .sl b{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--blue)}
+  .pname{position:absolute;right:50px;top:30px;font-size:22px;font-weight:600;color:var(--mut)}
+  .pname em{font-style:normal;color:#fff}
+
+  /* stats */
+  #sE{background:radial-gradient(ellipse 70% 60% at 50% 60%,#13244a 0%,#070a14 60%,#05060a 100%)}
+  .stat{position:absolute;left:0;right:0;text-align:center}
+  .big{font-family:"Inter Display","Inter";font-weight:900;font-size:300px;letter-spacing:-8px;line-height:1;
+    background:linear-gradient(180deg,#fff 30%,#9aa3b5);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .unit{font-size:110px;font-weight:800;color:var(--red);letter-spacing:-2px;-webkit-text-fill-color:var(--red)}
+  .stat .stripe{width:520px;margin:30px auto 0;height:8px;border-radius:4px}
+  .small{font-size:52px;font-weight:700;color:#dfe5f0}
+
+  /* booking */
+  #sF{perspective:1700px;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at 50% 40%,#151a24,#05060a 70%)}
+  .book{width:1040px;border-radius:34px;background:linear-gradient(180deg,#1a1d25,#0f1116);border:1px solid rgba(255,255,255,.1);
+    padding:50px 60px 56px;box-shadow:0 60px 160px rgba(0,0,0,.8);transform-style:preserve-3d}
+  .book .hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:46px}
+  .book .hd h2{font-size:44px;font-weight:800}
+  .fld{display:flex;justify-content:space-between;align-items:center;font-size:28px;padding:22px 0;border-bottom:1px solid var(--line)}
+  .fld span{color:var(--mut)}
+  .fld b{font-weight:700}
+  .track{height:8px;border-radius:4px;background:#2a2e38;position:relative;margin:18px 0 28px}
+  .track b{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,var(--blue),#8cc6ff)}
+  .track i{position:absolute;top:50%;width:34px;height:34px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 0 20px rgba(77,163,255,.7)}
+  .btn{margin-top:46px;height:96px;border-radius:48px;background:#f2f4f8;color:#111;font-size:30px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .btn .fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#2f7cf6,#7cc0ff)}
+  .btn span{position:relative}
+
+  /* blue scene + prompt */
+  #sG{background:radial-gradient(ellipse 80% 70% at 50% 60%,#2d6cf0 0%,#163aa8 45%,#0a1550 100%)}
+  #sH{background:radial-gradient(ellipse 60% 50% at 50% 50%,#121a2c,#05060a 70%)}
+  .pbar{position:absolute;left:50%;top:50%;width:1180px;height:210px;transform:translate(-50%,-50%);border-radius:30px;
+    background:linear-gradient(180deg,rgba(28,32,42,.92),rgba(14,16,22,.96));border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 40px 120px rgba(0,0,0,.7),0 0 80px rgba(77,163,255,.12)}
+  .pbar .line1{position:absolute;left:44px;top:42px;font-size:42px;font-weight:700;display:flex;align-items:center;gap:22px}
+  .chip{position:absolute;left:44px;bottom:36px;height:52px;padding:0 22px;border-radius:26px;background:#1d3f86;color:#cfe3ff;
+    font-size:24px;font-weight:700;display:flex;align-items:center;gap:10px;white-space:nowrap}
+  .pbar .send{right:36px;bottom:36px;width:60px;height:60px}
+  .menu{position:absolute;left:30px;bottom:100px;width:420px;border-radius:22px;background:rgba(22,25,33,.97);border:1px solid rgba(255,255,255,.12);
+    padding:12px;box-shadow:0 30px 80px rgba(0,0,0,.7);transform-origin:20% 100%}
+  .mi{height:64px;border-radius:14px;display:flex;align-items:center;gap:18px;padding:0 20px;font-size:28px;font-weight:700;position:relative;z-index:1}
+  .mi .ck{margin-left:auto;color:#fff;font-size:24px}
+  .hlbox{position:absolute;left:12px;right:12px;height:64px;border-radius:14px;background:rgba(255,255,255,.1)}
+
+  /* outro */
+  #sI{display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse 50% 40% at 50% 50%,#141a28,#05060a 70%)}
+  .logo{display:flex;align-items:center;gap:34px}
+  .logo .num{font-family:"Inter Display","Inter";font-weight:900;font-style:italic;font-size:220px;letter-spacing:-6px;line-height:1}
+  .logo .ico i{width:16px;height:120px;border-radius:3px}
+  .logo .ico{gap:9px}
+  .brand{margin-top:26px;font-size:30px;font-weight:600;letter-spacing:22px;color:#cfd5e0;padding-left:22px}
+  .disc{margin-top:22px;font-size:20px;color:var(--mut);letter-spacing:2px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="mbC1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0 0"/></filter>
+    <filter id="mbC2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0 0"/></filter>
+    <filter id="mbD"  x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0 0"/></filter>
+    <filter id="mbE"  x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0 0"/></filter>
+    <filter id="mbF"  x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0 0"/></filter>
+    <filter id="mbH"  x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0 0"/></filter>
+    <filter id="mbI"  x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="0 0"/></filter>
+  </defs>
+</svg>
+
+<div id="wrap"><div id="stage">
+
+  <!-- B: burst + badge -->
+  <div class="scene" id="sB" style="display:flex;align-items:center;justify-content:center;z-index:6">
+    <div class="badge" id="badgeB"><b>911</b><div class="stripe"><i></i><i></i><i></i></div></div>
+  </div>
+
+  <!-- C1: garage card -->
+  <div class="scene" id="sC1">
+    <div class="card">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="row"><div class="mini"><span class="ico" style="transform:skewX(-18deg) scale(.8)"><i></i><i></i><i></i></span></div><div class="h1">My 911 Garage</div></div>
+      <div class="lbl">In progress · 3</div>
+      <div class="cfg"><div class="spin" id="spin"></div>Configuring<span id="dotsC1">…</span></div>
+      <div class="sub">911 Turbo S · 992</div>
+    </div>
+  </div>
+
+  <!-- C2: chat -->
+  <div class="scene" id="sC2">
+    <div class="win" id="winC2">
+      <div class="bar"><div class="dots" style="margin:0"><i></i><i></i><i></i></div><div class="t">My 911 Garage · Configuration</div></div>
+      <div class="side">
+        <h3>911 Garage</h3>
+        <p class="on">In progress <span>1</span></p>
+        <p>Turbo S <span>992</span></p>
+        <p>Compare</p><p>Packages</p><p>Test drive</p><p>Settings</p>
+      </div>
+      <div class="main">
+        <div class="tag">Your 911</div>
+        <div class="q">Which 911 do you want?</div>
+        <div class="prompt"><span class="ic ico"><i></i><i></i><i></i></span><div class="txt" id="typeC2"></div><div class="send"></div></div>
+        <div class="checks">
+          <div id="ck1"><span class="ok">✓</span>Colour — Python Green</div>
+          <div id="ck2"><span class="ok">✓</span>Wheels — 20/21" Satin Black, black roof</div>
+          <div id="ck3"><span class="ok">✓</span>Performance — Sport Chrono, PDK</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D: configurator -->
+  <div class="scene" id="sD">
+    <div class="win" id="winD">
+      <div class="bar"><div class="dots" style="margin:0"><i></i><i></i><i></i></div><div class="t">Your 911 · Exterior</div></div>
+      <div class="side">
+        <h3>Your 911?</h3>
+        <div class="ctl" style="position:static;width:auto">
+          <div style="color:var(--mut);font-size:19px">Sport Design</div>
+          <div class="tog"><i id="togI"></i></div>
+          <div style="color:var(--mut);font-size:19px;margin-bottom:18px">Ride height <span id="rh" style="float:right;color:#fff">-10 mm</span></div>
+          <div class="sl"><b id="slB"></b></div>
+        </div>
+      </div>
+      <div class="floor">
+        <div class="spot"></div>
+        <div class="pname">Paint · <em id="pname">Shark Blue</em></div>
+        <div style="position:absolute;left:50px;top:30px;font-size:24px;font-weight:800">911 Turbo S</div>
+        <div class="carbox" id="carD"></div><div class="sweep" id="sweepD" style="left:40px"></div>
+        <div class="swatches" id="swD"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- E: stats -->
+  <div class="scene" id="sE">
+    <div class="stat" id="stat1" style="top:330px">
+      <div><span class="big" id="hp">0</span><span class="unit"> PS</span></div>
+      <div class="stripe"><i></i><i></i><i></i></div>
+    </div>
+    <div class="stat" id="stat2" style="top:300px">
+      <div class="small">0–100 km/h in</div>
+      <div><span class="big" id="acc">2,7</span><span class="unit" style="color:#fff;-webkit-text-fill-color:#fff"> s</span></div>
+    </div>
+  </div>
+
+  <!-- F: booking -->
+  <div class="scene" id="sF">
+    <div class="book" id="book">
+      <div class="hd"><h2>Your test drive</h2><div class="thumb"></div></div>
+      <div class="fld" style="border:0;padding-bottom:0"><span>Date</span><b id="dateF">Thu, Nov 12</b></div>
+      <div class="track"><b id="trB"></b><i id="trI"></i></div>
+      <div class="fld"><span>Time slot</span><b id="slotF">09:00</b></div>
+      <div class="fld"><span>Location</span><b id="locF">Porsche Centre nearby</b></div>
+      <div class="btn"><div class="fill" id="btnFill"></div><span id="btnTxt">Book a test drive</span></div>
+    </div>
+  </div>
+
+  <!-- G: blue -->
+  <div class="scene" id="sG"></div>
+
+  <!-- H: prompt -->
+  <div class="scene" id="sH">
+    <div id="camH" style="position:absolute;inset:0">
+      <div class="pbar" id="pbar">
+        <div class="line1"><span class="ico"><i></i><i></i><i></i></span><span id="typeH"></span></div>
+        <div class="chip" id="chip">+ <span id="chipTxt">Carrera</span> <span id="chev">⌄</span></div>
+        <div class="send"></div>
+        <div class="menu" id="menu">
+          <div class="hlbox" id="hlbox"></div>
+          <div class="mi"><span class="ico"><i></i><i></i><i></i></span>Carrera<span class="ck" id="ck_0">✓</span></div>
+          <div class="mi"><span class="ico"><i></i><i></i><i></i></span>Carrera S<span class="ck" id="ck_1"></span></div>
+          <div class="mi"><span class="ico"><i></i><i></i><i></i></span>Carrera GTS<span class="ck" id="ck_2"></span></div>
+          <div class="mi"><span class="ico"><i></i><i></i><i></i></span>Turbo<span class="ck" id="ck_3"></span></div>
+          <div class="mi"><span class="ico"><i></i><i></i><i></i></span>Turbo S<span class="ck" id="ck_4"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- I: outro -->
+  <div class="scene" id="sI"><div class="hero" id="heroI"></div>
+    <div class="logo" id="logoI" style="position:relative"><span class="ico"><i></i><i></i><i></i></span><span class="num">911</span></div>
+    <div class="brand" id="brandI" style="position:relative">TURBO S · 992</div>
+    <div class="disc" id="discI" style="position:relative">Concept film</div>
+  </div>
+
+  <canvas id="fx" width="1920" height="1080"></canvas>
+  <div id="grain"></div>
+  <div id="vignette"></div>
+  <div id="flash"></div>
+</div></div>
+
+<script>
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const clamp = (v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const lerp = (a,b,t)=>a+(b-a)*t;
+const P = (t,a,b)=>clamp((t-a)/(b-a));
+const eOut3 = t=>1-Math.pow(1-t,3);
+const eIn3 = t=>t*t*t;
+const eInOut3 = t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const eOutExpo = t=>t>=1?1:1-Math.pow(2,-10*t);
+const eInExpo = t=>t<=0?0:Math.pow(2,10*t-10);
+const eOutBack = t=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const DURATION = 17.5;
+
+function hex2rgb(h){h=h.replace('#','');return [0,2,4].map(i=>parseInt(h.substr(i,2),16))}
+const PAINTS=[['Shark Blue','#1f63d6','shark-blue'],['Guards Red','#c8141f','guards-red'],['Carrara White','#e6e7e9','carrara-white'],['Python Green','#4f8a2e','python-green']];
+$('carD').innerHTML=PAINTS.map((p,i)=>`<img id="ph${i}" src="assets/911-${p[2]}.jpg" alt="">`).join('');
+$('swD').innerHTML=PAINTS.map((p,i)=>`<div class="sw" id="sw${i}" style="--c:${p[1]}"></div>`).join('');
+
+/* ---------- light streaks (canvas) ---------- */
+const cv=$('fx'), ctx=cv.getContext('2d');
+function bez(p,u){const a=1-u;return [
+  a*a*a*p[0][0]+3*a*a*u*p[1][0]+3*a*u*u*p[2][0]+u*u*u*p[3][0],
+  a*a*a*p[0][1]+3*a*a*u*p[1][1]+3*a*u*u*p[2][1]+u*u*u*p[3][1]]}
+function streak(pts,head,tail,w,col,alpha=1){
+  if(alpha<=0) return;
+  head=clamp(head);tail=clamp(tail);if(head<=tail)return;
+  const N=46;
+  ctx.save();ctx.globalCompositeOperation='lighter';ctx.lineCap='round';
+  for(let pass=0;pass<2;pass++){
+    ctx.shadowColor=col;ctx.shadowBlur=pass?6:34;
+    let prev=bez(pts,tail);
+    for(let i=1;i<=N;i++){
+      const u=lerp(tail,head,i/N), q=bez(pts,u), k=i/N;
+      ctx.strokeStyle=pass?`rgba(255,255,255,${alpha*k*.95})`:col;
+      ctx.globalAlpha=pass?1:alpha*k*.9;
+      ctx.lineWidth=(pass?w*.45:w)*Math.pow(k,1.4)+.5;
+      ctx.beginPath();ctx.moveTo(prev[0],prev[1]);ctx.lineTo(q[0],q[1]);ctx.stroke();prev=q;
+    }
+  }
+  const h=bez(pts,head);
+  const g=ctx.createRadialGradient(h[0],h[1],0,h[0],h[1],w*4);
+  g.addColorStop(0,`rgba(255,255,255,${alpha})`);g.addColorStop(.3,col);g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.globalAlpha=alpha;ctx.shadowBlur=0;ctx.fillStyle=g;ctx.beginPath();ctx.arc(h[0],h[1],w*4,0,7);ctx.fill();
+  ctx.restore();
+}
+function runStreak(t,s){ // s: {pts,t0,dur,len,w,col,fade}
+  const p=P(t,s.t0,s.t0+s.dur); if(p<=0) return;
+  const head=eInOut3(p)*1.0, tail=head-s.len;
+  const a = s.fadeAt? 1-P(t,s.fadeAt,s.fadeAt+.25) : 1;
+  streak(s.pts,head,Math.max(0,tail),s.w,s.col,a);
+}
+const C=[960,540];
+const STREAKS_A=[
+  {pts:[[2050,230],[1600,170],[1250,420],[C[0]+6,C[1]-4]],t0:.25,dur:1.85,len:.28,w:9,col:'rgba(90,170,255,1)',fadeAt:2.15},
+  {pts:[[-120,860],[260,820],[620,700],[C[0]-6,C[1]+2]],t0:.55,dur:1.6,len:.3,w:8,col:'rgba(200,225,255,1)',fadeAt:2.15},
+  {pts:[[1240,1200],[1210,920],[1080,700],[C[0]+2,C[1]+6]],t0:.85,dur:1.3,len:.32,w:8,col:'rgba(255,50,50,1)',fadeAt:2.15},
+];
+const STREAKS_G=[
+  {pts:[[700,1150],[760,700],[860,420],[1000,330]],t0:12.55,dur:.75,len:.45,w:10,col:'rgba(160,210,255,1)',fadeAt:13.35},
+  {pts:[[1180,1150],[1130,760],[1080,420],[1240,360]],t0:12.65,dur:.7,len:.45,w:9,col:'rgba(255,60,60,1)',fadeAt:13.35},
+];
+const STREAKS_H=[
+  {pts:[[-200,560],[500,520],[1300,560],[2200,520]],t0:13.6,dur:.9,len:.25,w:7,col:'rgba(120,190,255,1)',fadeAt:14.3},
+];
+function ring(t){
+  const p=P(t,2.1,3.3); if(p<=0||p>=1) return;
+  const r=60+430*eOutExpo(p), a=Math.sin(Math.PI*Math.min(1,p*1.25))*(1-P(t,3.0,3.3));
+  ctx.save();ctx.globalCompositeOperation='lighter';
+  const g=ctx.createRadialGradient(C[0],C[1],r*.55,C[0],C[1],r*1.25);
+  g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(.45,`rgba(40,110,255,${.75*a})`);
+  g.addColorStop(.62,`rgba(170,215,255,${.9*a})`);g.addColorStop(.75,`rgba(220,40,60,${.55*a})`);g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,1920,1080);
+  const g2=ctx.createRadialGradient(C[0],C[1],0,C[0],C[1],r*.8);
+  g2.addColorStop(0,`rgba(30,80,200,${.35*a})`);g2.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g2;ctx.fillRect(0,0,1920,1080);
+  // sparkle ticks around ring
+  for(let i=0;i<90;i++){const an=i*0.0698+p*1.2, rr=r*(1+.06*Math.sin(i*7.3));
+    ctx.fillStyle=`rgba(200,230,255,${a*.5*(.5+.5*Math.sin(i*3.1))})`;
+    ctx.fillRect(C[0]+Math.cos(an)*rr,C[1]+Math.sin(an)*rr,2.5,2.5);}
+  ctx.restore();
+}
+
+/* ---------- scene utilities ---------- */
+function show(el,o){el.style.opacity=o;el.style.visibility=o<=0.001?'hidden':'visible';}
+function setBlur(fid,x,y=0){document.querySelector('#'+fid+' feGaussianBlur').setAttribute('stdDeviation',`${x.toFixed(2)} ${y.toFixed(2)}`);}
+// whip: enter from direction dIn (±1 = from right/left), exit toward dOut
+function whip(t,id,fid,tin,tout,dIn,dOut,extra=''){
+  const el=$(id);
+  const pi=P(t,tin,tin+.38), po=P(t,tout-.32,tout);
+  if(t<tin||t>tout){show(el,0);return {pi,po,on:false};}
+  const xi=(1-eOutExpo(pi))*dIn*900, xo=eInExpo(po)*dOut*-1100;
+  const bl=(1-eOutExpo(pi))*60 + eInExpo(po)*80;
+  el.style.transform=`translateX(${xi+xo}px) ${extra}`;
+  el.style.filter = bl>.3?`url(#${fid})`:'none'; setBlur(fid,bl,bl*.04);
+  show(el,Math.min(1,pi*3)*(1-P(t,tout-.08,tout)));
+  return {pi,po,on:true};
+}
+function typeText(str,p){return str.slice(0,Math.round(str.length*clamp(p)))}
+
+/* ---------- main render ---------- */
+function renderAt(t){
+  ctx.clearRect(0,0,1920,1080);
+
+  // A: streaks
+  if(t<2.5) STREAKS_A.forEach(s=>runStreak(t,s));
+  // convergence glow
+  {const p=P(t,1.9,2.25), q=1-P(t,2.25,2.7); const a=eIn3(p)*q;
+   if(a>0){ctx.save();ctx.globalCompositeOperation='lighter';
+     const g=ctx.createRadialGradient(C[0],C[1],0,C[0],C[1],260);
+     g.addColorStop(0,`rgba(255,255,255,${a})`);g.addColorStop(.25,`rgba(120,180,255,${a*.6})`);g.addColorStop(1,'rgba(0,0,0,0)');
+     ctx.fillStyle=g;ctx.fillRect(0,0,1920,1080);ctx.restore();}}
+
+  // B: ring + badge
+  ring(t);
+  {const el=$('sB'); if(t>2.15&&t<3.55){
+      const p=P(t,2.2,2.75), po=P(t,3.2,3.5);
+      const s=lerp(.3,1,eOutBack(p))*(1+eIn3(po)*2.5);
+      $('badgeB').style.transform=`scale(${s}) rotate(${(1-eOut3(p))*-12}deg)`;
+      el.style.filter=po>0?`blur(${po*24}px)`:'none';
+      show(el,Math.min(1,p*4)*(1-eIn3(po)));
+    } else show(el,0);}
+
+  // C1: garage card
+  {const r=whip(t,'sC1','mbC1',3.35,4.45,1,1);
+   if(r.on){$('spin').style.transform=`rotate(${t*540}deg)`;$('dotsC1').textContent='…'.slice(0,1)+['','.','..'][Math.floor(t*6)%3];
+     $('sC1').querySelector('.card').style.transform=`scale(${1+P(t,3.4,4.45)*.06})`;}}
+
+  // C2: chat
+  {const r=whip(t,'sC2','mbC2',4.3,6.55,1,1);
+   if(r.on){
+     const cam=P(t,4.3,6.55);
+     $('winC2').style.transform=`perspective(2000px) rotateY(${lerp(-6,4,eInOut3(cam))}deg) scale(${lerp(1.0,1.07,cam)})`;
+     const full='A 911 Turbo S in <r>Python Green</r>, satin black wheels, black roof';
+     const plain=full.replace(/<\/?r>/g,''); const n=Math.round(plain.length*eInOut3(P(t,4.55,5.55)));
+     let s=plain.slice(0,n); const i0=plain.indexOf('Python Green'), i1=i0+12;
+     if(n>i0){s=plain.slice(0,i0)+'<span class="hl">'+plain.slice(i0,Math.min(n,i1))+'</span>'+(n>i1?plain.slice(i1,n):'');}
+     const blink=(t<5.6)||Math.floor(t*3)%2===0;
+     $('typeC2').innerHTML=s+(blink?'<span class="caret"></span>':'');
+     [['ck1',5.65],['ck2',5.85],['ck3',6.05]].forEach(([id,t0])=>{const p=P(t,t0,t0+.25);const e=$(id);
+       e.style.opacity=p;e.style.transform=`translateY(${(1-eOut3(p))*24}px)`;});
+   }}
+
+  // D: configurator
+  {const tin=6.35,tout=9.25; const el=$('sD');
+   if(t>=tin&&t<=tout){
+     const pi=P(t,tin,tin+.45), po=P(t,tout-.35,tout);
+     const s=lerp(1.35,1,eOutExpo(pi))*lerp(1,1.04,P(t,tin,tout-.35))*(1+eInExpo(po)*.9);
+     el.style.transform=`scale(${s})`;
+     const bl=(1-eOutExpo(pi))*30+eInExpo(po)*40; el.style.filter=bl>.3?`blur(${bl}px)`:'none';
+     show(el,Math.min(1,pi*3)*(1-P(t,tout-.1,tout)));
+     const times=[6.35,6.95,7.55,8.15]; let idx=0; for(let i=1;i<4;i++) if(t>=times[i]) idx=i;
+     const tp=P(t,times[idx],times[idx]+.14);
+     PAINTS.forEach((_,i)=>{const im=$('ph'+i); im.style.opacity = i===idx ? (idx===0?1:eOut3(tp)) : (i===idx-1?1:0); im.style.zIndex = i===idx?1:0;});
+     $('pname').textContent=PAINTS[idx][0];
+     const sp=P(t,times[idx],times[idx]+.5); const swp=$('sweepD');
+     swp.style.opacity=(idx>0&&sp<1)?1:0; swp.style.transform=`translateX(${lerp(-500,1600,eInOut3(sp))}px) skewX(-15deg)`;
+     PAINTS.forEach((_,i)=>{const e=$('sw'+i);const on=i===idx;
+       e.style.borderColor=on?'#fff':'transparent';e.style.transform=`scale(${on?1.15:1})`;});
+     $('carD').querySelectorAll('img').forEach(im=>im.style.transform=`scale(${lerp(1.0,1.08,eInOut3(P(t,tin,tout)))}) translateX(${lerp(20,-20,eInOut3(P(t,tin,tout)))}px)`);
+     $('togI').style.left=(t>7.0?'34px':'4px');$('togI').parentElement.style.background=t>7.0?'#4da3ff':'#2a2e38';
+     $('slB').style.width=(30+50*eInOut3(P(t,6.6,8.6)))+'%';
+     $('rh').textContent='-'+Math.round(lerp(0,10,P(t,6.6,8.6)))+' mm';
+   } else show(el,0);}
+
+  // E: stats
+  {const tin=9.15,tout=10.85; const el=$('sE');
+   if(t>=tin&&t<=tout){
+     const pi=P(t,tin,tin+.3), po=P(t,tout-.3,tout);
+     show(el,Math.min(1,pi*2.5)*(1-P(t,tout-.08,tout)));
+     el.style.transform=`perspective(1600px) rotateX(${lerp(10,-4,P(t,tin,tout))}deg) rotateZ(${lerp(-2,1,P(t,tin,tout))}deg) scale(${1+eInExpo(po)*.4})`;
+     el.style.filter=(pi<1||po>0)?`blur(${(1-pi)*20+eInExpo(po)*30}px)`:'none';
+     $('hp').textContent=Math.round(650*eOut3(P(t,9.2,9.85)));
+     const sw=eInOut3(P(t,9.95,10.25));
+     $('stat1').style.transform=`translateY(${-sw*620}px)`;$('stat1').style.filter=`blur(${Math.sin(Math.PI*sw)*16}px)`;
+     $('stat2').style.transform=`translateY(${(1-sw)*620}px)`;$('stat2').style.opacity=sw;$('stat1').style.opacity=1-sw;$('stat2').style.filter=`blur(${Math.sin(Math.PI*sw)*16}px)`;
+     $('acc').textContent=(lerp(9.9,2.7,eOut3(P(t,10.05,10.55)))).toFixed(1).replace('.',',');
+   } else show(el,0);}
+
+  // F: booking
+  {const tin=10.75,tout=12.6; const el=$('sF');
+   if(t>=tin&&t<=tout){
+     const pi=P(t,tin,tin+.55), po=P(t,tout-.3,tout);
+     show(el,Math.min(1,pi*3)*(1-P(t,tout-.08,tout)));
+     const e=eOutExpo(pi);
+     $('book').style.transform=`translateY(${(1-e)*500}px) rotateX(${lerp(48,6,e)-P(t,tin+.5,tout)*6}deg) rotateZ(${lerp(-14,-2,e)+P(t,tin+.5,tout)*2}deg) scale(${lerp(.85,1,e)*(1+eInExpo(po)*.6)})`;
+     el.style.filter=(pi<1||po>0)?`blur(${(1-e)*14+eInExpo(po)*30}px)`:'none';
+     const sp=eInOut3(P(t,11.05,11.7)); const pc=lerp(18,74,sp);
+     $('trB').style.width=pc+'%';$('trI').style.left=pc+'%';
+     $('dateF').textContent=['Thu, Nov 12','Fri, Nov 13','Sat, Nov 14'][Math.min(2,Math.floor(sp*2.99))];
+     $('slotF').textContent=t<11.6?'09:00':'10:30';
+     $('locF').style.color=(t>11.55&&t<11.8)?'var(--red)':'#fff';
+     const bp=eInOut3(P(t,11.85,12.2));
+     $('btnFill').style.width=(bp*100)+'%';
+     $('btnTxt').textContent=bp>=1?'Test drive booked ✓':'Book a test drive';
+     $('btnTxt').style.color=bp>.5?'#fff':'#111';
+   } else show(el,0);}
+
+  // G: blue streak scene
+  {const tin=12.5,tout=13.65; const el=$('sG');
+   if(t>=tin&&t<=tout){
+     const pi=P(t,tin,tin+.2), po=P(t,tout-.25,tout);
+     show(el,pi*(1-po));
+     el.style.transform=`scale(${lerp(1.15,1,eOut3(P(t,tin,tout)))})`;
+     STREAKS_G.forEach(s=>runStreak(t,s));
+   } else show(el,0);}
+
+  // H: prompt + dropdown
+  {const tin=13.4,tout=15.6; const el=$('sH');
+   if(t>=tin&&t<=tout){
+     const pi=P(t,tin,tin+.4), po=P(t,tout-.3,tout);
+     show(el,Math.min(1,pi*2.5)*(1-P(t,tout-.08,tout)));
+     const bar=$('pbar');
+     bar.style.transform=`translate(-50%,-50%) translateY(${(1-eOutExpo(pi))*260}px) scale(${lerp(.9,1,eOutExpo(pi))})`;
+     $('typeH').textContent=typeText('Your 911, in one sentence.',eOut3(P(t,13.55,14.15)));
+     STREAKS_H.forEach(s=>runStreak(t,s));
+     // camera push towards the chip
+     const zc=eInOut3(P(t,14.25,14.65));
+     $('camH').style.transformOrigin='560px 640px';
+     $('camH').style.transform=`scale(${lerp(1,1.35,zc)*(1+eInExpo(po)*.8)}) translate(${lerp(0,160,zc)}px,${lerp(0,-70,zc)}px)`;
+     el.style.filter=po>0?`blur(${eInExpo(po)*36}px)`:'none';
+     // menu
+     const mo=eOutBack(P(t,14.4,14.7)), mc=1-eIn3(P(t,15.2,15.38));
+     const m=$('menu'); m.style.opacity=clamp(P(t,14.4,14.55))*mc; m.style.transform=`scale(${lerp(.6,1,mo)*lerp(.9,1,mc)})`;
+     m.style.display=t>14.4?'':'none';
+     const steps=[14.7,14.8,14.9,15.0]; let sel=0; steps.forEach((s,i)=>{if(t>=s)sel=i+1});
+     sel=Math.min(sel,4);
+     const hp=sel===0?0:P(t,steps[sel-1],steps[sel-1]+.1);
+     const y=12+64*(sel-1+eOut3(hp)); $('hlbox').style.top=(sel===0?12:y)+'px';
+     const picked=t>=15.12;
+     for(let i=0;i<5;i++) $('ck_'+i).textContent=(picked?i===4:i===0)?'✓':'';
+     $('chipTxt').textContent=picked?'Turbo S':'Carrera';
+     $('chev').style.display='inline-block';$('chev').style.transform=t>14.4&&t<15.2?'rotate(180deg)':'none';
+   } else show(el,0);}
+
+  // I: outro
+  {const tin=15.55; const el=$('sI');
+   if(t>=tin){
+     const p=P(t,15.7,16.3);
+     show(el,1);
+     $('logoI').style.transform=`scale(${lerp(1.5,1,eOutExpo(p))}) translateX(${(1-eOutExpo(p))*-120}px)`;
+     $('logoI').style.filter=p<1?`blur(${(1-eOutExpo(p))*26}px)`:'none';
+     const b=P(t,16.15,16.6), d=P(t,16.4,16.85);
+     $('brandI').style.opacity=b;$('brandI').style.letterSpacing=lerp(40,22,eOut3(b))+'px';
+     $('discI').style.opacity=d*.9;
+     $('heroI').style.transform=`scale(${lerp(1.18,1.05,eOut3(P(t,15.6,17.5)))})`;$('heroI').style.opacity=eOut3(P(t,15.6,16.2));
+     el.style.opacity=1-P(t,17.2,17.5);
+   } else show(el,0);}
+
+  // global white flashes
+  const fl=Math.max(
+    Math.sin(Math.PI*P(t,2.1,2.45))*.85,
+    Math.sin(Math.PI*P(t,6.25,6.5))*.35,
+    Math.sin(Math.PI*P(t,12.45,12.6))*.5,
+    Math.sin(Math.PI*P(t,15.45,15.85))*.95);
+  $('flash').style.opacity=fl;
+  $('grain').style.transform=`translate(${(Math.floor(t*24)*37)%100-50}px,${(Math.floor(t*24)*61)%100-50}px)`;
+}
+
+window.renderAt=renderAt; window.DURATION=DURATION;
+if(!/render/.test(location.search)){
+  const fit=()=>{const s=Math.min(innerWidth/1920,innerHeight/1080);$('stage').style.transform=`scale(${s})`;};
+  addEventListener('resize',fit);fit();
+  const t0=performance.now();
+  (function loop(){renderAt(((performance.now()-t0)/1000)%DURATION);requestAnimationFrame(loop)})();
+} else { renderAt(0); }
+</script>
+</body>
+</html>
