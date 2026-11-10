@@ -27,3 +27,9 @@ To change the caption, brand or timing, edit the constants and the phase times a
 
 Interactive single-page motion ad for a luxury real-estate brand (Tailwind + GSAP).
 Open [`penthouse/index.html`](penthouse/index.html) in a browser — see [`penthouse/README.md`](penthouse/README.md).
+
+---
+
+# The Penthouse — TikTok motion ad (real photos)
+
+13 s vertical clip built from real, freely licensed photographs: [`penthouse_video/out/penthouse_motion.mp4`](penthouse_video/out/penthouse_motion.mp4) — see [`penthouse_video/README.md`](penthouse_video/README.md) for credits and how to re-render.
