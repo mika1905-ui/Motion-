@@ -120,6 +120,8 @@
     </div>
     <div id="endsub" class="sub" style="font-size:46px;margin-top:22px">Jetzt erhältlich.</div>
   </div>
+  <div id="disc" class="abs sub" style="font-size:18px;opacity:0;color:#5c5c62">Konzept-Spot · nicht offiziell von Apple
+  </div>
 
   <div id="vignette"></div>
   <div id="grain"></div>
@@ -127,6 +129,31 @@
 </div>
 
 <script>
+// ================= Format: ?v=1 → TikTok/Reels 1080x1920 =================
+const V = new URLSearchParams(location.search).get('v')==='1';
+const W = V?1080:1920, H = V?1920:1080;
+const L = V ? {
+  lineY:-220, t2x:0, t2aY:-660, t2bY:-540, heroX:[0,20], heroY:260, heroOutX:0,
+  fanX:[-150,150,-150,150], fanY:[-150,-150,420,420], fanS:.62, t3Y:[-640,-660],
+  macX:0, macY:-170, macS:.74, phX:[900,210], phY:540, phS:.6, t4Y:[-660,-680],
+  arc:'M560 1010 Q 560 1200 690 1250'
+} : {
+  lineY:110, t2x:-430, t2aY:-75, t2bY:65, heroX:[380,420], heroY:0, heroOutX:-420,
+  fanX:[-630,-210,210,630], fanY:[30,30,30,30], fanS:.74, t3Y:[-380,-400],
+  macX:-180, macY:60, macS:.8, phX:[1100,560], phY:110, phS:.62, t4Y:[-400,-420],
+  arc:'M1010 520 Q 1290 300 1520 470'
+};
+if(V){
+  const st=document.getElementById('stage'); st.style.width=W+'px'; st.style.height=H+'px';
+  document.getElementById('link').setAttribute('width',W); document.getElementById('link').setAttribute('height',H);
+  document.getElementById('arc').setAttribute('d',L.arc);
+  const t1=document.getElementById('t1'); t1.innerHTML='Etwas Großes<br>kommt.'; t1.style.fontSize='104px'; t1.style.textAlign='center'; t1.style.lineHeight='1.08';
+  for(const id of ['t2a','t2b']) document.getElementById(id).style.fontSize='104px';
+  const t3=document.getElementById('t3'); t3.innerHTML='In vier Farben.<br><span class="grad">Alle brillant.</span>'; t3.style.fontSize='92px'; t3.style.textAlign='center'; t3.style.lineHeight='1.1';
+  const t4=document.getElementById('t4'); t4.innerHTML='Alles.<br><span class="grad">Perfekt verbunden.</span>'; t4.style.fontSize='96px'; t4.style.textAlign='center'; t4.style.lineHeight='1.1';
+  document.getElementById('logo') && (document.getElementById('logo').style.width='190px');
+}
+
 // ================= Hilfsfunktionen =================
 const DUR = 13;
 const $ = id => document.getElementById(id);
@@ -200,7 +227,7 @@ function render(t){
   // --- Szene 1: Lichtlinie + Teaser
   const lw = E.outExpo(seg(t,0.1,1.0))*1500;
   $('line').style.width=lw+'px';
-  set($('line'),{y:110}, env(t,0.1,0.4,1.6,2.0), 0);
+  set($('line'),{y:L.lineY}, env(t,0.1,0.4,1.6,2.0), 0);
   const p1=seg(t,0.35,1.25), o1=env(t,0.35,1.25,1.65,2.05);
   set($('t1'),{y:lerp(40,0,E.outExpo(p1)), s:lerp(.94,1,E.out(p1))+E.in(seg(t,1.65,2.05))*0.25}, o1, (1-E.out(p1))*18 + E.in(seg(t,1.65,2.05))*24);
   $('t1').style.letterSpacing = lerp(0.08,-0.035,E.outExpo(p1))+'em';
@@ -211,42 +238,42 @@ function render(t){
   const pout = E.inExpo(seg(t,4.65,5.1));
   const ry = lerp(65,-14,pin) + lerp(0,22,drift);
   set(hero.parentElement,{
-      x: lerp(380,420,drift) + lerp(0,-420,pout),
-      y: lerp(900,0,pin) + Math.sin(t*1.6)*8,
+      x: lerp(L.heroX[0],L.heroX[1],drift) + lerp(0,L.heroOutX,pout),
+      y: lerp(900,L.heroY,pin) + Math.sin(t*1.6)*8,
       rx: lerp(22,4,pin), ry: ry + pout*-40, rz: lerp(-10,0,pin),
       s: lerp(.6,.96,pin) + pout*2.6 }, t<1.9?0:1-seg(t,4.95,5.1), pout*14);
   paintPhone(hero,t,ry);
   const p2a=seg(t,2.4,3.3), p2b=seg(t,2.65,3.55), o2=1-E.in(seg(t,4.55,4.95));
-  set($('t2a'),{x:-430 + lerp(-60,0,E.outExpo(p2a)), y:-75}, E.out(p2a)*o2, (1-E.out(p2a))*14 + (1-o2)*20);
-  set($('t2b'),{x:-430 + lerp(-60,0,E.outExpo(p2b)) - pout*200, y:65}, E.out(p2b)*o2, (1-E.out(p2b))*14 + (1-o2)*20);
+  set($('t2a'),{x:L.t2x + lerp(-60,0,E.outExpo(p2a)), y:L.t2aY}, E.out(p2a)*o2, (1-E.out(p2a))*14 + (1-o2)*20);
+  set($('t2b'),{x:L.t2x + lerp(-60,0,E.outExpo(p2b)) - pout*200, y:L.t2bY}, E.out(p2b)*o2, (1-E.out(p2b))*14 + (1-o2)*20);
   $('t2b').style.backgroundPosition = (lerp(100,0,seg(t,2.6,5)))+'% 0';
 
   // Weißblitz beim Übergang
   $('flash').style.opacity = 0.85*env(t,4.95,5.05,5.05,5.45);
 
   // --- Szene 3: Farb-Fächer
-  const xs=[-630,-210,210,630];
+  const xs=L.fanX;
   fanPhones.forEach((w,i)=>{
     const st = 5.05 + i*0.09;
     const pf = E.outExpo(seg(t,st,st+1.1));
     const ex = E.inExpo(seg(t,7.2+i*0.05,7.75+i*0.05));
     const wave = Math.sin(t*2.2 + i*0.9)*10;
     const ryF = lerp(0, (i-1.5)*-9, pf) + Math.sin(t*1.1+i)*4;
-    set(w,{ x: lerp(0,xs[i],pf), y: lerp(140,30,pf) + wave + ex*1100, z: lerp(-600,0,pf),
-            ry: ryF, rz: lerp((i-1.5)*14,0,pf), s:.74 }, (t<5.0?0:1)*(1-ex*0.2), 0);
+    set(w,{ x: lerp(0,xs[i],pf), y: lerp(140,L.fanY[i],pf) + wave + ex*1700, z: lerp(-600,0,pf),
+            ry: ryF, rz: lerp((i-1.5)*14,0,pf), s:L.fanS }, (t<5.0?0:1)*(1-ex), 0);
     paintPhone(w._p,t+i,ryF);
   });
   set($('fan'),{},1,0);
   const p3=seg(t,5.6,6.4), o3=1-E.in(seg(t,7.15,7.55));
-  set($('t3'),{y:lerp(-380,-400,E.out(p3)) - (1-o3)*40, s:lerp(1.05,1,E.out(p3))}, E.out(p3)*o3, (1-E.out(p3))*16+(1-o3)*16);
+  set($('t3'),{y:lerp(L.t3Y[0],L.t3Y[1],E.out(p3)) - (1-o3)*40, s:lerp(1.05,1,E.out(p3))}, E.out(p3)*o3, (1-E.out(p3))*16+(1-o3)*16);
 
   // --- Szene 4: MacBook + iPhone
   const macIn = E.outExpo(seg(t,7.55,8.4));
   const lidP  = E.inOut(seg(t,7.85,9.0));
   const macOut= E.inExpo(seg(t,10.05,10.5));
   const macDrift = seg(t,7.55,10.5);
-  set($('macWrap'),{x:-180 - macDrift*30, y: lerp(500,60,macIn) - macOut*40, z: lerp(-400,0,macIn) + macDrift*80,
-                    rx: lerp(18,8,macIn), ry: lerp(-14,8,macDrift), s: .8 - macOut*0.15}, (t<7.5?0:1)*(1-macOut), macOut*12);
+  set($('macWrap'),{x:L.macX - macDrift*30, y: lerp(500,L.macY,macIn) - macOut*40, z: lerp(-400,0,macIn) + macDrift*80,
+                    rx: lerp(18,8,macIn), ry: lerp(-14,8,macDrift), s: L.macS - macOut*0.15}, (t<7.5?0:1)*(1-macOut), macOut*12);
   $('lid').style.transform = `rotateX(${lerp(-88,-4,lidP)}deg)`;
   $('macscreenOff').style.opacity = 1-E.out(seg(t,8.6,9.2));
   const mw=t*18;
@@ -255,18 +282,18 @@ function render(t){
   $('winph').style.background = `linear-gradient(${120+t*10}deg,#2b5cff,#a84dff 50%,#ff5ea8)`;
   const phIn = E.outExpo(seg(t,8.75,9.7));
   const ryM = lerp(-50,-16,phIn);
-  set($('phoneMac'),{x: lerp(1100,560,phIn) + macOut*400, y: lerp(60,110,phIn)+Math.sin(t*1.5)*6, ry:ryM, rx:4, s:.62}, (t<8.7?0:1)*(1-macOut), macOut*12);
+  set($('phoneMac'),{x: lerp(L.phX[0],L.phX[1],phIn) + macOut*400, y: lerp(L.phY-50,L.phY,phIn)+Math.sin(t*1.5)*6, ry:ryM, rx:4, s:L.phS}, (t<8.7?0:1)*(1-macOut), macOut*12);
   paintPhone(macPhone,t,ryM);
   // Verbindungsbogen
   const arcP = E.inOut(seg(t,9.45,10.0));
-  const arc=$('arc'), L=arc.getTotalLength();
-  arc.style.strokeDasharray=L; arc.style.strokeDashoffset=L*(1-arcP);
-  const pt = arc.getPointAtLength(L*clamp(arcP));
+  const arc=$("arc"), AL=arc.getTotalLength();
+  arc.style.strokeDasharray=AL; arc.style.strokeDashoffset=AL*(1-arcP);
+  const pt = arc.getPointAtLength(AL*clamp(arcP));
   $('dot').setAttribute('cx',pt.x); $('dot').setAttribute('cy',pt.y);
   $('link').style.opacity = (t<9.45?0:1)*(1-E.in(seg(t,9.95,10.3)));
   $('link').style.transform='none';
   const p4=seg(t,8.3,9.1), o4=1-E.in(seg(t,9.95,10.35));
-  set($('t4'),{y:lerp(-400,-420,E.out(p4))}, E.out(p4)*o4, (1-E.out(p4))*16+(1-o4)*18);
+  set($('t4'),{y:lerp(L.t4Y[0],L.t4Y[1],E.out(p4))}, E.out(p4)*o4, (1-E.out(p4))*16+(1-o4)*18);
 
   // --- Szene 5: Endcard
   const pl = E.back(seg(t,10.5,11.2));
@@ -278,13 +305,14 @@ function render(t){
   const word=$('word'); word.style.opacity=pw; word.style.letterSpacing=lerp(0.12,-0.035,pw)+'em'; word.style.filter=`blur(${(1-pw)*16}px)`;
   word.querySelector('.grad').style.backgroundPosition = lerp(100,0,seg(t,10.8,13))+'% 0';
   $('sweep').style.left = lerp(-300,900,E.inOut(seg(t,11.6,12.5)))+'px';
+  set($('disc'),{y:H/2-60}, 0.9*E.out(seg(t,11.8,12.4))*fadeEnd, 0);
   const es=$('endsub'); es.style.opacity=ps; es.style.transform=`translateY(${lerp(20,0,ps)}px)`;
 }
 window.render = render; window.DUR = DUR;
 
 // Vorschau im Browser: in Echtzeit abspielen (Klick = neu starten). Beim Rendern wird ?render=1 gesetzt.
 if(!location.search.includes('render')){
-  const fit=()=>{ const s=Math.min(innerWidth/1920,innerHeight/1080); $('stage').style.transform=`translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`; };
+  const fit=()=>{ const s=Math.min(innerWidth/W,innerHeight/H); $('stage').style.transform=`translate(${(innerWidth-W*s)/2}px,${(innerHeight-H*s)/2}px) scale(${s})`; };
   addEventListener('resize',fit); fit();
   let t0=performance.now();
   addEventListener('click',()=>t0=performance.now());

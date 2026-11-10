@@ -10,9 +10,10 @@ Werbespot im Motion-Look, 1920×1080, 30 fps, 13 Sekunden.
 | 7,6–10,4 s | MacBook klappt auf, iPhone gleitet dazu, Verbindungsbogen, „Alles. Perfekt verbunden.“ |
 | 10,4–13 s | Endcard „iPhone – Jetzt erhältlich.“ (+ optionales Logo) |
 
-- **Video:** `out/iphone-spot.mp4`
+- **Video 16:9:** `out/iphone-spot.mp4`
+- **Video 9:16 (TikTok/Reels):** `out/iphone-spot-tiktok.mp4` – neu rendern mit `node render.js out/iphone-spot-tiktok.mp4 --vertical`, Vorschau mit `index.html?v=1`
 - **Vorschau live:** `index.html` im Browser öffnen (Klick = neu starten)
 - **Neu rendern:** `node render.js` (Playwright + ffmpeg)
-- **Logo:** Eine Datei `assets/logo.svg` ablegen – sie erscheint automatisch über dem Schriftzug auf der Endcard.
+- **Logo:** `assets/logo.svg` erscheint auf der Endcard über dem Schriftzug.
 
-Geräte sind selbst in CSS/SVG gezeichnet (keine Apple-Fotos oder -Logos enthalten).
+Geräte sind in CSS/SVG nachgebaut. Konzept-Spot – nicht offiziell von Apple; vor öffentlicher Nutzung Markenrechte klären.

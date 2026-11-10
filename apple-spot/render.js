@@ -1,16 +1,19 @@
 // Rendert index.html Frame für Frame zu einem MP4 (1920x1080, 30 fps, 13 s).
-// Nutzung: node render.js [ausgabe.mp4] [fps]
+// Nutzung: node render.js [ausgabe.mp4] [fps] [--vertical]   (--vertical = 1080x1920 TikTok)
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
 const path = require('path');
 
 (async () => {
-  const out = process.argv[2] || path.join(__dirname, 'out', 'iphone-spot.mp4');
-  const fps = +(process.argv[3] || 30);
+  const args = process.argv.slice(2).filter(a => !a.startsWith('--'));
+  const out = args[0] || path.join(__dirname, 'out', 'iphone-spot.mp4');
+  const fps = +(args[1] || 30);
+  const vert = process.argv.includes('--vertical');
+  const [VW,VH] = vert ? [1080,1920] : [1920,1080];
   require('fs').mkdirSync(path.dirname(out), { recursive: true });
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
-  await page.goto('file://' + path.join(__dirname, 'index.html') + '?render=1');
+  const page = await browser.newPage({ viewport: { width: VW, height: VH } });
+  await page.goto('file://' + path.join(__dirname, 'index.html') + '?render=1' + (vert ? '&v=1' : ''));
   await page.evaluate(() => document.fonts.ready);
   const dur = await page.evaluate(() => window.DUR);
   const frames = Math.round(dur * fps);
