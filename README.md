@@ -41,3 +41,21 @@ python3 claude_render.py --preview 4.1 8.3     # einzelne PNG-Frames
 
 Texte, Name, Modelle und Timing stehen als Konstanten oben in `claude_render.py`
 (`NAME`, `QUESTION`, `MODELS`, `ANSWER`, `SUFFIXES`, `HITS`). Schrift: Source Serif 4 (OFL) in `assets/fonts/`.
+
+---
+
+# GPT-6 – Motion-Clip
+
+Gleiche Choreografie wie der Claude-Clip, aber mit Electric-Cyan/Violett-Look, Inter Display als Schrift,
+ChatGPT-ähnlichem Eingabefeld (runder weißer Senden-Button) und dem Modellwechsel
+GPT-6 Instant → GPT-6 Pro. Titel: „GPT-6 denkt. / forscht. / löst. / Pro“.
+
+**Output:** [`out/gpt_motion.mp4`](out/gpt_motion.mp4)
+
+```bash
+python3 gpt_render.py                       # -> out/gpt_motion.mp4
+python3 gpt_render.py --preview 4.1 8.3
+```
+
+Texte/Modelle/Farben stehen oben in `gpt_render.py` (`GREETING`, `QUESTION`, `MODELS`, `ANSWER`, `SUFFIXES`,
+`HOT`/`PINK` usw.). Das Logo ist ein abstraktes Ring-Zeichen, kein offizielles Markenlogo.
