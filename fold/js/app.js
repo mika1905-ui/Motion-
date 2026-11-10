@@ -18,13 +18,16 @@
   const halfL = $('.half--l'), halfR = $('.half--r');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  // Filmmodus (?film=1): keine Website-UI, automatische Kamerafahrt für das Video-Rendering
+  const FILM = new URLSearchParams(location.search).has('film');
+  if (FILM) root.classList.add('film');
 
   /* ---------- 1. Geometrie (responsive) ---------- */
   const G = { vw: 0, vh: 0, H: 0, hw: 0, t: 0, mobile: false };
   function measure() {
     G.vw = innerWidth; G.vh = innerHeight; G.mobile = G.vw < 768;
-    const avH = G.vh * (G.mobile ? .44 : .5);
-    const avW = G.vw * (G.mobile ? .9 : .6);
+    const avH = G.vh * (FILM ? .5 : G.mobile ? .44 : .5);
+    const avW = G.vw * (FILM ? .94 : G.mobile ? .9 : .6);
     G.H = Math.round(Math.min(avH, avW * 1.1));     // offen: Seitenverhältnis ~ 1 : 1.1
     G.hw = G.H / 2.2;
     G.t = Math.max(5, G.H * .022);
@@ -232,7 +235,7 @@
     current = key;
     collapseCard(true);
     const f = key && FEATURES[key];
-    const target = f ? { ...ZERO, ...f.cam(), sx: G.mobile ? 0 : -Math.min(260, G.vw * .16), sy: G.mobile ? -G.vh * .17 : 0 } : ZERO;
+    const target = f ? { ...ZERO, ...f.cam(), sx: FILM || G.mobile ? 0 : -Math.min(260, G.vw * .16), sy: FILM ? G.vh * .07 : G.mobile ? -G.vh * .17 : 0 } : ZERO;
     gsap.to(F, { ...target, duration: reduce ? 0 : 1.5, ease: 'expo.inOut', overwrite: true });
     if (key === 'hinge') flexTween.play(); else { flexTween.pause(); gsap.to(flex, { v: 0, duration: .8 }); }
 
@@ -364,19 +367,19 @@
   }
 
   /* ---------- 15. Loop & Init ---------- */
-  gsap.ticker.add((t) => {
+  const tick = (t) => {
     time = t;
     checkBoot();
     apply();
     if (!reduce) drawDust();
-  });
+  };
+  gsap.ticker.add(tick);
 
   function init() {
     measure();
     buildSlabs();
     sizeDust();
-    buildTimeline();
-    buildSectionTriggers();
+    if (FILM) buildFilm(); else { buildTimeline(); buildSectionTriggers(); }
     setColor('natural');
     if (reduce) drawDust();
   }
@@ -389,4 +392,76 @@
 
   // Für Tests/Debugging
   window.__fold = { S, F, focusFeature, scrollToSection };
+
+  /* ---------- 16. Filmmodus: Choreografie des Videos ---------- */
+  function buildFilm() {
+    const ui = $('#film-ui');
+    const title = (at, dur, html, cls = '') => {
+      const el = document.createElement('div');
+      el.className = 'ft ' + cls; el.innerHTML = html; ui.appendChild(el);
+      film.fromTo(el, { opacity: 0, y: 40, scale: 1.08, filter: 'blur(16px)', letterSpacing: '.06em' },
+                      { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', letterSpacing: '-.035em', duration: .7, ease: 'expo.out' }, at)
+          .to(el, { opacity: 0, y: -30, filter: 'blur(14px)', duration: .35, ease: 'power2.in' }, at + dur - .35);
+    };
+    const flash = (at, a = .9) => film.fromTo('#film-flash', { opacity: a }, { opacity: 0, duration: .45, ease: 'power2.out' }, at);
+    const film = gsap.timeline({ paused: true, defaults: { ease: 'power3.inOut' } });
+
+    // Start: Gerät fliegt aus der Tiefe ein, Scharnier glüht
+    film.set(S, { fold: 0, rx: 18, ry: -75, rz: -8, zoom: .25, sy: .12, hue: 215 }, 0);
+    flash(0, 1);
+    film.to(S, { zoom: 1.05, ry: -24, rx: 8, rz: 0, duration: 1.8, ease: 'expo.out' }, 0)
+        .to(S, { ry: -36, duration: 1, ease: 'sine.inOut' }, 1.8);
+    title(.5, 2.1, '<p class="eb">Neu</p><h2 class="ti">iPhone Fold</h2>');
+
+    // Entfalten
+    film.to(S, { fold: 1, ry: 0, rx: 4, zoom: 1.08, sy: .1, hue: 255, duration: 1.7, ease: 'power3.inOut' }, 2.7);
+    title(2.7, 2, '<h2>Entfalte das<br><span class="grad">Unmögliche.</span></h2>');
+
+    // Holo-OS (Boot startet automatisch), Parallax-Schwenk, Widget-Flip
+    film.to(S, { ry: 16, rx: 12, zoom: 1.14, hue: 280, duration: 1.4, ease: 'sine.inOut' }, 4.6)
+        .to(S, { ry: -12, rx: 2, duration: 1.5, ease: 'sine.inOut' }, 6.0)
+        .call(() => expandCard($('.card--core')), null, 5.6)
+        .call(() => collapseCard(), null, 6.9);
+    title(4.8, 2.7, '<h2>Ein OS mit <span class="grad">Tiefe.</span></h2>');
+
+    // Features
+    film.to(S, { ry: 0, rx: 0, zoom: 1, hue: 220, duration: .6 }, 7.4)
+        .call(() => focusFeature('hinge'), null, 7.6);
+    flash(7.6, .35);
+    title(7.8, 2.1, '<p class="eb">Liquid Hinge</p><h2>Faltet.<br><span class="grad">Ohne Falte.</span></h2><p class="sub">500.000+ Faltzyklen · 0,0 mm Spalt</p>');
+    film.call(() => focusFeature('oled'), null, 9.8);
+    flash(9.8, .35);
+    title(10.0, 2.0, '<p class="eb">Seamless OLED</p><h2>Fünf Schichten.<br><span class="grad">Ein Blatt Glas.</span></h2><p class="sub">7,9″ innen · 1–120 Hz</p>');
+    film.call(() => focusFeature('chip'), null, 12.0);
+    flash(12.0, .35);
+    title(12.2, 1.9, '<p class="eb">Quantum Chip</p><h2>Q1.<br><span class="grad">2 Nanometer.</span></h2><p class="sub">38 TOPS Neural Engine</p>');
+    film.call(() => focusFeature(null), null, 14.0);
+
+    // 360°-Drehung mit Farbwechsel
+    film.to(S, { ry: 360, rx: 10, zoom: .9, sy: .12, hue: 210, duration: 2.2, ease: 'power2.inOut' }, 14.3)
+        .call(() => setColor('blue'), null, 14.6)
+        .call(() => setColor('black'), null, 15.2)
+        .call(() => setColor('white'), null, 15.8)
+        .call(() => setColor('natural'), null, 16.3);
+    title(14.4, 2.0, '<h2>Vier Farben.<br><span class="grad">Ganz aus Titan.</span></h2>');
+
+    // Endcard
+    film.set(S, { ry: 0 }, 16.55)
+        .to(S, { sy: -.16, zoom: .62, ry: -22, rx: 10, duration: 1.2, ease: 'expo.out' }, 16.55)
+        .to(S, { ry: 18, duration: 2.4, ease: 'sine.inOut' }, 17.6);
+    flash(16.55, .8);
+    film.fromTo('#film-end', { opacity: 0, y: 40, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1, ease: 'expo.out' }, 16.8)
+        .fromTo('#film-end .pill', { scale: .6, opacity: 0 }, { scale: 1, opacity: 1, duration: .8, ease: 'back.out(2)' }, 17.6)
+        .to('#film-end .pill', { boxShadow: '0 0 60px 10px rgba(41,151,255,.7)', duration: .6, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 18.2)
+        .to('#film-black', { opacity: 1, duration: .4, ease: 'power2.in' }, 19.6)
+        .set({}, {}, 20);
+    // Frame-genaues Rendern: GSAP-Zeit wird extern gesteuert (gsap.updateRoot)
+    let base = 0;
+    window.__film = {
+      duration: film.duration(),
+      start: () => film.play(0),
+      manual: () => { gsap.ticker.remove(gsap.updateRoot); gsap.ticker.remove(tick); base = gsap.globalTimeline.time(); film.play(0); },
+      renderAt: t => { gsap.updateRoot(base + t); tick(t); }
+    };
+  }
 })();
