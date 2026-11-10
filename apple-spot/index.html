@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>iPhone Spot – 13s Motion</title>
+<style>
+  :root { --bg:#000; --fg:#f5f5f7; --muted:#86868b; }
+  html,body { margin:0; background:#000; overflow:hidden; }
+  body { font-family:"Inter Display","Inter",-apple-system,"Helvetica Neue",Arial,sans-serif; color:var(--fg); }
+  #stage { position:relative; width:1920px; height:1080px; background:#000; overflow:hidden; perspective:2200px; transform-origin:0 0; }
+  .abs { position:absolute; left:50%; top:50%; will-change:transform,opacity; }
+  .center { transform:translate(-50%,-50%); }
+  .layer3d { transform-style:preserve-3d; }
+
+  /* ---------- Licht / Atmosphäre ---------- */
+  #glow { width:1600px; height:1600px; border-radius:50%; filter:blur(40px); }
+  #line { height:2px; background:linear-gradient(90deg,transparent,#fff,transparent); box-shadow:0 0 24px 4px rgba(160,190,255,.6); }
+  #grain { position:absolute; inset:0; pointer-events:none; opacity:.06;
+    background-image:radial-gradient(rgba(255,255,255,.5) 1px,transparent 1px); background-size:3px 3px; }
+  #vignette { position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.85) 100%); }
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; }
+
+  /* ---------- Typo ---------- */
+  .headline { font-weight:700; letter-spacing:-.035em; white-space:nowrap; line-height:1; }
+  .grad { background:linear-gradient(100deg,#f5f5f7 0%,#d6d6db 35%,#9ab4ff 60%,#f0c8ff 80%,#f5f5f7 100%);
+    background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .sub { font-family:"Inter"; font-weight:500; color:var(--muted); letter-spacing:-.01em; white-space:nowrap; }
+
+  /* ---------- iPhone ---------- */
+  .phone { width:400px; height:840px; transform-style:preserve-3d; }
+  .phone .slab { position:absolute; inset:0; border-radius:76px; }
+  .phone .front { position:absolute; inset:0; border-radius:76px; padding:13px; box-sizing:border-box;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.35), inset 0 0 0 7px rgba(0,0,0,.25); }
+  .phone .bezel { position:absolute; inset:13px; border-radius:64px; background:#000; overflow:hidden; }
+  .phone .screen { position:absolute; inset:8px; border-radius:57px; overflow:hidden; }
+  .phone .wall { position:absolute; inset:-20%; }
+  .phone .island { position:absolute; top:26px; left:50%; width:118px; height:36px; margin-left:-59px; border-radius:20px; background:#000; z-index:3; }
+  .phone .time { position:absolute; top:150px; width:100%; text-align:center; font-weight:600; font-size:118px; letter-spacing:-.04em; color:rgba(255,255,255,.92); z-index:2; }
+  .phone .date { position:absolute; top:118px; width:100%; text-align:center; font-family:"Inter"; font-weight:600; font-size:24px; color:rgba(255,255,255,.85); z-index:2; }
+  .phone .dock { position:absolute; bottom:44px; left:50%; width:96px; height:96px; margin-left:-48px; display:none; }
+  .phone .bar { position:absolute; bottom:12px; left:50%; width:140px; height:5px; margin-left:-70px; border-radius:3px; background:rgba(255,255,255,.85); z-index:2; }
+  .phone .sheen { position:absolute; inset:0; border-radius:76px; pointer-events:none; mix-blend-mode:screen; }
+  .phone .btn { position:absolute; width:6px; border-radius:3px; }
+
+  /* ---------- MacBook ---------- */
+  #mac { width:1240px; height:820px; transform-style:preserve-3d; }
+  #lid { position:absolute; left:70px; bottom:40px; width:1100px; height:700px; transform-origin:50% 100%; transform-style:preserve-3d; }
+  #lid .shell { position:absolute; inset:0; border-radius:28px 28px 8px 8px; background:linear-gradient(#cfd0d4,#a9abb1); backface-visibility:hidden; transform:rotateY(180deg); }
+  #lid .face { position:absolute; inset:0; border-radius:28px 28px 8px 8px; background:#0b0b0c; box-shadow:inset 0 0 0 2px #3a3a3e; backface-visibility:hidden; }
+  #lid .display { position:absolute; left:22px; right:22px; top:22px; bottom:22px; border-radius:12px; overflow:hidden; background:#000; }
+  #lid .notch { position:absolute; top:0; left:50%; width:150px; height:24px; margin-left:-75px; background:#0b0b0c; border-radius:0 0 12px 12px; z-index:5; }
+  #macwall { position:absolute; inset:0; }
+  #menubar { position:absolute; top:0; left:0; right:0; height:26px; background:rgba(255,255,255,.18); backdrop-filter:blur(10px); }
+  #dock { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); padding:9px 12px; border-radius:20px;
+    background:rgba(255,255,255,.22); display:flex; gap:10px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.3); }
+  #dock i { display:block; width:46px; height:46px; border-radius:12px; }
+  #window { position:absolute; left:140px; top:90px; width:620px; height:390px; border-radius:14px; background:rgba(28,28,32,.82);
+    box-shadow:0 30px 80px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.12); overflow:hidden; }
+  #window .tl { position:absolute; top:14px; left:16px; display:flex; gap:8px; }
+  #window .tl b { width:12px; height:12px; border-radius:50%; display:block; }
+  #window .ph { position:absolute; left:24px; right:24px; top:52px; bottom:24px; border-radius:10px; }
+  #base { position:absolute; left:0; bottom:16px; width:1240px; height:26px; border-radius:4px 4px 30px 30px;
+    background:linear-gradient(#e3e4e8,#9c9ea4 70%,#5d5f64); }
+  #base .lip { position:absolute; top:0; left:50%; width:200px; height:10px; margin-left:-100px; border-radius:0 0 12px 12px; background:#8d8f95; }
+  #macshadow { position:absolute; left:40px; right:40px; bottom:-10px; height:40px; border-radius:50%; background:rgba(0,0,0,.7); filter:blur(18px); }
+
+  /* ---------- Endcard ---------- */
+  #logo { width:150px; height:auto; }
+  #sweep { position:absolute; top:0; bottom:0; width:260px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent); mix-blend-mode:overlay; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="glow" class="abs"></div>
+  <div id="line" class="abs"></div>
+
+  <!-- Szene 1 -->
+  <div id="t1" class="abs headline grad" style="font-size:120px">Etwas Großes kommt.</div>
+
+  <!-- Szene 2 -->
+  <div id="t2a" class="abs headline" style="font-size:132px">Gemacht,</div>
+  <div id="t2b" class="abs headline grad" style="font-size:132px">um zu begeistern.</div>
+  <div id="phoneHero" class="abs"></div>
+
+  <!-- Szene 3 -->
+  <div id="fan" class="abs layer3d" style="width:0;height:0"></div>
+  <div id="t3" class="abs headline" style="font-size:96px">In vier Farben. <span class="grad">Alle brillant.</span></div>
+
+  <!-- Szene 4 -->
+  <div id="macWrap" class="abs layer3d" style="width:0;height:0">
+    <div id="mac" class="abs" style="left:-620px;top:-410px">
+      <div id="macshadow"></div>
+      <div id="lid">
+        <div class="shell"></div>
+        <div class="face"><div class="display">
+          <div id="macwall"></div>
+          <div id="menubar"></div>
+          <div id="window"><div class="tl"><b style="background:#ff5f57"></b><b style="background:#febc2e"></b><b style="background:#28c840"></b></div><div class="ph" id="winph"></div></div>
+          <div id="dock"><i style="background:linear-gradient(#5ac8fa,#007aff)"></i><i style="background:linear-gradient(#ffd60a,#ff9f0a)"></i><i style="background:linear-gradient(#30d158,#248a3d)"></i><i style="background:linear-gradient(#ff375f,#ff2d55)"></i><i style="background:linear-gradient(#bf5af2,#5e5ce6)"></i><i style="background:linear-gradient(#f2f2f7,#c7c7cc)"></i><i style="background:linear-gradient(#64d2ff,#0a84ff)"></i></div>
+          <div id="macscreenOff" style="position:absolute;inset:0;background:#000"></div>
+        </div><div class="notch"></div></div>
+      </div>
+      <div id="base"><div class="lip"></div></div>
+    </div>
+  </div>
+  <div id="phoneMac" class="abs"></div>
+  <svg id="link" class="abs" width="1920" height="1080" style="left:0;top:0;overflow:visible">
+    <defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#7aa2ff"/><stop offset="1" stop-color="#f0a8ff"/></linearGradient></defs>
+    <path id="arc" d="M1010 520 Q 1290 300 1520 470" fill="none" stroke="url(#lg)" stroke-width="5" stroke-linecap="round"/>
+    <circle id="dot" r="10" fill="#fff"/>
+  </svg>
+  <div id="t4" class="abs headline" style="font-size:104px">Alles. <span class="grad">Perfekt verbunden.</span></div>
+
+  <!-- Szene 5: Endcard -->
+  <div id="end" class="abs" style="text-align:center">
+    <img id="logo" src="assets/logo.svg" alt="" onerror="this.remove()">
+    <div id="word" class="headline" style="position:relative;font-size:210px;font-weight:600;overflow:hidden;padding:0 20px">
+      <span class="grad">iPhone</span><div id="sweep"></div>
+    </div>
+    <div id="endsub" class="sub" style="font-size:46px;margin-top:22px">Jetzt erhältlich.</div>
+  </div>
+
+  <div id="vignette"></div>
+  <div id="grain"></div>
+  <div id="flash"></div>
+</div>
+
+<script>
+// ================= Hilfsfunktionen =================
+const DUR = 13;
+const $ = id => document.getElementById(id);
+const clamp = (v,a=0,b=1) => Math.min(b,Math.max(a,v));
+const lerp = (a,b,p) => a+(b-a)*p;
+const seg = (t,a,b) => clamp((t-a)/(b-a));
+const E = {
+  outExpo: p => p===1?1:1-Math.pow(2,-10*p),
+  inExpo:  p => p===0?0:Math.pow(2,10*p-10),
+  inOut:   p => p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2,
+  out:     p => 1-Math.pow(1-p,3),
+  in:      p => p*p*p,
+  back:    p => { const c1=1.70158,c3=c1+1; return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2); },
+};
+// ein/aus-Hüllkurve: 0 → 1 (in) … 1 → 0 (out)
+const env = (t,a,b,c,d,ei=E.out,eo=E.in) => t<b ? ei(seg(t,a,b)) : 1-eo(seg(t,c,d));
+const tf = o => `translate(-50%,-50%) translate3d(${o.x||0}px,${o.y||0}px,${o.z||0}px) rotateX(${o.rx||0}deg) rotateY(${o.ry||0}deg) rotateZ(${o.rz||0}deg) scale(${o.s??1})`;
+function set(el,o,op,blur){ el.style.transform=tf(o); el.style.opacity=op; el.style.filter=blur>0.05?`blur(${blur}px)`:'none'; el.style.visibility=op<=0.001?'hidden':'visible'; }
+
+// ================= iPhone-Bauteil =================
+const VARIANTS = [
+  { name:'Titan Natur', frame:['#d9d6cf','#8f8b83','#c9c5bc'], wall:['#ff8a3d','#c2185b','#3f1d6b','#0d0b1f'] },
+  { name:'Titan Blau',  frame:['#5a6f93','#232f45','#4a5d80'], wall:['#4fc3f7','#3949ab','#1a1060','#05040f'] },
+  { name:'Titan Wüste', frame:['#e6cdb2','#a8896b','#d8bc9e'], wall:['#ffd180','#ff6e40','#8e2443','#1a0710'] },
+  { name:'Titan Schwarz',frame:['#5b5b60','#1c1c1f','#45454a'], wall:['#b388ff','#536dfe','#0b1d4d','#02030a'] },
+];
+function makePhone(v){
+  const p=document.createElement('div'); p.className='phone';
+  const fg=`linear-gradient(135deg,${v.frame[0]},${v.frame[1]} 45%,${v.frame[2]} 70%,${v.frame[1]})`;
+  let h='';
+  for(let i=14;i>=1;i--) h+=`<div class="slab" style="background:${v.frame[1]};transform:translateZ(${-i*1.6}px);filter:brightness(${0.55+i*0.02})"></div>`;
+  h+=`<div class="btn" style="left:-5px;top:190px;height:46px;background:${v.frame[1]}"></div>
+      <div class="btn" style="left:-5px;top:260px;height:80px;background:${v.frame[1]}"></div>
+      <div class="btn" style="left:-5px;top:356px;height:80px;background:${v.frame[1]}"></div>
+      <div class="btn" style="right:-5px;top:290px;height:120px;background:${v.frame[1]}"></div>
+      <div class="front" style="background:${fg}">
+        <div class="bezel"><div class="screen">
+          <div class="wall"></div>
+          <div class="island"></div>
+          <div class="date">Dienstag, 10. November</div>
+          <div class="time">9:41</div>
+          <div class="bar"></div>
+        </div></div>
+      </div>
+      <div class="sheen"></div>`;
+  p.innerHTML=h; p._v=v; p._wall=p.querySelector('.wall'); p._sheen=p.querySelector('.sheen');
+  return p;
+}
+function paintPhone(p,t,ry=0){
+  const w=p._v.wall, a=t*22, b=Math.sin(t*1.3)*18;
+  p._wall.style.background=
+    `radial-gradient(circle at ${50+b}% ${30+Math.cos(t)*10}%, ${w[0]} 0%, transparent 45%),
+     radial-gradient(circle at ${30-b}% ${75}%, ${w[1]} 0%, transparent 55%),
+     conic-gradient(from ${a}deg at 60% 55%, ${w[2]}, ${w[1]}, ${w[3]}, ${w[2]})`;
+  const sx = 50 - ry*3.2;
+  p._sheen.style.background=`linear-gradient(115deg, transparent ${sx-22}%, rgba(255,255,255,.22) ${sx}%, transparent ${sx+18}%)`;
+}
+
+const hero = makePhone(VARIANTS[1]); $('phoneHero').appendChild(hero);
+const macPhone = makePhone(VARIANTS[0]); $('phoneMac').appendChild(macPhone);
+const fanPhones = VARIANTS.map(v=>{ const w=document.createElement('div'); w.className='abs'; w.style.transformStyle='preserve-3d'; const p=makePhone(v); w.appendChild(p); $('fan').appendChild(w); w._p=p; return w; });
+
+// ================= Render (deterministisch, t in Sekunden) =================
+function render(t){
+  // --- Atmosphäre
+  const glowHue = t<5?225 : t<7.6?lerp(225,300,seg(t,5,7.6)) : t<10.4?260 : 220;
+  const glowOp = 0.18 + 0.5*env(t,1.6,3.0,12.4,13.0) * (t>10.2&&t<10.6?0.4:1);
+  $('glow').style.background=`radial-gradient(circle, hsla(${glowHue},90%,60%,.55), hsla(${glowHue+40},90%,45%,.15) 40%, transparent 70%)`;
+  set($('glow'),{x:Math.sin(t*.6)*120, y:60+Math.cos(t*.5)*60, s:0.8+0.15*Math.sin(t*.8)}, t<1.4?0:glowOp, 0);
+
+  // --- Szene 1: Lichtlinie + Teaser
+  const lw = E.outExpo(seg(t,0.1,1.0))*1500;
+  $('line').style.width=lw+'px';
+  set($('line'),{y:110}, env(t,0.1,0.4,1.6,2.0), 0);
+  const p1=seg(t,0.35,1.25), o1=env(t,0.35,1.25,1.65,2.05);
+  set($('t1'),{y:lerp(40,0,E.outExpo(p1)), s:lerp(.94,1,E.out(p1))+E.in(seg(t,1.65,2.05))*0.25}, o1, (1-E.out(p1))*18 + E.in(seg(t,1.65,2.05))*24);
+  $('t1').style.letterSpacing = lerp(0.08,-0.035,E.outExpo(p1))+'em';
+
+  // --- Szene 2: Hero-iPhone
+  const pin = E.outExpo(seg(t,1.9,3.2));
+  const drift = E.inOut(seg(t,3.2,5.0));
+  const pout = E.inExpo(seg(t,4.65,5.1));
+  const ry = lerp(65,-14,pin) + lerp(0,22,drift);
+  set(hero.parentElement,{
+      x: lerp(380,420,drift) + lerp(0,-420,pout),
+      y: lerp(900,0,pin) + Math.sin(t*1.6)*8,
+      rx: lerp(22,4,pin), ry: ry + pout*-40, rz: lerp(-10,0,pin),
+      s: lerp(.6,.96,pin) + pout*2.6 }, t<1.9?0:1-seg(t,4.95,5.1), pout*14);
+  paintPhone(hero,t,ry);
+  const p2a=seg(t,2.4,3.3), p2b=seg(t,2.65,3.55), o2=1-E.in(seg(t,4.55,4.95));
+  set($('t2a'),{x:-430 + lerp(-60,0,E.outExpo(p2a)), y:-75}, E.out(p2a)*o2, (1-E.out(p2a))*14 + (1-o2)*20);
+  set($('t2b'),{x:-430 + lerp(-60,0,E.outExpo(p2b)) - pout*200, y:65}, E.out(p2b)*o2, (1-E.out(p2b))*14 + (1-o2)*20);
+  $('t2b').style.backgroundPosition = (lerp(100,0,seg(t,2.6,5)))+'% 0';
+
+  // Weißblitz beim Übergang
+  $('flash').style.opacity = 0.85*env(t,4.95,5.05,5.05,5.45);
+
+  // --- Szene 3: Farb-Fächer
+  const xs=[-630,-210,210,630];
+  fanPhones.forEach((w,i)=>{
+    const st = 5.05 + i*0.09;
+    const pf = E.outExpo(seg(t,st,st+1.1));
+    const ex = E.inExpo(seg(t,7.2+i*0.05,7.75+i*0.05));
+    const wave = Math.sin(t*2.2 + i*0.9)*10;
+    const ryF = lerp(0, (i-1.5)*-9, pf) + Math.sin(t*1.1+i)*4;
+    set(w,{ x: lerp(0,xs[i],pf), y: lerp(140,30,pf) + wave + ex*1100, z: lerp(-600,0,pf),
+            ry: ryF, rz: lerp((i-1.5)*14,0,pf), s:.74 }, (t<5.0?0:1)*(1-ex*0.2), 0);
+    paintPhone(w._p,t+i,ryF);
+  });
+  set($('fan'),{},1,0);
+  const p3=seg(t,5.6,6.4), o3=1-E.in(seg(t,7.15,7.55));
+  set($('t3'),{y:lerp(-380,-400,E.out(p3)) - (1-o3)*40, s:lerp(1.05,1,E.out(p3))}, E.out(p3)*o3, (1-E.out(p3))*16+(1-o3)*16);
+
+  // --- Szene 4: MacBook + iPhone
+  const macIn = E.outExpo(seg(t,7.55,8.4));
+  const lidP  = E.inOut(seg(t,7.85,9.0));
+  const macOut= E.inExpo(seg(t,10.05,10.5));
+  const macDrift = seg(t,7.55,10.5);
+  set($('macWrap'),{x:-180 - macDrift*30, y: lerp(500,60,macIn) - macOut*40, z: lerp(-400,0,macIn) + macDrift*80,
+                    rx: lerp(18,8,macIn), ry: lerp(-14,8,macDrift), s: .8 - macOut*0.15}, (t<7.5?0:1)*(1-macOut), macOut*12);
+  $('lid').style.transform = `rotateX(${lerp(-88,-4,lidP)}deg)`;
+  $('macscreenOff').style.opacity = 1-E.out(seg(t,8.6,9.2));
+  const mw=t*18;
+  $('macwall').style.background = `radial-gradient(circle at ${40+Math.sin(t)*10}% 40%, #ff9f6e 0%, transparent 40%),
+     radial-gradient(circle at 75% 70%, #7c4dff 0%, transparent 50%), conic-gradient(from ${mw}deg at 55% 55%, #1a237e, #6a1b9a, #c2185b, #1a237e)`;
+  $('winph').style.background = `linear-gradient(${120+t*10}deg,#2b5cff,#a84dff 50%,#ff5ea8)`;
+  const phIn = E.outExpo(seg(t,8.75,9.7));
+  const ryM = lerp(-50,-16,phIn);
+  set($('phoneMac'),{x: lerp(1100,560,phIn) + macOut*400, y: lerp(60,110,phIn)+Math.sin(t*1.5)*6, ry:ryM, rx:4, s:.62}, (t<8.7?0:1)*(1-macOut), macOut*12);
+  paintPhone(macPhone,t,ryM);
+  // Verbindungsbogen
+  const arcP = E.inOut(seg(t,9.45,10.0));
+  const arc=$('arc'), L=arc.getTotalLength();
+  arc.style.strokeDasharray=L; arc.style.strokeDashoffset=L*(1-arcP);
+  const pt = arc.getPointAtLength(L*clamp(arcP));
+  $('dot').setAttribute('cx',pt.x); $('dot').setAttribute('cy',pt.y);
+  $('link').style.opacity = (t<9.45?0:1)*(1-E.in(seg(t,9.95,10.3)));
+  $('link').style.transform='none';
+  const p4=seg(t,8.3,9.1), o4=1-E.in(seg(t,9.95,10.35));
+  set($('t4'),{y:lerp(-400,-420,E.out(p4))}, E.out(p4)*o4, (1-E.out(p4))*16+(1-o4)*18);
+
+  // --- Szene 5: Endcard
+  const pl = E.back(seg(t,10.5,11.2));
+  const pw = E.outExpo(seg(t,10.75,11.8));
+  const ps = E.out(seg(t,11.5,12.2));
+  const fadeEnd = 1-E.in(seg(t,12.65,13.0));
+  set($('end'),{y:10, s:lerp(1.06,1,E.out(seg(t,10.5,13)))}, (t<10.45?0:1)*fadeEnd, 0);
+  const logo=$('logo'); if(logo){ logo.style.opacity=clamp(pl); logo.style.transform=`scale(${lerp(.6,1,pl)})`; logo.style.filter=`blur(${(1-pl)*10}px)`; logo.style.marginBottom='18px'; }
+  const word=$('word'); word.style.opacity=pw; word.style.letterSpacing=lerp(0.12,-0.035,pw)+'em'; word.style.filter=`blur(${(1-pw)*16}px)`;
+  word.querySelector('.grad').style.backgroundPosition = lerp(100,0,seg(t,10.8,13))+'% 0';
+  $('sweep').style.left = lerp(-300,900,E.inOut(seg(t,11.6,12.5)))+'px';
+  const es=$('endsub'); es.style.opacity=ps; es.style.transform=`translateY(${lerp(20,0,ps)}px)`;
+}
+window.render = render; window.DUR = DUR;
+
+// Vorschau im Browser: in Echtzeit abspielen (Klick = neu starten). Beim Rendern wird ?render=1 gesetzt.
+if(!location.search.includes('render')){
+  const fit=()=>{ const s=Math.min(innerWidth/1920,innerHeight/1080); $('stage').style.transform=`translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`; };
+  addEventListener('resize',fit); fit();
+  let t0=performance.now();
+  addEventListener('click',()=>t0=performance.now());
+  (function loop(now){ render(((now-t0)/1000)%DUR); requestAnimationFrame(loop); })(t0);
+} else render(0);
+</script>
+</body>
+</html>
