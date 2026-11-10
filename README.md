@@ -20,3 +20,24 @@ python3 render.py --preview 5.3 8.6   # single PNG frames for quick checks
 
 To change the caption, brand or timing, edit the constants and the phase times at the top of
 `render.py` (`CAPTION`, `BRAND`, `liquid_field`).
+
+---
+
+# Claude Opus 5.5 – Motion-Clip
+
+12,4 s, 16:9 (1920×1080, 30 fps), mit eigenem Sounddesign. Ablauf: Spark-Explosion mit Lichtstrahlen und
+Schockwellen → „Claude“ tippt sich ein → Lichtstreifen reißen die Buchstaben weg → Chatfenster steigt aus einem
+Orange-Magenta-Glow auf, die Frage fliegt Wort für Wort ein → „Guten Abend, Mika“ → Kamerafahrt auf die
+Modellauswahl, Sonnet 5.5 → Opus 5.5 → Senden → Antwort wird Zeile für Zeile scharf →
+„Claude denkt. / baut. / liefert. / Opus 5.5“ mit Flash-Hits, Kamera-Shake, Zoom-Punch und RGB-Split.
+
+**Output:** [`out/claude_motion.mp4`](out/claude_motion.mp4)
+
+```bash
+pip install numpy pillow opencv-python-headless   # + ffmpeg
+python3 claude_render.py                       # -> out/claude_motion.mp4
+python3 claude_render.py --preview 4.1 8.3     # einzelne PNG-Frames
+```
+
+Texte, Name, Modelle und Timing stehen als Konstanten oben in `claude_render.py`
+(`NAME`, `QUESTION`, `MODELS`, `ANSWER`, `SUFFIXES`, `HITS`). Schrift: Source Serif 4 (OFL) in `assets/fonts/`.
