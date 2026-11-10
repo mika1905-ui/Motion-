@@ -20,3 +20,19 @@ python3 render.py --preview 5.3 8.6   # single PNG frames for quick checks
 
 To change the caption, brand or timing, edit the constants and the phase times at the top of
 `render.py` (`CAPTION`, `BRAND`, `liquid_field`).
+
+---
+
+# Liquid Icon – interactive 15 s WebGL prototype (9:16)
+
+[`web/index.html`](web/index.html) is a single self-contained file (Three.js + GSAP + Tailwind via CDN).
+Open it in a browser (or serve it: `python3 -m http.server` → `/web/`) and record the 9:16 stage.
+
+| Time | What happens |
+|---|---|
+| 0–5 s | Dark cyber showroom, chrome metaballs (marching cubes) and liquid droplets float in space |
+| 5–10 s | The liquid bursts into ~3 200 chrome particles that fly along curved paths onto the car's surface; a light scanner sweeps rear→front and turns the particle skin into the solid body |
+| 10–15 s | Headlights flicker on, shock ring + flash, low hero orbit with travelling studio reflections, UI overlay "The New Icon · 0–100 in 2.4 s" |
+
+Controls: **Space** pause · **R** replay · **mouse wheel / swipe** scrub · **H** hide hints (for clean recordings) · `?t=12` opens at a fixed time.
+The brand (AURÉON LM-01) and the car are fictional and built procedurally — no model files needed.
