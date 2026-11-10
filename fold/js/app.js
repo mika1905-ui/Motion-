@@ -26,8 +26,10 @@
   const G = { vw: 0, vh: 0, H: 0, hw: 0, t: 0, mobile: false };
   function measure() {
     G.vw = innerWidth; G.vh = innerHeight; G.mobile = G.vw < 768;
-    const avH = G.vh * (FILM ? .5 : G.mobile ? .44 : .5);
-    const avW = G.vw * (FILM ? .94 : G.mobile ? .9 : .6);
+    G.land = FILM && G.vw > G.vh;                 // Film im Querformat: Titel links, Gerät rechts
+    root.classList.toggle('film-land', G.land);
+    const avH = G.vh * (G.land ? .66 : FILM ? .5 : G.mobile ? .44 : .5);
+    const avW = G.vw * (G.land ? .46 : FILM ? .94 : G.mobile ? .9 : .6);
     G.H = Math.round(Math.min(avH, avW * 1.1));     // offen: Seitenverhältnis ~ 1 : 1.1
     G.hw = G.H / 2.2;
     G.t = Math.max(5, G.H * .022);
@@ -76,8 +78,8 @@
     const rx = S.rx + F.rx - tilt.y * 6 * tk;
     const ry = S.ry + F.ry + tilt.x * 9 * tk;
     const zoom = S.zoom * F.zoom;
-    const sx = F.sx;
-    const sy = S.sy * G.vh + F.sy + idle;
+    const sx = F.sx + (G.land ? G.vw * .2 : 0);
+    const sy = (G.land ? S.sy * G.vh * .25 : S.sy * G.vh) + F.sy + idle;
 
     device.style.transform =
       `translate3d(${sx}px,${sy}px,0) scale(${zoom}) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${S.rz + F.rz}deg) translate3d(${-fx}px,${-fy}px,${-fz}px)`;
@@ -210,7 +212,7 @@
       eyebrow: 'Liquid Hinge', title: 'Ein Scharnier wie Flüssigmetall.',
       text: '112 Mikro-Glieder verteilen die Biegung so fein, dass das Display niemals knickt – und das Gerät ohne Spalt schließt.',
       specs: [['Faltzyklen', '500.000+'], ['Spaltmaß geschlossen', '0,0 mm'], ['Winkel', 'stufenlos 0–180°']],
-      cam: () => ({ fx: 0, fy: -G.H * .2, fz: 0, zoom: G.mobile ? 1.9 : 2.3, rx: 14, ry: -40, rz: 0, xray: 1, explode: 0, flexAmp: 1 })
+      cam: () => ({ fx: 0, fy: -G.H * .2, fz: 0, zoom: G.mobile || G.land ? 1.9 : 2.3, rx: 14, ry: -40, rz: 0, xray: 1, explode: 0, flexAmp: 1 })
     },
     oled: {
       eyebrow: 'Seamless OLED', title: 'Fünf Schichten. Null Falte.',
@@ -222,7 +224,7 @@
       eyebrow: 'Quantum Chip', title: 'Q1. Gebaut für zwei Displays.',
       text: 'Ein 2-nm-Chip mit Neural Engine rendert beide Hälften synchron und verteilt Apps fließend – sobald du aufklappst.',
       specs: [['Fertigung', '2 nm'], ['Neural Engine', '38 TOPS'], ['Effizienz', '+40 %']],
-      cam: () => ({ fx: -G.hw * .5, fy: -G.H * .24, fz: 0, zoom: G.mobile ? 2.2 : 2.7, rx: 16, ry: 24, rz: 0, xray: 1, explode: 0, flexAmp: 0 })
+      cam: () => ({ fx: -G.hw * .5, fy: -G.H * .24, fz: 0, zoom: G.mobile || G.land ? 2.2 : 2.7, rx: 16, ry: 24, rz: 0, xray: 1, explode: 0, flexAmp: 0 })
     }
   };
   const ZERO = { fx: 0, fy: 0, fz: 0, zoom: 1, rx: 0, ry: 0, rz: 0, xray: 0, explode: 0, flexAmp: 0, sx: 0, sy: 0 };
@@ -235,7 +237,7 @@
     current = key;
     collapseCard(true);
     const f = key && FEATURES[key];
-    const target = f ? { ...ZERO, ...f.cam(), sx: FILM || G.mobile ? 0 : -Math.min(260, G.vw * .16), sy: FILM ? G.vh * .07 : G.mobile ? -G.vh * .17 : 0 } : ZERO;
+    const target = f ? { ...ZERO, ...f.cam(), sx: FILM || G.mobile ? 0 : -Math.min(260, G.vw * .16), sy: G.land ? 0 : FILM ? G.vh * .07 : G.mobile ? -G.vh * .17 : 0 } : ZERO;
     gsap.to(F, { ...target, duration: reduce ? 0 : 1.5, ease: 'expo.inOut', overwrite: true });
     if (key === 'hinge') flexTween.play(); else { flexTween.pause(); gsap.to(flex, { v: 0, duration: .8 }); }
 

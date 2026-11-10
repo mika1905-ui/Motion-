@@ -465,6 +465,12 @@ legend { font-size: 13px; color: var(--muted); margin-bottom: 8px; padding: 0; }
 #film-end h2 { font-size: min(15vw, 10vh); }
 #film-end .pill { margin-top: 3vh; padding: .7em 1.6em; border-radius: 999px; background: var(--accent); color: #fff; font-weight: 600; font-size: min(5vw, 3.4vh); }
 #film-end small { margin-top: 3vh; color: #6e6e73; font-size: min(2.6vw, 1.7vh); }
+.film-land .ft { top: 30%; left: 5%; right: auto; width: 44%; padding: 0; text-align: left; }
+.film-land .ft h2 { font-size: min(6.4vw, 13vh); }
+.film-land .ft .eb { font-size: 3.6vh; } .film-land .ft .sub { font-size: 3.6vh; }
+.film-land #film-end { left: 5%; right: auto; width: 44%; top: 50%; bottom: auto; margin-top: -24vh; }
+.film-land #film-end h2 { font-size: 13vh; white-space: nowrap; } .film-land #film-end .logo { width: 11vh; }
+.film-land #film-end .pill { font-size: 4.2vh; } .film-land #film-end small { font-size: 2.2vh; }
 #film-flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
 #film-black { position: absolute; inset: 0; background: #000; opacity: 0; }
 

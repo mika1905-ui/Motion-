@@ -1,5 +1,5 @@
 const { chromium } = require('playwright'); const path=require('path');
-(async()=>{ const b=await chromium.launch(); const p=await b.newPage({viewport:{width:540,height:960},deviceScaleFactor:1});
+(async()=>{ const b=await chromium.launch(); const p=await b.newPage({viewport:process.env.LAND?{width:960,height:540}:{width:540,height:960},deviceScaleFactor:1});
 const errs=[]; p.on('pageerror',e=>errs.push(e.message));
 await p.goto('file://'+path.resolve(__dirname,'../fold/index.html')+'?film=1'); await p.evaluate(()=>document.fonts.ready);
 await p.waitForTimeout(300); await p.evaluate(()=>__film.manual());

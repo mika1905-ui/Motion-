@@ -10,7 +10,7 @@ const path = require('path');
   const t0 = +(process.argv[4] || 0), t1 = process.argv[5] ? +process.argv[5] : null;
   require('fs').mkdirSync(path.dirname(out), { recursive: true });
   const b = await chromium.launch();
-  const page = await b.newPage({ viewport: { width: 540, height: 960 }, deviceScaleFactor: 2 });
+  const page = await b.newPage({ viewport: process.env.LAND ? { width: 960, height: 540 } : { width: 540, height: 960 }, deviceScaleFactor: 2 });
     await page.goto('file://' + path.resolve(__dirname, '../fold/index.html') + '?film=1');
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);

@@ -1,5 +1,5 @@
 out/chunk_*
 out/chunks.txt
 out/*.log
-out/fold-part.mp4
+out/fold-part-*.mp4
 out/soundtrack.wav
