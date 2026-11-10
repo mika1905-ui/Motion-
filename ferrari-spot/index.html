@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ferrari Hypercar Dynasty</title>
+<style>
+  @font-face{font-family:'Mont';src:url(fonts/montserrat-latin-300-normal.woff2) format('woff2');font-weight:300}
+  @font-face{font-family:'Mont';src:url(fonts/montserrat-latin-500-normal.woff2) format('woff2');font-weight:500}
+  @font-face{font-family:'Mont';src:url(fonts/montserrat-latin-800-normal.woff2) format('woff2');font-weight:800}
+  @font-face{font-family:'Bebas';src:url(fonts/bebas-neue-latin-400-normal.woff2) format('woff2');font-weight:400}
+  html,body{margin:0;height:100%;background:#000;color:#fff;font-family:'Mont',system-ui,sans-serif}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{position:relative;width:min(100vw,calc(100vh*16/9));aspect-ratio:16/9}
+  canvas{width:100%;height:100%;display:block}
+  #play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;width:100%;
+    background:radial-gradient(circle at 50% 55%,rgba(255,40,0,.22),rgba(0,0,0,.88) 60%);cursor:pointer;border:0;color:#fff;
+    letter-spacing:.35em;font-weight:500;font-size:clamp(11px,1.2vw,16px);text-transform:uppercase;font-family:inherit}
+  #play .btn{width:clamp(56px,7vw,96px);aspect-ratio:1;border-radius:50%;border:1.5px solid rgba(255,255,255,.85);display:grid;place-items:center}
+  #play .btn::after{content:'';margin-left:12%;border-style:solid;border-width:clamp(10px,1.3vw,18px) 0 clamp(10px,1.3vw,18px) clamp(16px,2.1vw,28px);border-color:transparent transparent transparent #fff}
+  #play[hidden]{display:none}
+  body.render #play{display:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="c" width="1920" height="1080"></canvas>
+  <button id="play" type="button"><span class="btn"></span><span>Play spot · 0:13</span></button>
+</div>
+<audio id="snd" src="audio/soundtrack.wav" preload="auto"></audio>
+<script>
+'use strict';
+/* =====================================================================
+   FERRARI – "The Hypercar Dynasty" · 13 s motion spot (unofficial fan concept)
+   Fully procedural Canvas 2D, deterministic via renderAt(t).
+   ===================================================================== */
+const W = 1920, H = 1080, DUR = 13;
+const BEAT = 0.325;
+const INTRO_END = 1.6, SCENE_D = 1.3, N_MODELS = 6;
+const OUTRO_START = INTRO_END + N_MODELS * SCENE_D;     // 9.4 s
+const LOGO_HIT = OUTRO_START + 1.15;                    // 10.55 s
+const CUTS = Array.from({length: N_MODELS}, (_, i) => INTRO_END + i * SCENE_D);
+const RED = '#ff2800', YEL = '#ffd400';
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const mk = (w = W, h = H) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+const sceneCv = mk(), sceneCtx = sceneCv.getContext('2d');
+const rCv = mk(), rCtx = rCv.getContext('2d');
+const cCv = mk(), cCtx = cCv.getContext('2d');
+const tmpCv = mk(), tmpCtx = tmpCv.getContext('2d');
+
+/* ---------- math & easing ---------- */
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const inv = (a, b, v) => clamp((v - a) / (b - a));
+const eOut3 = t => 1 - Math.pow(1 - t, 3);
+const eOut4 = t => 1 - Math.pow(1 - t, 4);
+const eIn3 = t => t * t * t;
+const eIn4 = t => t * t * t * t;
+const eInOut3 = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const eOutExpo = t => t >= 1 ? 1 : 1 - Math.pow(2, -10 * t);
+const eOutBack = t => { const c1 = 1.6, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+const pulse = (t, at, k = 10) => t >= at ? Math.exp(-(t - at) * k) : 0;
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${n >> 8 & 255},${n & 255},${a})`; }
+
+/* ---------- the dynasty (real photos, Wikimedia Commons – see README) ---------- */
+const MODELS = [
+  { name: 'F40', year: '1987', tag: 'The last car Enzo Ferrari approved.', engine: '2.9 L twin-turbo V8', cv: 478, kmh: '324',
+    img: 'photos/f40.jpg', cx: .47, cy: .6, vw: .9, accent: RED },
+  { name: 'F50', year: '1995', tag: 'Formula 1 for the road.', engine: '4.7 L V12', cv: 520, kmh: '325',
+    img: 'photos/f50.jpg', cx: .5, cy: .52, vw: 1.0, accent: '#d7dde3' },
+  { name: 'ENZO', year: '2002', tag: 'Named after the founder.', engine: '6.0 L V12', cv: 660, kmh: '350',
+    img: 'photos/enzo.jpg', cx: .53, cy: .55, vw: .8, accent: RED },
+  { name: 'LAFERRARI', year: '2013', tag: 'The Ferrari. Hybrid V12.', engine: '6.3 L V12 hybrid', cv: 963, kmh: '350+',
+    img: 'photos/laferrari.jpg', cx: .5, cy: .52, vw: .88, accent: '#ff3b1f' },
+  { name: 'DAYTONA SP3', year: '2021', tag: 'Icona. Open sky. Pure V12.', engine: '6.5 L V12', cv: 840, kmh: '340+',
+    img: 'photos/sp3.jpg', cx: .49, cy: .5, vw: .9, accent: YEL },
+  { name: 'F80', year: '2024', tag: 'The new apex.', engine: '3.0 L V6 hybrid', cv: 1200, kmh: '350',
+    img: 'photos/f80.jpg', cx: .5, cy: .55, vw: .92, accent: '#ff4d2e' },
+];
+const ASSETS = { horse: 'photos/horse.jpg', badge: 'photos/badge.jpg', crest: 'photos/crest.jpg', wordmark: 'photos/wordmark.svg' };
+const IMG = {};
+
+function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('load ' + src)); i.src = src; }); }
+async function prep() {
+  await Promise.all(MODELS.map(async m => {
+    const im = await loadImg(m.img);
+    const g = mk(im.width, im.height), gc = g.getContext('2d');
+    gc.filter = 'contrast(1.15) saturate(1.2) brightness(.9)'; gc.drawImage(im, 0, 0); m.photo = g;
+    const b = mk(480, 270), bc = b.getContext('2d'); bc.filter = 'blur(14px) brightness(.4) saturate(1.3)';
+    const sc = Math.max(480 / im.width, 270 / im.height) * 1.2;
+    bc.drawImage(im, 240 - im.width * sc / 2, 135 - im.height * sc / 2, im.width * sc, im.height * sc); m.blur = b;
+  }));
+  for (const [k, src] of Object.entries(ASSETS)) IMG[k] = await loadImg(src);
+  // Wordmark: recolour the vector logo to white
+  const wm = IMG.wordmark, ww = 600, wh = Math.round(600 * wm.height / wm.width) || 132;
+  const w = mk(ww, wh), wc = w.getContext('2d');
+  wc.drawImage(wm, 0, 0, ww, wh); wc.globalCompositeOperation = 'source-in'; wc.fillStyle = '#fff'; wc.fillRect(0, 0, ww, wh);
+  IMG.wordWhite = w;
+}
+
+/* ---------- drawing helpers ---------- */
+function cover(g, img, fx, fy, z, ox = 0, oy = 0) {   // cover-fit an image around focus point
+  const sc = Math.max(W / img.width, H / img.height) * z;
+  const dw = img.width * sc, dh = img.height * sc;
+  let x = W / 2 - fx * dw + ox, y = H / 2 - fy * dh + oy;
+  x = Math.min(0, Math.max(W - dw, x)); y = Math.min(0, Math.max(H - dh, y));
+  g.drawImage(img, x, y, dw, dh);
+}
+function drawPhoto(g, m, z, ox = 0) {
+  const P = m.photo;
+  const sc = Math.max(W / (m.vw * P.width), H / P.height) * z;
+  const dw = P.width * sc, dh = P.height * sc;
+  const x = W / 2 + ox - m.cx * dw, y = H / 2 - m.cy * dh;
+  if (y > 0 || y + dh < H || x > 0 || x + dw < W) g.drawImage(m.blur, 0, 0, W, H);
+  g.drawImage(P, x, y, dw, dh);
+}
+function text(g, str, x, y, font, color, o = {}) {
+  const { align = 'left', ls = 0, alpha = 1, reveal = 1, blend } = o;
+  if (alpha <= 0 || reveal <= 0) return;
+  g.save();
+  g.font = font; g.letterSpacing = ls + 'px'; g.textAlign = align; g.textBaseline = 'alphabetic';
+  g.globalAlpha *= alpha; g.fillStyle = color;
+  if (blend) g.globalCompositeOperation = blend;
+  if (align === 'center') x += ls / 2;
+  if (reveal < 1) {
+    const mt = g.measureText(str), asc = mt.actualBoundingBoxAscent + 10, desc = mt.actualBoundingBoxDescent + 10, w = mt.width + 120;
+    const x0 = align === 'left' ? x - 40 : align === 'center' ? x - w / 2 : x - w + 40;
+    g.beginPath(); g.rect(x0, y - asc, w, asc + desc); g.clip();
+    y += (1 - reveal) * (asc + desc);
+  }
+  g.fillText(str, x, y); g.restore();
+}
+function tricolore(g, x, y, w, h = 4, a = 1) {
+  const s = w / 3;
+  g.save(); g.globalAlpha *= a;
+  g.fillStyle = '#009246'; g.fillRect(x, y, s, h);
+  g.fillStyle = '#f4f5f0'; g.fillRect(x + s, y, s, h);
+  g.fillStyle = '#ce2b37'; g.fillRect(x + 2 * s, y, s, h);
+  g.restore();
+}
+function lightLeak(g, t, color, a = 1) {
+  g.save(); g.globalCompositeOperation = 'screen';
+  const pts = [[.15 + .1 * Math.sin(t * .9), .2 + .08 * Math.cos(t * 1.3), 700], [.9 + .06 * Math.cos(t * .7), .85 + .05 * Math.sin(t), 800]];
+  for (const [fx, fy, r] of pts) {
+    const rg = g.createRadialGradient(fx * W, fy * H, 0, fx * W, fy * H, r);
+    rg.addColorStop(0, hexA(color, .32 * a)); rg.addColorStop(.5, hexA('#ff7a1a', .08 * a)); rg.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = rg; g.fillRect(0, 0, W, H);
+  }
+  g.restore();
+}
+const STREAKS = (() => { const r = rng(11); return Array.from({length: 60}, () => ({ y: r() * H, len: lerp(200, 900, r()), sp: lerp(3000, 7000, r()), a: lerp(.05, .25, r()), ph: r() * 9000, w: r() < .2 ? 2 : 1 })); })();
+function streaks(g, t, color, k) {
+  if (k <= 0) return;
+  g.save(); g.globalCompositeOperation = 'lighter';
+  for (const s of STREAKS) {
+    const span = W + s.len * 2, x = ((s.ph - t * s.sp) % span + span) % span - s.len;
+    const gr = g.createLinearGradient(x, 0, x + s.len, 0);
+    gr.addColorStop(0, hexA(color, s.a * k)); gr.addColorStop(1, hexA(color, 0));
+    g.fillStyle = gr; g.fillRect(x, s.y, s.len, s.w);
+  }
+  g.restore();
+}
+const SPARKS = (() => { const r = rng(5); return Array.from({length: 90}, () => ({ x: r() * W, sp: lerp(40, 160, r()), ph: r() * H, s: lerp(1, 3.2, r()), dr: lerp(-30, 30, r()), a: lerp(.25, .9, r()) })); })();
+function sparks(g, t, a) {
+  if (a <= 0) return;
+  g.save(); g.globalCompositeOperation = 'lighter';
+  for (const p of SPARKS) {
+    const y = H - ((p.ph + t * p.sp) % (H + 40));
+    const x = p.x + Math.sin(t * 1.3 + p.ph) * p.dr;
+    const fl = .6 + .4 * Math.sin(t * 9 + p.ph);
+    g.fillStyle = `rgba(255,${120 + (p.s * 30 | 0)},40,${p.a * a * fl * (y / H)})`;
+    g.beginPath(); g.arc(x, y, p.s, 0, 7); g.fill();
+  }
+  g.restore();
+}
+const GRAIN = (() => { const r = rng(42); return Array.from({length: 6}, () => {
+  const c = mk(640, 360), g = c.getContext('2d'), id = g.createImageData(640, 360);
+  for (let i = 0; i < id.data.length; i += 4) { const v = r() * 255; id.data[i] = id.data[i + 1] = id.data[i + 2] = v; id.data[i + 3] = 255; }
+  g.putImageData(id, 0, 0); return c; }); })();
+
+/* ---------- RGB split (exact channel separation) ---------- */
+function chroma(src, amt, dy = 0) {
+  rCtx.globalCompositeOperation = 'source-over'; rCtx.clearRect(0, 0, W, H); rCtx.drawImage(src, 0, 0);
+  rCtx.globalCompositeOperation = 'multiply'; rCtx.fillStyle = '#f00'; rCtx.fillRect(0, 0, W, H);
+  cCtx.globalCompositeOperation = 'source-over'; cCtx.clearRect(0, 0, W, H); cCtx.drawImage(src, 0, 0);
+  cCtx.globalCompositeOperation = 'multiply'; cCtx.fillStyle = '#0ff'; cCtx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.drawImage(cCv, -amt, -dy); ctx.drawImage(rCv, amt, dy);
+  ctx.restore();
+}
+/* ---------- glitch bands ---------- */
+function glitch(src, strength, seed) {
+  if (strength <= .02) return;
+  const r = rng(seed);
+  for (let k = 0; k < 9; k++) {
+    const y = r() * H, h = lerp(8, 90, r()), dx = (r() - .5) * 260 * strength;
+    ctx.drawImage(src, 0, y, W, h, dx, y, W, h);
+    if (r() < .3) { ctx.fillStyle = hexA(r() < .5 ? RED : '#ffffff', .25 * strength); ctx.fillRect(0, y, W, h * .3); }
+  }
+}
+
+/* ---------- INTRO ---------- */
+function drawIntro(t) {
+  const g = sceneCtx; g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
+  if (t < 1.1) {
+    const shotB = t >= .55, lt = shotB ? t - .55 : t;
+    const img = shotB ? IMG.badge : IMG.horse;
+    const z = 1.25 + lt * .22 + .1 * pulse(lt, 0, 9);
+    g.save(); g.filter = 'brightness(.62) contrast(1.25) saturate(1.15)';
+    if (shotB) cover(g, img, .45, .42, z, -lt * 60); else cover(g, img, .62, .5, z, lt * 50);
+    g.restore();
+    lightLeak(g, t, RED, .9);
+    const vg = g.createRadialGradient(W / 2, H / 2, 200, W / 2, H / 2, 1100);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.85)'); g.fillStyle = vg; g.fillRect(0, 0, W, H);
+    g.globalAlpha = 1 - inv(0, .12, lt); g.fillStyle = '#000'; g.fillRect(0, 0, W, H); g.globalAlpha = 1;
+  } else {
+    // year strobe – the dynasty in six flashes
+    const k = Math.min(5, Math.floor((t - 1.1) / .07));
+    const lt = (t - 1.1) - k * .07;
+    const m = MODELS[k];
+    g.save(); g.globalAlpha = .35; g.filter = 'brightness(.5) saturate(1.3)'; cover(g, m.photo, m.cx, m.cy, 1.15 + lt); g.restore();
+    g.fillStyle = 'rgba(0,0,0,.45)'; g.fillRect(0, 0, W, H);
+    const s = 1 + .25 * (1 - eOut3(clamp(lt / .07)));
+    g.save(); g.translate(W / 2, H / 2 + 150); g.scale(s, s);
+    text(g, m.year, 0, 0, '400 420px Bebas', k % 2 ? '#fff' : RED, { align: 'center', ls: 6 });
+    g.restore();
+    text(g, m.name, W / 2, H / 2 + 230, '500 24px Mont', 'rgba(255,255,255,.85)', { align: 'center', ls: 14 });
+    if (t > 1.52) { g.fillStyle = '#000'; g.fillRect(0, 0, W, H); }   // the breath before the drop
+  }
+  // composite: RGB split on the macro cut and on every year flash
+  const fl = t >= 1.1 && t < 1.52 ? pulse((t - 1.1) % .07, 0, 40) : 0;
+  const h = Math.max(pulse(t, .55, 12), fl * .6);
+  if (h > .04) { chroma(sceneCv, 28 * h, 4 * h); glitch(sceneCv, h * .8, Math.floor(t * 60)); }
+  else ctx.drawImage(sceneCv, 0, 0);
+  if (t >= .55 && t < .65) { ctx.fillStyle = `rgba(255,255,255,${.5 * pulse(t, .55, 25)})`; ctx.fillRect(0, 0, W, H); }
+  return () => {
+    if (t < .55) {
+      text(ctx, 'SOME CARS ARE BUILT.', W / 2, H / 2 + 12, '300 46px Mont', '#fff', { align: 'center', ls: lerp(30, 16, eOut3(inv(.08, .5, t))), reveal: eOut4(inv(.08, .3, t)), alpha: 1 - inv(.45, .55, t) });
+    } else if (t < 1.1) {
+      text(ctx, 'THESE WERE BORN.', W / 2, H / 2 + 26, '800 92px Mont', '#fff', { align: 'center', ls: lerp(26, 10, eOut3(inv(.58, 1.05, t))), reveal: eOut4(inv(.58, .78, t)), alpha: 1 - inv(1.02, 1.1, t) });
+      tricolore(ctx, W / 2 - 90 * eOut3(inv(.65, .9, t)), H / 2 + 70, 180 * eOut3(inv(.65, .9, t)), 4);
+    }
+  };
+}
+
+/* ---------- MODEL SCENE ---------- */
+function drawModel(i, lt, t) {
+  const m = MODELS[i], g = sceneCtx;
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#050505'; g.fillRect(0, 0, W, H);
+  // camera: hard zoom-punch on the drop, beat bump, slow push
+  const z = 1.0 + .035 * lt + .2 * (1 - eOutExpo(clamp(lt / .35))) + .028 * pulse(lt, 2 * BEAT, 12);
+  drawPhoto(g, m, z, lerp(30, -30, lt / SCENE_D));
+  // grade
+  lightLeak(g, t, m.accent, .55);
+  let gr = g.createLinearGradient(0, H * .45, 0, H);
+  gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.88)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  gr = g.createLinearGradient(0, 0, W * .5, 0);
+  gr.addColorStop(0, 'rgba(0,0,0,.5)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  gr = g.createLinearGradient(0, 0, 0, 380);
+  gr.addColorStop(0, 'rgba(0,0,0,.6)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, 380);
+  // diagonal light sweep
+  const sw = inv(.3, 1.0, lt);
+  if (sw > 0 && sw < 1) {
+    const sx = lerp(-600, W + 600, eInOut3(sw));
+    g.save(); g.globalCompositeOperation = 'screen';
+    const sg = g.createLinearGradient(sx - 220, 0, sx + 220, 0);
+    sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,240,230,.18)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = sg; g.beginPath(); g.moveTo(sx - 20, 0); g.lineTo(sx + 420, 0); g.lineTo(sx + 20, H); g.lineTo(sx - 420, H); g.fill();
+    g.restore();
+  }
+  // giant year, odometer roll-in (overlay blend)
+  g.save();
+  g.font = '400 470px Bebas'; g.textAlign = 'left'; g.letterSpacing = '4px';
+  const digits = [...m.year], dW = digits.map(d => g.measureText(d).width + 4);
+  let x = W - 70 - dW.reduce((a, b) => a + b, 0);
+  const yb = 470 - lt * 40;
+  g.beginPath(); g.rect(0, yb - 360, W, 380); g.clip();
+  digits.forEach((d, k) => {
+    const q = eOut4(inv(.04 + k * .05, .3 + k * .05, lt));
+    const yy = yb + (1 - q) * 380;
+    g.globalCompositeOperation = 'overlay'; g.fillStyle = 'rgba(255,255,255,.55)'; g.fillText(d, x, yy);
+    g.globalCompositeOperation = 'source-over'; g.strokeStyle = hexA('#ffffff', .4); g.lineWidth = 2; g.strokeText(d, x, yy);
+    x += dW[k];
+  });
+  g.restore();
+  streaks(g, t, m.accent, .35 * inv(.1, .5, lt) * (1 - inv(.9, 1.1, lt)));
+
+  // --- composite to main: hit (RGB split + glitch), then zoom-through exit ---
+  const hit = pulse(lt, 0, 14);
+  const exitU = inv(1.0, SCENE_D, lt);
+  if (exitU > 0) {
+    const n = 7, zmax = .9 * eIn3(exitU);
+    ctx.save(); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+    for (let k = 0; k <= n; k++) {
+      const s = 1 + zmax * (k / n);
+      ctx.globalAlpha = k === 0 ? 1 : .2;
+      ctx.drawImage(sceneCv, W / 2 - W * s / 2, H / 2 - H * s / 2, W * s, H * s);
+    }
+    ctx.restore();
+    ctx.fillStyle = `rgba(255,255,255,${.6 * eIn4(exitU)})`; ctx.fillRect(0, 0, W, H);
+  } else if (hit > .03) {
+    chroma(sceneCv, 34 * hit, 6 * hit);
+    glitch(sceneCv, hit, i * 97 + Math.floor(lt * 60));
+  } else {
+    ctx.drawImage(sceneCv, 0, 0);
+    // subtle split on the off-beat bump
+    const b = pulse(lt, 2 * BEAT, 16);
+    if (b > .05) { ctx.save(); ctx.globalAlpha = .35 * b; ctx.globalCompositeOperation = 'screen'; ctx.drawImage(sceneCv, 14 * b, 0); ctx.restore(); }
+  }
+  if (lt < .09) { ctx.fillStyle = hexA(lt < .03 ? '#ffffff' : m.accent, .55 * (1 - lt / .09)); ctx.fillRect(0, 0, W, H); }
+
+  // --- typography / HUD (drawn after grade, before letterbox) ---
+  return () => {
+    const outA = 1 - inv(1.02, 1.14, lt);
+    ctx.save(); ctx.globalAlpha = outA;
+    // header
+    if (IMG.wordWhite) { const ww = 150, wh = ww * IMG.wordWhite.height / IMG.wordWhite.width; ctx.globalAlpha = outA * .95; ctx.drawImage(IMG.wordWhite, 80, 88, ww, wh); ctx.globalAlpha = outA; }
+    ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(250, 92, 1, 30);
+    text(ctx, 'THE HYPERCAR DYNASTY', 272, 114, '500 16px Mont', 'rgba(255,255,255,.85)', { ls: 6 });
+    text(ctx, `0${i + 1} / 06`, 272 + 390, 114, '500 16px Mont', m.accent, { ls: 6 });
+    // name block bottom-left
+    const nameFont = m.name.length > 6 ? '400 170px Bebas' : '400 230px Bebas';
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 40;
+    text(ctx, m.name, 76, 868, nameFont, '#fff', { ls: 6, reveal: eOut4(inv(.02, .3, lt)) });
+    ctx.restore();
+    tricolore(ctx, 82, 892, 150 * eOut3(inv(.12, .4, lt)), 5);
+    text(ctx, m.tag, 82, 948, '300 34px Mont', '#fff', { ls: 1, reveal: eOut4(inv(BEAT * .9, BEAT * .9 + .3, lt)) });
+    text(ctx, m.engine.toUpperCase(), 82, 990, '500 17px Mont', m.accent, { ls: 6, alpha: inv(.5, .7, lt) });
+    // HUD gauge bottom-right
+    gauge(W - 250, H - 260, 118, m, lt);
+    ctx.restore();
+  };
+}
+function gauge(cx, cy, R, m, lt) {
+  const app = eOut3(inv(.08, .3, lt));
+  if (app <= 0) return;
+  const a0 = Math.PI * .75, a1 = Math.PI * 2.25, span = a1 - a0;
+  const frac = m.cv / 1200;
+  const nd = clamp(eOutBack(inv(.14, .78, lt)), 0, 1.04) * frac;
+  ctx.save(); ctx.globalAlpha *= app; ctx.translate(cx, cy); ctx.scale(lerp(.85, 1, app), lerp(.85, 1, app));
+  // glass disc
+  const bg = ctx.createRadialGradient(0, 0, 10, 0, 0, R + 30);
+  bg.addColorStop(0, 'rgba(0,0,0,.55)'); bg.addColorStop(1, 'rgba(0,0,0,.15)');
+  ctx.fillStyle = bg; ctx.beginPath(); ctx.arc(0, 0, R + 26, 0, 7); ctx.fill();
+  // ticks
+  for (let k = 0; k <= 48; k++) {
+    const f = k / 48, a = a0 + span * f, red = f > .85, major = k % 6 === 0;
+    const r1 = R - (major ? 18 : 9);
+    ctx.strokeStyle = red ? hexA(RED, .95) : (f <= nd ? 'rgba(255,255,255,.95)' : 'rgba(255,255,255,.28)');
+    ctx.lineWidth = major ? 3 : 1.5;
+    ctx.beginPath(); ctx.moveTo(Math.cos(a) * r1, Math.sin(a) * r1); ctx.lineTo(Math.cos(a) * R, Math.sin(a) * R); ctx.stroke();
+  }
+  // progress arc
+  const ag = ctx.createLinearGradient(-R, 0, R, 0);
+  ag.addColorStop(0, YEL); ag.addColorStop(1, RED);
+  ctx.strokeStyle = ag; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.shadowColor = RED; ctx.shadowBlur = 18;
+  ctx.beginPath(); ctx.arc(0, 0, R + 12, a0, a0 + span * nd); ctx.stroke();
+  // needle
+  const an = a0 + span * nd;
+  ctx.shadowBlur = 12; ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(Math.cos(an) * 20, Math.sin(an) * 20); ctx.lineTo(Math.cos(an) * (R - 4), Math.sin(an) * (R - 4)); ctx.stroke();
+  ctx.shadowBlur = 0;
+  // counter
+  const val = Math.round(m.cv * clamp(nd / frac, 0, 1));
+  ctx.fillStyle = '#fff'; ctx.font = '400 84px Bebas'; ctx.textAlign = 'center'; ctx.letterSpacing = '2px';
+  ctx.fillText(String(val), 0, 30);
+  ctx.font = '500 14px Mont'; ctx.letterSpacing = '5px'; ctx.fillStyle = 'rgba(255,255,255,.75)';
+  ctx.fillText('CV', 3, 58);
+  ctx.globalAlpha *= inv(.55, .8, lt);
+  ctx.font = '500 18px Mont'; ctx.fillStyle = '#fff'; ctx.fillText(`${m.kmh} KM/H`, 3, R + 62);
+  ctx.restore();
+}
+
+/* ---------- OUTRO ---------- */
+function drawOutro(lt, t) {
+  const g = sceneCtx; g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#030303'; g.fillRect(0, 0, W, H);
+  let ui = null;
+  if (lt < 1.0) {
+    // tile wall: six legends slam in on the beat
+    const cols = 3, rows = 2, gap = 14, mX = 60, mY = 90;
+    const tw = (W - mX * 2 - gap * (cols - 1)) / cols, th = (H - mY * 2 - gap) / rows;
+    const collapse = eIn3(inv(.78, 1.0, lt));
+    g.save(); g.translate(W / 2, H / 2); g.scale(1 - .35 * collapse, 1 - .35 * collapse); g.translate(-W / 2, -H / 2);
+    MODELS.forEach((m, k) => {
+      const at = k * .11, q = inv(at, at + .18, lt);
+      if (q <= 0) return;
+      const s = lerp(1.35, 1, eOutExpo(q));
+      const cx = mX + (k % cols) * (tw + gap) + tw / 2, cy = mY + Math.floor(k / cols) * (th + gap) + th / 2;
+      g.save(); g.globalAlpha = Math.min(1, q * 3) * (1 - collapse);
+      g.translate(cx, cy); g.scale(s, s);
+      g.beginPath(); g.rect(-tw / 2, -th / 2, tw, th); g.clip();
+      const P = m.photo, sc = Math.max(tw / (P.width * m.vw * .9), th / P.height) * (1.05 + .05 * lt);
+      g.drawImage(P, -m.cx * P.width * sc, -m.cy * P.height * sc, P.width * sc, P.height * sc);
+      const gg = g.createLinearGradient(0, 0, 0, th / 2);
+      gg.addColorStop(0, 'rgba(0,0,0,0)'); gg.addColorStop(1, 'rgba(0,0,0,.8)'); g.fillStyle = gg; g.fillRect(-tw / 2, 0, tw, th / 2);
+      g.font = '400 64px Bebas'; g.letterSpacing = '3px'; g.fillStyle = '#fff'; g.textAlign = 'left';
+      g.fillText(m.name, -tw / 2 + 26, th / 2 - 28);
+      g.font = '500 16px Mont'; g.letterSpacing = '5px'; g.fillStyle = m.accent; g.textAlign = 'right';
+      g.fillText(m.year, tw / 2 - 26, th / 2 - 34);
+      g.fillStyle = `rgba(255,255,255,${.7 * pulse(lt, at, 10)})`; g.fillRect(-tw / 2, -th / 2, tw, th);
+      g.restore();
+    });
+    g.restore();
+  } else {
+    const L = t - LOGO_HIT;           // time relative to the logo hit
+    const rg = g.createRadialGradient(W / 2, 470, 10, W / 2, 470, 1000);
+    rg.addColorStop(0, hexA(RED, .3 * inv(0, .6, L))); rg.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = rg; g.fillRect(0, 0, W, H);
+    sparks(g, t, inv(0, .8, L));
+    if (L < 0) {   // the silence: a single thread of light
+      const w = W * eOut3(inv(-.15, 0, L));
+      g.fillStyle = RED; g.fillRect(W / 2 - w / 2, H / 2, w, 2);
+    } else {
+      // crest
+      const ch = 440, cw = ch * IMG.crest.width / IMG.crest.height;
+      const s = lerp(1.25, 1, eOutExpo(clamp(L / .5))) + .01 * Math.sin(L * 2);
+      g.save(); g.translate(W / 2, 430); g.scale(s, s);
+      g.shadowColor = hexA(RED, .9); g.shadowBlur = 80 * (.4 + .6 * pulse(L, 0, 3));
+      g.beginPath(); g.roundRect(-cw / 2, -ch / 2, cw, ch, 12); g.fillStyle = '#000'; g.fill();
+      g.shadowBlur = 0; g.save(); g.clip();
+      g.drawImage(IMG.crest, -cw / 2 - 2, -ch / 2 - 2, cw + 4, ch + 4);
+      const sw = inv(.55, 1.15, L);
+      if (sw > 0 && sw < 1) {
+        const bx = lerp(-cw, cw, eInOut3(sw));
+        const sg = g.createLinearGradient(bx - 80, 0, bx + 80, 0);
+        sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,255,255,.55)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
+        g.globalCompositeOperation = 'screen'; g.fillStyle = sg; g.save(); g.rotate(.25); g.fillRect(bx - 120, -ch, 240, ch * 2); g.restore();
+      }
+      g.restore(); g.restore();
+    }
+    ui = () => {
+      if (L < 0) return;
+      text(ctx, 'SIX LEGENDS. ONE OBSESSION.', W / 2, 760, '800 46px Mont', '#fff', { align: 'center', ls: lerp(26, 12, eOut3(inv(.3, 1.4, L))), reveal: eOut4(inv(.3, .65, L)) });
+      tricolore(ctx, W / 2 - 110 * eOut3(inv(.5, .9, L)), 790, 220 * eOut3(inv(.5, .9, L)), 4);
+      text(ctx, 'F40  ·  F50  ·  ENZO  ·  LAFERRARI  ·  DAYTONA SP3  ·  F80', W / 2, 842, '500 18px Mont', 'rgba(255,255,255,.6)', { align: 'center', ls: 6, alpha: eOut3(inv(.75, 1.2, L)) });
+      text(ctx, '1987 — 2024', W / 2, 890, '400 34px Bebas', RED, { align: 'center', ls: 10, alpha: eOut3(inv(.95, 1.4, L)) });
+    };
+  }
+  // composite with hit split on the logo
+  const h = pulse(t, LOGO_HIT, 9);
+  if (h > .04) chroma(sceneCv, 30 * h, 0); else ctx.drawImage(sceneCv, 0, 0);
+  if (t >= LOGO_HIT && t < LOGO_HIT + .25) { ctx.fillStyle = `rgba(255,255,255,${.75 * pulse(t, LOGO_HIT, 14)})`; ctx.fillRect(0, 0, W, H); }
+  return ui;
+}
+
+/* ---------- post ---------- */
+function barsAt(t) {
+  if (t < INTRO_END) return lerp(170, 120, inv(0, 1.5, t));
+  if (t < OUTRO_START) return lerp(0, 46, eOutExpo(inv(INTRO_END, INTRO_END + .35, t)));
+  return lerp(46, 70, inv(OUTRO_START, OUTRO_START + 1, t));
+}
+function post(t, frame, ui, sx, sy) {
+  ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .1;
+  ctx.drawImage(GRAIN[frame % GRAIN.length], 0, 0, W, H); ctx.restore();
+  const vg = ctx.createRadialGradient(W / 2, H / 2, H * .4, W / 2, H / 2, H * 1.05);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.6)');
+  ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  if (ui) { ctx.save(); ctx.translate(sx * .5, sy * .5); ui(); ctx.restore(); }
+  const b = barsAt(t);
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, b); ctx.fillRect(0, H - b, W, b);
+  const fade = Math.max(1 - inv(0, .15, t), inv(DUR - .3, DUR, t));
+  if (fade > 0) { ctx.fillStyle = `rgba(0,0,0,${fade})`; ctx.fillRect(0, 0, W, H); }
+}
+
+/* ---------- main render ---------- */
+function renderAt(t) {
+  t = clamp(t, 0, DUR);
+  const frame = Math.floor(t * 30);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  // camera shake on every hit
+  let sx = 0, sy = 0;
+  const hits = [.55, ...CUTS, LOGO_HIT];
+  for (const T of hits) { const k = pulse(t, T, 8) * 14; sx += Math.sin((t - T) * 70) * k; sy += Math.cos((t - T) * 55) * k * .6; }
+  if (t >= INTRO_END && t < OUTRO_START) { const lb = (t - INTRO_END) % BEAT; const k = Math.exp(-lb * 18) * 4; sy += k; }
+  ctx.save(); ctx.translate(sx, sy);
+  let ui;
+  if (t < INTRO_END) ui = drawIntro(t);
+  else if (t < OUTRO_START) { const i = Math.floor((t - INTRO_END) / SCENE_D); ui = drawModel(i, t - INTRO_END - i * SCENE_D, t); }
+  else ui = drawOutro(t - OUTRO_START, t);
+  ctx.restore();
+  post(t, frame, ui, sx, sy);
+}
+
+window.renderAt = renderAt;
+window.DURATION = DUR;
+window.__ready = Promise.all([prep(), ...['300 40px Mont', '500 40px Mont', '800 40px Mont', '400 40px Bebas'].map(f => document.fonts.load(f))]).then(() => { renderAt(.0001); return true; });
+
+const isRender = new URLSearchParams(location.search).has('render');
+if (isRender) document.body.classList.add('render');
+else {
+  const snd = document.getElementById('snd'), btn = document.getElementById('play');
+  let start = 0, playing = false;
+  window.__ready.then(() => renderAt(LOGO_HIT + 1.8));
+  const loop = () => {
+    if (!playing) return;
+    const t = (!snd.paused && snd.currentTime > 0) ? snd.currentTime : (performance.now() - start) / 1000;
+    renderAt(t);
+    if (t >= DUR) { playing = false; btn.hidden = false; return; }
+    requestAnimationFrame(loop);
+  };
+  btn.addEventListener('click', () => {
+    btn.hidden = true; playing = true; start = performance.now();
+    snd.currentTime = 0; snd.play().catch(() => {});
+    requestAnimationFrame(loop);
+  });
+}
+</script>
+</body>
+</html>
