@@ -20,3 +20,24 @@ python3 render.py --preview 5.3 8.6   # single PNG frames for quick checks
 
 To change the caption, brand or timing, edit the constants and the phase times at the top of
 `render.py` (`CAPTION`, `BRAND`, `liquid_field`).
+
+---
+
+# Café Europa Bielefeld – Instagram reel
+
+15 s vertical reel (1080×1920, 30 fps, 128 BPM with its own synthesized house beat):
+club intro **CAFÉ EUROPA – BIELEFELD** → **JEDEN MITTWOCH / FREITAG / SAMSTAG** (one scene per day,
+cut on the beat) → jumping crowd with lights and lasers, **PARTY – BIS IN DEN MORGEN** → end card with
+**MI · FR · SA**, Jahnplatz 4, 33602 Bielefeld and @cafe_europa_bi.
+
+**Output:** [`out/cafe_europa_reel.mp4`](out/cafe_europa_reel.mp4)
+
+```bash
+python3 europa_reel.py                    # -> out/cafe_europa_reel.mp4
+python3 europa_reel.py --preview 1 3.3 13 # single PNG frames
+```
+
+**Real footage:** put your own clips (filmed in the club, or clips you have the rights to) as `.mp4`/`.mov`
+into `clips/`. They're used in name order as the background for intro, Wednesday, Friday, Saturday and
+crowd scenes (colour-graded to the scene's colour), and the text and graphics stay on top. Texts, address
+and handle are at the top of `europa_reel.py`.
