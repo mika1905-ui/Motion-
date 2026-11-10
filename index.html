@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>XY Residences — Penthouse Experience</title>
+  <meta name="description" content="XY Residences: Acht Etagen, 23 Residenzen und ein Penthouse mit 270°-Panorama. Interaktive Motion-Experience." />
+  <meta name="theme-color" content="#0B0B0E" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind (Play-CDN für den Prototyp; für Produktion per CLI bauen, siehe README) -->
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0B0B0E',
+            'ink-2': '#131318',
+            cream: '#ECE6DC',
+            gold: '#C9A46A',
+            'gold-light': '#E6C995',
+            copper: '#B87543'
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['Manrope', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="bg-ink text-cream font-sans antialiased">
+
+  <!-- ============================================================
+       INTRO – Motion-Ad Opener
+       ============================================================ -->
+  <div id="intro" class="fixed inset-0 z-[80] bg-ink flex items-center justify-center">
+    <div class="text-center px-6">
+      <div class="intro-logo font-display font-light text-7xl md:text-9xl tracking-[.25em] pl-[.25em]">
+        <span class="intro-mask"><span>X</span></span><span class="intro-mask"><span>Y</span></span>
+      </div>
+      <div class="intro-line mx-auto my-6 h-px w-40 bg-gold"></div>
+      <p class="intro-tag uppercase tracking-[.55em] text-[11px] text-cream/60">Residences</p>
+      <p class="intro-claim font-display italic font-light text-2xl md:text-4xl mt-8 text-cream/90">Wohnen über den Dingen.</p>
+    </div>
+    <button id="skip-intro" class="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 text-[11px] uppercase tracking-[.3em] text-cream/40 hover:text-gold transition-colors">Überspringen</button>
+  </div>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header id="site-header" class="fixed top-0 inset-x-0 z-50 transition-colors duration-500">
+    <div class="mx-auto max-w-[1440px] px-5 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <a href="#hero" class="flex items-center gap-3 group" aria-label="XY Residences – Start">
+        <span class="font-display text-2xl tracking-[.3em] group-hover:text-gold-light transition-colors">XY</span>
+        <span class="hidden sm:block h-4 w-px bg-cream/20"></span>
+        <span class="hidden sm:block text-[10px] uppercase tracking-[.4em] text-cream/50">Residences</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-9 text-[11px] uppercase tracking-[.28em] text-cream/60">
+        <a href="#residenzen" class="nav-link">Residenzen</a>
+        <a href="#lage" class="nav-link">Lage</a>
+        <a href="#kontakt" class="nav-link">Kontakt</a>
+      </nav>
+      <button class="btn-ghost btn-sm" data-open-visit="">Besichtigung</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         HERO – Gebäude-Übersicht
+         ============================================================ -->
+    <section id="hero" class="relative min-h-[100svh] overflow-hidden">
+      <div class="hero-bg" aria-hidden="true"></div>
+
+      <div class="relative mx-auto max-w-[1440px] px-5 sm:px-8 pt-24 sm:pt-28 pb-12 lg:py-0 grid lg:grid-cols-12 gap-8 lg:gap-6 items-center min-h-[100svh]">
+
+        <!-- Copy -->
+        <div class="hero-copy lg:col-span-4 relative z-10">
+          <p class="hero-reveal eyebrow">XY Residences — Neubau am Stadtpark</p>
+          <h1 class="hero-reveal font-display font-light text-[3.2rem] leading-[.95] sm:text-7xl lg:text-[4.4rem] xl:text-[5.4rem] mt-5">
+            Wohnen<br /><em class="text-gold-light">über</em> den Dingen.
+          </h1>
+          <p class="hero-reveal mt-6 text-cream/65 text-[15px] leading-relaxed max-w-md">
+            Acht Etagen, 23 Residenzen und ein Penthouse mit 270°-Panorama.
+            Wählen Sie eine Etage – oder treten Sie direkt ein.
+          </p>
+          <div class="hero-reveal flex flex-wrap gap-3 mt-8">
+            <button class="btn-gold" data-enter>
+              Penthouse erleben
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg>
+            </button>
+            <button class="btn-ghost" data-open-visit="">Besichtigung vereinbaren</button>
+          </div>
+          <button id="play-ad" class="hero-reveal mt-8 inline-flex items-center gap-3 text-[11px] uppercase tracking-[.28em] text-cream/55 hover:text-gold-light transition-colors">
+            <span class="play-dot"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg></span>
+            Motion-Ad abspielen
+          </button>
+        </div>
+
+        <!-- Building -->
+        <div class="lg:col-span-5 relative">
+          <div id="stage" class="relative mx-auto w-full max-w-[640px]">
+            <svg id="building" viewBox="0 70 660 670" class="w-full h-auto max-h-[80vh] overflow-visible" role="group" aria-label="Gebäudeansicht – wählen Sie eine Etage">
+              <defs>
+                <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#fff" stop-opacity=".07" />
+                  <stop offset=".35" stop-color="#fff" stop-opacity="0" />
+                  <stop offset=".55" stop-color="#fff" stop-opacity=".05" />
+                  <stop offset=".62" stop-color="#fff" stop-opacity="0" />
+                </linearGradient>
+                <linearGradient id="plaza" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#C9A46A" stop-opacity=".10" />
+                  <stop offset="1" stop-color="#C9A46A" stop-opacity="0" />
+                </linearGradient>
+                <radialGradient id="groundGlow" cx=".5" cy=".5" r=".5">
+                  <stop offset="0" stop-color="#C9A46A" stop-opacity=".22" />
+                  <stop offset="1" stop-color="#C9A46A" stop-opacity="0" />
+                </radialGradient>
+              </defs>
+              <g id="ground"></g>
+              <g id="floors"></g>
+              <g id="building-fx" pointer-events="none"></g>
+            </svg>
+            <p class="building-hint hero-reveal text-center text-[10px] sm:text-[11px] uppercase tracking-[.28em] text-cream/40 mt-2">
+              Etage wählen · Penthouse anklicken für die Innenansicht
+            </p>
+          </div>
+        </div>
+
+        <!-- Floor info -->
+        <aside id="floor-info" class="lg:col-span-3 glass-card p-6 sm:p-7 relative z-10" aria-live="polite">
+          <div id="fi-body">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="eyebrow" id="fi-name">Penthouse</p>
+                <h2 class="font-display text-3xl leading-tight mt-1" id="fi-title">Sky Residence</h2>
+              </div>
+              <span id="fi-code" class="font-display text-5xl text-gold/80 leading-none">PH</span>
+            </div>
+            <dl class="grid grid-cols-2 gap-x-4 gap-y-4 mt-6 text-sm">
+              <div><dt class="dt">Einheiten</dt><dd id="fi-units">1 Residenz</dd></div>
+              <div><dt class="dt">Zimmer</dt><dd id="fi-rooms">5 Zimmer</dd></div>
+              <div class="col-span-2"><dt class="dt">Fläche</dt><dd id="fi-size">286 m² + 120 m² Terrasse</dd></div>
+              <div class="col-span-2"><dt class="dt">Kaufpreis</dt><dd id="fi-price" class="font-display text-2xl text-gold-light">ab 4.950.000 €</dd></div>
+            </dl>
+            <div class="mt-5"><span id="fi-status" class="status" data-type="ok">1 verfügbar</span></div>
+            <div class="flex flex-wrap gap-2 mt-6">
+              <button id="fi-enter" class="btn-gold btn-sm" data-enter>Betreten</button>
+              <button id="fi-plan" class="btn-ghost btn-sm" data-open-plan="ph">Grundriss ansehen</button>
+              <button id="fi-visit" class="btn-ghost btn-sm" data-open-visit="ph">Termin</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="scroll-cue hero-reveal" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- ============================================================
+         KENNZAHLEN
+         ============================================================ -->
+    <section id="residenzen" class="relative border-y border-cream/[.06] bg-ink-2/60">
+      <div class="mx-auto max-w-[1440px] px-5 sm:px-8 py-14 sm:py-20 grid grid-cols-2 lg:grid-cols-4 gap-y-10">
+        <div class="stat reveal"><span class="stat-num" data-count="8">0</span><span class="stat-label">Etagen</span></div>
+        <div class="stat reveal"><span class="stat-num" data-count="23">0</span><span class="stat-label">Residenzen</span></div>
+        <div class="stat reveal"><span class="whitespace-nowrap"><span class="stat-num" data-count="270">0</span><span class="stat-unit">°</span></span><span class="stat-label">Panorama im Penthouse</span></div>
+        <div class="stat reveal"><span class="stat-num" data-count="2027">0</span><span class="stat-label">Fertigstellung</span></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FEATURES
+         ============================================================ -->
+    <section class="mx-auto max-w-[1440px] px-5 sm:px-8 py-24 sm:py-32">
+      <div class="max-w-2xl reveal">
+        <p class="eyebrow">Architektur</p>
+        <h2 class="font-display font-light text-4xl sm:text-6xl mt-4 leading-[1.02]">Klarheit in jeder Linie. Licht in jedem Raum.</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5 mt-14">
+        <article class="feature-card reveal">
+          <span class="feature-no">01</span>
+          <h3 class="font-display text-3xl mt-10">Raumhohe Verglasung</h3>
+          <p class="text-cream/60 text-sm leading-relaxed mt-3">Bis zu 4,20 m lichte Höhe und Glasflächen ohne Brüstung – der Ausblick wird Teil der Architektur.</p>
+        </article>
+        <article class="feature-card reveal">
+          <span class="feature-no">02</span>
+          <h3 class="font-display text-3xl mt-10">Concierge &amp; Spa</h3>
+          <p class="text-cream/60 text-sm leading-relaxed mt-3">Lobby mit 24/7-Concierge, Private Spa, Fitness und Weinlounge im Erdgeschoss – exklusiv für Bewohner.</p>
+        </article>
+        <article class="feature-card reveal">
+          <span class="feature-no">03</span>
+          <h3 class="font-display text-3xl mt-10">KfW 40 Standard</h3>
+          <p class="text-cream/60 text-sm leading-relaxed mt-3">Geothermie, Photovoltaik und kontrollierte Lüftung. Nachhaltig ohne Kompromisse beim Komfort.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         LAGE
+         ============================================================ -->
+    <section id="lage" class="border-t border-cream/[.06]">
+      <div class="mx-auto max-w-[1440px] px-5 sm:px-8 py-24 sm:py-32 grid lg:grid-cols-2 gap-14 items-center">
+        <div class="reveal">
+          <p class="eyebrow">Lage</p>
+          <h2 class="font-display font-light text-4xl sm:text-6xl mt-4 leading-[1.02]">Zwischen Park, See und Altstadt.</h2>
+          <p class="text-cream/60 mt-6 max-w-lg leading-relaxed">Ruhig gelegen am Stadtpark, mit direktem Blick auf Skyline und Berge – und doch nur wenige Minuten von allem entfernt, was die Stadt lebenswert macht.</p>
+        </div>
+        <ul class="reveal divide-y divide-cream/[.08] border-y border-cream/[.08]">
+          <li class="loc-row"><span>Stadtpark</span><span class="loc-time">1 Min</span></li>
+          <li class="loc-row"><span>Seepromenade</span><span class="loc-time">4 Min</span></li>
+          <li class="loc-row"><span>Altstadt &amp; Oper</span><span class="loc-time">8 Min</span></li>
+          <li class="loc-row"><span>Hauptbahnhof</span><span class="loc-time">11 Min</span></li>
+          <li class="loc-row"><span>Flughafen</span><span class="loc-time">22 Min</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CTA
+         ============================================================ -->
+    <section id="kontakt" class="relative overflow-hidden border-t border-cream/[.06]">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-[1440px] px-5 sm:px-8 py-28 sm:py-40 text-center">
+        <p class="eyebrow reveal">Private Viewing</p>
+        <h2 class="reveal font-display font-light text-5xl sm:text-7xl lg:text-8xl mt-5 leading-[.98]">Ihr Zuhause<br /><em class="text-gold-light">über</em> der Stadt.</h2>
+        <div class="reveal flex flex-wrap justify-center gap-3 mt-12">
+          <button class="btn-gold" data-open-visit="">Besichtigung vereinbaren</button>
+          <button class="btn-ghost" data-enter>Penthouse erleben</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-cream/[.06]">
+    <div class="mx-auto max-w-[1440px] px-5 sm:px-8 py-10 flex flex-col sm:flex-row gap-4 justify-between text-[11px] uppercase tracking-[.22em] text-cream/40">
+      <span><span class="font-display text-base tracking-[.3em] text-cream/70 normal-case">XY</span>&nbsp; Residences © 2026</span>
+      <span class="flex gap-6"><a href="#" class="hover:text-gold">Impressum</a><a href="#" class="hover:text-gold">Datenschutz</a></span>
+      <span class="normal-case tracking-normal text-cream/30">Visualisierungen sind beispielhaft.</span>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       PENTHOUSE – Innenansicht
+       ============================================================ -->
+  <section id="interior" class="fixed inset-0 z-[60] hidden bg-black overflow-hidden" aria-hidden="true" aria-label="Penthouse Innenansicht">
+    <div id="interior-scene" class="absolute inset-0">
+      <canvas id="view" class="absolute inset-0"></canvas>
+
+      <svg id="room" class="absolute inset-0 w-full h-full" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="rCeil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#060608" /><stop offset="1" stop-color="#17161b" /></linearGradient>
+          <linearGradient id="rWallL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#050506" /><stop offset="1" stop-color="#141318" /></linearGradient>
+          <linearGradient id="rWallR" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#050506" /><stop offset="1" stop-color="#151419" /></linearGradient>
+          <linearGradient id="rFloor" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1d1813" stop-opacity=".45" />
+            <stop offset=".45" stop-color="#110e0b" stop-opacity=".78" />
+            <stop offset="1" stop-color="#060505" stop-opacity=".97" />
+          </linearGradient>
+          <linearGradient id="rGlass" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity=".08" />
+            <stop offset=".2" stop-color="#fff" stop-opacity="0" />
+            <stop offset=".47" stop-color="#fff" stop-opacity=".045" />
+            <stop offset=".53" stop-color="#fff" stop-opacity="0" />
+            <stop offset="1" stop-color="#fff" stop-opacity=".03" />
+          </linearGradient>
+          <linearGradient id="rTopShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".55" /><stop offset="1" stop-color="#000" stop-opacity="0" /></linearGradient>
+          <radialGradient id="rLamp"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".55" /><stop offset=".35" stop-color="#ffb860" stop-opacity=".14" /><stop offset="1" stop-color="#ffb860" stop-opacity="0" /></radialGradient>
+          <radialGradient id="rPool"><stop offset="0" stop-color="#ffcf8a" stop-opacity=".2" /><stop offset="1" stop-color="#ffcf8a" stop-opacity="0" /></radialGradient>
+          <radialGradient id="rFireGlow"><stop offset="0" stop-color="#ff9a3c" stop-opacity=".35" /><stop offset="1" stop-color="#ff9a3c" stop-opacity="0" /></radialGradient>
+          <linearGradient id="rArt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B87543" /><stop offset=".55" stop-color="#2a1f1a" /><stop offset="1" stop-color="#C9A46A" /></linearGradient>
+          <linearGradient id="rFire" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffe08a" /><stop offset=".45" stop-color="#ff8a2a" /><stop offset="1" stop-color="#ff4a12" stop-opacity="0" /></linearGradient>
+          <linearGradient id="rSofa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#29252b" /><stop offset="1" stop-color="#0c0b0e" /></linearGradient>
+          <filter id="rBlur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" /></filter>
+          <clipPath id="clipArt"><polygon points="40,254 150,259 150,409 40,439" /></clipPath>
+          <clipPath id="clipFire"><polygon points="1450,491 1550,536 1550,618 1450,559" /></clipPath>
+        </defs>
+
+        <!-- Fenster (transparent – dahinter liegt das Canvas) -->
+        <rect id="win-rect" x="200" y="90" width="1200" height="610" fill="url(#rGlass)" />
+        <rect x="200" y="90" width="1200" height="110" fill="url(#rTopShade)" />
+        <g fill="#09090c">
+          <rect x="496" y="90" width="8" height="610" />
+          <rect x="796" y="90" width="8" height="610" />
+          <rect x="1096" y="90" width="8" height="610" />
+        </g>
+        <g stroke="#E6C995" stroke-opacity=".22" stroke-width="1">
+          <line x1="504.5" y1="90" x2="504.5" y2="700" />
+          <line x1="804.5" y1="90" x2="804.5" y2="700" />
+          <line x1="1104.5" y1="90" x2="1104.5" y2="700" />
+        </g>
+        <rect x="200" y="90" width="1200" height="610" fill="none" stroke="#09090c" stroke-width="10" />
+
+        <!-- Decke -->
+        <polygon points="0,0 1600,0 1400,90 200,90" fill="url(#rCeil)" />
+        <line x1="214" y1="84" x2="1386" y2="84" stroke="#ffd39a" stroke-width="8" filter="url(#rBlur)" opacity=".75" />
+        <line x1="214" y1="84" x2="1386" y2="84" stroke="#fff0d6" stroke-width="1.6" />
+        <g fill="#fff3dc">
+          <ellipse cx="450" cy="42" rx="14" ry="3.5" /><ellipse cx="800" cy="42" rx="14" ry="3.5" /><ellipse cx="1150" cy="42" rx="14" ry="3.5" />
+        </g>
+        <g fill="#ffd9a0" filter="url(#rBlur)" opacity=".5">
+          <ellipse cx="450" cy="46" rx="30" ry="8" /><ellipse cx="800" cy="46" rx="30" ry="8" /><ellipse cx="1150" cy="46" rx="30" ry="8" />
+        </g>
+
+        <!-- Linke Wand mit Lamellen & Kunst -->
+        <polygon points="0,0 200,90 200,700 0,900" fill="url(#rWallL)" />
+        <g stroke="#fff" stroke-opacity=".035" stroke-width="2">
+          <line x1="25" y1="11" x2="25" y2="875" /><line x1="50" y1="22" x2="50" y2="850" /><line x1="75" y1="34" x2="75" y2="825" />
+          <line x1="100" y1="45" x2="100" y2="800" /><line x1="125" y1="56" x2="125" y2="775" /><line x1="150" y1="67" x2="150" y2="750" /><line x1="175" y1="79" x2="175" y2="725" />
+        </g>
+        <ellipse cx="95" cy="340" rx="90" ry="150" fill="#ffd39a" opacity=".07" filter="url(#rBlur)" />
+        <polygon points="40,254 150,259 150,409 40,439" fill="url(#rArt)" />
+        <g clip-path="url(#clipArt)">
+          <circle cx="88" cy="330" r="34" fill="#E6C995" opacity=".55" />
+          <rect x="40" y="370" width="120" height="6" fill="#0B0B0E" opacity=".6" transform="rotate(-8 95 373)" />
+        </g>
+        <polygon points="40,254 150,259 150,409 40,439" fill="none" stroke="#0b0b0e" stroke-width="5" />
+
+        <!-- Rechte Wand mit Kamin -->
+        <polygon points="1600,0 1400,90 1400,700 1600,900" fill="url(#rWallR)" />
+        <ellipse cx="1500" cy="560" rx="120" ry="90" fill="url(#rFireGlow)" />
+        <polygon points="1450,491 1550,536 1550,618 1450,559" fill="#050506" stroke="#2a2620" stroke-width="2" />
+        <g clip-path="url(#clipFire)">
+          <path class="flame" d="M1457 568 Q1459 548 1465 532 Q1471 548 1473 568Z" fill="url(#rFire)" />
+          <path class="flame f2" d="M1482 583 Q1484 560 1490 542 Q1496 560 1498 583Z" fill="url(#rFire)" />
+          <path class="flame f3" d="M1507 598 Q1509 576 1515 556 Q1521 576 1523 598Z" fill="url(#rFire)" />
+          <path class="flame f4" d="M1530 611 Q1532 592 1538 574 Q1544 592 1546 611Z" fill="url(#rFire)" />
+        </g>
+
+        <!-- Boden -->
+        <polygon points="200,700 1400,700 1600,900 0,900" fill="url(#rFloor)" />
+        <g id="planks" stroke="#fff" stroke-opacity=".03" stroke-width="1.2"></g>
+        <rect x="200" y="698" width="1200" height="4" fill="#2a241c" />
+        <polygon points="510,758 1090,758 1170,862 430,862" fill="#2b2620" opacity=".55" />
+        <ellipse cx="640" cy="820" rx="260" ry="50" fill="url(#rPool)" />
+        <ellipse cx="1500" cy="760" rx="160" ry="60" fill="url(#rFireGlow)" opacity=".6" />
+
+        <!-- Bogenleuchte -->
+        <circle cx="642" cy="552" r="170" fill="url(#rLamp)" />
+        <ellipse cx="360" cy="868" rx="34" ry="8" fill="#1a1814" />
+        <path d="M360 866 C350 640 470 520 640 540" stroke="#a98455" stroke-width="4" fill="none" stroke-linecap="round" />
+        <path d="M608 545 Q640 505 674 548 Z" fill="#1c1a17" stroke="#a98455" stroke-width="1.5" />
+        <ellipse cx="641" cy="547" rx="20" ry="4" fill="#ffe6bb" />
+
+        <!-- Sofa (Rückansicht, Silhouette vor dem Ausblick) -->
+        <ellipse cx="800" cy="812" rx="300" ry="16" fill="#000" opacity=".55" />
+        <rect x="592" y="660" width="72" height="44" rx="14" fill="#2f2a26" />
+        <rect x="958" y="666" width="66" height="38" rx="14" fill="#4a3627" />
+        <rect x="545" y="760" width="510" height="46" rx="10" fill="#0c0b0e" />
+        <rect x="560" y="682" width="480" height="98" rx="18" fill="url(#rSofa)" />
+        <path d="M580 684 H1020" stroke="#E6C995" stroke-opacity=".45" stroke-width="1.5" />
+        <g stroke="#fff" stroke-opacity=".04" stroke-width="2"><line x1="720" y1="692" x2="720" y2="772" /><line x1="880" y1="692" x2="880" y2="772" /></g>
+        <rect x="532" y="714" width="52" height="94" rx="16" fill="#141217" />
+        <rect x="1016" y="714" width="52" height="94" rx="16" fill="#141217" />
+
+        <!-- Beistelltisch mit Weinglas -->
+        <rect x="1100" y="768" width="56" height="46" rx="4" fill="#17140f" />
+        <ellipse cx="1128" cy="768" rx="30" ry="6" fill="#2a241c" />
+        <path d="M1119 730 Q1128 748 1137 730 Z" fill="#6e1a24" stroke="#d8cbb8" stroke-opacity=".5" stroke-width="1" />
+        <path d="M1128 742 V765 M1121 766 H1135" stroke="#d8cbb8" stroke-opacity=".5" stroke-width="1.2" />
+
+        <!-- Pflanze -->
+        <g class="plant">
+          <path d="M1272 776 C1250 700 1205 660 1180 642 C1225 668 1262 712 1272 776Z" fill="#0f1a13" />
+          <path d="M1272 776 C1290 690 1335 650 1362 632 C1322 668 1290 712 1272 776Z" fill="#12201a" />
+          <path d="M1272 776 C1262 680 1268 610 1282 570 C1286 620 1282 690 1272 776Z" fill="#0d1610" />
+          <path d="M1272 776 C1240 720 1210 712 1188 712 C1220 724 1250 740 1272 776Z" fill="#142319" />
+          <path d="M1272 776 C1300 730 1335 720 1356 722 C1326 732 1296 748 1272 776Z" fill="#0f1a13" />
+        </g>
+        <rect x="1236" y="772" width="72" height="96" rx="8" fill="#191714" />
+        <path d="M1240 776 H1304" stroke="#E6C995" stroke-opacity=".25" />
+
+        <!-- Hotspots -->
+        <g id="hotspots">
+          <g class="hotspot" tabindex="0" role="button" transform="translate(960 300)"
+             data-title="Panoramaverglasung" data-text="Raumhohe 4,20-m-Verglasung mit Sonnenschutzglas – 270° Blick über Skyline, See und Berge.">
+            <circle class="halo" r="17" /><circle class="ring" r="10" /><circle class="dot" r="5" />
+          </g>
+          <g class="hotspot" tabindex="0" role="button" transform="translate(700 712)"
+             data-title="Wohnen &amp; Essen · 92 m²" data-text="Offener Grundriss, geölte Eichendielen, Fußbodenheizung und -kühlung.">
+            <circle class="halo" r="17" /><circle class="ring" r="10" /><circle class="dot" r="5" />
+          </g>
+          <g class="hotspot" tabindex="0" role="button" transform="translate(1000 46)"
+             data-title="Smart Living" data-text="Licht, Klima, Beschattung und Zutritt – per App und Sprache steuerbar.">
+            <circle class="halo" r="17" /><circle class="ring" r="10" /><circle class="dot" r="5" />
+          </g>
+          <g class="hotspot" tabindex="0" role="button" transform="translate(1250 440)"
+             data-title="Dachterrasse · 120 m²" data-text="Über raumhohe Schiebeelemente erreichbar – mit Outdoor-Küche und Pflanzinseln.">
+            <circle class="halo" r="17" /><circle class="ring" r="10" /><circle class="dot" r="5" />
+          </g>
+          <g class="hotspot" tabindex="0" role="button" transform="translate(1500 505)"
+             data-title="Design-Kamin" data-text="Rauchfreier Bioethanol-Kamin, fernsteuerbar und in die Wand integriert.">
+            <circle class="halo" r="17" /><circle class="ring" r="10" /><circle class="dot" r="5" />
+          </g>
+          <g class="hotspot" tabindex="0" role="button" transform="translate(95 300)"
+             data-title="Galeriewand" data-text="Akzentbeleuchtung und unsichtbares Hängesystem für Ihre Sammlung.">
+            <circle class="halo" r="17" /><circle class="ring" r="10" /><circle class="dot" r="5" />
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="int-vignette" aria-hidden="true"></div>
+
+    <!-- UI oben -->
+    <div class="absolute top-0 inset-x-0 z-10 p-4 sm:p-8 flex items-center justify-between gap-3">
+      <button id="exit-btn" class="int-ui btn-ghost btn-sm">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3m4-4L3 8l4 4" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span class="hidden sm:inline">Zurück zum&nbsp;</span>Gebäude
+      </button>
+      <div class="int-ui hidden md:block font-display text-2xl tracking-[.3em]">XY</div>
+      <div class="int-ui tod" role="tablist" aria-label="Tageszeit">
+        <span class="tod-ind" aria-hidden="true"></span>
+        <button class="tod-btn" role="tab" data-tod="morgen">Morgen</button>
+        <button class="tod-btn" role="tab" data-tod="tag">Tag</button>
+        <button class="tod-btn is-active" role="tab" data-tod="abend">Abend</button>
+        <button class="tod-btn" role="tab" data-tod="nacht">Nacht</button>
+      </div>
+    </div>
+
+    <!-- UI unten -->
+    <div class="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-10 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+      <div class="mx-auto max-w-[1440px] flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+        <div>
+          <p class="int-ui eyebrow hidden sm:block">Sky Residence · 8. Etage · Blick Südwest</p>
+          <h2 class="int-ui font-display font-light text-[2.6rem] sm:text-7xl lg:text-8xl leading-none sm:mt-3">Das Penthouse</h2>
+          <ul class="int-ui int-stats mt-5">
+            <li><b>286</b> m² Wohnfläche</li>
+            <li><b>120</b> m² Terrasse</li>
+            <li><b>5</b> Zimmer</li>
+            <li class="hidden sm:list-item">ab <b>4,95</b> Mio. €</li>
+          </ul>
+        </div>
+        <div class="int-ui flex flex-wrap gap-3">
+          <button class="btn-ghost" data-open-plan="ph">Grundriss ansehen</button>
+          <button class="btn-gold" data-open-visit="ph">Besichtigung vereinbaren</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="hotspot-tip" class="glass-card" role="tooltip" hidden>
+      <p class="eyebrow" id="tip-title"></p>
+      <p class="text-sm text-cream/75 leading-relaxed mt-2" id="tip-text"></p>
+    </div>
+  </section>
+
+  <!-- Übergangs-Licht -->
+  <div id="flash" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       MODAL: Grundriss
+       ============================================================ -->
+  <div id="modal-plan" class="modal" role="dialog" aria-modal="true" aria-labelledby="plan-title" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel max-w-4xl">
+      <button class="modal-x" data-close aria-label="Schließen">&times;</button>
+      <p class="eyebrow">Grundriss</p>
+      <h3 id="plan-title" class="font-display font-light text-3xl sm:text-5xl mt-2">Penthouse</h3>
+      <p id="plan-meta" class="text-sm text-cream/55 mt-2"></p>
+      <div class="plan-wrap mt-6">
+        <svg id="plan-svg" viewBox="0 0 600 430" class="w-full h-auto"></svg>
+      </div>
+      <div class="flex flex-wrap gap-3 justify-end mt-6">
+        <button class="btn-ghost btn-sm" id="plan-expose">Exposé anfordern</button>
+        <button class="btn-gold btn-sm" id="plan-visit">Besichtigung vereinbaren</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: Besichtigung
+       ============================================================ -->
+  <div id="modal-visit" class="modal" role="dialog" aria-modal="true" aria-labelledby="visit-title" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel max-w-2xl">
+      <button class="modal-x" data-close aria-label="Schließen">&times;</button>
+
+      <form id="visit-form" novalidate>
+        <p class="eyebrow">Private Viewing</p>
+        <h3 id="visit-title" class="font-display font-light text-3xl sm:text-5xl mt-2">Besichtigung vereinbaren</h3>
+        <p class="text-sm text-cream/55 mt-2">Persönlich, diskret und ohne Wartezeit – wir bestätigen innerhalb von 24 Stunden.</p>
+
+        <div class="grid sm:grid-cols-2 gap-4 mt-7">
+          <label class="field"><span>Name *</span><input name="name" type="text" autocomplete="name" required /></label>
+          <label class="field"><span>E-Mail *</span><input name="email" type="email" autocomplete="email" required /></label>
+          <label class="field"><span>Telefon</span><input name="phone" type="tel" autocomplete="tel" /></label>
+          <label class="field"><span>Interesse</span><select name="interest" id="v-interest"></select></label>
+        </div>
+
+        <fieldset class="mt-6">
+          <legend class="dt mb-3">Wunschtag</legend>
+          <div id="v-days" class="flex flex-wrap gap-2"></div>
+        </fieldset>
+        <fieldset class="mt-5">
+          <legend class="dt mb-3">Uhrzeit</legend>
+          <div class="flex flex-wrap gap-2">
+            <label class="chip"><input type="radio" name="time" value="10:00" /><span>10:00</span></label>
+            <label class="chip"><input type="radio" name="time" value="12:00" /><span>12:00</span></label>
+            <label class="chip"><input type="radio" name="time" value="14:00" checked /><span>14:00</span></label>
+            <label class="chip"><input type="radio" name="time" value="16:00" /><span>16:00</span></label>
+            <label class="chip"><input type="radio" name="time" value="18:00" /><span>18:00</span></label>
+          </div>
+        </fieldset>
+
+        <label class="check mt-6"><input type="checkbox" name="privacy" required /><span>Ich stimme der Verarbeitung meiner Daten zur Terminvereinbarung zu. *</span></label>
+
+        <div class="flex justify-end mt-7">
+          <button type="submit" class="btn-gold">Termin anfragen</button>
+        </div>
+      </form>
+
+      <div id="visit-success" class="text-center py-10" hidden>
+        <svg class="mx-auto" width="84" height="84" viewBox="0 0 84 84" fill="none" aria-hidden="true">
+          <circle id="ok-circle" cx="42" cy="42" r="38" stroke="#C9A46A" stroke-width="1.5" />
+          <path id="ok-check" d="M27 43l10 10 21-22" stroke="#E6C995" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <h3 class="font-display font-light text-4xl mt-6">Vielen Dank.</h3>
+        <p id="visit-success-text" class="text-cream/60 mt-3 max-w-md mx-auto"></p>
+        <button class="btn-ghost btn-sm mt-8" data-close>Schließen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
