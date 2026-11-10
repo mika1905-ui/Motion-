@@ -2,185 +2,209 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<title>YouTube thumbnail – supercar</title>
+<title>YouTube thumbnail – car on podium, two presenters, text bars</title>
 <style>
+  @font-face { font-family: "Anton"; src: url("fonts/anton-latin-400-normal.woff2") format("woff2"); }
   html, body { margin: 0; background: #000; }
-  #thumb {
-    position: relative; width: 1280px; height: 720px; overflow: hidden;
-    font-family: "Inter Display", "Inter", sans-serif;
-    background:
-      radial-gradient(ellipse 760px 420px at 68% 60%, #ff3b1f 0%, #b3120a 32%, rgba(60, 6, 8, 0) 72%),
-      linear-gradient(180deg, #14070a 0%, #1d0a0d 55%, #050304 100%);
-  }
-  /* sunburst behind the car */
-  .rays {
-    position: absolute; left: 870px; top: 430px; width: 2400px; height: 2400px;
-    margin: -1200px 0 0 -1200px;
-    background: repeating-conic-gradient(from 4deg, rgba(255, 190, 120, .16) 0 5deg, rgba(0, 0, 0, 0) 5deg 15deg);
-    -webkit-mask-image: radial-gradient(circle, #000 0%, rgba(0, 0, 0, .55) 22%, transparent 46%);
-            mask-image: radial-gradient(circle, #000 0%, rgba(0, 0, 0, .55) 22%, transparent 46%);
-  }
-  .floor {
-    position: absolute; left: 0; right: 0; bottom: 0; height: 150px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .78) 55%, #000 100%);
-  }
-  .vignette {
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 55% 50%, transparent 52%, rgba(0, 0, 0, .7) 100%);
-  }
+  #thumb { position: relative; width: 1280px; height: 720px; overflow: hidden; background: #cfd6dc; }
+  #thumb > * { position: absolute; }
 
-  .car {
-    position: absolute; left: 388px; top: 330px; width: 900px;
-    filter:
-      drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff)
-      drop-shadow(0 26px 22px rgba(0, 0, 0, .75))
-      saturate(1.25) contrast(1.08);
-  }
-  .car-glow {
-    position: absolute; left: 430px; top: 600px; width: 820px; height: 70px;
-    background: radial-gradient(ellipse, rgba(0, 0, 0, .85) 0%, transparent 70%);
-  }
+  /* ---------- background: sky, skyline, plaza ---------- */
+  .sky { inset: 0 0 auto 0; height: 250px;
+         background: linear-gradient(180deg, #1f7fe0 0%, #58aaf2 45%, #cfe9fb 100%); }
+  .cloud { background: #fff; border-radius: 50%; filter: blur(9px); opacity: .95; }
+  .skyline { left: 0; top: 34px; width: 1280px; height: 218px; filter: blur(.6px) saturate(1.3) contrast(1.15); }
+  .plaza { left: 0; right: 0; top: 246px; bottom: 0;
+           background:
+             repeating-linear-gradient(90deg, rgba(0, 0, 0, .06) 0 2px, transparent 2px 160px),
+             linear-gradient(180deg, #b9bcc0 0%, #dcdcda 30%, #c9c7c2 100%); }
+  .sun { left: 0; top: 0; width: 1280px; height: 720px; mix-blend-mode: soft-light;
+         background: radial-gradient(ellipse 700px 420px at 50% 22%, rgba(255, 244, 200, .45), transparent 70%); }
 
-  .person {
-    position: absolute; left: -22px; bottom: -6px; width: 600px;
-    filter: drop-shadow(0 0 0 #fff) drop-shadow(5px 0 0 #fff) drop-shadow(-5px 0 0 #fff)
-            drop-shadow(0 -5px 0 #fff) drop-shadow(0 0 26px rgba(0, 0, 0, .8));
-  }
+  /* ---------- podium + car ---------- */
+  .podium { left: 222px; top: 286px; width: 836px; height: 170px; }
+  .car, .car-reflect { left: 312px; width: 656px; }
+  .car { top: 132px; filter: saturate(1.35) contrast(1.12) brightness(1.04) drop-shadow(0 10px 8px rgba(0, 0, 0, .55)); }
+  .car-reflect { top: 338px; transform: scaleY(-1); opacity: .28; filter: blur(2px) saturate(1.2);
+                 -webkit-mask-image: linear-gradient(0deg, #000 0%, transparent 42%);
+                         mask-image: linear-gradient(0deg, #000 0%, transparent 42%); }
 
-  .headline {
-    position: absolute; left: 470px; top: 26px; margin: 0;
-    transform: rotate(-4deg) skewX(-8deg); transform-origin: left top;
-    font-weight: 900; font-style: italic; line-height: .88; letter-spacing: -3px;
-    white-space: nowrap;
-  }
-  .headline span {
-    display: block; paint-order: stroke fill;
-    -webkit-text-stroke: 18px #000;
-    text-shadow: 0 10px 0 #000, 0 16px 28px rgba(0, 0, 0, .7);
-  }
-  .headline .l1 { font-size: 96px; color: #fff; }
-  .headline .l2 { font-size: 178px; color: #ffe500; margin-left: -6px; }
+  /* ---------- presenters ---------- */
+  .person { top: 6px; height: 730px; filter: drop-shadow(0 0 18px rgba(0, 0, 0, .45)) saturate(1.1); }
+  .p-left { left: -132px; }
+  .p-right { left: 850px; }
 
-  .tag {
-    position: absolute; right: 34px; top: 262px;
-    transform: rotate(5deg);
-    padding: 8px 22px 10px;
-    background: #e60012; color: #fff; border: 6px solid #fff; border-radius: 14px;
-    font-weight: 900; font-style: italic; font-size: 46px; letter-spacing: -1px;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, .65);
-  }
-  .arrow { position: absolute; left: 585px; top: 250px; width: 220px;
-           filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .7)); }
+  /* ---------- text bars ---------- */
+  .bars { left: 0; width: 1280px; top: 424px; display: flex; flex-direction: column; align-items: center;
+          transform: rotate(-2deg); font-family: "Anton", "Inter", sans-serif; text-transform: uppercase; }
+  .bar { white-space: nowrap; line-height: 1; transform: skewX(-7deg); }
+  .bar.yellow { font-size: 82px; padding: 8px 30px 12px; color: #111;
+                background: linear-gradient(180deg, #ffe033 0%, #ffc400 100%);
+                box-shadow: inset 0 0 0 3px rgba(120, 80, 0, .35), 0 8px 18px rgba(0, 0, 0, .5); }
+  .bar.black { font-size: 92px; padding: 8px 34px 14px; margin-top: 6px; color: #fff;
+               background: linear-gradient(180deg, #1b1b1b 0%, #000 100%);
+               box-shadow: 0 10px 22px rgba(0, 0, 0, .55); letter-spacing: .5px; }
+
+  .grade { inset: 0; pointer-events: none;
+           background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0, 0, 0, .32) 100%); }
 </style>
 </head>
 <body>
 <div id="thumb">
-  <div class="rays"></div>
-  <div class="floor"></div>
-  <div class="car-glow"></div>
-  <img class="car" src="../assets/car_cutout.png" alt="">
-  <div class="vignette"></div>
+  <div class="sky"></div>
+  <div class="cloud" style="left:120px; top:34px; width:330px; height:56px"></div>
+  <div class="cloud" style="left:300px; top:70px; width:240px; height:40px; opacity:.7"></div>
+  <div class="cloud" style="left:800px; top:26px; width:380px; height:60px"></div>
+  <div class="cloud" style="left:1010px; top:76px; width:260px; height:38px; opacity:.7"></div>
 
-  <h1 class="headline">
-    <span class="l1">ICH FAHRE</span>
-    <span class="l2">963 PS!</span>
-  </h1>
-  <div class="tag">3.000.000 €</div>
-
-  <!-- curved arrow pointing at the car -->
-  <svg class="arrow" viewBox="0 0 250 150">
-    <path d="M14 30 C 90 6, 160 30, 190 96" fill="none" stroke="#000" stroke-width="34" stroke-linecap="round"/>
-    <path d="M150 78 L196 138 L236 70 Z" fill="#000" stroke="#000" stroke-width="16" stroke-linejoin="round"/>
-    <path d="M14 30 C 90 6, 160 30, 190 96" fill="none" stroke="#ffe500" stroke-width="18" stroke-linecap="round"/>
-    <path d="M150 78 L196 138 L236 70 Z" fill="#ffe500"/>
-  </svg>
-
-  <!-- fictional, illustrated presenter (no real person) -->
-  <svg class="person" viewBox="0 0 600 640">
+  <!-- hazy city skyline -->
+  <svg class="skyline" viewBox="0 0 1280 190" preserveAspectRatio="none">
     <defs>
-      <linearGradient id="skin" x1="0" x2="1">
-        <stop offset="0" stop-color="#e9b08a"/><stop offset=".55" stop-color="#f6c9a4"/><stop offset="1" stop-color="#dc9d78"/>
-      </linearGradient>
-      <linearGradient id="jacket" x1="0" x2="1">
-        <stop offset="0" stop-color="#15171c"/><stop offset=".5" stop-color="#2b2f38"/><stop offset="1" stop-color="#101216"/>
-      </linearGradient>
-      <radialGradient id="rim" cx=".95" cy=".35" r=".7">
-        <stop offset="0" stop-color="#ff5a36" stop-opacity=".75"/><stop offset="1" stop-color="#ff5a36" stop-opacity="0"/>
-      </radialGradient>
-      <clipPath id="headClip"><path d="M128 232 C128 120 190 84 250 84 C310 84 372 120 372 232 C372 330 318 408 250 408 C182 408 128 330 128 232Z"/></clipPath>
+      <linearGradient id="tower" x1="0" x2="1"><stop offset="0" stop-color="#3f5f88"/><stop offset=".5" stop-color="#86a8cc"/><stop offset="1" stop-color="#4c6c94"/></linearGradient>
+      <linearGradient id="far" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9fbfe0"/><stop offset="1" stop-color="#c5dcf0"/></linearGradient>
     </defs>
-
-    <!-- pointing arm (behind torso) -->
-    <path d="M362 500 C420 470 470 430 520 372 L566 410 C520 480 470 540 400 590 Z" fill="url(#jacket)"/>
-    <path d="M362 500 C420 470 470 430 520 372 L566 410 C520 480 470 540 400 590 Z" fill="url(#rim)"/>
-    <!-- hand -->
-    <g transform="translate(540 372) rotate(-38)">
-      <rect x="-8" y="-34" width="62" height="60" rx="24" fill="url(#skin)"/>
-      <rect x="34" y="-36" width="78" height="24" rx="12" fill="#f6c9a4"/>
-      <rect x="20" y="-14" width="34" height="13" rx="6.5" fill="#dc9d78"/>
-      <rect x="20" y="0" width="32" height="13" rx="6.5" fill="#dc9d78"/>
-      <rect x="18" y="13" width="28" height="12" rx="6" fill="#d39370"/>
-      <path d="M-2 -30 C 10 -50, 34 -48, 36 -30" fill="#f6c9a4"/>
+    <g fill="url(#far)">
+      <rect x="0" y="120" width="1280" height="70"/>
+      <rect x="40" y="96" width="46" height="94"/><rect x="150" y="84" width="38" height="106"/><rect x="250" y="104" width="60" height="86"/>
+      <rect x="520" y="90" width="44" height="100"/><rect x="760" y="100" width="56" height="90"/><rect x="930" y="82" width="40" height="108"/>
+      <rect x="1120" y="98" width="52" height="92"/><rect x="1210" y="88" width="44" height="102"/>
     </g>
-
-    <!-- torso -->
-    <path d="M28 640 C34 540 60 470 150 446 L206 426 L294 426 L350 446 C440 470 470 540 476 640 Z" fill="url(#jacket)"/>
-    <path d="M28 640 C34 540 60 470 150 446 L206 426 L294 426 L350 446 C440 470 470 540 476 640 Z" fill="url(#rim)"/>
-    <!-- t-shirt + collar -->
-    <path d="M196 428 C214 500 286 500 304 428 L330 640 L170 640 Z" fill="#f4f4f4"/>
-    <path d="M196 428 L160 448 L212 640 L232 640 Z" fill="#0c0d10"/>
-    <path d="M304 428 L340 448 L288 640 L268 640 Z" fill="#0c0d10"/>
-    <!-- chain -->
-    <path d="M212 452 C232 512 268 512 288 452" fill="none" stroke="#f5c542" stroke-width="6" stroke-linecap="round"/>
-
-    <!-- neck -->
-    <path d="M204 360 L296 360 L300 436 C280 470 220 470 200 436 Z" fill="#d99a76"/>
-    <path d="M204 380 C230 420 270 420 296 380 L296 360 L204 360Z" fill="#b97a5a" opacity=".6"/>
-
-    <!-- ears -->
-    <ellipse cx="128" cy="250" rx="18" ry="30" fill="#e3a680"/>
-    <ellipse cx="372" cy="250" rx="18" ry="30" fill="#d0906c"/>
-
-    <!-- head -->
-    <path d="M128 232 C128 120 190 84 250 84 C310 84 372 120 372 232 C372 330 318 408 250 408 C182 408 128 330 128 232Z" fill="url(#skin)"/>
-
-    <g clip-path="url(#headClip)">
-      <!-- beard -->
-      <path d="M118 262 C140 300 150 318 176 322 C200 300 300 300 324 322 C350 318 360 300 382 262 L382 420 L118 420 Z" fill="#2a1b14"/>
-      <!-- hair fade on the sides -->
-      <path d="M120 250 C116 150 150 96 200 82 L170 190 C160 210 152 230 150 262 Z" fill="#2a1b14" opacity=".85"/>
-      <path d="M380 250 C384 150 350 96 300 82 L330 190 C340 210 348 230 350 262 Z" fill="#2a1b14" opacity=".85"/>
-      <!-- cheeks -->
-      <ellipse cx="172" cy="286" rx="26" ry="14" fill="#ff8a70" opacity=".35"/>
-      <ellipse cx="328" cy="286" rx="26" ry="14" fill="#ff8a70" opacity=".35"/>
-      <!-- rim light from the car -->
-      <rect x="110" y="70" width="290" height="360" fill="url(#rim)"/>
+    <g fill="url(#tower)">
+      <rect x="92" y="58" width="40" height="132"/><path d="M196 190 V40 l22 -18 l22 18 V190Z"/><rect x="318" y="70" width="48" height="120"/>
+      <rect x="392" y="28" width="36" height="162"/><rect x="408" y="6" width="4" height="24"/>
+      <rect x="452" y="64" width="54" height="126"/><path d="M584 190 V52 q24 -30 48 0 V190Z"/><rect x="664" y="78" width="60" height="112"/>
+      <rect x="836" y="36" width="42" height="154"/><rect x="855" y="12" width="4" height="26"/><rect x="900" y="72" width="34" height="118"/>
+      <path d="M990 190 V60 l28 -22 V190Z"/><rect x="1040" y="48" width="46" height="142"/><rect x="1176" y="66" width="38" height="124"/>
     </g>
-
-    <!-- hair top -->
-    <path d="M132 190 C112 90 180 40 256 44 C332 40 392 96 368 190 C352 150 330 128 300 124 C260 136 200 136 172 122 C150 136 140 160 132 190Z" fill="#1d120d"/>
-    <path d="M170 92 C210 62 290 60 330 90" fill="none" stroke="#4a3226" stroke-width="7" stroke-linecap="round" opacity=".7"/>
-
-    <!-- eyebrows (raised) -->
-    <path d="M158 180 C176 156 210 154 226 170" fill="none" stroke="#1d120d" stroke-width="13" stroke-linecap="round"/>
-    <path d="M274 170 C290 154 324 156 342 180" fill="none" stroke="#1d120d" stroke-width="13" stroke-linecap="round"/>
-
-    <!-- eyes (wide open) -->
-    <ellipse cx="196" cy="226" rx="33" ry="36" fill="#fff" stroke="#3a2418" stroke-width="4"/>
-    <ellipse cx="304" cy="226" rx="33" ry="36" fill="#fff" stroke="#3a2418" stroke-width="4"/>
-    <circle cx="208" cy="228" r="17" fill="#4b2e1c"/><circle cx="316" cy="228" r="17" fill="#4b2e1c"/>
-    <circle cx="210" cy="228" r="8.5" fill="#000"/><circle cx="318" cy="228" r="8.5" fill="#000"/>
-    <circle cx="215" cy="221" r="5" fill="#fff"/><circle cx="323" cy="221" r="5" fill="#fff"/>
-
-    <!-- nose -->
-    <path d="M250 232 C244 262 232 276 236 288 C244 298 258 298 266 288" fill="none" stroke="#b97a5a" stroke-width="7" stroke-linecap="round"/>
-
-    <!-- open mouth -->
-    <ellipse cx="250" cy="352" rx="44" ry="40" fill="#f6c9a4" opacity=".0"/>
-    <path d="M206 344 C206 312 294 312 294 344 C294 392 206 392 206 344Z" fill="#3b0a10" stroke="#1d120d" stroke-width="5"/>
-    <path d="M214 332 C230 320 270 320 286 332 L284 342 C266 336 234 336 216 342Z" fill="#fff"/>
-    <ellipse cx="250" cy="372" rx="26" ry="13" fill="#e2566a"/>
+    <g fill="#fff" opacity=".25">
+      <rect x="98" y="66" width="6" height="118"/><rect x="398" y="36" width="6" height="150"/><rect x="842" y="44" width="6" height="142"/><rect x="1046" y="56" width="6" height="130"/>
+    </g>
+    <!-- tree line -->
+    <path d="M0 190 V166 q40 -22 80 -6 q50 -26 110 -4 q60 -20 120 2 q70 -24 130 -2 q60 -18 120 0 q70 -26 140 -2 q60 -20 130 0 q70 -24 140 0 q60 -22 130 -2 q60 -18 110 2 q40 -14 70 4 V190Z" fill="#3f8a3c"/>
+    <path d="M0 190 V176 q60 -16 130 -2 q80 -18 170 0 q90 -18 180 0 q90 -16 190 0 q90 -18 190 0 q100 -16 200 0 q110 -14 220 2 V190Z" fill="#2c6b2d"/>
   </svg>
+
+  <div class="plaza"></div>
+
+  <!-- dark glossy podium -->
+  <svg class="podium" viewBox="0 0 836 170">
+    <defs>
+      <linearGradient id="ptop" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3a3d44"/><stop offset="1" stop-color="#15161a"/></linearGradient>
+      <linearGradient id="pfront" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#0d0e11"/><stop offset="1" stop-color="#22242a"/></linearGradient>
+      <linearGradient id="pshine" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    </defs>
+    <ellipse cx="418" cy="150" rx="430" ry="20" fill="#000" opacity=".35"/>
+    <path d="M70 4 H766 L832 84 H4Z" fill="url(#ptop)"/>
+    <path d="M70 4 H766 L832 84 H4Z" fill="url(#pshine)"/>
+    <path d="M4 84 H832 V150 H4Z" fill="url(#pfront)"/>
+    <path d="M4 84 H832" stroke="#8d939e" stroke-width="2.5"/>
+  </svg>
+  <img class="car-reflect" src="../assets/car_yellow.png" alt="">
+  <img class="car" src="../assets/car_yellow.png" alt="">
+  <div class="sun"></div>
+
+  <!-- ============ fictional illustrated presenter, left ============ -->
+  <svg class="person p-left" viewBox="0 0 500 640">
+    <defs>
+      <linearGradient id="skinA" x1="0" x2="1"><stop offset="0" stop-color="#d79a72"/><stop offset=".5" stop-color="#f0bd95"/><stop offset="1" stop-color="#cf8f68"/></linearGradient>
+      <linearGradient id="polo" x1="0" x2="1"><stop offset="0" stop-color="#c40812"/><stop offset=".45" stop-color="#f21a24"/><stop offset="1" stop-color="#b3060f"/></linearGradient>
+      <linearGradient id="poloShade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset=".35" stop-color="#000" stop-opacity="0"/></linearGradient>
+      <clipPath id="headA"><path d="M128 232 C128 120 190 84 250 84 C310 84 372 120 372 232 C372 330 318 408 250 408 C182 408 128 330 128 232Z"/></clipPath>
+    </defs>
+    <!-- polo shirt -->
+    <path d="M-30 640 C-20 530 50 470 160 446 L206 426 L294 426 L340 446 C450 470 520 530 530 640Z" fill="url(#polo)"/>
+    <path d="M-30 640 C-20 530 50 470 160 446 L206 426 L294 426 L340 446 C450 470 520 530 530 640Z" fill="url(#poloShade)"/>
+    <path d="M250 500 V640" stroke="#8e040b" stroke-width="5"/>
+    <circle cx="261" cy="540" r="6" fill="#ffd9d9"/><circle cx="261" cy="590" r="6" fill="#ffd9d9"/>
+    <!-- neck -->
+    <path d="M202 356 H298 L304 440 C284 500 216 500 196 440Z" fill="#cf8f68"/>
+    <path d="M202 372 C228 424 272 424 298 372 V356 H202Z" fill="#7a4a30" opacity=".55"/>
+    <!-- collar -->
+    <path d="M200 420 L150 452 L224 520 L250 470Z" fill="#d70c17" stroke="#8e040b" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M300 420 L350 452 L276 520 L250 470Z" fill="#c10a14" stroke="#8e040b" stroke-width="4" stroke-linejoin="round"/>
+    <!-- ears + head -->
+    <ellipse cx="128" cy="252" rx="17" ry="30" fill="#d79a72"/><ellipse cx="372" cy="252" rx="17" ry="30" fill="#c58560"/>
+    <path d="M128 232 C128 120 190 84 250 84 C310 84 372 120 372 232 C372 330 318 408 250 408 C182 408 128 330 128 232Z" fill="url(#skinA)"/>
+    <g clip-path="url(#headA)">
+      <!-- short beard -->
+      <path d="M118 256 C138 300 150 322 180 326 C206 306 294 306 320 326 C350 322 362 300 382 256 V420 H118Z" fill="#231711"/>
+      <path d="M118 256 C138 300 150 322 180 326 C206 306 294 306 320 326 C350 322 362 300 382 256" fill="none" stroke="#231711" stroke-width="10" opacity=".35"/>
+      <!-- faded sides -->
+      <path d="M118 250 C114 150 150 96 200 82 L166 196 C158 214 152 232 150 258Z" fill="#231711" opacity=".8"/>
+      <path d="M382 250 C386 150 350 96 300 82 L334 196 C342 214 348 232 350 258Z" fill="#231711" opacity=".8"/>
+      <ellipse cx="250" cy="160" rx="70" ry="30" fill="#fff" opacity=".14"/>
+    </g>
+    <!-- hair -->
+    <path d="M130 196 C108 92 178 40 254 44 C332 40 394 96 370 196 C356 150 334 126 302 122 C262 134 202 134 172 120 C150 134 140 160 130 196Z" fill="#17100c"/>
+    <path d="M172 90 C212 62 290 60 330 88" fill="none" stroke="#4b3427" stroke-width="7" stroke-linecap="round" opacity=".6"/>
+    <!-- brows, eyes -->
+    <path d="M160 196 C178 180 208 178 226 190" fill="none" stroke="#17100c" stroke-width="12" stroke-linecap="round"/>
+    <path d="M274 190 C292 178 322 180 340 196" fill="none" stroke="#17100c" stroke-width="12" stroke-linecap="round"/>
+    <ellipse cx="196" cy="232" rx="27" ry="21" fill="#fff" stroke="#3a2418" stroke-width="3.5"/>
+    <ellipse cx="304" cy="232" rx="27" ry="21" fill="#fff" stroke="#3a2418" stroke-width="3.5"/>
+    <circle cx="200" cy="233" r="14" fill="#4b2e1c"/><circle cx="308" cy="233" r="14" fill="#4b2e1c"/>
+    <circle cx="200" cy="233" r="7" fill="#000"/><circle cx="308" cy="233" r="7" fill="#000"/>
+    <circle cx="205" cy="227" r="4" fill="#fff"/><circle cx="313" cy="227" r="4" fill="#fff"/>
+    <path d="M170 216 C184 206 210 206 224 218" fill="none" stroke="#3a2418" stroke-width="5" stroke-linecap="round"/>
+    <path d="M276 218 C290 206 316 206 330 216" fill="none" stroke="#3a2418" stroke-width="5" stroke-linecap="round"/>
+    <!-- nose -->
+    <path d="M250 238 C244 266 232 280 238 292 C246 300 256 300 264 292" fill="none" stroke="#a96d4c" stroke-width="7" stroke-linecap="round"/>
+    <!-- big smile -->
+    <path d="M196 334 C222 384 278 384 304 334 C276 344 224 344 196 334Z" fill="#fff" stroke="#17100c" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M206 346 C234 354 266 354 294 346" fill="none" stroke="#c9c9c9" stroke-width="2"/>
+  </svg>
+
+  <!-- ============ fictional illustrated presenter, right ============ -->
+  <svg class="person p-right" viewBox="0 0 500 640">
+    <defs>
+      <linearGradient id="skinB" x1="0" x2="1"><stop offset="0" stop-color="#eab896"/><stop offset=".5" stop-color="#fbd9be"/><stop offset="1" stop-color="#e2a985"/></linearGradient>
+      <clipPath id="headB"><path d="M132 236 C132 124 192 92 250 92 C308 92 368 124 368 236 C368 322 320 404 250 404 C180 404 132 322 132 236Z"/></clipPath>
+    </defs>
+    <path d="M-30 640 C-20 530 50 470 160 446 L206 426 L294 426 L340 446 C450 470 520 530 530 640Z" fill="url(#polo)"/>
+    <path d="M-30 640 C-20 530 50 470 160 446 L206 426 L294 426 L340 446 C450 470 520 530 530 640Z" fill="url(#poloShade)"/>
+    <path d="M250 500 V640" stroke="#8e040b" stroke-width="5"/>
+    <circle cx="261" cy="540" r="6" fill="#ffd9d9"/><circle cx="261" cy="590" r="6" fill="#ffd9d9"/>
+    <path d="M204 356 H296 L302 440 C282 500 218 500 198 440Z" fill="#e2a985"/>
+    <path d="M204 372 C228 420 272 420 296 372 V356 H204Z" fill="#a8704f" opacity=".5"/>
+    <path d="M200 420 L150 452 L224 520 L250 470Z" fill="#d70c17" stroke="#8e040b" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M300 420 L350 452 L276 520 L250 470Z" fill="#c10a14" stroke="#8e040b" stroke-width="4" stroke-linejoin="round"/>
+    <ellipse cx="132" cy="254" rx="16" ry="28" fill="#eab896"/><ellipse cx="368" cy="254" rx="16" ry="28" fill="#dba07c"/>
+    <path d="M132 236 C132 124 192 92 250 92 C308 92 368 124 368 236 C368 322 320 404 250 404 C180 404 132 322 132 236Z" fill="url(#skinB)"/>
+    <g clip-path="url(#headB)">
+      <!-- light stubble -->
+      <path d="M120 270 C150 330 170 340 196 336 C220 316 280 316 304 336 C330 340 350 330 380 270 V420 H120Z" fill="#9a7a5c" opacity=".33"/>
+      <ellipse cx="174" cy="296" rx="24" ry="13" fill="#ff8f7a" opacity=".3"/><ellipse cx="326" cy="296" rx="24" ry="13" fill="#ff8f7a" opacity=".3"/>
+      <ellipse cx="250" cy="150" rx="70" ry="26" fill="#fff" opacity=".18"/>
+    </g>
+    <!-- sandy side-parted hair -->
+    <path d="M128 214 C104 110 172 50 252 52 C338 50 396 112 372 214 C362 170 346 146 318 132 C262 150 196 138 168 116 C146 140 136 170 128 214Z" fill="#b98a4e"/>
+    <path d="M168 116 C214 76 300 70 352 110 C300 96 226 100 168 116Z" fill="#d7ab6c"/>
+    <!-- brows (one raised), eyes -->
+    <path d="M160 204 C178 194 208 194 226 202" fill="none" stroke="#8a6434" stroke-width="11" stroke-linecap="round"/>
+    <path d="M274 192 C292 178 322 180 340 194" fill="none" stroke="#8a6434" stroke-width="11" stroke-linecap="round"/>
+    <ellipse cx="196" cy="238" rx="25" ry="19" fill="#fff" stroke="#5a3d28" stroke-width="3"/>
+    <ellipse cx="304" cy="238" rx="25" ry="19" fill="#fff" stroke="#5a3d28" stroke-width="3"/>
+    <circle cx="192" cy="239" r="13" fill="#2f6f9f"/><circle cx="300" cy="239" r="13" fill="#2f6f9f"/>
+    <circle cx="192" cy="239" r="6.5" fill="#000"/><circle cx="300" cy="239" r="6.5" fill="#000"/>
+    <circle cx="196" cy="234" r="3.6" fill="#fff"/><circle cx="304" cy="234" r="3.6" fill="#fff"/>
+    <!-- glasses -->
+    <g fill="rgba(255,255,255,.12)" stroke="#16181c" stroke-width="8">
+      <rect x="156" y="208" width="82" height="62" rx="16"/><rect x="262" y="208" width="82" height="62" rx="16"/>
+    </g>
+    <path d="M238 232 q12 -10 24 0 M156 230 L132 224 M344 230 L368 224" fill="none" stroke="#16181c" stroke-width="7" stroke-linecap="round"/>
+    <path d="M250 246 C246 270 236 284 240 294 C248 302 258 302 264 294" fill="none" stroke="#c08a68" stroke-width="7" stroke-linecap="round"/>
+    <!-- sceptical closed mouth -->
+    <path d="M210 348 C232 340 268 340 292 352" fill="none" stroke="#7d3b2e" stroke-width="9" stroke-linecap="round"/>
+    <path d="M226 368 C242 374 260 374 274 370" fill="none" stroke="#c08a68" stroke-width="5" stroke-linecap="round"/>
+  </svg>
+
+  <!-- ============ two text bars ============ -->
+  <div class="bars">
+    <div class="bar yellow">Ich kaufe Traumwagen!</div>
+    <div class="bar black">Hypercar für 3.000.000€</div>
+  </div>
+
+  <div class="grade"></div>
 </div>
 </body>
 </html>
