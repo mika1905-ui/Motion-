@@ -21,11 +21,12 @@ const path = require('path');
     for (const a of document.getAnimations()) { if (a.playState !== 'paused') a.pause(); a.currentTime = (a.currentTime || 0) + d; }
   }, dt);
   const frames = Math.round(dur * fps);
+  const f0 = Math.round(t0 * fps);
   const ff = spawn('ffmpeg', ['-y', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-', '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', out], { stdio: ['pipe', 'ignore', 'inherit'] });
   for (let i = 0; i < frames; i++) {
     await page.evaluate(t => window.__film.renderAt(t), (i + 1) / fps);
     await step();
-    if (i / fps < t0) continue;
+    if (i < f0) continue;
     const buf = await page.screenshot({ type: 'png' });
     if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
     if (i % 60 === 0) console.log(`frame ${i}/${frames}`);
