@@ -41,3 +41,13 @@ python3 europa_reel.py --preview 1 3.3 13 # single PNG frames
 into `clips/`. They're used in name order as the background for intro, Wednesday, Friday, Saturday and
 crowd scenes (colour-graded to the scene's colour), and the text and graphics stay on top. Texts, address
 and handle are at the top of `europa_reel.py`.
+
+## Version with real club footage
+
+[`out/cafe_europa_reel_footage.mp4`](out/cafe_europa_reel_footage.mp4) – 15 s, cut on a 128 BPM grid from two
+@cafeeuropa TikTok clips (party shots only), with the same MI · FR · SA / Jahnplatz 4 overlays.
+**No audio track on purpose:** add "Free Your Mind" (Prospa) in Instagram's music library when posting.
+
+```bash
+python3 europa_footage_reel.py CLIP_A.mp4 CLIP_B.mp4     # shot list: SHOTS in the script
+```
