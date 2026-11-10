@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>YouTube thumbnail – supercar</title>
+<style>
+  html, body { margin: 0; background: #000; }
+  #thumb {
+    position: relative; width: 1280px; height: 720px; overflow: hidden;
+    font-family: "Inter Display", "Inter", sans-serif;
+    background:
+      radial-gradient(ellipse 760px 420px at 68% 60%, #ff3b1f 0%, #b3120a 32%, rgba(60, 6, 8, 0) 72%),
+      linear-gradient(180deg, #14070a 0%, #1d0a0d 55%, #050304 100%);
+  }
+  /* sunburst behind the car */
+  .rays {
+    position: absolute; left: 870px; top: 430px; width: 2400px; height: 2400px;
+    margin: -1200px 0 0 -1200px;
+    background: repeating-conic-gradient(from 4deg, rgba(255, 190, 120, .16) 0 5deg, rgba(0, 0, 0, 0) 5deg 15deg);
+    -webkit-mask-image: radial-gradient(circle, #000 0%, rgba(0, 0, 0, .55) 22%, transparent 46%);
+            mask-image: radial-gradient(circle, #000 0%, rgba(0, 0, 0, .55) 22%, transparent 46%);
+  }
+  .floor {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 150px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .78) 55%, #000 100%);
+  }
+  .vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 55% 50%, transparent 52%, rgba(0, 0, 0, .7) 100%);
+  }
+
+  .car {
+    position: absolute; left: 388px; top: 330px; width: 900px;
+    filter:
+      drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff)
+      drop-shadow(0 26px 22px rgba(0, 0, 0, .75))
+      saturate(1.25) contrast(1.08);
+  }
+  .car-glow {
+    position: absolute; left: 430px; top: 600px; width: 820px; height: 70px;
+    background: radial-gradient(ellipse, rgba(0, 0, 0, .85) 0%, transparent 70%);
+  }
+
+  .person {
+    position: absolute; left: -22px; bottom: -6px; width: 600px;
+    filter: drop-shadow(0 0 0 #fff) drop-shadow(5px 0 0 #fff) drop-shadow(-5px 0 0 #fff)
+            drop-shadow(0 -5px 0 #fff) drop-shadow(0 0 26px rgba(0, 0, 0, .8));
+  }
+
+  .headline {
+    position: absolute; left: 470px; top: 26px; margin: 0;
+    transform: rotate(-4deg) skewX(-8deg); transform-origin: left top;
+    font-weight: 900; font-style: italic; line-height: .88; letter-spacing: -3px;
+    white-space: nowrap;
+  }
+  .headline span {
+    display: block; paint-order: stroke fill;
+    -webkit-text-stroke: 18px #000;
+    text-shadow: 0 10px 0 #000, 0 16px 28px rgba(0, 0, 0, .7);
+  }
+  .headline .l1 { font-size: 96px; color: #fff; }
+  .headline .l2 { font-size: 178px; color: #ffe500; margin-left: -6px; }
+
+  .tag {
+    position: absolute; right: 34px; top: 262px;
+    transform: rotate(5deg);
+    padding: 8px 22px 10px;
+    background: #e60012; color: #fff; border: 6px solid #fff; border-radius: 14px;
+    font-weight: 900; font-style: italic; font-size: 46px; letter-spacing: -1px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .65);
+  }
+  .arrow { position: absolute; left: 585px; top: 250px; width: 220px;
+           filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .7)); }
+</style>
+</head>
+<body>
+<div id="thumb">
+  <div class="rays"></div>
+  <div class="floor"></div>
+  <div class="car-glow"></div>
+  <img class="car" src="../assets/car_cutout.png" alt="">
+  <div class="vignette"></div>
+
+  <h1 class="headline">
+    <span class="l1">ICH FAHRE</span>
+    <span class="l2">963 PS!</span>
+  </h1>
+  <div class="tag">3.000.000 €</div>
+
+  <!-- curved arrow pointing at the car -->
+  <svg class="arrow" viewBox="0 0 250 150">
+    <path d="M14 30 C 90 6, 160 30, 190 96" fill="none" stroke="#000" stroke-width="34" stroke-linecap="round"/>
+    <path d="M150 78 L196 138 L236 70 Z" fill="#000" stroke="#000" stroke-width="16" stroke-linejoin="round"/>
+    <path d="M14 30 C 90 6, 160 30, 190 96" fill="none" stroke="#ffe500" stroke-width="18" stroke-linecap="round"/>
+    <path d="M150 78 L196 138 L236 70 Z" fill="#ffe500"/>
+  </svg>
+
+  <!-- fictional, illustrated presenter (no real person) -->
+  <svg class="person" viewBox="0 0 600 640">
+    <defs>
+      <linearGradient id="skin" x1="0" x2="1">
+        <stop offset="0" stop-color="#e9b08a"/><stop offset=".55" stop-color="#f6c9a4"/><stop offset="1" stop-color="#dc9d78"/>
+      </linearGradient>
+      <linearGradient id="jacket" x1="0" x2="1">
+        <stop offset="0" stop-color="#15171c"/><stop offset=".5" stop-color="#2b2f38"/><stop offset="1" stop-color="#101216"/>
+      </linearGradient>
+      <radialGradient id="rim" cx=".95" cy=".35" r=".7">
+        <stop offset="0" stop-color="#ff5a36" stop-opacity=".75"/><stop offset="1" stop-color="#ff5a36" stop-opacity="0"/>
+      </radialGradient>
+      <clipPath id="headClip"><path d="M128 232 C128 120 190 84 250 84 C310 84 372 120 372 232 C372 330 318 408 250 408 C182 408 128 330 128 232Z"/></clipPath>
+    </defs>
+
+    <!-- pointing arm (behind torso) -->
+    <path d="M362 500 C420 470 470 430 520 372 L566 410 C520 480 470 540 400 590 Z" fill="url(#jacket)"/>
+    <path d="M362 500 C420 470 470 430 520 372 L566 410 C520 480 470 540 400 590 Z" fill="url(#rim)"/>
+    <!-- hand -->
+    <g transform="translate(540 372) rotate(-38)">
+      <rect x="-8" y="-34" width="62" height="60" rx="24" fill="url(#skin)"/>
+      <rect x="34" y="-36" width="78" height="24" rx="12" fill="#f6c9a4"/>
+      <rect x="20" y="-14" width="34" height="13" rx="6.5" fill="#dc9d78"/>
+      <rect x="20" y="0" width="32" height="13" rx="6.5" fill="#dc9d78"/>
+      <rect x="18" y="13" width="28" height="12" rx="6" fill="#d39370"/>
+      <path d="M-2 -30 C 10 -50, 34 -48, 36 -30" fill="#f6c9a4"/>
+    </g>
+
+    <!-- torso -->
+    <path d="M28 640 C34 540 60 470 150 446 L206 426 L294 426 L350 446 C440 470 470 540 476 640 Z" fill="url(#jacket)"/>
+    <path d="M28 640 C34 540 60 470 150 446 L206 426 L294 426 L350 446 C440 470 470 540 476 640 Z" fill="url(#rim)"/>
+    <!-- t-shirt + collar -->
+    <path d="M196 428 C214 500 286 500 304 428 L330 640 L170 640 Z" fill="#f4f4f4"/>
+    <path d="M196 428 L160 448 L212 640 L232 640 Z" fill="#0c0d10"/>
+    <path d="M304 428 L340 448 L288 640 L268 640 Z" fill="#0c0d10"/>
+    <!-- chain -->
+    <path d="M212 452 C232 512 268 512 288 452" fill="none" stroke="#f5c542" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- neck -->
+    <path d="M204 360 L296 360 L300 436 C280 470 220 470 200 436 Z" fill="#d99a76"/>
+    <path d="M204 380 C230 420 270 420 296 380 L296 360 L204 360Z" fill="#b97a5a" opacity=".6"/>
+
+    <!-- ears -->
+    <ellipse cx="128" cy="250" rx="18" ry="30" fill="#e3a680"/>
+    <ellipse cx="372" cy="250" rx="18" ry="30" fill="#d0906c"/>
+
+    <!-- head -->
+    <path d="M128 232 C128 120 190 84 250 84 C310 84 372 120 372 232 C372 330 318 408 250 408 C182 408 128 330 128 232Z" fill="url(#skin)"/>
+
+    <g clip-path="url(#headClip)">
+      <!-- beard -->
+      <path d="M118 262 C140 300 150 318 176 322 C200 300 300 300 324 322 C350 318 360 300 382 262 L382 420 L118 420 Z" fill="#2a1b14"/>
+      <!-- hair fade on the sides -->
+      <path d="M120 250 C116 150 150 96 200 82 L170 190 C160 210 152 230 150 262 Z" fill="#2a1b14" opacity=".85"/>
+      <path d="M380 250 C384 150 350 96 300 82 L330 190 C340 210 348 230 350 262 Z" fill="#2a1b14" opacity=".85"/>
+      <!-- cheeks -->
+      <ellipse cx="172" cy="286" rx="26" ry="14" fill="#ff8a70" opacity=".35"/>
+      <ellipse cx="328" cy="286" rx="26" ry="14" fill="#ff8a70" opacity=".35"/>
+      <!-- rim light from the car -->
+      <rect x="110" y="70" width="290" height="360" fill="url(#rim)"/>
+    </g>
+
+    <!-- hair top -->
+    <path d="M132 190 C112 90 180 40 256 44 C332 40 392 96 368 190 C352 150 330 128 300 124 C260 136 200 136 172 122 C150 136 140 160 132 190Z" fill="#1d120d"/>
+    <path d="M170 92 C210 62 290 60 330 90" fill="none" stroke="#4a3226" stroke-width="7" stroke-linecap="round" opacity=".7"/>
+
+    <!-- eyebrows (raised) -->
+    <path d="M158 180 C176 156 210 154 226 170" fill="none" stroke="#1d120d" stroke-width="13" stroke-linecap="round"/>
+    <path d="M274 170 C290 154 324 156 342 180" fill="none" stroke="#1d120d" stroke-width="13" stroke-linecap="round"/>
+
+    <!-- eyes (wide open) -->
+    <ellipse cx="196" cy="226" rx="33" ry="36" fill="#fff" stroke="#3a2418" stroke-width="4"/>
+    <ellipse cx="304" cy="226" rx="33" ry="36" fill="#fff" stroke="#3a2418" stroke-width="4"/>
+    <circle cx="208" cy="228" r="17" fill="#4b2e1c"/><circle cx="316" cy="228" r="17" fill="#4b2e1c"/>
+    <circle cx="210" cy="228" r="8.5" fill="#000"/><circle cx="318" cy="228" r="8.5" fill="#000"/>
+    <circle cx="215" cy="221" r="5" fill="#fff"/><circle cx="323" cy="221" r="5" fill="#fff"/>
+
+    <!-- nose -->
+    <path d="M250 232 C244 262 232 276 236 288 C244 298 258 298 266 288" fill="none" stroke="#b97a5a" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- open mouth -->
+    <ellipse cx="250" cy="352" rx="44" ry="40" fill="#f6c9a4" opacity=".0"/>
+    <path d="M206 344 C206 312 294 312 294 344 C294 392 206 392 206 344Z" fill="#3b0a10" stroke="#1d120d" stroke-width="5"/>
+    <path d="M214 332 C230 320 270 320 286 332 L284 342 C266 336 234 336 216 342Z" fill="#fff"/>
+    <ellipse cx="250" cy="372" rx="26" ry="13" fill="#e2566a"/>
+  </svg>
+</div>
+</body>
+</html>
