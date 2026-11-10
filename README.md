@@ -20,3 +20,26 @@ python3 render.py --preview 5.3 8.6   # single PNG frames for quick checks
 
 To change the caption, brand or timing, edit the constants and the phase times at the top of
 `render.py` (`CAPTION`, `BRAND`, `liquid_field`).
+
+---
+
+# Revolut – 13 s spec spot (fan-made)
+
+A 13 s vertical (1080×1920, 30 fps) TikTok spot with synthesized 120 BPM sound design. It covers
+Revolut's real product features only: sending money, currency exchange, stocks, crypto, Vaults savings,
+budgets & analytics, disposable virtual cards, bill splitting, Apple Pay & Google Pay, RevPoints,
+Revolut <18 and the Premium/Metal/Ultra plans.
+Structure: a glitchy wordmark slam that zooms through the "o", then a spinning card, then 12 feature cuts
+on the beat, then a hyperspace run into the app, then the drop and the end card.
+Effects: RGB split, glitch slices, flash frames, zoom punches, camera shake, speed lines, particles, grain.
+The end card says it is a fan-made spec ad and not an official Revolut ad.
+
+**Output:** [`out/revolut_spot.mp4`](out/revolut_spot.mp4)
+
+```bash
+cd revolut
+python3 audio.py                         # -> spot_audio.wav
+node render.js                           # -> ../out/revolut_spot.mp4 (Playwright + ffmpeg)
+node render.js --preview 0.6 3.2 11.0    # single JPG frames in preview/
+```
+Open `revolut/spot.html` in a browser to watch a live loop. All copy lives in `spot.html` (`F` array and scene functions).
