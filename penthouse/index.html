@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Aurum Residences — The Penthouse</title>
+  <meta name="description" content="Aurum Residences — an interactive motion experience. Step into the Penthouse." />
+  <meta name="theme-color" content="#060607" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind (Play CDN) -->
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#060607',
+            gold: { DEFAULT: '#d4b483', light: '#f3dcae', deep: '#a8865a' },
+            ti: { DEFAULT: '#8c9099', light: '#c9ccd2', dark: '#3a3d44' }
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['"Cormorant Garamond"', 'ui-serif', 'Georgia', 'serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body class="bg-ink text-white font-sans antialiased overflow-hidden select-none">
+
+  <!-- Custom cursor (fine pointers only) -->
+  <div id="cursor" aria-hidden="true"><span class="cursor-dot"></span><span class="cursor-ring"></span></div>
+  <!-- Film grain -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ───────────────────────── Header ───────────────────────── -->
+  <header id="topbar" class="fixed inset-x-0 top-0 z-40 flex h-20 items-center justify-between px-6 md:px-10">
+    <a href="#" class="flex items-center gap-3" aria-label="Aurum Residences">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2 22 12 12 22 2 12Z" stroke="#d4b483" stroke-width="1"/>
+        <path d="M12 7 17 12 12 17 7 12Z" fill="#d4b483" fill-opacity=".85"/>
+      </svg>
+      <span class="text-[13px] font-light tracking-[.45em]">AURUM</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-9 text-[12px] font-light tracking-[.18em] text-white/50">
+      <a class="nav-link" href="#">RESIDENCES</a>
+      <a class="nav-link" href="#">AMENITIES</a>
+      <a class="nav-link" href="#">NEIGHBOURHOOD</a>
+      <a class="nav-link" href="#">ATELIER</a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <span class="hidden sm:inline text-[11px] tracking-[.2em] text-white/40">EN</span>
+      <button class="btn-ghost text-[11px] tracking-[.2em]" data-open-booking>PRIVATE SALES</button>
+    </div>
+  </header>
+
+  <!-- ───────────────────────── 1 · Tower view ───────────────────────── -->
+  <section id="tower-view" class="fixed inset-0 z-10" aria-label="Building overview">
+    <div class="tower-bg" aria-hidden="true"></div>
+
+    <div class="relative z-10 mx-auto flex h-full max-w-[1500px] flex-col lg:flex-row items-center px-6 md:px-10 pt-24 pb-6 lg:pb-10">
+      <!-- Copy -->
+      <div id="tower-copy" class="w-full lg:w-[38%] shrink-0 lg:pr-6">
+        <p class="eyebrow fade">Aurum Residences — No.&nbsp;01</p>
+        <h1 class="mt-4 text-[44px] leading-[1.02] sm:text-6xl xl:text-[84px] font-extralight tracking-[-.035em]">
+          <span class="line"><span>Nine floors.</span></span>
+          <span class="line"><span>One <em class="font-serif italic font-light text-gold-light">summit</em>.</span></span>
+        </h1>
+        <p class="fade mt-6 max-w-sm text-[15px] leading-relaxed text-white/50 font-light hidden sm:block">
+          A sculpted tower of titanium and glass. Eight private residences — crowned by a single penthouse suspended above the skyline.
+        </p>
+
+        <dl class="fade mt-10 hidden sm:grid grid-cols-3 max-w-md gap-6 border-t border-white/10 pt-6">
+          <div><dt class="stat-k">Height</dt><dd class="stat-v">212&nbsp;m</dd></div>
+          <div><dt class="stat-k">Residences</dt><dd class="stat-v">09</dd></div>
+          <div><dt class="stat-k">Completion</dt><dd class="stat-v">2027</dd></div>
+        </dl>
+
+        <button id="hint" class="fade text-left mt-8 lg:mt-12 inline-flex items-center gap-3 text-[12px] tracking-[.2em] text-gold-light/90" data-enter>
+          <span class="pulse-dot"></span>SELECT THE PENTHOUSE TO STEP INSIDE
+        </button>
+      </div>
+
+      <!-- Building -->
+      <div id="stage-wrap" class="relative w-full flex-1 min-h-0 h-full flex items-center justify-center">
+        <div id="stage">
+          <div id="tilt">
+            <svg id="tower" role="img" aria-label="Isometric model of Aurum Tower with nine labelled floors"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── 2 · Penthouse interior ───────────────────────── -->
+  <section id="interior" class="fixed inset-0 z-20" aria-label="The Penthouse lounge">
+    <div id="scene">
+      <div id="camera">
+        <div class="layer" data-depth="6"  id="l-sky"></div>
+        <div class="layer" data-depth="8"  id="l-sun"></div>
+        <div class="layer" data-depth="14" id="l-clouds"></div>
+        <div class="layer" data-depth="22" id="l-far"></div>
+        <div class="layer" data-depth="34" id="l-mid"></div>
+        <div class="layer" data-depth="52" id="l-near"></div>
+        <div class="layer" data-depth="-26" id="l-glass"></div>
+        <div class="layer" data-depth="66" id="l-room"></div>
+        <div class="layer" data-depth="84" id="l-furniture"></div>
+        <div class="layer" data-depth="96" id="l-dust"></div>
+      </div>
+    </div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div id="sweep" aria-hidden="true"></div>
+
+    <!-- Interior UI -->
+    <button id="btn-back" class="ui-in fixed left-6 md:left-10 top-24 z-30 btn-glass text-[11px] tracking-[.2em]" aria-label="Back to tower">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 6l-6 6 6 6"/></svg>
+      TOWER
+    </button>
+
+    <div class="ui-in fixed right-6 md:right-10 top-24 z-30 hidden sm:flex items-center gap-3 text-[11px] tracking-[.2em] text-white/60">
+      <span class="live-dot"></span>LIVE VIEW · WEST · <span id="clock">19:42</span>
+    </div>
+
+    <div class="fixed inset-x-0 bottom-0 z-30 px-6 md:px-10 pb-8 md:pb-10 pointer-events-none">
+      <div class="mx-auto flex max-w-[1500px] flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <!-- Title block -->
+        <div class="pointer-events-auto">
+          <p class="ui-in eyebrow">Residence PH · Top Floor</p>
+          <h2 class="ui-in mt-3 text-5xl sm:text-7xl xl:text-[96px] font-extralight tracking-[-.04em] leading-none">The Penthouse</h2>
+          <p class="ui-in mt-3 font-serif italic text-xl sm:text-2xl text-gold-light/90">Where the city ends and the sky begins.</p>
+          <ul class="ui-in mt-6 hidden sm:flex items-center gap-6 text-[12px] tracking-[.14em] text-white/60">
+            <li>620 m²</li><li class="sep"></li><li>5 Bedrooms</li><li class="sep"></li><li>6 Baths</li><li class="sep"></li><li>360° Terrace</li>
+          </ul>
+        </div>
+
+        <!-- Price card -->
+        <div class="ui-in glass-card pointer-events-auto w-full md:w-[360px]">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="stat-k">Asking price</p>
+              <p class="mt-1 text-[44px] font-extralight tracking-[-.03em] leading-none"><span id="price">$12.5M</span></p>
+              <p class="mt-2 text-[11px] tracking-[.12em] text-white/40">≈ $20,160 / m² · Freehold</p>
+            </div>
+            <span class="badge-available">AVAILABLE</span>
+          </div>
+          <div class="mt-6 grid grid-cols-2 gap-3">
+            <button id="btn-tour" class="btn-outline">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>
+              Virtual Tour
+            </button>
+            <button class="btn-gold" data-open-booking>Book Viewing</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour caption -->
+    <div id="tour-ui" class="fixed inset-x-0 top-1/2 z-30 -translate-y-1/2 flex justify-center pointer-events-none" aria-live="polite">
+      <div class="text-center px-6">
+        <p id="tour-step" class="eyebrow justify-center">01 / 04</p>
+        <p id="tour-title" class="mt-4 text-4xl sm:text-6xl font-extralight tracking-[-.03em]">Panoramic glazing</p>
+        <p id="tour-text" class="mt-4 font-serif italic text-xl text-gold-light/90">6.2 m floor-to-ceiling glass.</p>
+      </div>
+    </div>
+    <div id="tour-bar" class="fixed left-1/2 bottom-6 z-30 -translate-x-1/2 flex items-center gap-4 text-[11px] tracking-[.2em] text-white/60">
+      <div class="h-px w-40 bg-white/15 overflow-hidden"><div id="tour-progress" class="h-full w-full bg-gold origin-left scale-x-0"></div></div>
+      <button id="btn-tour-end" class="pointer-events-auto hover:text-white transition">END TOUR ✕</button>
+    </div>
+
+    <div id="tip" role="tooltip"><p class="tip-t"></p><p class="tip-d"></p></div>
+  </section>
+
+  <!-- ───────────────────────── Booking modal ───────────────────────── -->
+  <div id="booking" class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="booking-title">
+    <div class="booking-backdrop absolute inset-0" data-close-booking></div>
+    <div class="booking-panel relative w-full max-w-[520px] glass-card !p-8 sm:!p-10">
+      <button class="absolute right-5 top-5 text-white/40 hover:text-white transition" data-close-booking aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+
+      <div id="booking-form-wrap">
+        <p class="eyebrow">Private Viewing</p>
+        <h3 id="booking-title" class="mt-3 text-3xl font-extralight tracking-[-.02em]">Reserve your moment<br/><em class="font-serif italic text-gold-light">at golden hour.</em></h3>
+
+        <form id="booking-form" class="mt-8 space-y-6" novalidate>
+          <fieldset>
+            <legend class="stat-k mb-3">Date</legend>
+            <div id="date-chips" class="grid grid-cols-3 sm:grid-cols-6 gap-2"></div>
+          </fieldset>
+          <fieldset>
+            <legend class="stat-k mb-3">Time</legend>
+            <div id="time-chips" class="grid grid-cols-4 gap-2"></div>
+          </fieldset>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <label class="field"><span>Name</span><input name="name" type="text" autocomplete="name" placeholder="Full name" /></label>
+            <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" placeholder="you@domain.com" /></label>
+          </div>
+          <button type="submit" class="btn-gold w-full !py-4">Confirm Private Viewing</button>
+          <p class="text-center text-[11px] tracking-[.1em] text-white/35">Prototype — no data is sent.</p>
+        </form>
+      </div>
+
+      <div id="booking-done" class="hidden text-center py-6">
+        <svg class="mx-auto" width="72" height="72" viewBox="0 0 72 72" fill="none">
+          <circle class="done-circle" cx="36" cy="36" r="34" stroke="#d4b483" stroke-width="1" pathLength="1"/>
+          <path class="done-check" d="M23 37l9 9 17-19" stroke="#f3dcae" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/>
+        </svg>
+        <h3 class="mt-6 text-3xl font-extralight tracking-[-.02em]">Your viewing is reserved.</h3>
+        <p id="booking-summary" class="mt-3 font-serif italic text-xl text-gold-light/90"></p>
+        <p class="mt-4 text-sm text-white/45 font-light">A private concierge will contact you within 24 hours.</p>
+        <button class="btn-outline mx-auto mt-8 !px-8" data-close-booking>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

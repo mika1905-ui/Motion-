@@ -20,3 +20,10 @@ python3 render.py --preview 5.3 8.6   # single PNG frames for quick checks
 
 To change the caption, brand or timing, edit the constants and the phase times at the top of
 `render.py` (`CAPTION`, `BRAND`, `liquid_field`).
+
+---
+
+# Aurum Residences — Penthouse motion prototype
+
+Interactive single-page motion ad for a luxury real-estate brand (Tailwind + GSAP).
+Open [`penthouse/index.html`](penthouse/index.html) in a browser — see [`penthouse/README.md`](penthouse/README.md).
