@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+      <stop offset="0" stop-color="#1c1c24"/>
+      <stop offset="1" stop-color="#07070a"/>
+    </radialGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff5a4e"/>
+      <stop offset="0.55" stop-color="#e3121f"/>
+      <stop offset="1" stop-color="#8e0611"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- the mark: a liquid drop whose body is cut by a swirl, reads as motion + a stylised "M" wave -->
+    <g id="mark">
+      <!-- drop -->
+      <path d="M512 150 C 560 250 700 380 700 560 C 700 680 616 770 512 770 C 408 770 324 680 324 560 C 324 380 464 250 512 150 Z"/>
+      <!-- splash orbit -->
+      <path d="M232 690 C 300 840 520 900 690 820 C 790 772 840 700 836 640 C 820 720 740 790 610 812 C 470 836 320 790 232 690 Z"/>
+      <!-- flying droplets -->
+      <circle cx="808" cy="318" r="34"/>
+      <circle cx="872" cy="420" r="18"/>
+    </g>
+    <mask id="cut">
+      <rect width="1024" height="1024" fill="#fff"/>
+      <!-- wave cut through the drop: motion line -->
+      <path d="M300 590 C 380 520 450 520 512 590 C 574 660 644 660 724 590" fill="none" stroke="#000" stroke-width="44" stroke-linecap="round"/>
+    </mask>
+  </defs>
+
+  <rect width="1024" height="1024" rx="0" fill="url(#bg)"/>
+
+  <!-- chromatic offset echoes -->
+  <g transform="translate(-10 -20)"><g mask="url(#cut)">
+    <use href="#mark" fill="#22e6f0" transform="translate(-16 -12)" opacity="0.95"/>
+    <use href="#mark" fill="#ff2d6f" transform="translate(16 12)" opacity="0.95"/>
+    <use href="#mark" fill="url(#red)"/>
+  </g>
+  <!-- gloss highlight on the drop -->
+  <path d="M470 270 C 430 340 380 410 372 500 C 368 540 392 548 404 516 C 424 440 460 360 492 300 C 502 278 484 252 470 270 Z" fill="url(#gloss)" opacity="0.7"/></g>
+</svg>
