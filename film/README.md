@@ -1,6 +1,6 @@
 # iPhone Film – Gesamtvideo (TikTok 9:16, ~30 s, mit Sound)
 
-**Video:** `out/iphone-film-tiktok.mp4` – 1080×1920, 30 fps, AAC-Stereo.
+**Videos:** `out/iphone-film-tiktok.mp4` (9:16, 1080×1920) und `out/iphone-film-16x9.mp4` (16:9, 1920×1080) – 30 fps, AAC-Stereo.
 
 | Zeit | Inhalt |
 |---|---|
@@ -17,7 +17,8 @@
 
 ## Neu bauen
 ```bash
-./build.sh                 # setzt alles zusammen (rendert fehlende Teile automatisch)
+./build.sh                 # 9:16 (rendert fehlende Teile automatisch)
+./build.sh land            # 16:9
 ```
 - `render-fold.js` – rendert `fold/index.html?film=1` Frame für Frame (GSAP-Zeit über `gsap.updateRoot`)
 - `sound.py` – synthetisiert den Soundtrack (Drone, Hits, Whooshes, 120-BPM-Beat) synchron zu den Schnitten
