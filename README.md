@@ -24,7 +24,7 @@ To change the caption, brand or timing, edit the constants and the phase times a
 ## Lumyx – 3D-Website
 
 [`website/index.html`](website/index.html) ist die Website für **Lumyx**, eine KI-Telefonassistenz für Arztpraxen
-(früher „Linea Praxistelefon“), im Neon-Look mit einem 3D-Linienband (Three.js) im Hintergrund.
+(früher „Linea Praxistelefon“), in Mint und Weiß mit einem dezenten 3D-Linienband (Three.js) im Hintergrund.
 Enthalten: Telefon-Demo als Chatbot (Terminabsage, Folgerezept, Notfall-Weiterleitung, Sprachausgabe),
 Praxis-Dashboard, Ablauf, Funktionen, Datenschutz, Preise mit Monats-/Jahresumschalter, Ersparnis-Rechner, FAQ und Kontaktformular.
 Einfach `website/index.html` im Browser öffnen oder den Ordner auf einen Webspace hochladen.
