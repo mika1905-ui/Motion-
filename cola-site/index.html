@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VELA Cola</title>
+  <meta name="description" content="VELA Cola – Craft-Cola aus Hamburg in der Mehrweg-Glasflasche. Classic, Zero, Cherry und Vanilla." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.js" } }
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a href="#top" class="logo">VELA</a>
+    <nav>
+      <a href="#flavors">Sorten</a>
+      <a href="#brand">Marke</a>
+      <a href="#pricing">Preise</a>
+      <a href="#shop">Shop</a>
+    </nav>
+    <button class="cart-btn" id="cart-open" aria-label="Warenkorb öffnen">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+      <span id="cart-count">0</span>
+    </button>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-text">
+        <p class="eyebrow">Craft-Cola aus Hamburg · Mehrweg-Glas</p>
+        <h1 class="hero-title"><span>Eiskalt.</span><span class="grad">Eingeschenkt.</span></h1>
+        <p class="hero-sub">Rohrzucker, Kolanuss, echte Kohlensäure.<br/>Ab <strong>1,49 €</strong> pro Flasche.</p>
+        <div class="hero-cta">
+          <a href="#shop" class="btn primary">Jetzt bestellen</a>
+          <a href="#pour" class="btn link">Scroll &amp; schenk ein ›</a>
+        </div>
+      </div>
+      <div class="scroll-hint"><span></span>Scrollen</div>
+    </section>
+
+    <!-- EINSCHENKEN -->
+    <section class="sticky-section" id="pour" style="--h: 460vh">
+      <div class="sticky">
+        <div class="pour-copy">
+          <h2 class="big-line" data-step="0">Zisch.</h2>
+          <h2 class="big-line" data-step="1">Eis rein.</h2>
+          <h2 class="big-line" data-step="2">Einschenken.<br/><span class="muted">Langsam, am Glasrand.</span></h2>
+          <h2 class="big-line" data-step="3">Prost.<br/><span class="grad">Genau so.</span></h2>
+        </div>
+        <div class="stats">
+          <div><b data-count="330" data-suffix=" ml">0</b><span>Mehrweg-Glasflasche</span></div>
+          <div><b data-count="4" data-suffix=" °C">0</b><span>ideale Trinktemperatur</span></div>
+          <div><b data-count="7.2" data-decimals="1" data-suffix=" g/l">0</b><span>Kohlensäure</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SORTEN -->
+    <section class="sticky-section" id="flavors" style="--h: 420vh">
+      <div class="sticky">
+        <div class="flavor-panels" id="flavor-panels"></div>
+        <div class="flavor-dots" id="flavor-dots"></div>
+      </div>
+    </section>
+
+    <!-- MARKE -->
+    <section class="brand" id="brand">
+      <div class="brand-intro reveal">
+        <p class="eyebrow">Die Marke</p>
+        <h2 class="section-title">Eine Cola,<br/><span class="grad">wie sie früher war.</span></h2>
+        <p class="lead">VELA entstand 2019 in einer Hamburger Hinterhofküche. Zwei Freunde wollten eine Cola, die nach Kolanuss und Gewürzen schmeckt statt nach Sirup. Nach 61 Testrezepten stand die Mischung. Heute füllen wir in Hamburg-Altona ab, in Mehrweg-Glas und mit Rohrzucker.</p>
+      </div>
+
+      <ol class="timeline" aria-label="Geschichte von VELA">
+        <li class="reveal"><time>2019</time><h3>Rezept Nr. 61</h3><p>Nach 60 Fehlversuchen stimmt die Mischung aus Kolanuss, Zimt, Orange und Limette.</p></li>
+        <li class="reveal"><time>2020</time><h3>Erste 2.000 Flaschen</h3><p>Handabgefüllt und verkauft in Kiosken und Bars auf St. Pauli.</p></li>
+        <li class="reveal"><time>2022</time><h3>Eigene Abfüllung</h3><p>Umzug nach Altona: eigene Linie für Mehrweg-Glas, 12.000 Flaschen pro Stunde.</p></li>
+        <li class="reveal"><time>2024</time><h3>Zero, Cherry, Vanilla</h3><p>Drei neue Sorten, alle auf Basis des Original-Rezepts.</p></li>
+      </ol>
+
+      <div class="values">
+        <article class="value reveal"><span class="v-num">100 %</span><h3>Rohrzucker</h3><p>Kein Glukose-Fruktose-Sirup. Classic, Cherry und Vanilla werden nur mit Rohrzucker gesüßt.</p></article>
+        <article class="value reveal"><span class="v-num">bis 50×</span><h3>Mehrweg-Glas</h3><p>Jede Flasche wird gespült und bis zu 50-mal neu befüllt. Pfand 0,15 €.</p></article>
+        <article class="value reveal"><span class="v-num">&lt; 300 km</span><h3>Regional</h3><p>Wasser aus Hamburg, Abfüllung in Altona, Lieferung vor allem in Norddeutschland.</p></article>
+      </div>
+
+      <div class="facts reveal">
+        <div>
+          <h3>Zutaten (Classic)</h3>
+          <p class="muted">Wasser, Rohrzucker, Kohlensäure, Farbstoff Zuckerkulör E150d, Säuerungsmittel Phosphorsäure, Kolanuss-Extrakt, natürliche Aromen (Zimt, Orange, Limette, Muskat), Koffein.</p>
+          <p class="muted small">Erhöhter Koffeingehalt (10 mg/100 ml). Für Kinder und Schwangere nicht empfohlen.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="nutrition" id="nutrition">
+            <caption>Nährwerte pro 100 ml</caption>
+            <thead><tr><th></th><th>Classic</th><th>Zero</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREISE -->
+    <section class="pricing" id="pricing">
+      <div class="section-head reveal">
+        <p class="eyebrow">Preise</p>
+        <h2 class="section-title">Mehr Flaschen.<br/><span class="grad">Mehr Zisch.</span></h2>
+      </div>
+      <div class="tiers" id="tiers"></div>
+      <p class="deposit muted small">Alle Preise inkl. MwSt., zzgl. 0,15 € Mehrwegpfand pro Flasche.</p>
+    </section>
+
+    <!-- SHOP -->
+    <section class="shop" id="shop">
+      <div class="section-head reveal">
+        <p class="eyebrow">Shop</p>
+        <h2 class="section-title">Alle Sorten.</h2>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div><div class="logo">VELA</div><p class="muted">Craft-Cola aus Hamburg seit 2019.</p><p class="muted small">Demo-Website. VELA ist eine fiktive Marke, es findet kein echter Verkauf statt.</p></div>
+      <div><h4>Shop</h4><a href="#shop">Alle Sorten</a><a href="#pricing">Packs &amp; Kisten</a><a href="#flavors">Sorten</a></div>
+      <div><h4>Marke</h4><a href="#brand">Unsere Geschichte</a><a href="#brand">Nährwerte</a><a href="#">Presse</a></div>
+      <div><h4>Service</h4><a href="#">Versand &amp; Pfand</a><a href="#">Impressum</a><a href="#">Datenschutz</a></div>
+    </div>
+  </footer>
+
+  <!-- Warenkorb -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <aside class="drawer" id="drawer" aria-label="Warenkorb">
+    <div class="drawer-head">
+      <h3>Warenkorb</h3>
+      <button class="icon-btn" id="cart-close" aria-label="Schließen">✕</button>
+    </div>
+    <div class="ship">
+      <div class="ship-text" id="ship-text"></div>
+      <div class="ship-bar"><span id="ship-bar"></span></div>
+    </div>
+    <div class="drawer-items" id="drawer-items"></div>
+    <div class="drawer-foot">
+      <div class="total sub"><span>Pfand</span><span id="cart-deposit">0,00 €</span></div>
+      <div class="total"><span>Gesamt</span><b id="cart-total">0,00 €</b></div>
+      <button class="btn primary wide" id="checkout">Zur Kasse</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
