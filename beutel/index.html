@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pöff – Der Beutel für alles, was raus muss</title>
+  <meta name="description" content="Pöff: der Beutel zum Reinpupsen und Reinkotzen. Geruchsdicht, auslaufsicher, in sieben Düften." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.min.js" } }
+  </script>
+</head>
+<body>
+  <div id="loader"><div class="loader-bag"></div><span>Pöff wird aufgeblasen …</span></div>
+
+  <!-- Global nav -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="#top" class="logo">pöff<span>.</span></a>
+      <nav class="nav-links">
+        <a href="#puff">Puff</a>
+        <a href="#splash">Splash</a>
+        <a href="#lagen">Technik</a>
+        <a href="#duefte">Düfte</a>
+        <a href="#preise">Preise</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <button class="cart" aria-label="Warenkorb">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>
+        <b id="cartCount">0</b>
+      </button>
+    </div>
+  </header>
+
+  <!-- Sub nav (Apple style) -->
+  <div class="subnav">
+    <div class="subnav-inner">
+      <strong>Pöff Pro</strong>
+      <div class="subnav-links">
+        <a href="#puff">Überblick</a>
+        <a href="#duefte">Düfte</a>
+        <a href="#vergleich">Technische Daten</a>
+        <a href="#preise" class="pill">Kaufen</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D stage -->
+  <div id="glow"></div>
+  <canvas id="stage"></canvas>
+  <div id="labels">
+    <div class="label" data-layer="0"><b>Außenhülle</b><span>Recycelter Stoff mit Duft-Mikrokapseln</span></div>
+    <div class="label" data-layer="1"><b>Alu-Barriere</b><span>0,08 mm – nichts kommt durch</span></div>
+    <div class="label" data-layer="2"><b>Aktivkohle-Kern</b><span>Bindet 99,7 % aller Gerüche¹</span></div>
+  </div>
+
+  <main id="top">
+    <!-- 0 HERO -->
+    <section class="scene hero" data-stage="0" style="--h:170vh">
+      <div class="sticky">
+        <div class="beat hero-copy" data-in="-1" data-out="0.55">
+          <p class="eyebrow">Neu · Pöff Pro</p>
+          <h1>Lass es raus.<br /><span class="grad">Wir halten es dicht.</span></h1>
+          <p class="lead">Der Beutel für alles, was raus muss. Pupsen. Kotzen. Beides.</p>
+          <div class="cta-row">
+            <a href="#preise" class="btn">Kaufen ab 9,99 €</a>
+            <a href="#puff" class="link">Mehr erfahren ›</a>
+          </div>
+        </div>
+        <div class="scroll-hint beat" data-in="-1" data-out="0.25"><span></span>Scrollen</div>
+      </div>
+    </section>
+
+    <!-- 1 PUFF -->
+    <section class="scene" id="puff" data-stage="1" style="--h:280vh">
+      <div class="sticky side-left">
+        <div class="beat" data-in="0.05" data-out="0.48">
+          <p class="eyebrow">Puff-Modus</p>
+          <h2>Einmal rein.<br />Nie wieder raus.</h2>
+          <p class="lead">Halte Pöff an, lass los, Klick – zu. Das Einweg-Ventil saugt jeden Hauch ein und lässt ihn nie wieder entkommen.</p>
+        </div>
+        <div class="beat" data-in="0.5" data-out="1.01">
+          <p class="eyebrow">Duft-Konverter</p>
+          <h2>Was reingeht,<br /><span class="grad">riecht nach Lavendel.</span></h2>
+          <p class="lead">Mikrokapseln im Gewebe wandeln Faulgase in deinen Lieblingsduft. Die Physik dahinter? Fragen Sie nicht.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 SPLASH -->
+    <section class="scene" id="splash" data-stage="2" style="--h:280vh">
+      <div class="sticky side-right">
+        <div class="beat" data-in="0.05" data-out="0.48">
+          <p class="eyebrow">Splash-Modus</p>
+          <h2>Wenn's mal<br />schneller kommt.</h2>
+          <p class="lead">1,2 Liter Fassungsvermögen. Weite Öffnung für zielsicheres Treffen – auch auf der Fähre bei Windstärke 8.</p>
+        </div>
+        <div class="beat" data-in="0.5" data-out="1.01">
+          <p class="eyebrow">MagClick™ Verschluss</p>
+          <h2>0,3 Sekunden.<br /><span class="grad">Dann ist Ruhe.</span></h2>
+          <p class="lead">Magnetischer Verschluss, der sich mit einer Hand schließt. 100 % auslaufsicher, selbst kopfüber in der Handtasche.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 LAYERS -->
+    <section class="scene" id="lagen" data-stage="3" style="--h:260vh">
+      <div class="sticky side-top">
+        <div class="beat" data-in="0.02" data-out="1.01">
+          <p class="eyebrow">Drei Lagen. Null Kompromisse.</p>
+          <h2>Ingenieurskunst<br />für den Ernstfall.</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 FLAVORS -->
+    <section class="scene" id="duefte" data-stage="4" style="--h:200vh">
+      <div class="sticky side-left">
+        <div class="beat flavor-ui" data-in="0.0" data-out="1.01">
+          <p class="eyebrow">Sieben Düfte</p>
+          <h2 class="flavor-name" id="flavorName">Lavendel</h2>
+          <p class="lead" id="flavorText">Wie ein Spaziergang durch die Provence. Nur mit Bohnen.</p>
+          <div class="swatches" id="swatches" role="radiogroup" aria-label="Duft wählen"></div>
+          <p class="hint">Duft antippen – der Beutel zieht sich um.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HIGHLIGHTS (light) -->
+    <section class="light block" id="highlights">
+      <div class="wrap">
+        <p class="eyebrow dark reveal">Highlights</p>
+        <h2 class="reveal">Klein im Format.<br />Riesig im Einsatz.</h2>
+        <div class="bento">
+          <div class="tile big reveal tilt">
+            <span class="num" data-count="99.7" data-dec="1">0</span><span class="unit">%</span>
+            <p>Geruchsdicht dank Aktivkohle-Kern.¹</p>
+          </div>
+          <div class="tile reveal tilt">
+            <span class="num" data-count="1.2" data-dec="1">0</span><span class="unit">L</span>
+            <p>Splash-Volumen im Pöff Pro.</p>
+          </div>
+          <div class="tile reveal tilt">
+            <span class="num" data-count="30" data-dec="0">0</span><span class="unit">×</span>
+            <p>Füllungen pro Filter.</p>
+          </div>
+          <div class="tile dark reveal tilt">
+            <span class="num" data-count="0.3" data-dec="1">0</span><span class="unit">s</span>
+            <p>MagClick™ – zu, bevor's jemand merkt.</p>
+          </div>
+          <div class="tile reveal tilt">
+            <span class="num" data-count="7" data-dec="0">0</span>
+            <p>Düfte. Von Lavendel bis Mango.</p>
+          </div>
+          <div class="tile accent reveal tilt">
+            <span class="num" data-count="0" data-dec="0">0</span>
+            <p>Peinliche Momente. Garantiert.²</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOMENTS -->
+    <section class="light block alt" id="momente">
+      <div class="wrap">
+        <p class="eyebrow dark reveal">Für jeden Moment</p>
+        <h2 class="reveal">Überall dabei,<br />wo es eng wird.</h2>
+      </div>
+      <div class="rail" id="rail">
+        <article class="moment"><i>🛗</i><h3>Im Aufzug</h3><p>14 Stockwerke. 9 Fremde. Ein Pöff.</p></article>
+        <article class="moment"><i>🎢</i><h3>Auf der Achterbahn</h3><p>Der Looping kam unerwartet. Der Splash-Modus nicht.</p></article>
+        <article class="moment"><i>🌹</i><h3>Beim ersten Date</h3><p>Zweites Date? Dank Pöff gar kein Problem.</p></article>
+        <article class="moment"><i>💼</i><h3>Im Großraumbüro</h3><p>Das Bohnen-Chili aus der Kantine bleibt unter uns.</p></article>
+        <article class="moment"><i>⛴️</i><h3>Auf der Fähre</h3><p>Windstärke 8. Magen Windstärke 10.</p></article>
+        <article class="moment"><i>🎉</i><h3>Nach der Party</h3><p>Taxi-Fahrer lieben diesen Trick.</p></article>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="light block" id="preise">
+      <div class="wrap">
+        <p class="eyebrow dark reveal">Preise</p>
+        <h2 class="reveal">Welcher Pöff passt zu dir?</h2>
+        <p class="sub reveal">Alle Modelle in sieben Düften. Kostenloser Versand in diskreter Verpackung.</p>
+
+        <div class="cards">
+          <article class="card reveal tilt">
+            <div class="card-bag"><svg viewBox="0 0 120 150"><use href="#bagIcon" /></svg></div>
+            <h3>Pöff Air</h3>
+            <p class="tag">Für Pupse.</p>
+            <p class="price"><b>9,99 €</b></p>
+            <ul>
+              <li>Einweg-Ventil</li>
+              <li>1 Duftkapsel inklusive</li>
+              <li>30 Füllungen pro Filter</li>
+              <li>Passt in jede Hosentasche</li>
+            </ul>
+            <button class="btn buy" data-name="Pöff Air">In den Warenkorb</button>
+          </article>
+
+          <article class="card featured reveal tilt">
+            <span class="badge">Bestseller</span>
+            <div class="card-bag"><svg viewBox="0 0 120 150"><use href="#bagIcon" /></svg></div>
+            <h3>Pöff Pro</h3>
+            <p class="tag">Für alles. Wirklich alles.</p>
+            <p class="price"><b>24,99 €</b></p>
+            <ul>
+              <li>Dual-Kammer: Puff + Splash</li>
+              <li>Aktivkohle-Kern &amp; Alu-Barriere</li>
+              <li>MagClick™ Verschluss</li>
+              <li>Füllstandsanzeige per LED</li>
+              <li>3 Duftkapseln inklusive</li>
+            </ul>
+            <button class="btn buy" data-name="Pöff Pro">In den Warenkorb</button>
+          </article>
+
+          <article class="card reveal tilt">
+            <div class="card-bag"><svg viewBox="0 0 120 150"><use href="#bagIcon" /></svg></div>
+            <h3>Pöff Splash</h3>
+            <p class="tag">Für Kotze.</p>
+            <p class="price"><b>14,99 €</b></p>
+            <ul>
+              <li>1,2 Liter Fassungsvermögen</li>
+              <li>3-lagig, 100 % auslaufsicher</li>
+              <li>Extra weite Öffnung</li>
+              <li>Waschbar bis 60 °C</li>
+            </ul>
+            <button class="btn buy" data-name="Pöff Splash">In den Warenkorb</button>
+          </article>
+        </div>
+
+        <div class="abo reveal">
+          <div>
+            <p class="eyebrow">Pöff Duft-Abo</p>
+            <h3>Jeden Monat ein neuer Duft.</h3>
+            <p>3 Duftkapseln + 1 Ersatzfilter, direkt in deinen Briefkasten. Jederzeit kündbar.</p>
+          </div>
+          <div class="abo-price">
+            <b>4,99 €</b><span>/ Monat</span>
+            <button class="btn light-btn buy" data-name="Duft-Abo">Abo starten</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARE -->
+    <section class="light block alt" id="vergleich">
+      <div class="wrap">
+        <p class="eyebrow dark reveal">Vergleich</p>
+        <h2 class="reveal">Alle Modelle im Überblick.</h2>
+        <div class="table-wrap reveal">
+          <table>
+            <thead><tr><th></th><th>Air</th><th>Splash</th><th class="hl">Pro</th></tr></thead>
+            <tbody>
+              <tr><td>Puff-Modus</td><td>●</td><td>–</td><td class="hl">●</td></tr>
+              <tr><td>Splash-Modus</td><td>–</td><td>●</td><td class="hl">●</td></tr>
+              <tr><td>Volumen</td><td>3 L Gas</td><td>1,2 L</td><td class="hl">3 L + 1,2 L</td></tr>
+              <tr><td>Lagen</td><td>2</td><td>3</td><td class="hl">3</td></tr>
+              <tr><td>MagClick™</td><td>–</td><td>●</td><td class="hl">●</td></tr>
+              <tr><td>Duft-Konverter</td><td>●</td><td>●</td><td class="hl">●</td></tr>
+              <tr><td>LED-Füllstand</td><td>–</td><td>–</td><td class="hl">●</td></tr>
+              <tr><td>Gewicht</td><td>38 g</td><td>64 g</td><td class="hl">92 g</td></tr>
+              <tr><td>Preis</td><td>9,99 €</td><td>14,99 €</td><td class="hl">24,99 €</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="light block" id="faq">
+      <div class="wrap narrow">
+        <p class="eyebrow dark reveal">FAQ</p>
+        <h2 class="reveal">Fragen, die du dich<br />nicht zu stellen traust.</h2>
+        <div class="faq reveal">
+          <details><summary>Hört man es, wenn ich in den Pöff pupse?</summary><p>Die schallgedämmte Ventilkammer reduziert Geräusche um bis zu 80 %. Den Rest übertönt das zufriedene Klick des MagClick™.</p></details>
+          <details><summary>Kann ich den Pöff wiederverwenden?</summary><p>Ja. Den Splash-Einsatz entleeren, ausspülen, bei 60 °C waschen. Den Aktivkohlefilter nach etwa 30 Füllungen tauschen.</p></details>
+          <details><summary>Wie lange hält ein Duft?</summary><p>Eine Duftkapsel reicht für ca. 4 Wochen Normalbetrieb oder ein langes Wochenende mit Bohnen-Eintopf.</p></details>
+          <details><summary>Darf ich den Pöff mit ins Flugzeug nehmen?</summary><p>Ja, leer passt er ins Handgepäck. Befüllt empfehlen wir, ihn vor dem Sicherheitscheck zu entleeren.</p></details>
+          <details><summary>Kann ich Düfte mischen?</summary><p>Technisch ja. Erdbeere-Minze ist erstaunlich gut. Mango-Lavendel ist ein Verbrechen.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final">
+      <div class="wrap">
+        <h2 class="reveal">Pöff.<br /><span class="grad">Raus damit.</span></h2>
+        <a href="#preise" class="btn reveal">Jetzt kaufen</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>¹ Gemessen im Labor nach 3 Portionen Kohl-Eintopf. ² Gilt nur bei rechtzeitigem Einsatz. Pöff ersetzt keinen Arzt – bei anhaltender Übelkeit bitte medizinische Hilfe holen.</p>
+      <p>© 2026 Pöff GmbH · Impressum · Datenschutz · AGB · Diskreter Versand</p>
+    </div>
+  </footer>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Bag icon used in pricing cards -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <radialGradient id="bagShade" cx="35%" cy="40%" r="70%">
+        <stop offset="0" stop-color="#fff" stop-opacity=".45" />
+        <stop offset=".55" stop-color="#fff" stop-opacity="0" />
+        <stop offset="1" stop-color="#000" stop-opacity=".35" />
+      </radialGradient>
+      <g id="bagIcon">
+        <path d="M44 34 C30 44 12 62 12 92 C12 126 34 142 60 142 C86 142 108 126 108 92 C108 62 90 44 76 34 Z" fill="var(--flavor)" />
+        <path d="M44 34 C30 44 12 62 12 92 C12 126 34 142 60 142 C86 142 108 126 108 92 C108 62 90 44 76 34 Z" fill="url(#bagShade)" />
+        <path d="M40 34 C36 22 38 12 46 10 L60 18 L74 10 C82 12 84 22 80 34 Z" fill="var(--flavor)" />
+        <path d="M40 34 C36 22 38 12 46 10 L60 18 L74 10 C82 12 84 22 80 34 Z" fill="#000" opacity=".15" />
+        <rect x="38" y="31" width="44" height="6" rx="3" fill="#f5f0e6" />
+        <path d="M58 37 C56 50 50 56 48 66" stroke="#f5f0e6" stroke-width="2.5" fill="none" stroke-linecap="round" />
+        <path d="M62 37 C64 50 70 56 72 66" stroke="#f5f0e6" stroke-width="2.5" fill="none" stroke-linecap="round" />
+        <rect x="44" y="64" width="8" height="10" rx="3" fill="#f5f0e6" />
+        <rect x="68" y="64" width="8" height="10" rx="3" fill="#f5f0e6" />
+        <text x="60" y="108" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="20" fill="#000" opacity=".25">pöff</text>
+      </g>
+    </defs>
+  </svg>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
