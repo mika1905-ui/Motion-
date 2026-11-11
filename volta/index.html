@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VOLTA Energy</title>
+  <meta name="description" content="VOLTA Energy – 160 mg Koffein, B-Vitamine, sechs Geschmäcker. Energie. Neu geladen.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/InterDisplay-Black.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+</head>
+<body>
+  <div class="loader" id="loader"><div class="loader-bolt"></div><span>VOLTA</span></div>
+
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#top" class="logo" aria-label="VOLTA Startseite">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 2 4.8 13.4h5.6L9.4 22l9.8-12.6h-6z"/></svg>VOLTA
+      </a>
+      <nav class="links">
+        <a href="#inhalt">Inhalt</a>
+        <a href="#geschmack">Geschmäcker</a>
+        <a href="#power">Power</a>
+        <a href="#shop">Shop</a>
+        <a href="#preise">Preise</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <button class="bag" id="bag" aria-label="Warenkorb">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l1 14H5L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+        <span class="bag-count" id="bagCount">0</span>
+      </button>
+      <a href="#shop" class="btn btn-small">Kaufen</a>
+    </div>
+  </header>
+
+  <!-- 3D layers -->
+  <div class="glow" id="glow" aria-hidden="true"></div>
+  <div class="hero-clip" aria-hidden="true"><div class="hero-word" id="heroWord">VOLTA</div></div>
+  <canvas id="stage" aria-hidden="true"></canvas>
+  <img class="fallback-can" id="fallback" src="img/can-original.webp" alt="" hidden>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-top reveal">
+        <p class="eyebrow">Neu · VOLTA Energy Drink</p>
+        <h1>Energie.<br><span class="grad">Neu geladen.</span></h1>
+      </div>
+      <div class="hero-bottom reveal">
+        <p class="hero-price">Ab <strong>2,49 €</strong> · 6 Geschmäcker · 250 ml</p>
+        <div class="cta">
+          <a href="#shop" class="btn">Jetzt kaufen</a>
+          <a href="#inhalt" class="btn btn-ghost">Mehr erfahren ›</a>
+        </div>
+      </div>
+      <div class="scroll-hint" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- FEATURES (sticky, scroll driven) -->
+    <section class="features" id="inhalt">
+      <div class="sticky">
+        <div class="feat-copy">
+          <p class="eyebrow">Was drin ist</p>
+          <h2>Gemacht für<br>den nächsten Level.</h2>
+          <ol class="feat-list" id="featList">
+            <li><b>160 mg</b><span>Koffein pro Dose. Wach in Minuten – ohne Absturz danach.</span></li>
+            <li><b>B6 + B12</b><span>Vitamine, die zur Verringerung von Müdigkeit beitragen.</span></li>
+            <li><b>45 kcal</b><span>Leicht wie nie. Und Zero Black kommt mit nur 3 kcal.</span></li>
+            <li><b>100 %</b><span>Natürliche Aromen. Recycelbare Aluminiumdose.</span></li>
+          </ol>
+          <div class="feat-progress"><span id="featBar"></span></div>
+        </div>
+        <p class="pssst" id="pssst">Pssst.</p>
+      </div>
+    </section>
+
+    <!-- FLAVOURS -->
+    <section class="flavors" id="geschmack">
+      <div class="sticky">
+        <div class="flav-copy">
+          <p class="eyebrow">Sechs Geschmäcker</p>
+          <h2 class="flav-name" id="flavName">Original</h2>
+          <p class="flav-sub" id="flavSub">Zitrus &amp; Ingwer</p>
+          <p class="flav-desc" id="flavDesc"></p>
+          <div class="flav-meta">
+            <div><b id="flavKcal">45</b><span>kcal / 100 ml</span></div>
+            <div><b>160</b><span>mg Koffein</span></div>
+            <div><b id="flavPrice">2,49 €</b><span>pro Dose</span></div>
+          </div>
+          <div class="flav-actions">
+            <button class="btn" id="flavAdd">In den Warenkorb</button>
+            <div class="flav-arrows">
+              <button class="round" id="flavPrev" aria-label="Vorheriger Geschmack">‹</button>
+              <button class="round" id="flavNext" aria-label="Nächster Geschmack">›</button>
+            </div>
+          </div>
+        </div>
+        <div class="swatches" id="swatches" role="tablist" aria-label="Geschmack wählen"></div>
+      </div>
+    </section>
+
+    <!-- BENTO -->
+    <section class="bento-wrap" id="power">
+      <div class="container">
+        <p class="eyebrow reveal">Power in Zahlen</p>
+        <h2 class="section-title reveal">Kleine Dose.<br>Große Wirkung.</h2>
+        <div class="bento">
+          <article class="card c-big reveal tilt">
+            <img src="img/lineup.webp" alt="Alle sechs VOLTA Dosen nebeneinander" loading="lazy">
+            <div class="card-copy"><h3>Die ganze Familie.</h3><p>Sechs Geschmäcker. Eine Mission.</p></div>
+          </article>
+          <article class="card c-num reveal tilt"><div class="nv"><span class="num" data-count="160">0</span><span class="unit">mg</span></div><p>Koffein pro 250-ml-Dose</p></article>
+          <article class="card c-num c-lime reveal tilt"><div class="nv"><span class="num" data-count="0">0</span><span class="unit">g</span></div><p>Zucker in Zero Black</p></article>
+          <article class="card c-num reveal tilt"><div class="nv"><span class="num" data-count="12">0</span><span class="unit">h</span></div><p>Kühl bleiben im Isolier-Tray</p></article>
+          <article class="card c-wide reveal tilt">
+            <div><h3>Eiskalt am besten.</h3><p>Bei 4 °C entfaltet VOLTA sein volles Aroma. Kühlschrank auf, Lasche hoch – los.</p></div>
+            <img src="img/can-arctic.webp" alt="VOLTA Arctic Ice Dose" loading="lazy">
+          </article>
+          <article class="card c-num reveal tilt"><div class="nv"><span class="num" data-count="100">0</span><span class="unit">%</span></div><p>recycelbares Aluminium</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOP -->
+    <section class="shop" id="shop">
+      <div class="container">
+        <p class="eyebrow reveal">Shop</p>
+        <h2 class="section-title reveal">Such dir deinen<br>Geschmack aus.</h2>
+        <div class="seg reveal" id="packSeg" role="radiogroup" aria-label="Packungsgröße">
+          <button data-pack="1" class="on">Einzeldose</button>
+          <button data-pack="12">12er Pack</button>
+          <button data-pack="24">24er Tray</button>
+        </div>
+        <div class="products" id="products"></div>
+        <p class="fine">Alle Preise inkl. MwSt., zzgl. 0,25 € Pfand pro Dose. Kostenloser Versand ab 30 €.</p>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="preise">
+      <div class="container">
+        <p class="eyebrow reveal">Preise</p>
+        <h2 class="section-title reveal">Mehr Dosen.<br>Weniger zahlen.</h2>
+        <div class="tiers">
+          <article class="tier reveal">
+            <h3>Probierpaket</h3>
+            <p class="tier-sub">6 Dosen · alle Geschmäcker</p>
+            <p class="tier-price">14,99 €</p>
+            <p class="tier-unit">2,50 € / Dose</p>
+            <ul><li>Jeder Geschmack einmal</li><li>Ideal zum Testen</li><li>Versand in 1–2 Tagen</li></ul>
+            <button class="btn btn-ghost-dark" data-add="Probierpaket" data-price="14.99">Auswählen</button>
+          </article>
+          <article class="tier reveal">
+            <h3>12er Pack</h3>
+            <p class="tier-sub">12 Dosen · 1 Geschmack</p>
+            <p class="tier-price">24,99 €</p>
+            <p class="tier-unit">2,08 € / Dose</p>
+            <ul><li>Spare 16 %</li><li>Geschmack frei wählbar</li><li>Kostenloser Versand</li></ul>
+            <button class="btn btn-ghost-dark" data-add="12er Pack" data-price="24.99">Auswählen</button>
+          </article>
+          <article class="tier tier-hot reveal">
+            <span class="badge">Bestseller</span>
+            <h3>24er Tray</h3>
+            <p class="tier-sub">24 Dosen · bis zu 2 Geschmäcker</p>
+            <p class="tier-price">44,99 €</p>
+            <p class="tier-unit">1,87 € / Dose</p>
+            <ul><li>Spare 25 %</li><li>Isolier-Tray inklusive</li><li>Kostenloser Express-Versand</li></ul>
+            <button class="btn" data-add="24er Tray" data-price="44.99">Auswählen</button>
+          </article>
+          <article class="tier reveal">
+            <h3>VOLTA Abo</h3>
+            <p class="tier-sub">24 Dosen · jeden Monat</p>
+            <p class="tier-price">37,99 €<small>/Monat</small></p>
+            <p class="tier-unit">1,58 € / Dose</p>
+            <ul><li>Spare 37 %</li><li>Geschmäcker jederzeit tauschen</li><li>Monatlich kündbar</li></ul>
+            <button class="btn btn-ghost-dark" data-add="VOLTA Abo" data-price="37.99">Abo starten</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <div class="container narrow">
+        <h2 class="section-title reveal">Fragen? Antworten.</h2>
+        <details class="reveal"><summary>Wie viel Koffein ist in einer Dose?</summary><p>Jede 250-ml-Dose enthält 160 mg Koffein (64 mg/100 ml). Das entspricht etwa zwei Tassen Espresso.</p></details>
+        <details class="reveal"><summary>Ist VOLTA vegan?</summary><p>Ja. Alle sechs Geschmäcker sind vegan und glutenfrei.</p></details>
+        <details class="reveal"><summary>Wie schnell wird geliefert?</summary><p>Bestellungen bis 14 Uhr verschicken wir am selben Tag. Die Lieferung dauert in Deutschland 1–2 Werktage.</p></details>
+        <details class="reveal"><summary>Kann ich mein Abo pausieren?</summary><p>Jederzeit – mit einem Klick in deinem Konto. Keine Mindestlaufzeit, monatlich kündbar.</p></details>
+        <details class="reveal"><summary>Für wen ist VOLTA nicht geeignet?</summary><p>Wegen des erhöhten Koffeingehalts nicht für Kinder, Schwangere und Stillende empfohlen. Bitte nicht mit Alkohol mischen.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="foot-top">
+        <a href="#top" class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 2 4.8 13.4h5.6L9.4 22l9.8-12.6h-6z"/></svg>VOLTA</a>
+        <p>Energie. Neu geladen.</p>
+      </div>
+      <div class="foot-cols">
+        <div><h4>Produkte</h4><a href="#geschmack">Geschmäcker</a><a href="#shop">Shop</a><a href="#preise">Abo</a></div>
+        <div><h4>Info</h4><a href="#inhalt">Inhaltsstoffe</a><a href="#faq">FAQ</a><a href="#power">Nachhaltigkeit</a></div>
+        <div><h4>Rechtliches</h4><a href="#top">Impressum</a><a href="#top">Datenschutz</a><a href="#top">AGB</a></div>
+      </div>
+      <p class="fine">© 2026 VOLTA Energy. Erhöhter Koffeingehalt. Für Kinder und schwangere oder stillende Frauen nicht empfohlen.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
