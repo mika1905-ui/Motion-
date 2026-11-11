@@ -20,3 +20,10 @@ python3 render.py --preview 5.3 8.6   # single PNG frames for quick checks
 
 To change the caption, brand or timing, edit the constants and the phase times at the top of
 `render.py` (`CAPTION`, `BRAND`, `liquid_field`).
+
+## Linea – 3D-Website
+
+[`website/index.html`](website/index.html) ist eine einseitige 3D-Website für **Linea** (Three.js, keine Build-Tools):
+ein Band aus Hunderten leuchtender Neon-Linien, das sich dreht, der Maus folgt und beim Scrollen verwindet.
+Einfach `website/index.html` im Browser öffnen oder den Ordner auf einen beliebigen Webspace hochladen.
+Texte, Zahlen und die E-Mail-Adresse sind Platzhalter und können direkt im HTML ersetzt werden.
