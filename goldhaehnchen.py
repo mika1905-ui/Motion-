@@ -14,6 +14,7 @@ import argparse, math, os, subprocess, sys, wave
 from multiprocessing import Pool
 
 import cv2
+cv2.setNumThreads(1)
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from scipy.ndimage import distance_transform_edt
