@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<title>Sportwagen Zentrum Muster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: nächtlicher Showroom. Graphit als Grund, Weiß für Schrift, ein warmes Signalrot nur für Handlungen. Die Autos sind die Farbe. Bewusst ein dunkles Theme. */
+:root {
+  color-scheme: dark;
+  --bg: #0D0E10;
+  --bg-2: #15171A;
+  --card: #1A1D21;
+  --line: #2B2F35;
+  --ink: #F4F5F6;
+  --muted: #9BA1A9;
+  --accent: #D5001C;
+  --accent-ink: #FFFFFF;
+  --ok: #4CC38A;
+  --f-display: "Archivo", "Inter", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1220px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--f-display); font-stretch: 112%; margin: 0; line-height: 1.04; text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font-size: clamp(30px, 4.4vw, 52px); font-weight: 700; }
+h3 { font-size: 20px; font-weight: 700; }
+p { margin: 0; }
+a { color: inherit; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.lead { color: var(--muted); font-size: 18px; max-width: 62ch; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 4px; padding: 14px 22px; font: 600 15px var(--f-body); cursor: pointer; text-decoration: none; transition: transform .15s, background .15s, border-color .15s; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: #B00018; transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--ink); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+section { padding-block: 88px; }
+.sec-head { display: grid; gap: 14px; margin-bottom: 40px; }
+
+/* Navigation */
+header.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.nav-in { display: flex; align-items: center; gap: 28px; padding-block: 16px; }
+.brand { font-family: var(--f-display); font-stretch: 125%; font-weight: 800; letter-spacing: .14em; font-size: 15px; text-decoration: none; text-transform: uppercase; }
+.brand small { display: block; font: 500 10.5px var(--f-mono); letter-spacing: .2em; color: var(--muted); }
+.nav-links { display: flex; gap: 24px; margin-left: auto; font-size: 14.5px; }
+.nav-links a { text-decoration: none; color: var(--muted); }
+.nav-links a:hover { color: var(--ink); }
+.nav .btn { padding: 10px 16px; font-size: 14px; }
+@media (max-width: 880px) { .nav-links { display: none; } .nav .btn { margin-left: auto; } }
+@media (max-width: 520px) { .brand { font-size: 12px; letter-spacing: .1em; } .nav .btn { padding: 9px 12px; font-size: 13px; } }
+
+/* Hero: 3D-Showroom */
+.hero { padding-block: 48px 24px; position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: -20% -10% auto; height: 80%; background: radial-gradient(50% 60% at 60% 30%, rgba(255,255,255,.09), transparent 70%); pointer-events: none; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: 32px; align-items: center; position: relative; }
+.hero h1 { font-size: clamp(36px, 4.4vw, 64px); font-weight: 800; }
+.hero h1 span { color: var(--muted); font-weight: 300; }
+.hero .lead { margin-top: 20px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.stage { perspective: 1400px; position: relative; min-width: 0; }
+.stage-car { transform-style: preserve-3d; transform: rotateX(var(--rx, 6deg)) rotateY(var(--ry, -10deg)); transition: transform .5s cubic-bezier(.2,.7,.2,1); position: relative; }
+.stage-car img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 72%; border-radius: 6px; box-shadow: 0 40px 80px rgba(0,0,0,.55); transition: opacity .45s; }
+.stage-car .reflect { position: absolute; left: 0; right: 0; top: 100%; height: 38%; transform: scaleY(-1); overflow: hidden; border-radius: 6px; opacity: .22; -webkit-mask-image: linear-gradient(to top, #000, transparent 75%); mask-image: linear-gradient(to top, #000, transparent 75%); pointer-events: none; }
+.stage-car .reflect img { box-shadow: none; object-position: 50% 100%; height: 100%; aspect-ratio: auto; }
+.stage-floor { height: 120px; margin-top: -8px; background: radial-gradient(60% 100% at 50% 0%, rgba(255,255,255,.06), transparent 70%); }
+.stage-tabs { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: -70px; position: relative; }
+.stage-tabs button { border: 1px solid var(--line); background: var(--bg-2); color: var(--muted); border-radius: 999px; padding: 7px 14px; font: 500 13px var(--f-body); cursor: pointer; }
+.stage-tabs button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+.stage-cap { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 12px; }
+@media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; } }
+
+/* Modelle */
+.models { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; perspective: 1200px; }
+.model { background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transform-style: preserve-3d; transition: transform .2s ease-out, border-color .2s; }
+.model:hover { border-color: #4A5059; }
+.model img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 70%; display: block; }
+.model-body { padding: 18px; display: grid; gap: 6px; flex: 1; align-content: start; }
+.model .type { font: 500 11.5px var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.model .price { font-family: var(--f-display); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 8px; }
+.model .src { font-size: 12px; color: var(--muted); }
+.model .btn { margin: 0 18px 18px; }
+
+/* Konfigurator */
+#konfigurator { background: var(--bg-2); border-block: 1px solid var(--line); }
+.steps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+.steps button { border: 1px solid var(--line); background: transparent; color: var(--muted); padding: 9px 14px; border-radius: 4px; font: 500 14px var(--f-body); cursor: pointer; }
+.steps button[aria-current="step"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.steps button b { font-family: var(--f-mono); font-weight: 500; margin-right: 6px; }
+.cfg { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 960px) { .cfg { grid-template-columns: 1fr; } }
+.cfg-view { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; position: relative; }
+.cfg-view img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 72%; display: block; }
+.paint { position: relative; height: 300px; border-top: 1px solid var(--line); background: radial-gradient(70% 90% at 50% 30%, #23272C, var(--bg)); }
+.paint canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: pan-y; }
+.paint .paint-label { position: absolute; left: 16px; bottom: 14px; font: 500 12px var(--f-mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; pointer-events: none; }
+.paint .paint-hint { position: absolute; right: 16px; bottom: 14px; font-size: 12px; color: var(--muted); pointer-events: none; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 24px; display: grid; gap: 18px; }
+.opt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.opt { display: grid; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--bg-2); color: var(--ink); padding: 12px; border-radius: 6px; cursor: pointer; font: 500 14px var(--f-body); }
+.opt small { color: var(--muted); font-weight: 400; font-size: 12.5px; }
+.opt[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.sw { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: var(--bg-2); color: var(--ink); padding: 9px 10px; border-radius: 6px; cursor: pointer; font: 500 13.5px var(--f-body); text-align: left; }
+.sw i { width: 22px; height: 22px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); }
+.sw[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.checks { display: grid; gap: 8px; }
+.checks label { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; cursor: pointer; }
+.checks input { accent-color: var(--accent); width: 17px; height: 17px; margin-top: 3px; }
+.note { font-size: 12.5px; color: var(--muted); }
+.sum { display: grid; gap: 8px; }
+.sum .row { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 8px; font-size: 14.5px; }
+.sum .row span:first-child { color: var(--muted); }
+.sum .row b { text-align: right; font-weight: 600; }
+.sum .total { font-family: var(--f-display); font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.panel-nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+
+/* Finanzierung */
+.fin { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; }
+@media (max-width: 860px) { .fin { grid-template-columns: 1fr; } }
+.field { display: grid; gap: 6px; }
+.field label { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; }
+.field output { font-family: var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.res { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 24px; display: grid; gap: 12px; align-content: start; }
+.res .big { font-family: var(--f-display); font-size: clamp(36px, 5vw, 52px); font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* Formulare */
+form { display: grid; gap: 12px; }
+.f2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 520px) { .f2 { grid-template-columns: 1fr; } }
+form label { display: grid; gap: 5px; font-size: 13.5px; font-weight: 600; }
+form input, form select, form textarea { width: 100%; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 11px 12px; font: 400 15px var(--f-body); }
+form textarea { min-height: 90px; resize: vertical; }
+.ok { background: color-mix(in srgb, var(--ok) 16%, transparent); border: 1px solid color-mix(in srgb, var(--ok) 50%, transparent); border-radius: 6px; padding: 14px 16px; font-size: 14.5px; }
+.err { color: #FF7A85; font-size: 13.5px; }
+.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 32px; }
+@media (max-width: 860px) { .contact { grid-template-columns: 1fr; } }
+
+/* Quellen */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 14px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 12px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--bg-2); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+footer { border-top: 1px solid var(--line); padding-block: 40px 56px; color: var(--muted); font-size: 13.5px; }
+footer p + p { margin-top: 10px; }
+
+.reveal { transform: translateY(24px); transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { transform: none; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">Sportwagen Zentrum Muster<small>Demo-Website</small></a>
+    <nav class="nav-links" aria-label="Hauptnavigation">
+      <a href="#modelle">Modelle</a>
+      <a href="#konfigurator">Konfigurator</a>
+      <a href="#finanzierung">Finanzierung</a>
+      <a href="#probefahrt">Probefahrt</a>
+      <a href="#quellen">Quellen</a>
+    </nav>
+    <a class="btn btn-primary" href="#probefahrt">Probefahrt anfragen</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Neuwagen · Beratung · Probefahrt</p>
+        <h1 style="margin-top:14px">Fünf Baureihen. <span>Ein Showroom.</span></h1>
+        <p class="lead">Entdecken Sie 911, Taycan, Macan, Cayenne und Panamera, stellen Sie Ihren Wunschwagen zusammen und vereinbaren Sie eine Probefahrt.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#konfigurator">Konfigurator starten</a>
+          <a class="btn btn-ghost" href="#modelle">Alle Modelle</a>
+        </div>
+      </div>
+      <div class="stage" id="stage">
+        <div class="stage-car" id="stageCar">
+          <img id="stageImg" src="img/911.webp" alt="Porsche 911 Carrera GTS (2024) in Grau" width="1600" height="960">
+          <div class="reflect" aria-hidden="true"><img id="stageRef" src="img/911.webp" alt=""></div>
+        </div>
+        <div class="stage-floor" aria-hidden="true"></div>
+        <div class="stage-tabs" id="stageTabs" role="group" aria-label="Modell im Showroom"></div>
+        <p class="stage-cap" id="stageCap"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="modelle">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">Modellübersicht</p>
+        <h2>Die aktuellen Baureihen</h2>
+        <p class="lead">Die Fotos zeigen echte Fahrzeuge der aktuellen Generation. Die Preise sind Einstiegspreise des jeweiligen Basismodells in Deutschland inklusive MwSt., mit Quelle und Stand.</p>
+      </div>
+      <div class="models" id="modelGrid"></div>
+    </div>
+  </section>
+
+  <section id="konfigurator">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">Konfigurator</p>
+        <h2>Stellen Sie Ihren Wunschwagen zusammen</h2>
+        <p class="lead">Wählen Sie Baureihe, Lackwunsch und Ausstattung. Wir erstellen Ihnen daraus ein verbindliches Angebot mit den aktuellen Listenpreisen.</p>
+      </div>
+      <div class="steps" id="steps" role="tablist" aria-label="Schritte">
+        <button type="button" data-step="0" aria-current="step"><b>01</b>Baureihe</button>
+        <button type="button" data-step="1"><b>02</b>Lack</button>
+        <button type="button" data-step="2"><b>03</b>Ausstattung</button>
+        <button type="button" data-step="3"><b>04</b>Übersicht</button>
+      </div>
+      <div class="cfg">
+        <div class="cfg-view">
+          <img id="cfgImg" src="img/911.webp" alt="" width="1600" height="960">
+          <div class="paint">
+            <canvas id="paint" aria-label="3D-Lackmuster der gewählten Farbe"></canvas>
+            <span class="paint-label" id="paintLabel">3D-Lackmuster</span>
+            <span class="paint-hint">Ziehen zum Drehen</span>
+          </div>
+        </div>
+        <div class="panel" id="panel">
+          <div data-pane="0">
+            <h3>Baureihe wählen</h3>
+            <div class="opt-grid" id="modelOpts" style="margin-top:14px"></div>
+          </div>
+          <div data-pane="1" hidden>
+            <h3>Lackwunsch</h3>
+            <p class="note" style="margin-top:6px">Farbfamilien als Orientierung. Die genauen Lackfarben der Baureihe und ihre Aufpreise nennen wir Ihnen im Angebot laut aktueller Preisliste.</p>
+            <div class="swatches" id="swatches" style="margin-top:14px"></div>
+          </div>
+          <div data-pane="2" hidden>
+            <h3>Ausstattungswünsche</h3>
+            <p class="note" style="margin-top:6px">Verfügbarkeit und Preis hängen von Baureihe und Modell ab. Wir prüfen jeden Wunsch für Ihr Angebot.</p>
+            <div class="checks" id="checks" style="margin-top:14px"></div>
+          </div>
+          <div data-pane="3" hidden>
+            <h3>Ihre Zusammenstellung</h3>
+            <div class="sum" id="sum" style="margin-top:14px"></div>
+          </div>
+          <div class="panel-nav">
+            <button class="btn btn-ghost" type="button" id="prevStep">Zurück</button>
+            <button class="btn btn-primary" type="button" id="nextStep">Weiter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="finanzierung">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">Finanzierung</p>
+        <h2>Monatsrate berechnen</h2>
+        <p class="lead">Ein Rechenbeispiel für eine klassische Finanzierung ohne Schlussrate. Den Zinssatz stellen Sie selbst ein, er ist kein Angebot einer Bank.</p>
+      </div>
+      <div class="fin">
+        <div class="panel">
+          <div class="field"><label for="fPrice">Fahrzeugpreis <output id="oPrice"></output></label><input type="range" id="fPrice" min="60000" max="250000" step="500" value="136300"></div>
+          <div class="field"><label for="fDown">Anzahlung <output id="oDown"></output></label><input type="range" id="fDown" min="0" max="100000" step="1000" value="25000"></div>
+          <div class="field"><label for="fMonths">Laufzeit <output id="oMonths"></output></label><input type="range" id="fMonths" min="12" max="72" step="6" value="48"></div>
+          <div class="field"><label for="fRate">Sollzins pro Jahr <output id="oRate"></output></label><input type="range" id="fRate" min="0" max="9" step="0.1" value="4.9"></div>
+        </div>
+        <div class="res" aria-live="polite">
+          <p class="eyebrow">Monatliche Rate</p>
+          <div class="big" id="rRate">–</div>
+          <div class="sum">
+            <div class="row"><span>Finanzierter Betrag</span><b id="rLoan">–</b></div>
+            <div class="row"><span>Zinsen gesamt</span><b id="rInt">–</b></div>
+            <div class="row"><span>Gesamtbetrag inkl. Anzahlung</span><b id="rTotal">–</b></div>
+          </div>
+          <p class="note">Annuitätenrechnung mit monatlicher Verzinsung. Ohne Gebühren, Versicherungen und Schlussrate. Ein verbindliches Angebot erhalten Sie über unsere Finanzierungspartner.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="probefahrt" style="background:var(--bg-2);border-block:1px solid var(--line)">
+    <div class="wrap contact">
+      <div class="sec-head reveal" style="align-content:start">
+        <p class="eyebrow">Probefahrt &amp; Angebot</p>
+        <h2>Erleben Sie es selbst</h2>
+        <p class="lead">Wählen Sie Modell und Wunschtermin. Wenn Sie den Konfigurator genutzt haben, übernehmen wir Ihre Zusammenstellung automatisch.</p>
+      </div>
+      <div>
+        <form id="leadForm" novalidate>
+          <div class="f2">
+            <label for="lName">Name<input id="lName" autocomplete="name" placeholder="Vor- und Nachname"></label>
+            <label for="lMail">E-Mail<input id="lMail" type="email" autocomplete="email" placeholder="name@beispiel.de"></label>
+          </div>
+          <div class="f2">
+            <label for="lModel">Modell<select id="lModel"></select></label>
+            <label for="lDate">Wunschtermin<input id="lDate" type="date"></label>
+          </div>
+          <label for="lType">Anliegen<select id="lType"><option>Probefahrt</option><option>Angebot zu meiner Konfiguration</option><option>Beratung zur Finanzierung</option></select></label>
+          <label for="lMsg">Nachricht<textarea id="lMsg" placeholder="Ihre Fragen oder Wünsche"></textarea></label>
+          <p class="err" id="lErr" hidden>Bitte Name und eine gültige E-Mail-Adresse angeben.</p>
+          <button class="btn btn-primary" type="submit" style="justify-self:start">Anfrage absenden</button>
+        </form>
+        <div class="ok" id="lOk" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quellen">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Quellen</p>
+        <h2>Preise und Bilder</h2>
+        <p class="lead">Preise ändern sich regelmäßig. Verbindlich ist die aktuelle Preisliste des Herstellers. Wo Quellen voneinander abweichen, zeigen wir die Spanne.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Baureihe</th><th>Einstiegspreis</th><th>Quelle</th><th>Stand</th></tr></thead>
+          <tbody id="priceRows"></tbody>
+        </table>
+      </div>
+      <h3 style="margin:40px 0 14px">Bildnachweis</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Foto</th><th>Urheber</th><th>Lizenz</th><th>Original</th></tr></thead>
+          <tbody id="imgRows"></tbody>
+        </table>
+      </div>
+      <p class="note" style="margin-top:12px">Die Fotos wurden verkleinert und zugeschnitten angezeigt. Für Fotos unter CC BY-SA gilt die Weitergabe unter gleichen Bedingungen.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b style="color:var(--ink)">Sportwagen Zentrum Muster</b> ist eine Demo-Website. Es gibt kein solches Autohaus, und Anfragen werden nicht versendet.</p>
+    <p>Kein Porsche Zentrum und kein offizieller Partner der Dr. Ing. h.c. F. Porsche AG. Porsche, 911, Taycan, Macan, Cayenne und Panamera sind eingetragene Marken der Dr. Ing. h.c. F. Porsche AG.</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const eur = (n) => Math.round(n).toLocaleString("de-DE") + " €";
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Daten: Preise nur mit Quelle, Fotos mit Lizenz */
+  const MODELS = [
+    { id: "911", name: "911", type: "Sportwagen · Coupé & Cabriolet", price: 136300, priceText: "ab 136.300 €",
+      src: "AutoScout24 und AUTO BILD; Carwow nennt 137.800 €", date: "04/2026",
+      links: [["AutoScout24", "https://www.autoscout24.de/auto/porsche/porsche-911/porsche-911-carrera/"], ["AUTO BILD", "https://www.autobild.de/marken-modelle/porsche/911/"], ["Carwow", "https://www.carwow.de/porsche/911-carrera"]],
+      photo: "Porsche 911 Carrera GTS (2024)", alt: "Porsche 911 Carrera GTS (2024) in Grau",
+      credit: ["Calreyn88", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:2024_Porsche_911_992_Carrera_GTS_%2824306%29.jpg"] },
+    { id: "taycan", name: "Taycan", type: "Elektro · Limousine & Kombi", price: 102600, priceText: "ab 102.600 €",
+      src: "Kostenlupe, Porsche-Kostenübersicht", date: "05/2026",
+      links: [["Kostenlupe", "https://www.kostenlupe.de/artikel/porsche-kosten"]],
+      photo: "Porsche Taycan Sport Turismo (2024)", alt: "Porsche Taycan Sport Turismo (2024) in Schwarz",
+      credit: ["Alexander-93", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:2024_Porsche_Taycan_Sport_Turismo_IMG_9326.jpg"] },
+    { id: "macan", name: "Macan", type: "Elektro · SUV", price: 81200, priceText: "ab 81.200 €",
+      src: "Kostenlupe, nach Porsche-Preisübersicht", date: "05/2026",
+      links: [["Kostenlupe", "https://www.kostenlupe.de/artikel/porsche-kosten"]],
+      photo: "Porsche Macan Electric (2025)", alt: "Porsche Macan Electric (2025) in Dunkelgrau",
+      credit: ["M 93", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Porsche_Macan_%28II%29_%E2%80%93_f_22022025.jpg"] },
+    { id: "cayenne", name: "Cayenne", type: "SUV · SUV & Coupé-Variante", price: 101500, priceText: "ab 101.500 €",
+      src: "Kostenlupe, Porsche-Kostenübersicht", date: "05/2026",
+      links: [["Kostenlupe", "https://www.kostenlupe.de/artikel/porsche-kosten"]],
+      photo: "Porsche Cayenne GTS (2024)", alt: "Porsche Cayenne GTS (2024) in Rot",
+      credit: ["Calreyn88", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:2024_Porsche_Cayenne_GTS_Auto.jpg"] },
+    { id: "panamera", name: "Panamera", type: "Gran Turismo · Limousine", price: 116400, priceText: "ab 116.400 – 118.800 €",
+      src: "Quellen weichen ab, Spanne laut Kostenlupe und Vergleichsseiten", date: "05/2026",
+      links: [["Kostenlupe", "https://www.kostenlupe.de/artikel/porsche-kosten"]],
+      photo: "Porsche Panamera 4S E-Hybrid (2024)", alt: "Porsche Panamera 4S E-Hybrid (2024) in Silbergrau",
+      credit: ["Charles from Port Chester, New York", "CC0 1.0", "https://commons.wikimedia.org/wiki/File:Porsche_Panamera_4S_e-Hybrid_%282024%29_%2854731488552%29.jpg"] },
+  ];
+  const COLORS = [
+    ["Schwarz", "#0b0c0e", .45], ["Weiß", "#eceeef", .0], ["Grau", "#6f7479", .55], ["Silber", "#b9bdc1", .8],
+    ["Rot", "#b3121f", .1], ["Blau", "#1f3f8f", .55], ["Grün", "#2f5a45", .55], ["Gelb", "#e9b411", .1],
+  ];
+  const EXTRAS = ["Sport Chrono Paket", "Hinterachslenkung", "Panorama-Glasdach", "Premium-Soundsystem", "Adaptive Sportsitze", "Matrix-LED-Hauptscheinwerfer", "Anhängerkupplung", "Assistenzpaket mit Abstandsregelung"];
+
+  /* Showroom */
+  const tabs = $("stageTabs");
+  function showStage(m) {
+    $("stageImg").style.opacity = 0;
+    setTimeout(() => { $("stageImg").src = $("stageRef").src = "img/" + m.id + ".webp"; $("stageImg").alt = m.alt; $("stageImg").style.opacity = 1; }, reduce ? 0 : 220);
+    $("stageCap").textContent = m.photo + " · Foto: " + m.credit[0] + ", " + m.credit[1];
+    tabs.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.id === m.id));
+  }
+  MODELS.forEach(m => { const b = document.createElement("button"); b.type = "button"; b.dataset.id = m.id; b.textContent = m.name; b.addEventListener("click", () => showStage(m)); tabs.appendChild(b); });
+  showStage(MODELS[0]);
+  const stage = $("stage"), car = $("stageCar");
+  if (!reduce && matchMedia("(hover: hover)").matches) {
+    stage.addEventListener("pointermove", e => { const r = stage.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; car.style.setProperty("--ry", (x * 22) + "deg"); car.style.setProperty("--rx", (-y * 12 + 4) + "deg"); });
+    stage.addEventListener("pointerleave", () => { car.style.setProperty("--ry", "-10deg"); car.style.setProperty("--rx", "6deg"); });
+  }
+
+  /* Modellkarten */
+  MODELS.forEach(m => {
+    const el = document.createElement("article"); el.className = "model reveal";
+    el.innerHTML = `<img src="img/${m.id}_s.webp" alt="${esc(m.alt)}" loading="lazy" width="480" height="360"><div class="model-body"><span class="type">${esc(m.type)}</span><h3>${esc(m.name)}</h3><div class="price">${esc(m.priceText)}</div><span class="src">Basismodell, Stand ${esc(m.date)}. Foto: ${esc(m.photo)}</span></div><a class="btn btn-ghost" href="#konfigurator" data-cfg="${m.id}">Konfigurieren</a>`;
+    if (!reduce && matchMedia("(hover: hover)").matches) {
+      el.addEventListener("pointermove", e => { const r = el.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; el.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`; });
+      el.addEventListener("pointerleave", () => { el.style.transform = ""; });
+    }
+    el.querySelector("[data-cfg]").addEventListener("click", () => { cfg.model = m; cfg.step = 1; renderCfg(); });
+    $("modelGrid").appendChild(el);
+  });
+
+  /* Quellen-Tabellen */
+  MODELS.forEach(m => {
+    $("priceRows").insertAdjacentHTML("beforeend", `<tr><td>${esc(m.name)}</td><td class="num">${esc(m.priceText)}</td><td>${esc(m.src)}<br>${m.links.map(([t, u]) => `<a href="${u}" target="_blank" rel="noopener">${esc(t)}</a>`).join(" · ")}</td><td class="num">${esc(m.date)}</td></tr>`);
+    $("imgRows").insertAdjacentHTML("beforeend", `<tr><td>${esc(m.photo)}</td><td>${esc(m.credit[0])}</td><td>${esc(m.credit[1])}</td><td><a href="${m.credit[2]}" target="_blank" rel="noopener">Wikimedia Commons</a></td></tr>`);
+    $("lModel").insertAdjacentHTML("beforeend", `<option>${esc(m.name)}</option>`);
+  });
+
+  /* Konfigurator */
+  const cfg = { step: 0, model: MODELS[0], color: COLORS[2], extras: new Set() };
+  MODELS.forEach(m => { const b = document.createElement("button"); b.type = "button"; b.className = "opt"; b.dataset.id = m.id; b.innerHTML = `${esc(m.name)}<small>${esc(m.priceText)}</small>`; b.addEventListener("click", () => { cfg.model = m; renderCfg(); }); $("modelOpts").appendChild(b); });
+  COLORS.forEach(c => { const b = document.createElement("button"); b.type = "button"; b.className = "sw"; b.innerHTML = `<i style="background:${c[1]}"></i>${c[0]}`; b.addEventListener("click", () => { cfg.color = c; renderCfg(); }); $("swatches").appendChild(b); });
+  EXTRAS.forEach((x, i) => { $("checks").insertAdjacentHTML("beforeend", `<label for="ex${i}"><input type="checkbox" id="ex${i}" value="${esc(x)}">${esc(x)}</label>`); });
+  $("checks").addEventListener("change", e => { if (e.target.checked) cfg.extras.add(e.target.value); else cfg.extras.delete(e.target.value); renderCfg(); });
+  $("steps").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { cfg.step = +b.dataset.step; renderCfg(); } });
+  $("prevStep").addEventListener("click", () => { cfg.step = Math.max(0, cfg.step - 1); renderCfg(); });
+  $("nextStep").addEventListener("click", () => {
+    if (cfg.step < 3) { cfg.step++; renderCfg(); return; }
+    $("lModel").value = cfg.model.name; $("lType").value = "Angebot zu meiner Konfiguration";
+    $("lMsg").value = `Konfiguration: ${cfg.model.name}, Lackwunsch ${cfg.color[0]}` + (cfg.extras.size ? `, Wünsche: ${[...cfg.extras].join(", ")}` : "") + ".";
+    $("probefahrt").scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+  });
+  function renderCfg() {
+    document.querySelectorAll("[data-pane]").forEach(p => p.hidden = +p.dataset.pane !== cfg.step);
+    $("steps").querySelectorAll("button").forEach(b => { if (+b.dataset.step === cfg.step) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); });
+    $("modelOpts").querySelectorAll(".opt").forEach(b => b.setAttribute("aria-pressed", b.dataset.id === cfg.model.id));
+    $("swatches").querySelectorAll(".sw").forEach((b, i) => b.setAttribute("aria-pressed", COLORS[i] === cfg.color));
+    $("cfgImg").src = "img/" + cfg.model.id + ".webp"; $("cfgImg").alt = cfg.model.alt;
+    $("paintLabel").textContent = "3D-Lackmuster · " + cfg.color[0];
+    window.__setPaint && window.__setPaint(cfg.color);
+    $("prevStep").disabled = cfg.step === 0; $("prevStep").style.visibility = cfg.step === 0 ? "hidden" : "visible";
+    $("nextStep").textContent = cfg.step === 3 ? "Angebot anfragen" : "Weiter";
+    $("sum").innerHTML = `
+      <div class="row"><span>Baureihe</span><b>${esc(cfg.model.name)}</b></div>
+      <div class="row"><span>Lackwunsch</span><b>${esc(cfg.color[0])}</b></div>
+      <div class="row"><span>Ausstattung</span><b>${cfg.extras.size ? [...cfg.extras].map(esc).join("<br>") : "Serienausstattung"}</b></div>
+      <div class="row"><span>Einstiegspreis Basismodell</span><b>${esc(cfg.model.priceText)}</b></div>
+      <p class="note">Lack- und Ausstattungspreise sind hier nicht enthalten. Sie stehen in Ihrem persönlichen Angebot. Preisquelle: ${esc(cfg.model.src)}, Stand ${esc(cfg.model.date)}.</p>`;
+    $("fPrice").value = cfg.model.price; fin();
+  }
+  window.__cfg = cfg;
+
+  /* Finanzierung */
+  function fin() {
+    const P = +$("fPrice").value, D = Math.min(+$("fDown").value, P), n = +$("fMonths").value, r = +$("fRate").value / 100 / 12;
+    $("oPrice").textContent = eur(P); $("oDown").textContent = eur(D); $("oMonths").textContent = n + " Monate"; $("oRate").textContent = String(+$("fRate").value).replace(".", ",") + " %";
+    const L = P - D; const m = r === 0 ? L / n : L * r / (1 - Math.pow(1 + r, -n));
+    $("rRate").textContent = eur(m); $("rLoan").textContent = eur(L); $("rInt").textContent = eur(m * n - L); $("rTotal").textContent = eur(m * n + D);
+  }
+  ["fPrice", "fDown", "fMonths", "fRate"].forEach(id => $(id).addEventListener("input", fin));
+  renderCfg();
+
+  /* Formular (Demo) */
+  const d = new Date(); d.setDate(d.getDate() + 3); $("lDate").value = d.toISOString().slice(0, 10);
+  $("leadForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const name = $("lName").value.trim(), mail = $("lMail").value.trim();
+    const ok = name && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+    $("lErr").hidden = !!ok; if (!ok) return;
+    $("leadForm").hidden = true; $("lOk").hidden = false;
+    $("lOk").innerHTML = `<b>Danke, ${esc(name)}.</b><br>Ihre Anfrage (${esc($("lType").value)}, ${esc($("lModel").value)}) ist erfasst. Dies ist eine Demo-Website, die Anfrage wird nicht versendet.`;
+  });
+
+  /* Einblenden */
+  if ("IntersectionObserver" in window && !reduce) {
+    const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }), { threshold: .1 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+  } else document.querySelectorAll(".reveal").forEach(el => el.classList.add("in"));
+})();
+</script>
+
+<script type="importmap">
+  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+
+/* 3D-Lackmuster: ein gewölbtes Musterblech mit Klarlack, wie im Lackstudio */
+const canvas = document.getElementById("paint");
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (e) { renderer = null; }
+if (renderer) {
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 50);
+  camera.position.set(0, 0.6, 6.2);
+  camera.lookAt(0, 0, 0);
+
+  const mat = new THREE.MeshPhysicalMaterial({ color: 0x6f7479, metalness: 0.55, roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.03 });
+  // Musterblech: abgerundete Platte, sanft gewölbt wie ein Kotflügel
+  const geo = new RoundedBoxGeometry(3.2, 2.0, 0.12, 6, 0.08);
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) { const x = pos.getX(i), y = pos.getY(i); pos.setZ(i, pos.getZ(i) + 0.35 * Math.cos(x * 0.7) + 0.12 * Math.cos(y * 1.2)); }
+  geo.computeVertexNormals();
+  const panel = new THREE.Mesh(geo, mat);
+  scene.add(panel);
+  const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.62, 64, 48), mat);
+  sphere.position.set(1.95, -0.55, 0.9);
+  scene.add(sphere);
+  const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(3, 4, 5); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xffffff, 1.2); rim.position.set(-4, 2, -3); scene.add(rim);
+
+  window.__setPaint = ([name, hex, metal]) => { mat.color.set(hex); mat.metalness = metal; mat.roughness = metal > 0.3 ? 0.3 : 0.18; };
+  if (window.__cfg) window.__setPaint(window.__cfg.color);
+
+  let rotY = -0.5, target = -0.5, dragging = false, lastX = 0;
+  canvas.addEventListener("pointerdown", e => { dragging = true; lastX = e.clientX; canvas.setPointerCapture(e.pointerId); canvas.style.cursor = "grabbing"; });
+  canvas.addEventListener("pointermove", e => { if (!dragging) return; target += (e.clientX - lastX) * 0.01; lastX = e.clientX; });
+  const stop = () => { dragging = false; canvas.style.cursor = "grab"; };
+  canvas.addEventListener("pointerup", stop); canvas.addEventListener("pointercancel", stop);
+
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function size() { const w = canvas.clientWidth, h = canvas.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.position.z = w < 500 ? 8 : 6.2; camera.updateProjectionMatrix(); }
+  new ResizeObserver(size).observe(canvas); size();
+  const clock = new THREE.Clock();
+  (function loop() {
+    const t = clock.getElapsedTime();
+    if (!dragging && !reduce) target += 0.0025;
+    rotY += (target - rotY) * 0.08;
+    panel.rotation.set(-0.15 + Math.sin(t * 0.4) * 0.04, rotY, 0);
+    sphere.rotation.y = rotY;
+    renderer.render(scene, camera);
+    requestAnimationFrame(loop);
+  })();
+}
+</script>
+</body>
+</html>

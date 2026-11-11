@@ -28,3 +28,10 @@ To change the caption, brand or timing, edit the constants and the phase times a
 Enthalten: Telefon-Demo als Chatbot (Terminabsage, Folgerezept, Notfall-Weiterleitung, Sprachausgabe),
 Praxis-Dashboard, Ablauf, Funktionen, Datenschutz, Preise mit Monats-/Jahresumschalter, Ersparnis-Rechner, FAQ und Kontaktformular.
 Einfach `website/index.html` im Browser öffnen oder den Ordner auf einen Webspace hochladen.
+
+## Sportwagen Zentrum Muster – Autohaus-Demo
+
+[`autohaus/index.html`](autohaus/index.html) ist eine Demo-Website für ein Sportwagen-Autohaus (kein echtes Autohaus, kein offizieller Porsche-Partner):
+3D-Showroom, Modellübersicht, Konfigurator mit 3D-Lackmuster (Three.js), Finanzierungsrechner und Probefahrt-Formular.
+Preise stammen aus den auf der Seite genannten Quellen mit Stand-Datum. Die Fotos in `autohaus/img/` kommen von Wikimedia Commons
+(CC BY-SA 4.0, CC BY-SA 3.0 bzw. CC0); Urheber und Links stehen im Bildnachweis auf der Seite.
