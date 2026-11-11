@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BMW M Legends</title>
+<style>
+  @font-face{font-family:'Mont';src:url(fonts/montserrat-latin-300-normal.woff2) format('woff2');font-weight:300}
+  @font-face{font-family:'Mont';src:url(fonts/montserrat-latin-500-normal.woff2) format('woff2');font-weight:500}
+  @font-face{font-family:'Mont';src:url(fonts/montserrat-latin-800-normal.woff2) format('woff2');font-weight:800}
+  @font-face{font-family:'Bebas';src:url(fonts/bebas-neue-latin-400-normal.woff2) format('woff2');font-weight:400}
+  html,body{margin:0;height:100%;background:#000;color:#fff;font-family:'Mont',system-ui,sans-serif}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #stage{position:relative;height:min(100vh,calc(100vw*16/9));aspect-ratio:9/16}
+  canvas{width:100%;height:100%;display:block}
+  #play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;width:100%;
+    background:radial-gradient(circle at 50% 50%,rgba(28,105,212,.3),rgba(0,0,0,.9) 65%);cursor:pointer;border:0;color:#fff;
+    letter-spacing:.3em;font-weight:500;font-size:clamp(11px,1.8vh,16px);text-transform:uppercase;font-family:inherit}
+  #play .btn{width:clamp(56px,9vh,96px);aspect-ratio:1;border-radius:50%;border:1.5px solid rgba(255,255,255,.85);display:grid;place-items:center}
+  #play .btn::after{content:'';margin-left:12%;border-style:solid;border-width:clamp(10px,1.8vh,18px) 0 clamp(10px,1.8vh,18px) clamp(16px,2.9vh,28px);border-color:transparent transparent transparent #fff}
+  #play[hidden]{display:none}
+  body.render #play{display:none}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="c" width="1080" height="1920"></canvas>
+  <button id="play" type="button"><span class="btn"></span><span>Play · 0:15</span></button>
+</div>
+<audio id="snd" src="audio/soundtrack.wav" preload="auto"></audio>
+<script>
+'use strict';
+/* =====================================================================
+   BMW M – "Eight Legends. One Letter." · 15 s vertical spot (unofficial fan concept)
+   Procedural Canvas 2D, deterministic via renderAt(t). 1080×1920 (9:16).
+   ===================================================================== */
+const W = 1080, H = 1920, DUR = 15;
+const BEAT = 0.3;
+const INTRO_END = 2.4, SCENE_D = 1.2, N_MODELS = 8;
+const PING_START = INTRO_END + N_MODELS * SCENE_D;   // 12.0
+const END_START = PING_START + 1.0;                   // 13.0
+const CUTS = Array.from({length: N_MODELS}, (_, i) => INTRO_END + i * SCENE_D);
+const MB = '#4fb4ff', MD = '#1c3f94', MR = '#e4002b';   // M colours: light blue, dark blue, red
+
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const mk = (w = W, h = H) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+const sceneCv = mk(), sceneCtx = sceneCv.getContext('2d');
+const rCv = mk(), rCtx = rCv.getContext('2d'), cCv = mk(), cCtx = cCv.getContext('2d');
+const smearCv = mk(), smearCtx = smearCv.getContext('2d');
+
+/* ---------- math & easing ---------- */
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const inv = (a, b, v) => clamp((v - a) / (b - a));
+const eOut3 = t => 1 - Math.pow(1 - t, 3), eOut4 = t => 1 - Math.pow(1 - t, 4);
+const eIn3 = t => t * t * t, eIn4 = t => t * t * t * t;
+const eInOut3 = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const eOutExpo = t => t >= 1 ? 1 : 1 - Math.pow(2, -10 * t);
+const eOutBack = t => { const c1 = 1.7, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+const pulse = (t, at, k = 10) => t >= at ? Math.exp(-(t - at) * k) : 0;
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${n >> 8 & 255},${n & 255},${a})`; }
+
+/* ---------- the legends (real photos, Wikimedia Commons – see README) ----------
+   pa→pb: horizontal pan range of the car centre, cy: vertical centre, d: detail focus for the jump-cut */
+const MODELS = [
+  { name: 'M1', year: '1978', tag: 'WHERE IT ALL STARTED.', engine: '3.5 L STRAIGHT-SIX', ps: 277, kmh: 262, img: 'photos/m1.jpg', pa: .3, pb: .62, cy: .5, d: [.33, .62], z2: 2.0 },
+  { name: 'M3 E30', year: '1986', tag: 'BORN ON THE RACETRACK.', engine: '2.3 L FOUR-CYLINDER', ps: 200, kmh: 235, img: 'photos/e30.jpg', pa: .38, pb: .66, cy: .5, d: [.32, .44], z2: 2.1 },
+  { name: 'M2', year: '2023', tag: 'SMALL. ANGRY. PERFECT.', engine: '3.0 L TWIN-TURBO SIX', ps: 460, kmh: 285, img: 'photos/m2.jpg', pa: .32, pb: .7, cy: .52, d: [.18, .55], z2: 2.2 },
+  { name: 'M3 TOURING', year: '2022', tag: 'GROCERIES AT 280 KM/H.', engine: '3.0 L TWIN-TURBO SIX', ps: 510, kmh: 280, img: 'photos/m3t.jpg', pa: .36, pb: .6, cy: .6, d: [.3, .7], z2: 1.9 },
+  { name: 'M4 CSL', year: '2022', tag: 'LIGHTER. LOUDER. LIMITED.', engine: '3.0 L TWIN-TURBO SIX', ps: 550, kmh: 307, img: 'photos/csl.jpg', pa: .62, pb: .36, cy: .5, d: [.73, .66], z2: 2.1 },
+  { name: 'M8', sub: 'COMPETITION', year: '2019', tag: 'GRAND TOURING. M STYLE.', engine: '4.4 L TWIN-TURBO V8', ps: 625, kmh: 305, img: 'photos/m8.jpg', pa: .32, pb: .64, cy: .56, d: [.27, .6], z2: 2.2 },
+  { name: 'M5', year: '2024', tag: 'FOUR DOORS. ZERO CHILL.', engine: '4.4 L V8 PLUG-IN HYBRID', ps: 727, kmh: 305, img: 'photos/m5.jpg', pa: .66, pb: .36, cy: .52, d: [.72, .55], z2: 2.0 },
+  { name: 'XM', year: '2023', tag: 'THE BOLDEST M EVER.', engine: '4.4 L V8 PLUG-IN HYBRID', ps: 748, upto: true, kmh: 290, img: 'photos/xm.jpg', pa: .3, pb: .62, cy: .52, d: [.18, .5], z2: 2.1 },
+];
+const ACC = [MB, MR, MB, MR, MB, MR, MB, MR];
+const ASSETS = { roundel: 'photos/roundel.png', roundelW: 'photos/roundel_white.png', mlogo: 'photos/mlogo.png', badge50: 'photos/badge50.jpg', badgems: 'photos/badgems.jpg', bonnet: 'photos/bonnet.jpg' };
+const IMG = {};
+function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('load ' + src)); i.src = src; }); }
+async function prep() {
+  await Promise.all(MODELS.map(async m => {
+    const im = await loadImg(m.img);
+    const g = mk(im.width, im.height), gc = g.getContext('2d');
+    gc.filter = 'contrast(1.18) saturate(1.2) brightness(.92)'; gc.drawImage(im, 0, 0); m.photo = g;
+    const b = mk(270, 480), bc = b.getContext('2d'); bc.filter = 'blur(10px) brightness(.38) saturate(1.4)';
+    const sc = Math.max(270 / im.width, 480 / im.height) * 1.1;
+    bc.drawImage(im, 135 - im.width * sc * .5, 240 - im.height * sc / 2, im.width * sc, im.height * sc); m.blur = b;
+  }));
+  for (const [k, src] of Object.entries(ASSETS)) IMG[k] = await loadImg(src);
+}
+
+/* ---------- helpers ---------- */
+function coverAt(g, img, fx, fy, z, rot = 0) {     // fill the frame, (fx,fy) of the image at centre
+  const sc = Math.max(W / img.width, H / img.height) * z;
+  const dw = img.width * sc, dh = img.height * sc;
+  let x = -fx * dw, y = -fy * dh;
+  x = Math.min(-W / 2, Math.max(W / 2 - dw, x)); y = Math.min(-H / 2, Math.max(H / 2 - dh, y));
+  g.save(); g.translate(W / 2, H / 2); if (rot) g.rotate(rot); g.drawImage(img, x, y, dw, dh); g.restore();
+}
+function text(g, str, x, y, font, color, o = {}) {
+  const { align = 'left', ls = 0, alpha = 1, reveal = 1, stroke } = o;
+  if (alpha <= 0 || reveal <= 0) return;
+  g.save(); g.font = font; g.letterSpacing = ls + 'px'; g.textAlign = align; g.textBaseline = 'alphabetic'; g.globalAlpha *= alpha;
+  if (align === 'center') x += ls / 2;
+  if (reveal < 1) {
+    const mt = g.measureText(str), asc = mt.actualBoundingBoxAscent + 10, desc = mt.actualBoundingBoxDescent + 10, w = mt.width + 160;
+    const x0 = align === 'left' ? x - 60 : align === 'center' ? x - w / 2 : x - w + 60;
+    g.beginPath(); g.rect(x0, y - asc, w, asc + desc); g.clip(); y += (1 - reveal) * (asc + desc);
+  }
+  if (stroke) { g.strokeStyle = color; g.lineWidth = stroke; g.strokeText(str, x, y); } else { g.fillStyle = color; g.fillText(str, x, y); }
+  g.restore();
+}
+function fitFont(g, str, family, maxPx, maxW, ls = 0) {
+  g.save(); g.font = `${family.split(' ')[0]} ${maxPx}px ${family.split(' ').slice(1).join(' ')}`; g.letterSpacing = ls + 'px';
+  const w = g.measureText(str).width; g.restore();
+  return Math.min(maxPx, Math.floor(maxPx * maxW / w));
+}
+function mStripes(g, x, y, w, h, a = 1) {
+  const s = w / 3; g.save(); g.globalAlpha *= a;
+  g.fillStyle = MB; g.fillRect(x, y, s, h); g.fillStyle = MD; g.fillRect(x + s, y, s, h); g.fillStyle = MR; g.fillRect(x + 2 * s, y, s, h);
+  g.restore();
+}
+// full-screen diagonal M-stripe wipe; u 0→1 sweeps across
+function stripeWipe(g, u, dir = 1) {
+  if (u <= 0 || u >= 1) return;
+  const band = 520, total = W + H * .6 + band * 3;
+  const x0 = dir > 0 ? lerp(-band * 3 - H * .3, W + H * .3, eInOut3(u)) : lerp(W + H * .3 + band * 3, -H * .3, eInOut3(u));
+  const cols = dir > 0 ? [MR, MD, MB] : [MB, MD, MR];
+  g.save();
+  cols.forEach((c, k) => {
+    const x = x0 + k * band * dir * -1 * -1;
+    g.fillStyle = c; g.beginPath();
+    g.moveTo(x + H * .3, 0); g.lineTo(x + H * .3 + band, 0); g.lineTo(x - H * .3 + band, H); g.lineTo(x - H * .3, H); g.closePath(); g.fill();
+  });
+  g.restore();
+}
+function chroma(src, amt, dy = 0) {
+  rCtx.globalCompositeOperation = 'source-over'; rCtx.clearRect(0, 0, W, H); rCtx.drawImage(src, 0, 0);
+  rCtx.globalCompositeOperation = 'multiply'; rCtx.fillStyle = '#f00'; rCtx.fillRect(0, 0, W, H);
+  cCtx.globalCompositeOperation = 'source-over'; cCtx.clearRect(0, 0, W, H); cCtx.drawImage(src, 0, 0);
+  cCtx.globalCompositeOperation = 'multiply'; cCtx.fillStyle = '#0ff'; cCtx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'lighter';
+  ctx.drawImage(cCv, -amt, -dy); ctx.drawImage(rCv, amt, dy); ctx.restore();
+}
+// horizontal motion smear: squash + stretch, offset dx
+function smear(src, amt, dx) {
+  const sw = Math.max(8, Math.round(W / (2 + 40 * amt)));
+  smearCtx.clearRect(0, 0, W, H); smearCtx.imageSmoothingQuality = 'high'; smearCtx.drawImage(src, 0, 0, sw, H);
+  ctx.save(); ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(smearCv, 0, 0, sw, H, dx, 0, W, H);
+  if (dx > 0) ctx.drawImage(smearCv, 0, 0, sw, H, dx - W, 0, W, H); else if (dx < 0) ctx.drawImage(smearCv, 0, 0, sw, H, dx + W, 0, W, H);
+  ctx.restore();
+}
+function glitch(src, s, seed) {
+  if (s <= .03) return; const r = rng(seed);
+  for (let k = 0; k < 10; k++) { const y = r() * H, h = lerp(10, 120, r()), dx = (r() - .5) * 200 * s; ctx.drawImage(src, 0, y, W, h, dx, y, W, h); }
+}
+const GRAIN = (() => { const r = rng(42); return Array.from({length: 6}, () => {
+  const c = mk(360, 640), g = c.getContext('2d'), id = g.createImageData(360, 640);
+  for (let i = 0; i < id.data.length; i += 4) { const v = r() * 255; id.data[i] = id.data[i + 1] = id.data[i + 2] = v; id.data[i + 3] = 255; }
+  g.putImageData(id, 0, 0); return c; }); })();
+const STREAKS = (() => { const r = rng(9); return Array.from({length: 50}, () => ({ y: r() * H, len: lerp(150, 700, r()), sp: lerp(3000, 8000, r()), a: lerp(.06, .3, r()), ph: r() * 9000, c: [MB, MR, '#ffffff'][Math.floor(r() * 3)] })); })();
+function streaks(g, t, k, dir = 1) {
+  if (k <= 0) return; g.save(); g.globalCompositeOperation = 'lighter';
+  for (const s of STREAKS) { const span = W + s.len * 2; let x = ((s.ph - t * s.sp) % span + span) % span - s.len; if (dir < 0) x = W - x - s.len;
+    const gr = g.createLinearGradient(x, 0, x + s.len, 0); gr.addColorStop(dir > 0 ? 0 : 1, hexA(s.c, s.a * k)); gr.addColorStop(dir > 0 ? 1 : 0, hexA(s.c, 0));
+    g.fillStyle = gr; g.fillRect(x, s.y, s.len, 2); }
+  g.restore();
+}
+
+/* ---------- INTRO: BAYERISCHE MOTOREN WERKE → BMW → roundel → M ---------- */
+const WORDS = ['BAYERISCHE', 'MOTOREN', 'WERKE'];
+function drawIntro(t) {
+  const g = sceneCtx; g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
+  // background macro shots, flipping on each word
+  if (t < 1.8) {
+    const k = Math.min(2, Math.floor(t / BEAT));
+    const imgs = [IMG.badgems, IMG.badge50, IMG.bonnet], foc = [[.45, .5], [.5, .45], [.5, .32]];
+    const lt = t - k * BEAT, dir = k % 2 ? -1 : 1;
+    g.save(); g.filter = 'brightness(.42) contrast(1.2) saturate(1.2)';
+    coverAt(g, imgs[t < .9 ? k : 1], foc[t < .9 ? k : 1][0] + dir * .04 * lt, foc[t < .9 ? k : 1][1], 1.35 + .25 * lt + (t >= .9 ? .3 * (t - .9) : 0), dir * .03 * (1 - lt));
+    g.restore();
+    const vg = g.createRadialGradient(W / 2, H / 2, 200, W / 2, H / 2, 1200);
+    vg.addColorStop(0, 'rgba(0,0,0,.1)'); vg.addColorStop(1, 'rgba(0,0,0,.85)'); g.fillStyle = vg; g.fillRect(0, 0, W, H);
+  }
+  streaks(g, t, .6 * inv(.2, .9, t) * (1 - inv(1.6, 1.8, t)), 1);
+  // words → initials
+  const collapse = eInOut3(inv(.9, 1.2, t));
+  if (t < 1.25) {
+    g.save(); g.font = '400 210px Bebas'; g.letterSpacing = '6px'; g.textBaseline = 'alphabetic';
+    WORDS.forEach((w, k) => {
+      const at = k * BEAT; if (t < at) return;
+      const s = lerp(1.7, 1, eOutExpo(clamp((t - at) / .18)));
+      const wy = 760 + k * 210, ww = g.measureText(w).width;
+      const fy = lerp(wy, 1010, collapse);
+      let x = W / 2 - ww / 2;
+      [...w].forEach((ch, j) => {
+        const cw = g.measureText(ch).width, initial = j === 0;
+        const tx = initial ? W / 2 - 150 + k * 150 - cw / 2 : x;
+        const px = lerp(x, tx, initial ? collapse : 0);
+        const a = initial ? 1 : 1 - collapse * 1.4;
+        if (a > 0) {
+          g.save(); g.translate(px + cw / 2, fy); g.scale(s, s); g.globalAlpha = clamp(a);
+          g.fillStyle = initial && collapse > 0 ? ['#ffffff', MB, '#ffffff'][k] : '#fff';
+          if (!initial) g.translate(0, collapse * 120 * (j % 2 ? 1 : -1));
+          g.fillText(ch, -cw / 2, 0); g.restore();
+        }
+        x += cw + 6;
+      });
+    });
+    g.restore();
+  }
+  // roundel spin-in
+  if (t >= 1.2 && t < 1.95) {
+    const u = inv(1.2, 1.5, t), s = lerp(.2, 1, eOutBack(u)) * (1 + .5 * eIn3(inv(1.75, 1.95, t)));
+    const R = 300;
+    g.save(); g.translate(W / 2, 860); g.rotate((1 - eOut4(u)) * -Math.PI * 1.5); g.scale(s, s);
+    g.shadowColor = hexA(MB, .9); g.shadowBlur = 60 * pulse(t, 1.5, 4) + 20;
+    g.globalAlpha = 1 - inv(1.82, 1.95, t);
+    g.drawImage(IMG.roundel, -R, -R, R * 2, R * 2); g.restore();
+  }
+  // M stripes wipe + M logo slam
+  stripeWipe(g, inv(1.72, 2.02, t), 1);
+  if (t >= 1.92 && t < 2.25) {
+    const s = lerp(1.8, 1, eOutExpo(clamp((t - 1.92) / .2)));
+    const lw = 860, lh = lw * IMG.mlogo.height / IMG.mlogo.width;
+    g.save(); g.translate(W / 2, 900); g.scale(s, s); g.drawImage(IMG.mlogo, -lw / 2, -lh / 2, lw, lh); g.restore();
+  }
+  if (t >= 2.25) { g.fillStyle = '#000'; g.fillRect(0, 0, W, H); }   // the breath before the drop
+  // composite with hits
+  const hits = [0, BEAT, 2 * BEAT, 1.5, 1.92];
+  let h = 0; for (const T of hits) h = Math.max(h, pulse(t, T, 14));
+  if (h > .04) { chroma(sceneCv, 26 * h, 0); glitch(sceneCv, h * .7, Math.floor(t * 60)); } else ctx.drawImage(sceneCv, 0, 0);
+  for (const T of hits) if (t >= T && t < T + .1) { ctx.fillStyle = `rgba(255,255,255,${.45 * pulse(t, T, 30)})`; ctx.fillRect(0, 0, W, H); }
+  return () => {
+    text(ctx, 'BAVARIAN MOTOR WORKS', W / 2, 1260, '500 26px Mont', 'rgba(255,255,255,.85)', { align: 'center', ls: 12, alpha: inv(1.25, 1.45, t) * (1 - inv(1.7, 1.8, t)) });
+    if (t >= 1.92 && t < 2.25) text(ctx, 'EIGHT LEGENDS. ONE LETTER.', W / 2, 1180, '800 40px Mont', '#fff', { align: 'center', ls: 6, reveal: eOut4(inv(1.98, 2.12, t)) });
+  };
+}
+
+/* ---------- MODEL SCENE: wide band → full-bleed pan → detail jump-cut → whip ---------- */
+function drawModel(i, lt, t) {
+  const m = MODELS[i], acc = ACC[i], g = sceneCtx, P = m.photo;
+  const dir = i % 2 ? -1 : 1;                 // alternating left / right energy
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
+  const phase = lt < 2 * BEAT ? 0 : lt < 3 * BEAT ? 1 : 2;
+  if (phase === 0) {
+    // blurred backdrop + the full car in a band
+    g.drawImage(m.blur, 0, 0, W, H);
+    const gr = g.createLinearGradient(0, 0, 0, H);
+    gr.addColorStop(0, hexA(acc, .25)); gr.addColorStop(.5, 'rgba(0,0,0,0)'); gr.addColorStop(1, hexA(MD, .35));
+    g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    streaks(g, t, .8, dir);
+    const z = 1.04 + .06 * (lt / (2 * BEAT)) + .12 * pulse(lt, 0, 14);
+    const bw = W * z, bh = bw * P.height / P.width, by = 950 - bh / 2;
+    const slide = (1 - eOutExpo(clamp(lt / .2))) * W * .9 * dir;
+    g.save(); g.beginPath(); g.rect(0, 620, W, 660); g.clip();
+    g.drawImage(P, W / 2 - bw / 2 + slide + dir * -40 * lt, by, bw, bh); g.restore();
+    mStripes(g, 0 + slide, 612, W, 8); mStripes(g, 0 + slide, 1280, W, 8);
+  } else if (phase === 1) {
+    const u = (lt - 2 * BEAT) / BEAT;
+    g.save(); g.filter = 'brightness(.95)';
+    coverAt(g, P, lerp(m.pa, m.pb, eInOut3(u)), m.cy, 1.0 + .08 * pulse(u, 0, 8) + .04 * u); g.restore();
+  } else {
+    const u = (lt - 3 * BEAT) / BEAT;
+    coverAt(g, P, m.d[0] + dir * .015 * u, m.d[1], m.z2 * (1 + .12 * u) + .2 * pulse(u, 0, 10), dir * .035);
+  }
+  // grade for type
+  let gr = g.createLinearGradient(0, 0, 0, 640); gr.addColorStop(0, 'rgba(0,0,0,.75)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, 640);
+  gr = g.createLinearGradient(0, 1240, 0, H); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(.6, 'rgba(0,0,0,.8)'); gr.addColorStop(1, 'rgba(0,0,0,.9)'); g.fillStyle = gr; g.fillRect(0, 1240, W, H - 1240);
+
+  // composite: hit on every beat, stripe wipe / whip on exit
+  const hitBig = pulse(lt, 0, 13), hitSmall = Math.max(pulse(lt, 2 * BEAT, 18), pulse(lt, 3 * BEAT, 18));
+  const exitU = inv(SCENE_D - .13, SCENE_D, lt);
+  if (exitU > 0) {
+    smear(sceneCv, eIn3(exitU), -dir * W * .9 * eIn4(exitU));
+  } else if (lt < .14) {
+    const enterU = clamp(lt / .14);
+    if (enterU < .6) smear(sceneCv, .75 * (1 - enterU / .6), dir * W * .35 * eIn3(1 - enterU / .6)); else chroma(sceneCv, 34 * hitBig, 4 * hitBig);
+    glitch(sceneCv, hitBig, i * 31 + Math.floor(lt * 60));
+  } else if (hitSmall > .05) {
+    chroma(sceneCv, 22 * hitSmall, 0);
+  } else ctx.drawImage(sceneCv, 0, 0);
+  if (i % 2 === 0) stripeWipe(ctx, inv(SCENE_D - .16, SCENE_D + .02, lt), -1);   // every second cut: M-stripe wipe
+  if (lt < .06) { ctx.fillStyle = `rgba(255,255,255,${.6 * (1 - lt / .06)})`; ctx.fillRect(0, 0, W, H); }
+  for (const T of [2 * BEAT, 3 * BEAT]) if (lt >= T && lt < T + .05) { ctx.fillStyle = `rgba(255,255,255,${.3 * (1 - (lt - T) / .05)})`; ctx.fillRect(0, 0, W, H); }
+
+  return () => {
+    const outA = 1 - inv(SCENE_D - .1, SCENE_D - .02, lt);
+    ctx.save(); ctx.globalAlpha = outA;
+    // header
+    const rs = 46; ctx.drawImage(IMG.roundelW, 70, 150, rs, rs);
+    text(ctx, 'BMW M', 132, 186, '800 26px Mont', '#fff', { ls: 6 });
+    text(ctx, `0${i + 1} / 08`, W - 70, 186, '500 24px Mont', acc, { align: 'right', ls: 6 });
+    mStripes(ctx, 70, 214, 150 * eOut3(inv(0, .2, lt)), 6);
+    // name
+    const nfs = fitFont(ctx, m.name, '400 Bebas', 290, W - 140, 4);
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 40;
+    text(ctx, m.name, 64, 250 + nfs * .82, `400 ${nfs}px Bebas`, '#fff', { ls: 4, reveal: eOut4(inv(.02, .22, lt)) });
+    ctx.restore();
+    const ty = 250 + nfs * .82 + 58;
+    text(ctx, m.year, 70, ty, '400 54px Bebas', acc, { ls: 4, reveal: eOut4(inv(.1, .3, lt)) });
+    text(ctx, (m.sub ? m.sub + ' · ' : '') + m.tag, 70 + 120, ty - 6, '800 28px Mont', '#fff', { ls: 2, reveal: eOut4(inv(BEAT, BEAT + .18, lt)) });
+    // power counter
+    const cu = eOut3(inv(.08, .75, lt)), val = Math.round(m.ps * cu);
+    ctx.save(); ctx.shadowColor = hexA(acc, .7); ctx.shadowBlur = 30 * pulse(lt, .75, 8);
+    const cy = 1560;
+    if (m.upto) text(ctx, 'UP TO', 72, cy - 250, '500 26px Mont', 'rgba(255,255,255,.8)', { ls: 8, alpha: inv(.05, .2, lt) });
+    text(ctx, String(val), 62, cy, '400 300px Bebas', '#fff', { ls: 2, alpha: inv(.04, .12, lt) });
+    ctx.font = '400 300px Bebas'; ctx.letterSpacing = '2px'; const vw = ctx.measureText(String(m.ps)).width;
+    ctx.restore();
+    text(ctx, 'PS', 62 + vw + 20, cy, '400 110px Bebas', acc, { reveal: eOut4(inv(.1, .3, lt)) });
+    // power bar
+    ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(70, cy + 30, W - 140, 6);
+    mStripes(ctx, 70, cy + 30, (W - 140) * (m.ps / 750) * cu, 6);
+    text(ctx, m.engine, 70, cy + 90, '500 26px Mont', '#fff', { ls: 5, alpha: inv(.3, .5, lt) });
+    text(ctx, `${m.kmh} KM/H`, W - 70, cy + 90, '800 26px Mont', acc, { align: 'right', ls: 5, alpha: inv(.4, .6, lt) });
+    ctx.restore();
+  };
+}
+
+/* ---------- PING-PONG flicker montage ---------- */
+function drawPing(lt, t) {
+  const g = sceneCtx; g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1;
+  const step = .075, n = Math.floor(lt / step), u = (lt - n * step) / step;
+  const m = MODELS[(n * 3) % N_MODELS], dir = n % 2 ? -1 : 1;
+  g.fillStyle = '#000'; g.fillRect(0, 0, W, H);
+  coverAt(g, m.photo, (m.pa + m.pb) / 2 + dir * .05, m.cy, 1.15 + .1 * (lt));
+  g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(0, 0, W, H);
+  if (u < .5) smear(sceneCv, 1 - u * 2, dir * 90 * (1 - u * 2)); else ctx.drawImage(sceneCv, 0, 0);
+  ctx.fillStyle = hexA(n % 2 ? MR : MB, .18 * (1 - u)); ctx.fillRect(0, 0, W, H);
+  if (lt > .9) { ctx.fillStyle = `rgba(255,255,255,${inv(.9, 1, lt)})`; ctx.fillRect(0, 0, W, H); }
+  return () => {
+    const big = Math.floor(lt / .15) % 2 === 0 ? '8 LEGENDS.' : '1 LETTER.';
+    const s = 1 + .15 * (1 - ((lt % .15) / .15));
+    ctx.save(); ctx.translate(W / 2, 1040); ctx.scale(s, s);
+    ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 40;
+    text(ctx, big, 0, 0, '400 230px Bebas', '#fff', { align: 'center', ls: 6 });
+    ctx.restore();
+  };
+}
+
+/* ---------- END CARD ---------- */
+function drawEnd(L, t) {
+  const g = sceneCtx; g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#020306'; g.fillRect(0, 0, W, H);
+  // three M light beams drifting
+  g.save(); g.globalCompositeOperation = 'lighter';
+  [MB, MD, MR].forEach((c, k) => {
+    const x = W * .5 + (k - 1) * 120 + Math.sin(t * .8 + k) * 40;
+    const gr = g.createLinearGradient(x - 160, 0, x + 160, 0);
+    gr.addColorStop(0, hexA(c, 0)); gr.addColorStop(.5, hexA(c, .22 * inv(0, .6, L))); gr.addColorStop(1, hexA(c, 0));
+    g.fillStyle = gr; g.save(); g.translate(x, H / 2); g.rotate(.32); g.fillRect(-160, -H, 320, H * 2); g.restore();
+  });
+  g.restore();
+  streaks(g, t, .35 * inv(0, .5, L), 1);
+  // M logo slam
+  const lw = 820, lh = lw * IMG.mlogo.height / IMG.mlogo.width;
+  const s = lerp(1.9, 1, eOutExpo(clamp(L / .3))) * (1 + .015 * Math.sin(L * 3));
+  g.save(); g.translate(W / 2, 860); g.scale(s, s);
+  g.shadowColor = hexA(MB, .8); g.shadowBlur = 50 * (.3 + .7 * pulse(L, 0, 3));
+  g.drawImage(IMG.mlogo, -lw / 2, -lh / 2, lw, lh); g.restore();
+  // shine sweep over logo
+  const sw = inv(.9, 1.4, L);
+  if (sw > 0 && sw < 1) {
+    const bx = lerp(-200, W + 200, eInOut3(sw));
+    g.save(); g.globalCompositeOperation = 'screen'; g.beginPath(); g.rect(W / 2 - lw / 2, 860 - lh / 2, lw, lh); g.clip();
+    const sg = g.createLinearGradient(bx - 90, 0, bx + 90, 0);
+    sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(.5, 'rgba(255,255,255,.6)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = sg; g.fillRect(bx - 120, 0, 240, H); g.restore();
+  }
+  // roundel
+  const ru = eOutBack(inv(.25, .6, L)), R = 95;
+  if (ru > 0) { g.save(); g.translate(W / 2, 560); g.rotate((1 - ru) * -2); g.scale(ru, ru); g.drawImage(IMG.roundel, -R, -R, R * 2, R * 2); g.restore(); }
+  const h = pulse(L, 0, 10);
+  if (h > .04) chroma(sceneCv, 36 * h, 0); else ctx.drawImage(sceneCv, 0, 0);
+  if (L < .12) { ctx.fillStyle = `rgba(255,255,255,${.8 * (1 - L / .12)})`; ctx.fillRect(0, 0, W, H); }
+  return () => {
+    text(ctx, 'ONE LETTER.', W / 2, 1210, '400 150px Bebas', '#fff', { align: 'center', ls: 6, reveal: eOut4(inv(.3, .55, L)) });
+    text(ctx, 'EIGHT LEGENDS.', W / 2, 1350, '400 150px Bebas', MB, { align: 'center', ls: 6, reveal: eOut4(inv(.45, .7, L)) });
+    mStripes(ctx, W / 2 - 150 * eOut3(inv(.6, .9, L)), 1392, 300 * eOut3(inv(.6, .9, L)), 6);
+    text(ctx, 'BAYERISCHE MOTOREN WERKE', W / 2, 1470, '500 24px Mont', 'rgba(255,255,255,.85)', { align: 'center', ls: 10, alpha: inv(.75, 1.0, L) });
+    text(ctx, 'M1 · M3 E30 · M2 · M3 TOURING · M4 CSL · M8 · M5 · XM', W / 2, 1520, '500 19px Mont', 'rgba(255,255,255,.55)', { align: 'center', ls: 3, alpha: inv(.9, 1.2, L) });
+  };
+}
+
+/* ---------- post ---------- */
+function post(t, frame, ui, sx, sy) {
+  ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = .09; ctx.drawImage(GRAIN[frame % GRAIN.length], 0, 0, W, H); ctx.restore();
+  const vg = ctx.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * .75);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.5)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  if (ui) { ctx.save(); ctx.translate(sx * .5, sy * .5); ui(); ctx.restore(); }
+  const fade = inv(DUR - .3, DUR, t);
+  if (fade > 0) { ctx.fillStyle = `rgba(0,0,0,${fade})`; ctx.fillRect(0, 0, W, H); }
+}
+
+/* ---------- main ---------- */
+function renderAt(t) {
+  t = clamp(t, 0, DUR);
+  const frame = Math.floor(t * 30);
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  let sx = 0, sy = 0;
+  const hits = [0, BEAT, 2 * BEAT, 1.5, 1.92, ...CUTS, END_START];
+  for (const T of hits) { const k = pulse(t, T, 9) * 16; sx += Math.sin((t - T) * 75) * k; sy += Math.cos((t - T) * 60) * k * .7; }
+  if (t >= INTRO_END && t < END_START) { const lb = (t - INTRO_END) % BEAT; sy += Math.exp(-lb * 20) * 6; }
+  ctx.save(); ctx.translate(sx, sy);
+  let ui;
+  if (t < INTRO_END) ui = drawIntro(t);
+  else if (t < PING_START) { const i = Math.floor((t - INTRO_END) / SCENE_D); ui = drawModel(i, t - INTRO_END - i * SCENE_D, t); }
+  else if (t < END_START) ui = drawPing(t - PING_START, t);
+  else ui = drawEnd(t - END_START, t);
+  ctx.restore();
+  post(t, frame, ui, sx, sy);
+}
+
+window.renderAt = renderAt; window.DURATION = DUR;
+window.__ready = Promise.all([prep(), ...['300 40px Mont', '500 40px Mont', '800 40px Mont', '400 40px Bebas'].map(f => document.fonts.load(f))]).then(() => { renderAt(.0001); return true; });
+const isRender = new URLSearchParams(location.search).has('render');
+if (isRender) document.body.classList.add('render');
+else {
+  const snd = document.getElementById('snd'), btn = document.getElementById('play');
+  let start = 0, playing = false;
+  window.__ready.then(() => renderAt(END_START + 1.6));
+  const loop = () => {
+    if (!playing) return;
+    const t = (!snd.paused && snd.currentTime > 0) ? snd.currentTime : (performance.now() - start) / 1000;
+    renderAt(t);
+    if (t >= DUR) { playing = false; btn.hidden = false; return; }
+    requestAnimationFrame(loop);
+  };
+  btn.addEventListener('click', () => { btn.hidden = true; playing = true; start = performance.now(); snd.currentTime = 0; snd.play().catch(() => {}); requestAnimationFrame(loop); });
+}
+</script>
+</body>
+</html>
