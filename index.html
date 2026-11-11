@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<title>Lumyx Praxistelefon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: Telefonleitung als Leitmotiv. Hero = funktionierende Demo (Telefon links, Praxis-Ansicht rechts), darunter ruhige Produktseite. */
+/* Lumyx-Look: ruhig und klinisch sauber. Weiß als Grund, Mint als einzige Akzentfarbe, ein dezentes 3D-Linienband hinter dem Hero. Bewusst nur ein (helles) Theme. */
+:root {
+  color-scheme: light;
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-2: #F0F9F5;
+  --ink: #10302A;
+  --muted: #5A6E68;
+  --line: #DCEAE4;
+  --accent: #0A7F61;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E2F6EE;
+  --mint: #3ECFA0;
+  --mint-pale: #F3FBF8;
+  --deep: #0E3A31;
+  --live: #0A8F6C;
+  --live-soft: #DDF4EA;
+  --warn: #A86400;
+  --warn-soft: #FCEFD9;
+  --alarm: #C9314A;
+  --alarm-soft: #FCE3E7;
+  --phone: #10302A;
+  --phone-screen: #FBFEFD;
+  --shadow: 0 1px 2px rgba(16,48,42,.05), 0 14px 36px rgba(16,48,42,.08);
+  --f-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; pointer-events: none; }
+header.nav, main, footer { position: relative; z-index: 1; }
+body.no-webgl { background: radial-gradient(55% 45% at 80% 15%, var(--accent-soft), transparent), var(--bg); }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--f-display); letter-spacing: -0.02em; text-wrap: balance; margin: 0; line-height: 1.08; }
+h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 700; }
+h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: var(--accent); }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.lead { font-size: 18px; color: var(--muted); max-width: 60ch; }
+.hero .lead, .hero h1 { text-shadow: 0 0 18px var(--bg), 0 0 6px var(--bg); }
+.hero h1 em { text-shadow: none; }
+.btn { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 12px 20px; font: 600 15px var(--f-body); cursor: pointer; text-decoration: none; transition: transform .15s, background .15s; }
+.btn:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn-ghost:hover { background: var(--surface-2); }
+
+/* Nav */
+header.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20 !important; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav-in { display: flex; align-items: center; gap: 24px; padding-block: 14px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--f-display); font-weight: 800; font-size: 22px; color: var(--ink); text-decoration: none; letter-spacing: -0.03em; }
+.brand-mark { width: 30px; height: 30px; }
+.nav-links { display: flex; gap: 22px; margin-left: auto; font-size: 14.5px; }
+.nav-links a { color: var(--muted); text-decoration: none; font-weight: 500; }
+.nav-links a:hover { color: var(--ink); }
+.nav .btn { padding: 9px 16px; font-size: 14px; }
+@media (max-width: 820px) { .nav-links { display: none; } .nav .btn { margin-left: auto; } }
+
+/* Hero */
+.hero { padding-block: 56px 40px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0,.82fr) minmax(0,1.25fr); gap: 40px; align-items: center; }
+.hero h1 { font-size: clamp(36px, 4.6vw, 56px); font-weight: 700; letter-spacing: -0.035em; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lead { margin-top: 18px; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.trust { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 28px; font-size: 13.5px; color: var(--muted); }
+.trust span { display: inline-flex; align-items: center; gap: 7px; }
+.trust svg { width: 16px; height: 16px; color: var(--live); }
+@media (max-width: 1080px) { .hero-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+/* Demo */
+.demo { display: grid; grid-template-columns: 300px minmax(0,1fr); gap: 20px; align-items: start; }
+@media (max-width: 640px) { .demo { grid-template-columns: 1fr; justify-items: center; } .dash { width: 100%; } }
+.phone { width: 300px; max-width: 100%; background: var(--phone); border-radius: 42px; padding: 12px; box-shadow: var(--shadow); position: relative; }
+.phone-screen { background: var(--phone-screen); border-radius: 32px; height: 560px; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.notch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 92px; height: 24px; border-radius: 14px; background: var(--phone); z-index: 3; }
+.ph-top { padding: 44px 18px 12px; text-align: center; border-bottom: 1px solid var(--line); }
+.ph-name { font-family: var(--f-display); font-weight: 700; font-size: 18px; }
+.ph-sub { font-size: 12.5px; color: var(--muted); }
+.ph-status { margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; font: 600 11.5px var(--f-mono); padding: 3px 9px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+.ph-status .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.ph-status.live { background: var(--live-soft); color: var(--live); }
+.ph-status.live .dot { animation: pulse 1.4s infinite; }
+.ph-status.alarm { background: var(--alarm-soft); color: var(--alarm); }
+.ph-status.human { background: var(--warn-soft); color: var(--warn); }
+@keyframes pulse { 50% { opacity: .3; } }
+.ph-body { flex: 1; overflow-y: auto; padding: 14px 12px; display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth; }
+.bubble { max-width: 86%; padding: 9px 12px; border-radius: 16px; font-size: 13.5px; line-height: 1.4; }
+.bubble.bot { background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 5px; align-self: flex-start; }
+.bubble.me { background: var(--accent); color: var(--accent-ink); border-bottom-right-radius: 5px; align-self: flex-end; }
+.bubble.sys { align-self: center; background: transparent; color: var(--muted); font: 500 11.5px var(--f-mono); text-align: center; padding: 2px 6px; }
+.bubble.alarm { background: var(--alarm-soft); border-color: var(--alarm); color: var(--ink); }
+.typing { align-self: flex-start; display: flex; gap: 4px; padding: 11px 13px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; border-bottom-left-radius: 5px; }
+.typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); animation: blink 1s infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes blink { 50% { opacity: .25; } }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
+.chip { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 5px 10px; font: 500 12px var(--f-body); cursor: pointer; }
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip.danger { border-color: var(--alarm); color: var(--alarm); }
+.ph-input { display: flex; gap: 6px; padding: 10px 12px 12px; border-top: 1px solid var(--line); align-items: center; }
+.ph-input input { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 9px 13px; font: 400 13.5px var(--f-body); }
+.icon-btn { width: 38px; height: 38px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer; flex: none; background: var(--surface-2); color: var(--ink); }
+.icon-btn svg { width: 18px; height: 18px; }
+.icon-btn.send { background: var(--accent); color: var(--accent-ink); }
+.icon-btn.mic.on { background: var(--alarm); color: #fff; animation: pulse 1.2s infinite; }
+.ph-idle { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 20px; text-align: center; }
+.avatar { width: 84px; height: 84px; border-radius: 50%; background: var(--accent-soft); display: grid; place-items: center; }
+.avatar svg { width: 46px; height: 46px; }
+.call-btn { width: 66px; height: 66px; border-radius: 50%; border: 0; background: var(--live); color: #fff; display: grid; place-items: center; cursor: pointer; box-shadow: 0 0 0 0 var(--live); animation: ring 2s infinite; }
+.call-btn svg { width: 28px; height: 28px; }
+@keyframes ring { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--live) 55%, transparent); } 70% { box-shadow: 0 0 0 18px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.ph-idle small { color: var(--muted); font-size: 12px; max-width: 24ch; }
+.voice-pick { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.voice-pick select { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 5px 8px; font: 500 12px var(--f-body); max-width: 100%; }
+.ph-bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 14px 10px; }
+.hangup { border: 0; background: var(--alarm); color: #fff; border-radius: 999px; padding: 7px 14px; font: 600 12.5px var(--f-body); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.hangup svg { width: 14px; height: 14px; }
+.speaker { border: 1px solid var(--line); background: var(--surface); color: var(--muted); border-radius: 999px; padding: 6px 11px; font: 500 12px var(--f-body); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.speaker svg { width: 14px; height: 14px; }
+.speaker[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+.timer { font: 600 12px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Dashboard */
+.dash { background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; min-width: 0; }
+.dash-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.dash-head b { font-family: var(--f-display); font-size: 16px; }
+.dash-head small { color: var(--muted); font-size: 12px; display: block; }
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+.kpi { padding: 10px 14px; border-right: 1px solid var(--line); }
+.kpi:last-child { border-right: 0; }
+.kpi .v { font: 700 20px var(--f-display); font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 11.5px; color: var(--muted); line-height: 1.25; }
+.feed { max-height: 400px; overflow-y: auto; }
+.item { padding: 12px 16px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: auto minmax(0,1fr); gap: 4px 10px; }
+.item:last-child { border-bottom: 0; }
+.item.new { animation: flash 1.6s ease-out; }
+@keyframes flash { from { background: var(--accent-soft); } to { background: transparent; } }
+.pill { font: 600 11px var(--f-mono); padding: 2px 8px; border-radius: 999px; white-space: nowrap; align-self: start; margin-top: 2px; }
+.pill.rx { background: var(--accent-soft); color: var(--accent); }
+.pill.cal { background: var(--live-soft); color: var(--live); }
+.pill.alarm { background: var(--alarm-soft); color: var(--alarm); }
+.pill.human { background: var(--warn-soft); color: var(--warn); }
+.item-t { font-weight: 600; font-size: 14px; }
+.item-d { font-size: 13px; color: var(--muted); grid-column: 2; }
+.item-meta { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 4px; font: 500 11.5px var(--f-mono); color: var(--muted); }
+.adopt { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); border-radius: 8px; padding: 4px 9px; font: 600 12px var(--f-body); cursor: pointer; }
+.adopt:hover { border-color: var(--accent); }
+.done { color: var(--live); font-weight: 600; }
+.ex-tag { font: 500 10.5px var(--f-mono); color: var(--muted); border: 1px dashed var(--line); padding: 0 6px; border-radius: 6px; }
+.dash-foot { padding: 10px 16px; font-size: 12px; color: var(--muted); background: var(--surface-2); }
+
+/* Sections */
+section.block { padding-block: 72px; }
+.sec-head { display: grid; gap: 12px; margin-bottom: 36px; max-width: 760px; }
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0; position: relative; }
+.flow::before { content: ""; position: absolute; top: 22px; left: 22px; right: 22px; height: 2px; background: repeating-linear-gradient(90deg, var(--line) 0 8px, transparent 8px 14px); }
+.step { position: relative; padding-right: 20px; }
+.step-n { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 2px solid var(--accent); color: var(--accent); font: 700 15px var(--f-mono); position: relative; z-index: 1; }
+.step h3 { margin-top: 16px; }
+.step p { margin-top: 6px; color: var(--muted); font-size: 15px; }
+.step.alarm .step-n { border-color: var(--alarm); color: var(--alarm); }
+@media (max-width: 820px) { .flow { grid-template-columns: 1fr; gap: 26px; } .flow::before { top: 22px; bottom: 22px; left: 21px; right: auto; width: 2px; height: auto; background: repeating-linear-gradient(180deg, var(--line) 0 8px, transparent 8px 14px); } .step { display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 0 16px; padding-right: 0; } .step h3 { margin-top: 10px; } .step p { grid-column: 2; } }
+
+.features { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+.feat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: grid; gap: 8px; align-content: start; }
+.feat svg { width: 26px; height: 26px; color: var(--accent); }
+.feat p { color: var(--muted); font-size: 15px; }
+@media (max-width: 900px) { .features { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 560px) { .features { grid-template-columns: 1fr; } }
+
+.split { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+.aud { border-radius: 20px; padding: 28px; display: grid; gap: 14px; align-content: start; }
+.aud.pat { background: var(--accent-soft); }
+.aud.prax { background: var(--surface); border: 1px solid var(--line); }
+.aud ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.aud li { display: grid; grid-template-columns: 20px minmax(0,1fr); gap: 10px; font-size: 15.5px; }
+.aud li svg { width: 18px; height: 18px; color: var(--live); margin-top: 3px; }
+@media (max-width: 760px) { .split { grid-template-columns: 1fr; } }
+
+.targets { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-top: 28px; }
+.target { background: var(--surface); padding: 20px; }
+.target .v { font: 800 32px var(--f-display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.target .l { color: var(--muted); font-size: 14px; }
+@media (max-width: 760px) { .targets { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+.footnote { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+
+.privacy { background: var(--deep); color: #FFFFFF; border-radius: 24px; padding: 40px; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr); gap: 40px; }
+.privacy h2 { color: #FFFFFF; }
+.privacy .eyebrow { color: var(--mint); }
+.privacy p.lead { color: rgba(255,255,255,.82); }
+.priv-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px 24px; }
+.priv-list div { display: grid; gap: 4px; }
+.priv-list b { font-family: var(--f-display); font-size: 16px; }
+.priv-list span { font-size: 14px; color: rgba(255,255,255,.78); }
+@media (max-width: 860px) { .privacy { grid-template-columns: 1fr; padding: 28px; } }
+@media (max-width: 520px) { .priv-list { grid-template-columns: 1fr; } }
+
+/* Pricing */
+.bill { justify-self: start; display: inline-flex; background: var(--surface-2); border-radius: 999px; padding: 4px; gap: 4px; margin-top: 8px; }
+.bill button { border: 0; background: transparent; color: var(--muted); padding: 8px 16px; border-radius: 999px; font: 600 14px var(--f-body); cursor: pointer; }
+.bill button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.bill .save { font: 600 11px var(--f-mono); color: var(--live); margin-left: 4px; }
+.plans { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; align-items: stretch; }
+.plan { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 16px; }
+.plan.rec { border: 2px solid var(--accent); position: relative; }
+.plan.rec::before { content: "Empfohlen"; position: absolute; top: -12px; left: 24px; background: var(--accent); color: var(--accent-ink); font: 600 11.5px var(--f-mono); padding: 3px 10px; border-radius: 999px; }
+.plan .for { color: var(--muted); font-size: 14px; }
+.price { display: flex; align-items: baseline; gap: 6px; }
+.price .amt { font: 800 42px var(--f-display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.price .per { color: var(--muted); font-size: 14px; }
+.plan ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 9px; font-size: 14.5px; }
+.plan li { display: grid; grid-template-columns: 18px minmax(0,1fr); gap: 9px; }
+.plan li svg { width: 16px; height: 16px; color: var(--live); margin-top: 3px; }
+.plan .btn { margin-top: auto; justify-content: center; }
+.plan .calls { font: 600 13px var(--f-mono); color: var(--ink); background: var(--surface-2); border-radius: 8px; padding: 6px 10px; }
+@media (max-width: 900px) { .plans { grid-template-columns: 1fr; } }
+.price-note { margin-top: 16px; font-size: 13px; color: var(--muted); }
+
+/* Calculator */
+.calc { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 26px; display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); gap: 28px; }
+.calc h3 { margin-bottom: 14px; }
+.field { display: grid; gap: 6px; margin-bottom: 14px; }
+.field label { font-size: 14px; font-weight: 600; display: flex; justify-content: space-between; }
+.field label output { font-family: var(--f-mono); color: var(--accent); font-variant-numeric: tabular-nums; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.result { background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--mint) 40%, transparent); border-radius: 16px; padding: 22px; display: grid; gap: 12px; align-content: start; }
+.result .big { font: 800 40px var(--f-display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.result .row { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; border-top: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); padding-top: 10px; }
+.result .row b { font-variant-numeric: tabular-nums; }
+@media (max-width: 820px) { .calc { grid-template-columns: 1fr; } }
+
+/* FAQ */
+.faq { display: grid; gap: 10px; max-width: 820px; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 18px; }
+summary { cursor: pointer; font-weight: 600; padding-block: 14px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font: 600 20px var(--f-mono); color: var(--accent); line-height: 1; }
+details[open] summary::after { content: "–"; }
+details p { padding-bottom: 16px; color: var(--muted); font-size: 15px; max-width: 70ch; }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 32px; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 36px; }
+form { display: grid; gap: 12px; }
+.f2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+form label { font-size: 13.5px; font-weight: 600; display: grid; gap: 5px; }
+form input, form select, form textarea { border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 10px; padding: 10px 12px; font: 400 15px var(--f-body); width: 100%; }
+form textarea { min-height: 80px; resize: vertical; }
+.form-ok { background: var(--live-soft); color: var(--ink); border-radius: 12px; padding: 14px 16px; font-size: 14.5px; }
+@media (max-width: 820px) { .contact { grid-template-columns: 1fr; padding: 24px; } }
+@media (max-width: 460px) { .f2 { grid-template-columns: 1fr; } }
+
+footer { padding-block: 40px 56px; border-top: 1px solid var(--line); margin-top: 72px; color: var(--muted); font-size: 13.5px; }
+.foot-in { display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; }
+.disclaimer { margin-top: 16px; font-size: 12.5px; max-width: 80ch; }
+
+/* ---------- Motion ---------- */
+.progress { position: fixed; left: 0; top: env(safe-area-inset-top, 0px); height: 3px; width: 100%; transform-origin: 0 50%; transform: scaleX(var(--p, 0)); background: linear-gradient(90deg, var(--accent), var(--mint)); z-index: 30; pointer-events: none; }
+@keyframes rise { from { opacity: 0; transform: translateY(22px); } }
+@keyframes slideIn { from { opacity: 0; transform: translateX(36px); } }
+@keyframes phoneIn { from { opacity: 0; scale: .9; rotate: -5deg; } }
+@keyframes floaty { 50% { translate: 0 -10px; } }
+@keyframes pop { from { opacity: 0; transform: scale(.82) translateY(8px); } }
+@keyframes chipIn { from { opacity: 0; transform: translateY(8px); } }
+@keyframes itemIn { from { opacity: 0; transform: translateX(28px); } }
+@keyframes bump { 40% { transform: scale(1.28); color: var(--accent); } }
+@keyframes mark { to { background-size: 100% .34em; } }
+@keyframes travel { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes halo { from { transform: scale(1); opacity: .55; } to { transform: scale(1.75); opacity: 0; } }
+@keyframes eq { 0%, 100% { transform: scaleY(.25); } 50% { transform: scaleY(1); } }
+@keyframes wiggle { 0%, 60%, 100% { rotate: 0deg; } 66% { rotate: -14deg; } 72% { rotate: 12deg; } 78% { rotate: -10deg; } 84% { rotate: 8deg; } 90% { rotate: -4deg; } }
+@keyframes drift { 50% { transform: translate(18%, 12%) scale(1.15); } }
+@keyframes glow { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--live) 22%, transparent), 0 18px 48px color-mix(in srgb, var(--live) 30%, transparent); } }
+
+/* Hero: gestaffelter Auftritt */
+.hero-copy > * { animation: rise .75s cubic-bezier(.2,.7,.2,1) backwards; }
+.hero-copy > :nth-child(2) { animation-delay: .08s; } .hero-copy > :nth-child(3) { animation-delay: .18s; }
+.hero-copy > :nth-child(4) { animation-delay: .28s; } .hero-copy > :nth-child(5) { animation-delay: .38s; }
+.hero h1 em { background: linear-gradient(color-mix(in srgb, var(--mint) 45%, transparent), color-mix(in srgb, var(--mint) 45%, transparent)) 0 92% / 0% .3em no-repeat; animation: mark .8s .75s cubic-bezier(.2,.7,.2,1) forwards; }
+.trust span { transition: transform .2s; } .trust span:hover { transform: translateY(-2px); }
+.demo { perspective: 1100px; }
+.phone { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .3s ease-out, box-shadow .4s; animation: phoneIn .9s .2s cubic-bezier(.2,.8,.2,1.1) backwards; will-change: transform; }
+.phone.idle { animation: phoneIn .9s .2s cubic-bezier(.2,.8,.2,1.1) backwards, floaty 6s 1.2s ease-in-out infinite; }
+.phone.speaking { animation: glow 1.6s ease-in-out infinite; }
+.dash { animation: slideIn .85s .4s cubic-bezier(.2,.7,.2,1) backwards; }
+
+/* Puls-Linie unter dem Hero */
+.pulse-line { display: block; width: 100%; height: 72px; margin-top: 28px; }
+.pulse-line path { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.pulse-line .base { stroke: var(--line); }
+.pulse-line .run { stroke: var(--accent); stroke-dasharray: .14 .86; animation: travel 5.5s linear infinite; }
+.pulse-line .run.b { stroke: var(--mint); stroke-dasharray: .06 .94; animation-duration: 8s; animation-delay: -3s; opacity: .8; }
+.brand-mark path, .avatar path { stroke-dasharray: 1; animation: draw 1.4s .2s ease-out backwards; }
+.brand:hover .brand-mark path { animation: none; stroke-dashoffset: 0; }
+.brand .brand-mark { transition: rotate .4s cubic-bezier(.2,.8,.2,1.4); } .brand:hover .brand-mark { rotate: -8deg; }
+
+/* Telefon */
+.avatar { position: relative; }
+.avatar::before, .avatar::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent); animation: halo 2.6s ease-out infinite; pointer-events: none; }
+.avatar::after { animation-delay: 1.3s; }
+.call-btn svg { animation: wiggle 2.4s ease-in-out infinite; }
+.call-btn { transition: transform .2s; } .call-btn:hover { transform: scale(1.08); } .call-btn:active { transform: scale(.94); }
+.eq { display: flex; justify-content: center; align-items: center; gap: 3px; height: 16px; margin-top: 6px; }
+.eq i { width: 3px; height: 100%; border-radius: 2px; background: var(--line); transform: scaleY(.25); transition: background .3s; }
+.phone.speaking .eq i { background: var(--live); animation: eq .9s ease-in-out infinite; }
+.phone.speaking .eq i:nth-child(2) { animation-duration: .6s; animation-delay: -.2s; } .phone.speaking .eq i:nth-child(3) { animation-duration: 1.1s; animation-delay: -.5s; }
+.phone.speaking .eq i:nth-child(4) { animation-duration: .7s; animation-delay: -.1s; } .phone.speaking .eq i:nth-child(5) { animation-duration: 1s; animation-delay: -.7s; }
+.phone.speaking .eq i:nth-child(6) { animation-duration: .65s; animation-delay: -.35s; } .phone.speaking .eq i:nth-child(7) { animation-duration: .85s; animation-delay: -.6s; }
+.bubble { animation: pop .34s cubic-bezier(.2,.9,.3,1.25) backwards; transform-origin: 0 100%; }
+.bubble.me { transform-origin: 100% 100%; } .bubble.sys { transform-origin: 50% 50%; }
+.typing { animation: pop .25s backwards; transform-origin: 0 100%; }
+.chip { animation: chipIn .3s backwards; transition: transform .15s, border-color .15s, color .15s; }
+.chip:nth-child(2) { animation-delay: .06s; } .chip:nth-child(3) { animation-delay: .12s; } .chip:nth-child(4) { animation-delay: .18s; }
+.chip:hover { transform: translateY(-2px); } .chip:active { transform: scale(.95); }
+.icon-btn, .hangup, .speaker, .adopt { transition: transform .15s; }
+.icon-btn:hover, .hangup:hover, .adopt:hover { transform: translateY(-1px) scale(1.04); } .icon-btn:active, .hangup:active, .adopt:active { transform: scale(.94); }
+.item.new { animation: itemIn .5s cubic-bezier(.2,.7,.2,1) backwards, flash 1.8s ease-out; }
+.kpi .v { transform-origin: 0 60%; } .kpi .v.bump { animation: bump .5s ease-out; }
+
+/* Scroll-Auftritt (Klasse wird nur per Skript gesetzt) */
+.rv { opacity: 0; translate: 0 30px; scale: .98; }
+.rv.in { opacity: 1; translate: 0 0; scale: 1; transition: opacity .7s ease-out var(--d, 0ms), translate .8s cubic-bezier(.2,.7,.2,1) var(--d, 0ms), scale .8s cubic-bezier(.2,.7,.2,1) var(--d, 0ms); }
+.flow::before { transition: clip-path 1.6s cubic-bezier(.4,0,.2,1) .2s; clip-path: inset(0); }
+.flow.pre::before { clip-path: inset(0 100% 0 0); }
+@media (max-width: 820px) { .flow.pre::before { clip-path: inset(0 0 100% 0); } }
+.step-n { transition: transform .25s cubic-bezier(.2,.8,.2,1.4), background .25s, color .25s; }
+.step:hover .step-n { transform: scale(1.14); background: var(--accent); color: var(--accent-ink); }
+.step.alarm:hover .step-n { background: var(--alarm); color: #fff; }
+
+/* Hover */
+.feat, .plan, .target, .aud, details { transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s, border-color .25s; }
+.feat:hover, .plan:hover, .aud:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.feat:hover { border-color: var(--accent); }
+.feat svg { transition: transform .35s cubic-bezier(.2,.8,.2,1.5); } .feat:hover svg { transform: scale(1.2) rotate(-8deg); }
+.target .v { transition: color .2s, transform .25s; transform-origin: 0 70%; } .target:hover .v { color: var(--accent); transform: scale(1.06); }
+details:hover { border-color: var(--accent); }
+details[open] p { animation: rise .35s ease-out backwards; }
+summary::after { transition: rotate .25s; } details[open] summary::after { rotate: 180deg; }
+.btn { position: relative; overflow: hidden; transition: transform .18s, background .15s, box-shadow .18s; }
+.btn-primary::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, color-mix(in srgb, var(--accent-ink) 35%, transparent) 50%, transparent 65%); translate: -110% 0; transition: translate .6s; pointer-events: none; }
+.btn-primary:hover::after { translate: 110% 0; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 35%, transparent); }
+.btn:active { transform: scale(.96); }
+.nav-links a { position: relative; padding-block: 4px; }
+.nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; transition: transform .25s; }
+.nav-links a:hover::after { transform: scaleX(1); }
+.bill button { transition: background .2s, color .2s, box-shadow .2s; }
+.privacy { position: relative; overflow: hidden; } .privacy > * { position: relative; }
+.privacy::before { content: ""; position: absolute; width: 60%; aspect-ratio: 1; left: -20%; top: -40%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--mint) 35%, transparent), transparent); animation: drift 14s ease-in-out infinite; pointer-events: none; }
+.priv-list div { transition: transform .25s; } .priv-list div:hover { transform: translateX(6px); }
+.result .big { transition: color .2s; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-phone" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.2 4.2L19 7"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11h-2Z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12.6 2-12.6 2z"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3Zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4Z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3 4.5 6v5.5c0 4.6 3.2 8.5 7.5 9.5 4.3-1 7.5-4.9 7.5-9.5V6L12 3Z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m8.5 12 2.4 2.4L15.5 10"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm12-10a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM6 15V9a4 4 0 0 1 4-4h6M18 9v6a4 4 0 0 1-4 4H8"/></symbol>
+  <symbol id="i-pill" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M10.5 20.5a5 5 0 0 1-7-7l6-6a5 5 0 0 1 7 7l-6 6ZM8 9l7 7"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Zm0 4h16M8 3v4m8-4v4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+  <symbol id="i-ear" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 9a6 6 0 1 1 12 0c0 3-2 4-3 5.5S14 18 12 20a3 3 0 0 1-4.5-2.5M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-1.5 2-1.5 3.5"/></symbol>
+</svg>
+
+<canvas id="scene" aria-hidden="true"></canvas>
+<script>document.body.classList.add("no-webgl")</script>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Lumyx Startseite">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M7 16h3l2-5 3 10 3-13 2 8h5" fill="none" stroke="var(--accent-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>
+      Lumyx
+    </a>
+    <nav class="nav-links" aria-label="Hauptnavigation">
+      <a href="#ablauf">Ablauf</a>
+      <a href="#funktionen">Funktionen</a>
+      <a href="#datenschutz">Datenschutz</a>
+      <a href="#preise">Preise</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary" href="#kontakt">Pilot anfragen</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">KI-Telefonassistenz für Arztpraxen</div>
+        <h1 style="margin-top:14px">Das Praxistelefon nimmt ab. <em>Ihr Team</em> kümmert sich um die Menschen.</h1>
+        <p class="lead">Lumyx beantwortet Routine-Anrufe in ruhiger, verständlicher Sprache, nimmt Folgerezepte und Terminabsagen strukturiert auf und stellt Notfälle sofort zu Ihrem Praxisteam durch.</p>
+        <div class="hero-ctas">
+          <button class="btn btn-primary" type="button" id="heroCall"><svg width="18" height="18"><use href="#i-phone"/></svg>Jetzt testen</button>
+          <a class="btn btn-ghost" href="#preise">Preise ansehen</a>
+        </div>
+        <div class="trust">
+          <span><svg><use href="#i-check"/></svg>Server in Deutschland</span>
+          <span><svg><use href="#i-check"/></svg>Notfälle immer an Menschen</span>
+          <span><svg><use href="#i-check"/></svg>Jederzeit „Mitarbeiter“ sagen</span>
+        </div>
+      </div>
+
+      <div class="demo" id="demo">
+        <div class="phone idle" id="phone" aria-label="Test-Telefon">
+          <div class="phone-screen">
+            <div class="notch"></div>
+            <div class="ph-top">
+              <div class="ph-name">Praxis Dr. Sommer</div>
+              <div class="ph-sub">Allgemeinmedizin · Testleitung</div>
+              <div class="ph-status" id="phStatus"><span class="dot"></span><span id="phStatusText">Bereit</span></div>
+              <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+
+            <div class="ph-idle" id="phIdle">
+              <div class="avatar"><svg viewBox="0 0 32 32" aria-hidden="true"><path pathLength="1" d="M5 16h4l2.5-6 3.5 12 3.5-15 2.5 9h6" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div><b>Lumyx anrufen</b><br><small>Testen Sie eine Terminabsage, ein Folgerezept oder einen Notfall.</small></div>
+              <button class="call-btn" id="callBtn" type="button" aria-label="Anruf starten"><svg><use href="#i-phone"/></svg></button>
+              <div class="voice-pick"><label for="voiceSel">Stimme</label><select id="voiceSel"><option value="rounded" selected>Sophie · warm, ruhig</option><option value="airy">Lena · hell, freundlich</option><option value="glassy">Mia · klar, deutlich</option><option value="buttery">Standard</option></select><button type="button" class="chip" id="voiceTest">Probe hören</button></div>
+              <small>Demo mit fiktiver Praxis. Bitte keine echten Gesundheitsdaten eingeben.</small>
+            </div>
+
+            <div id="phCall" hidden style="display:flex;flex-direction:column;flex:1;min-height:0">
+              <div class="ph-body" id="phBody" aria-live="polite"></div>
+              <div class="chips" id="chips"></div>
+              <form class="ph-input" id="phForm" autocomplete="off">
+                <input id="phText" type="text" placeholder="Antwort tippen …" aria-label="Ihre Antwort">
+                <button class="icon-btn mic" id="micBtn" type="button" aria-label="Sprechen" hidden><svg><use href="#i-mic"/></svg></button>
+                <button class="icon-btn send" type="submit" aria-label="Senden"><svg><use href="#i-send"/></svg></button>
+              </form>
+              <div class="ph-bar">
+                <button class="speaker" id="spkBtn" type="button" aria-pressed="true"><svg><use href="#i-vol"/></svg>Ton an</button>
+                <span class="timer" id="timer">00:00</span>
+                <button class="hangup" id="hangBtn" type="button"><svg style="transform:rotate(135deg)"><use href="#i-phone"/></svg>Auflegen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="dash" aria-label="Praxis-Ansicht">
+          <div class="dash-head">
+            <div><b>Praxis-Dashboard</b><small>So sieht Ihr Team die Anrufe</small></div>
+            <span class="ph-status live"><span class="dot"></span>Live</span>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><div class="v" id="kAuto">0</div><div class="l">autonom erledigt</div></div>
+            <div class="kpi"><div class="v" id="kFwd">0</div><div class="l">an Team geleitet</div></div>
+            <div class="kpi"><div class="v" id="kTime">–</div><div class="l">Ø Übernahme in Akte</div></div>
+          </div>
+          <div class="feed" id="feed"></div>
+          <div class="dash-foot">Neue Anrufe erscheinen oben. Mit „In Akte übernehmen“ messen Sie die Bearbeitungszeit.</div>
+        </aside>
+      </div>
+    </div>
+    <svg class="pulse-line" viewBox="0 0 1200 72" preserveAspectRatio="none" aria-hidden="true">
+      <path class="base" pathLength="1" d="M0 40H170l12-12 14 26 16-46 14 48 10-16H520l12-12 14 26 16-46 14 48 10-16H880l12-12 14 26 16-46 14 48 10-16H1200"/>
+      <path class="run" pathLength="1" d="M0 40H170l12-12 14 26 16-46 14 48 10-16H520l12-12 14 26 16-46 14 48 10-16H880l12-12 14 26 16-46 14 48 10-16H1200"/>
+      <path class="run b" pathLength="1" d="M0 40H170l12-12 14 26 16-46 14 48 10-16H520l12-12 14 26 16-46 14 48 10-16H880l12-12 14 26 16-46 14 48 10-16H1200"/>
+    </svg>
+  </section>
+
+  <section class="block" id="ablauf" style="padding-top:32px">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Ablauf eines Anrufs</div>
+        <h2>Vom Klingeln bis zur Patientenakte</h2>
+        <p class="lead">Lumyx folgt festen Gesprächsskripten. Was nicht eindeutig ist, landet bei einem Menschen.</p>
+      </div>
+      <div class="flow">
+        <div class="step"><div class="step-n">1</div><h3>Anruf annehmen</h3><p>Lumyx meldet sich sofort, sagt offen, dass sie ein KI-Assistent ist, und fragt nach dem Anliegen.</p></div>
+        <div class="step alarm"><div class="step-n">2</div><h3>Dringlichkeit prüfen</h3><p>Bei Warnsignalen wie Brustschmerz oder Atemnot verbindet Lumyx sofort mit dem Praxisteam und nennt die 112.</p></div>
+        <div class="step"><div class="step-n">3</div><h3>Anliegen aufnehmen</h3><p>Folgerezept oder Terminabsage werden mit kurzen, klaren Fragen vollständig erfasst.</p></div>
+        <div class="step"><div class="step-n">4</div><h3>Im Dashboard übernehmen</h3><p>Ihr Team sieht eine fertige Notiz und übernimmt sie mit einem Klick in die Akte.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="funktionen" style="background:var(--mint-pale);border-block:1px solid var(--line)">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Funktionen</div>
+        <h2>Gebaut für den Praxisalltag, nicht für das Callcenter</h2>
+      </div>
+      <div class="features">
+        <div class="feat"><svg><use href="#i-ear"/></svg><h3>Ruhige Gesprächsführung</h3><p>Langsames Sprechtempo, Wiederholungen auf Wunsch, einfache Sprache. Entwickelt mit älteren Patient:innen im Blick.</p></div>
+        <div class="feat"><svg><use href="#i-route"/></svg><h3>Intelligente Weiterleitung</h3><p>Notfälle, unklare Anliegen und der Wunsch nach einem Menschen gehen direkt an MFA oder Ärzt:in.</p></div>
+        <div class="feat"><svg><use href="#i-pill"/></svg><h3>Folgerezepte</h3><p>Name, Medikament und Abholweg werden strukturiert erfasst. Die Freigabe bleibt bei der Ärztin oder dem Arzt.</p></div>
+        <div class="feat"><svg><use href="#i-cal"/></svg><h3>Terminabsagen</h3><p>Absagen kommen nicht mehr auf dem Anrufbeantworter an, sondern als Notiz mit Datum, bereit für die Nachbesetzung.</p></div>
+        <div class="feat"><svg><use href="#i-list"/></svg><h3>Rückrufliste</h3><p>Alles, was Rückfragen braucht, steht sortiert im Dashboard. Mit Transkript, damit nichts verloren geht.</p></div>
+        <div class="feat"><svg><use href="#i-shield"/></svg><h3>Datenschutz ab Werk</h3><p>Verarbeitung ausschließlich auf Servern in Deutschland, nur die Daten, die für das Anliegen nötig sind.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Für wen</div>
+        <h2>Entlastung auf beiden Seiten des Hörers</h2>
+      </div>
+      <div class="split">
+        <div class="aud pat">
+          <h3>Für Patient:innen</h3>
+          <ul>
+            <li><svg><use href="#i-check"/></svg><span>Keine Warteschleife bei Rezept oder Terminabsage</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Klare, freundliche Fragen in normaler Sprache</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Jederzeit „Mitarbeiter“ sagen und verbunden werden</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Angehörige erreichen die Praxis zuverlässig</span></li>
+          </ul>
+        </div>
+        <div class="aud prax">
+          <h3>Für Praxisteams</h3>
+          <ul>
+            <li><svg><use href="#i-check"/></svg><span>Weniger Klingeln während der Sprechstunde</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Fertige Gesprächsnotizen statt Zettelwirtschaft</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Notfälle werden nie von der KI allein bearbeitet</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Übersicht über alle Anliegen und Rückrufe</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="targets">
+        <div class="target"><div class="v">60–80 %</div><div class="l">der Routine-Anrufe autonom aufgenommen</div></div>
+        <div class="target"><div class="v">100 %</div><div class="l">der erkannten Notfälle sofort an Menschen</div></div>
+        <div class="target"><div class="v">&lt; 30 s</div><div class="l">pro Notiz bis zur Übernahme in die Akte</div></div>
+        <div class="target"><div class="v">24/7</div><div class="l">erreichbar für Rezept und Absage</div></div>
+      </div>
+      <p class="footnote">Zielwerte für den Pilotbetrieb in einer Test-Praxis. Noch keine gemessenen Ergebnisse.</p>
+    </div>
+  </section>
+
+  <section class="block" id="datenschutz" style="padding-top:0">
+    <div class="wrap">
+      <div class="privacy">
+        <div>
+          <div class="eyebrow">Datenschutz &amp; Sicherheit</div>
+          <h2 style="margin-top:12px">Gesundheitsdaten bleiben in Deutschland</h2>
+          <p class="lead" style="margin-top:14px">Telefonate in der Arztpraxis gehören zu den sensibelsten Daten überhaupt. Deshalb ist Lumyx von Anfang an auf Datensparsamkeit und Transparenz ausgelegt.</p>
+        </div>
+        <div class="priv-list">
+          <div><b>Hosting in Deutschland</b><span>Verarbeitung ausschließlich auf EU-Servern, keine Weitergabe an Dritte.</span></div>
+          <div><b>Klar als KI erkennbar</b><span>Jeder Anruf beginnt mit dem Hinweis, dass ein KI-Assistent spricht.</span></div>
+          <div><b>Datensparsam</b><span>Erfasst wird nur, was für Rezept oder Absage nötig ist.</span></div>
+          <div><b>Ausfallsicher</b><span>Fällt das System aus, klingelt automatisch wieder das Praxistelefon.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="preise" style="background:var(--mint-pale);border-block:1px solid var(--line)">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Preise</div>
+        <h2>Ein Abo, das zu Ihrer Praxisgröße passt</h2>
+        <p class="lead">Monatlich kündbar oder mit Jahresrabatt. Alle Pakete enthalten Notfall-Weiterleitung, Dashboard und Hosting in Deutschland.</p>
+        <div class="bill" role="group" aria-label="Abrechnung">
+          <button type="button" id="billM" aria-pressed="true">Monatlich</button>
+          <button type="button" id="billY" aria-pressed="false">Jährlich <span class="save">−15 %</span></button>
+        </div>
+      </div>
+      <div class="plans">
+        <div class="plan">
+          <div><h3>Basis</h3><p class="for">Für Einzelpraxen mit einer Ärztin oder einem Arzt</p></div>
+          <div class="price"><span class="amt" data-m="149">149 €</span><span class="per">/ Monat</span></div>
+          <div class="calls">bis 600 Anrufe / Monat</div>
+          <ul>
+            <li><svg><use href="#i-check"/></svg><span>Folgerezepte und Terminabsagen</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Notfall-Weiterleitung an das Team</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Dashboard mit Rückrufliste</span></li>
+            <li><svg><use href="#i-check"/></svg><span>E-Mail-Support</span></li>
+          </ul>
+          <a class="btn btn-ghost" href="#kontakt" data-plan="Basis">Basis anfragen</a>
+        </div>
+        <div class="plan rec">
+          <div><h3>Praxis</h3><p class="for">Für Gemeinschaftspraxen mit mehreren Ärzt:innen</p></div>
+          <div class="price"><span class="amt" data-m="289">289 €</span><span class="per">/ Monat</span></div>
+          <div class="calls">bis 1.500 Anrufe / Monat</div>
+          <ul>
+            <li><svg><use href="#i-check"/></svg><span>Alles aus Basis</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Mehrere Ärzt:innen und Sprechzeiten</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Export der Notizen in die Praxissoftware</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Eigene Ansagen und Urlaubsmodus</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Telefon-Support werktags</span></li>
+          </ul>
+          <a class="btn btn-primary" href="#kontakt" data-plan="Praxis">Praxis anfragen</a>
+        </div>
+        <div class="plan">
+          <div><h3>MVZ</h3><p class="for">Für MVZ und Praxen mit mehreren Standorten</p></div>
+          <div class="price"><span class="amt" data-m="549">549 €</span><span class="per">/ Monat</span></div>
+          <div class="calls">bis 4.000 Anrufe / Monat</div>
+          <ul>
+            <li><svg><use href="#i-check"/></svg><span>Alles aus Praxis</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Mehrere Standorte, eine Übersicht</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Eigene Gesprächsskripte</span></li>
+            <li><svg><use href="#i-check"/></svg><span>99,9 % Verfügbarkeit (SLA)</span></li>
+            <li><svg><use href="#i-check"/></svg><span>Persönliche Ansprechperson</span></li>
+          </ul>
+          <a class="btn btn-ghost" href="#kontakt" data-plan="MVZ">MVZ anfragen</a>
+        </div>
+      </div>
+      <p class="price-note">Alle Preise zzgl. MwSt. Einmalige Einrichtung inkl. Schulung des Praxisteams: 490 €. Weitere Anrufe: 0,25 € pro Anruf. Beispielpreise aus einem Studienprojekt.</p>
+
+      <div class="calc">
+        <div>
+          <h3>Was spart Ihre Praxis?</h3>
+          <div class="field"><label for="cCalls">Anrufe pro Tag <output id="oCalls">60</output></label><input type="range" id="cCalls" min="10" max="250" step="5" value="60"></div>
+          <div class="field"><label for="cMin">Minuten pro Routine-Anruf <output id="oMin">3</output></label><input type="range" id="cMin" min="1" max="8" step="0.5" value="3"></div>
+          <div class="field"><label for="cShare">Anteil Routine-Anrufe <output id="oShare">70 %</output></label><input type="range" id="cShare" min="30" max="90" step="5" value="70"></div>
+          <div class="field"><label for="cRate">Kosten MFA pro Stunde <output id="oRate">28 €</output></label><input type="range" id="cRate" min="18" max="45" step="1" value="28"></div>
+        </div>
+        <div class="result" aria-live="polite">
+          <div class="eyebrow">Geschätzte Entlastung</div>
+          <div class="big" id="rHours">49 Std.</div>
+          <div style="color:var(--muted);font-size:14px;margin-top:-8px">Telefonzeit pro Monat, die Ihr Team zurückgewinnt</div>
+          <div class="row"><span>Wert der Arbeitszeit</span><b id="rValue">1.372 €</b></div>
+          <div class="row"><span>Passendes Paket</span><b id="rPlan">Praxis · 289 €</b></div>
+          <div class="row"><span>Rechnerischer Nutzen</span><b id="rNet">+1.083 € / Monat</b></div>
+          <div style="font-size:12px;color:var(--muted)">Annahme: 21 Praxistage im Monat; Lumyx übernimmt den gewählten Anteil der Routine-Anrufe. Grobe Schätzung, kein Angebot.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <div class="sec-head"><div class="eyebrow">Häufige Fragen</div><h2>Was Praxen vor dem Start wissen wollen</h2></div>
+      <div class="faq">
+        <details><summary>Stellt Lumyx Diagnosen?</summary><p>Nein. Lumyx nimmt Anliegen auf und erkennt Warnsignale. Jede medizinische Einschätzung bleibt beim Praxisteam. Bei Anzeichen eines Notfalls verbindet Lumyx sofort und nennt die 112.</p></details>
+        <details><summary>Was passiert, wenn jemand lieber mit einem Menschen spricht?</summary><p>Ein Wort genügt: „Mitarbeiter“, „Mensch“ oder „Praxis“. Lumyx leitet dann direkt weiter oder notiert einen Rückruf, wenn gerade niemand frei ist.</p></details>
+        <details><summary>Kommen ältere Patient:innen damit zurecht?</summary><p>Das Gespräch ist bewusst langsam und einfach gehalten, Fragen werden auf Wunsch wiederholt. Wer unsicher ist, wird ohne Umwege verbunden. Die Verständlichkeit prüfen wir im Pilot gezielt mit älteren Anrufenden.</p></details>
+        <details><summary>Wie funktioniert die Anbindung an die Praxissoftware?</summary><p>Im Paket Basis übernimmt Ihr Team die Notizen per Klick aus dem Dashboard. Ab dem Paket Praxis ist ein Export vorgesehen; die direkte Schnittstelle stimmen wir mit Ihrem Softwareanbieter ab.</p></details>
+        <details><summary>Wie lange dauert die Einführung?</summary><p>Nach Einrichtung und Schulung wird Lumyx stufenweise freigeschaltet, zuerst für Terminabsagen, dann für Folgerezepte. So bleibt Ihr Team in Kontrolle.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="kontakt" style="padding-top:0">
+    <div class="wrap">
+      <div class="contact">
+        <div style="display:grid;gap:14px;align-content:start">
+          <div class="eyebrow">Pilotphase</div>
+          <h2>Werden Sie Test-Praxis</h2>
+          <p class="lead">Wir suchen Praxen, die Lumyx im Alltag erproben und mit ihrem Feedback mitgestalten. Hinterlassen Sie uns ein paar Angaben.</p>
+        </div>
+        <div>
+          <form id="leadForm" novalidate>
+            <div class="f2">
+              <label for="lfName">Ihr Name<input id="lfName" required placeholder="z. B. Anna Weber"></label>
+              <label for="lfPraxis">Praxis<input id="lfPraxis" required placeholder="z. B. Hausarztpraxis am Markt"></label>
+            </div>
+            <div class="f2">
+              <label for="lfMail">E-Mail<input id="lfMail" type="email" required placeholder="praxis@beispiel.de"></label>
+              <label for="lfPlan">Interesse an<select id="lfPlan"><option>Basis</option><option selected>Praxis</option><option>MVZ</option><option>Noch unsicher</option></select></label>
+            </div>
+            <label for="lfMsg">Nachricht (optional)<textarea id="lfMsg" placeholder="Wie viele Anrufe haben Sie etwa pro Tag?"></textarea></label>
+            <p id="lfErr" style="color:var(--alarm);font-size:13.5px" hidden>Bitte Name, Praxis und eine gültige E-Mail-Adresse angeben.</p>
+            <button class="btn btn-primary" type="submit" style="justify-self:start">Anfrage absenden</button>
+          </form>
+          <div class="form-ok" id="lfOk" hidden></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <a class="brand" href="#top" style="font-size:18px"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M7 16h3l2-5 3 10 3-13 2 8h5" fill="none" stroke="var(--accent-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>Lumyx</a>
+      <span>Ein Projekt von Mika &amp; Tim · Agiles Projektmanagement, FHM 2026/27</span>
+    </div>
+    <p class="disclaimer">Lumyx ist ein fiktives Produkt aus einem Studienprojekt. Praxis, Preise und Zielwerte sind Beispiele. Die Demo ersetzt keine medizinische Beratung. Bei Lebensgefahr wählen Sie bitte immer die 112, außerhalb der Sprechzeiten erreichen Sie den ärztlichen Bereitschaftsdienst unter 116 117.</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const esc = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  /* ---------- Sprachausgabe & Diktat (optional) ---------- */
+  let tts = null, dict = null, soundOn = true, listening = false;
+  const hasWebSpeech = "speechSynthesis" in window;
+  const phone = $("phone");
+  function setSpeaking(on) { phone.classList.toggle("speaking", !!on); $("voiceTest").textContent = on && state === "idle" ? "Stopp" : "Probe hören"; }
+  let ttsReady = Promise.resolve(null);
+  if (window.claude && window.claude.use) {
+    ttsReady = Promise.race([window.claude.use("tts").catch(() => null), new Promise(r => setTimeout(() => r(null), 1500))]);
+    window.claude.use("tts").then(t => {
+      tts = t; if (!t) return;
+      t.onState(({ state: st }) => setSpeaking(st === "speaking"));
+    }).catch(() => {});
+    window.claude.use("dictation").then(d => {
+      if (!d) return;
+      dict = d; $("micBtn").hidden = false;
+      d.onPartial(({ text }) => { $("phText").value = text; });
+      d.onFinal(({ text }) => { $("phText").value = text; if (text.trim()) { stopMic(); submit(); } });
+      d.onState(({ state }) => { listening = state === "listening"; $("micBtn").classList.toggle("on", listening); $("micBtn").setAttribute("aria-label", listening ? "Zuhören beenden" : "Sprechen"); });
+    }).catch(() => {});
+  }
+  let voice = "rounded";
+  try { voice = localStorage.getItem("lumyx-voice-v1") || "rounded"; } catch (e) {}
+  $("voiceSel").value = voice;
+  $("voiceSel").addEventListener("change", () => { voice = $("voiceSel").value; try { localStorage.setItem("lumyx-voice-v1", voice); } catch (e) {} });
+  $("voiceTest").addEventListener("click", () => {
+    if (phone.classList.contains("speaking")) { stopSpeak(); setSpeaking(false); return; }
+    const was = soundOn; soundOn = true; speak("Hallo, hier ist Lumyx aus der Praxis Dr. Sommer. Schön, dass Sie anrufen. Wie kann ich Ihnen denn helfen?"); soundOn = was;
+  });
+  // Für das Ohr schreiben: Abkürzungen ausschreiben, Zahlen sprechbar machen, Atempausen über Satzzeichen
+  function spoken(t) {
+    return t.replace(/<[^>]+>/g, "").replace(/[„“"]/g, "").replace(/\s*\(([^)]*)\)/g, ", $1,").replace(/;/g, ",").replace(/\s[–·]\s/g, ", ")
+      .replace(/\bz\. ?B\./g, "zum Beispiel").replace(/\bDr\./g, "Doktor").replace(/\bmg\b/g, "Milligramm")
+      .replace(/\bMFA\b/g, "M F A").replace(/0800 111 0 111/g, "0 8 0 0, 1 1 1, 0, 1 1 1").replace(/\b112\b/g, "eins, eins, zwei")
+      .replace(/(\d{1,2}):(\d\d) Uhr/g, "$1 Uhr $2").replace(/\s+/g, " ").trim();
+  }
+  // Ruhiges Gesprächstempo statt Vorlese-Tempo; im Notfall etwas zügiger und klarer
+  const PACE = { rounded: 0.95, airy: 0.97, glassy: 0.96, buttery: 0.96 };
+  function speak(text, mood) {
+    if (!soundOn) return;
+    const plain = spoken(text);
+    const rate = mood === "alarm" ? 1.0 : (PACE[voice] || 0.96);
+    const go = (t) => {
+      if (!soundOn) return;
+      if (t) { t.speak(plain, { voice, rate, language: "de-DE" }).catch(() => {}); return; }
+      webSpeak(plain, mood);
+    };
+    if (tts) go(tts); else ttsReady.then(go);
+  }
+  // Ohne Claude-Stimme: beste deutsche Systemstimme, Satz für Satz mit kleinen Pausen und leicht wechselnder Melodie
+  const FEMALE = ["anna", "petra", "helena", "katja", "marlene", "vicki", "hedda", "amala", "seraphina", "elke", "klara", "louisa", "google deutsch", "female", "frau"];
+  function pickVoice() {
+    const vs = speechSynthesis.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith("de"));
+    const score = v => { const n = v.name.toLowerCase(); let s = 0; if (FEMALE.some(f => n.includes(f))) s += 10; if (/natural|neural|online|premium|enhanced|wavenet|siri/.test(n)) s += 15; if (/male|mann|stefan|markus|conrad|killian|yannick/.test(n) && !/female/.test(n)) s -= 20; return s; };
+    return vs.sort((a, b) => score(b) - score(a))[0];
+  }
+  if (hasWebSpeech) { try { speechSynthesis.getVoices(); } catch (e) {} }
+  let webRun = 0;
+  function webSpeak(plain, mood) {
+    if (!hasWebSpeech) return;
+    try {
+      speechSynthesis.cancel();
+      const run = ++webRun;
+      const v = pickVoice(); const nat = v && /natural|neural|online|premium|enhanced|wavenet|siri/i.test(v.name);
+      const parts = plain.match(/[^.!?]+[.!?]*/g) || [plain];
+      parts.map(x => x.trim()).filter(Boolean).forEach((part, i, all) => {
+        const u = new SpeechSynthesisUtterance(part); u.lang = "de-DE"; if (v) u.voice = v;
+        const q = /\?$/.test(part);
+        u.rate = (mood === "alarm" ? 1.0 : nat ? 0.96 : 0.92) + (i % 2 ? 0.02 : -0.01);
+        u.pitch = (nat ? 1.0 : 1.04) + (q ? 0.05 : i % 3 === 1 ? -0.03 : 0.01);
+        u.onstart = () => { if (run === webRun) setSpeaking(true); };
+        u.onend = u.onerror = () => { if (run === webRun && i === all.length - 1) setSpeaking(false); };
+        speechSynthesis.speak(u);
+      });
+    } catch (e) {}
+  }
+  function stopSpeak() { webRun++; try { tts && tts.stop().catch(() => {}); } catch (e) {} try { hasWebSpeech && speechSynthesis.cancel(); } catch (e) {} if (!tts) setSpeaking(false); }
+  function stopMic() { if (dict && listening) dict.stop().catch(() => {}); }
+  $("micBtn").addEventListener("click", () => {
+    if (!dict) return;
+    if (listening) { stopMic(); return; }
+    stopSpeak(); $("phText").value = "";
+    dict.start().catch(err => { if (err && err.code === "not_granted") $("micBtn").hidden = true; });
+  });
+  $("spkBtn").addEventListener("click", () => {
+    soundOn = !soundOn; $("spkBtn").setAttribute("aria-pressed", soundOn); $("spkBtn").lastChild.textContent = soundOn ? "Ton an" : "Ton aus";
+    if (!soundOn) stopSpeak();
+  });
+
+  /* ---------- Dashboard ---------- */
+  const stats = { auto: 0, fwd: 0, times: [] };
+  const feed = $("feed");
+  const TYPES = { rx: "Rezept", cal: "Absage", alarm: "Notfall", human: "Rückruf" };
+  function clock(d = new Date()) { return d.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }); }
+  function addItem({ type, title, detail, example = false, transcript = 0, adoptable = true }) {
+    const el = document.createElement("div");
+    el.className = "item" + (example ? "" : " new");
+    const created = Date.now();
+    el.innerHTML = `<span class="pill ${type}">${TYPES[type]}</span><div class="item-t">${esc(title)}</div><div class="item-d">${esc(detail)}</div>
+      <div class="item-meta"><span>${clock()}</span>${transcript ? `<span>${transcript} Sätze Transkript</span>` : ""}${example ? `<span class="ex-tag">Beispiel</span>` : ""}${adoptable ? `<button class="adopt" type="button">In Akte übernehmen</button>` : `<span class="done">sofort durchgestellt</span>`}</div>`;
+    const btn = el.querySelector(".adopt");
+    if (btn) btn.addEventListener("click", () => {
+      const sec = Math.max(1, Math.round((Date.now() - created) / 1000));
+      if (!example) { stats.times.push(sec); renderKpis(); }
+      btn.replaceWith(Object.assign(document.createElement("span"), { className: "done", textContent: example ? "übernommen" : `übernommen nach ${sec} s` }));
+    });
+    feed.prepend(el);
+  }
+  function renderKpis() {
+    const set = (id, val) => { const el = $(id); if (el.textContent === String(val)) return; el.textContent = val; el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); };
+    set("kAuto", stats.auto); set("kFwd", stats.fwd);
+    set("kTime", stats.times.length ? Math.round(stats.times.reduce((a, b) => a + b, 0) / stats.times.length) + " s" : "–");
+  }
+  addItem({ type: "cal", title: "Terminabsage · Herr Kaya", detail: "Termin Do., 9:30 Uhr abgesagt. Platz kann neu vergeben werden.", example: true, transcript: 6 });
+  addItem({ type: "rx", title: "Folgerezept · Frau Lehmann", detail: "Ramipril 5 mg, Abholung in der Praxis ab morgen.", example: true, transcript: 8 });
+
+  /* ---------- Gesprächslogik ---------- */
+  const body = $("phBody");
+  let state = "idle", slots = {}, fails = 0, lines = 0, t0 = 0, tick = null, busy = false;
+  const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss");
+  const has = (s, words) => words.some(w => s.includes(w));
+  const EMERG = ["notfall", "brustschmerz", "brust schmerz", "atemnot", "luftnot", "keine luft", "bekomme schlecht luft", "bewusstlos", "ohnmacht", "umgekippt", "schlaganfall", "lahmung", "gelahmt", "kann nicht sprechen", "krampf", "starke blutung", "blutet stark", "herzinfarkt", "herzrasen", "allergische reaktion", "zunge schwillt", "vergiftung"];
+  const CRISIS = ["suizid", "umbringen", "nicht mehr leben", "mir das leben", "selbstmord"];
+  const HUMAN = ["mensch", "mitarbeiter", "mitarbeiterin", "person", "jemand", "arzthelfer", "mfa", "doktor", "arzt sprechen", "arztin sprechen", "weiterleiten", "verbinden", "praxis sprechen", "rezeption"];
+  const CANCEL = ["absag", "stornier", "nicht kommen", "kann nicht", "termin", "verschieb"];
+  const RX = ["rezept", "medikament", "tabletten", "folgeverordnung", "verordnung", "pille", "spray", "insulin"];
+  const BYE = ["tschuss", "danke", "auf wiedersehen", "nein danke", "das wars", "das war", "nichts mehr", "fertig"];
+  const YES = ["ja", "genau", "richtig", "stimmt", "passt", "korrekt", "gerne", "ok", "okay"];
+  const NO = ["nein", "falsch", "stimmt nicht", "nicht richtig", "korrigier"];
+
+  function setStatus(text, cls = "") { const s = $("phStatus"); s.className = "ph-status " + cls; $("phStatusText").textContent = text; }
+  function bubble(html, who = "bot", extra = "") {
+    const b = document.createElement("div"); b.className = `bubble ${who} ${extra}`; b.innerHTML = html; body.appendChild(b); body.scrollTop = body.scrollHeight; lines++; return b;
+  }
+  function setChips(list) {
+    const c = $("chips"); c.innerHTML = "";
+    list.forEach(([label, val, danger]) => { const b = document.createElement("button"); b.type = "button"; b.className = "chip" + (danger ? " danger" : ""); b.textContent = label; b.addEventListener("click", () => { if (!busy) handle(val || label); }); c.appendChild(b); });
+  }
+  function say(html, { chips = [], extra = "" } = {}) {
+    busy = true; setChips([]);
+    const t = document.createElement("div"); t.className = "typing"; t.innerHTML = "<i></i><i></i><i></i>"; body.appendChild(t); body.scrollTop = body.scrollHeight;
+    const delay = soundOn ? 520 + Math.random() * 420 : Math.min(1400, 450 + html.length * 6);
+    return new Promise(r => setTimeout(() => { t.remove(); bubble(html, "bot", extra); speak(html, extra === "alarm" ? "alarm" : ""); setChips(chips); busy = false; $("phText").focus({ preventScroll: true }); r(); }, delay));
+  }
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  const ACK = ["Alles klar.", "Mhm, verstehe.", "Okay, gut.", "Ja, sehr gerne."];
+  const THX = ["Danke Ihnen.", "Vielen Dank.", "Super, danke.", "Danke schön."];
+  const MAIN_CHIPS = [["Termin absagen"], ["Folgerezept"], ["Mit Mitarbeiter sprechen"], ["Ich habe Brustschmerzen", null, true]];
+
+  function startCall() {
+    if (state !== "idle") return;
+    stopSpeak();
+    phone.classList.remove("idle"); phone.style.setProperty("--rx", "0deg"); phone.style.setProperty("--ry", "0deg"); $("phIdle").hidden = true; $("phCall").hidden = false; body.innerHTML = ""; slots = {}; fails = 0; lines = 0;
+    setStatus("Verbunden mit Lumyx", "live");
+    t0 = Date.now(); clearInterval(tick); tick = setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); $("timer").textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }, 500);
+    bubble("Anruf verbunden · " + clock(), "sys");
+    state = "menu";
+    say("Praxis Dr. Sommer, guten Tag! Sie sprechen mit Lumyx, der digitalen Assistentin hier in der Praxis. Kurz vorab: Ich bin eine KI. Sollte es ein Notfall sein, sagen Sie bitte einfach „Notfall“. So, was kann ich denn für Sie tun?", { chips: MAIN_CHIPS });
+  }
+  function endCall(note = "Anruf beendet") {
+    stopSpeak(); stopMic(); clearInterval(tick); busy = false;
+    if (state !== "idle") bubble(note + " · " + $("timer").textContent, "sys");
+    state = "idle"; setChips([]);
+    setStatus("Bereit");
+    setTimeout(() => { if (state === "idle") { $("phCall").hidden = true; $("phIdle").hidden = false; $("timer").textContent = "00:00"; phone.classList.add("idle"); } }, 2600);
+  }
+  function forward(kind, reason) {
+    if (kind === "alarm") {
+      setStatus("Notfall · an Praxisteam", "alarm");
+      addItem({ type: "alarm", title: "Notfall durchgestellt", detail: reason, transcript: lines, adoptable: false });
+    } else {
+      setStatus("Weitergeleitet an MFA", "human");
+      addItem({ type: "human", title: "Rückruf erbeten" + (slots.name ? " · " + slots.name : ""), detail: reason, transcript: lines });
+    }
+    stats.fwd++; renderKpis(); state = "done";
+    setTimeout(() => endCall(kind === "alarm" ? "An Praxisteam übergeben" : "Weitergeleitet"), 5200);
+  }
+  function cleanName(raw) {
+    let n = raw.replace(/^(ich hei(ß|ss)e|mein name ist|hier ist|hier spricht|ich bin|das ist|name)\s*:?\s*/i, "").replace(/[.!?,]+$/g, "").trim();
+    n = n.split(/\s+/).slice(0, 3).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+    return n || raw.trim();
+  }
+
+  async function handle(text) {
+    text = String(text || "").trim(); if (!text || busy || state === "idle" || state === "done") return;
+    bubble(esc(text), "me"); $("phText").value = "";
+    const s = norm(text);
+
+    if (has(s, CRISIS)) {
+      await say("Danke, dass Sie das sagen. Sie sind nicht allein. Wenn Sie in akuter Gefahr sind, wählen Sie bitte sofort die <b>112</b>. Die Telefonseelsorge erreichen Sie rund um die Uhr unter <b>0800 111 0 111</b>. Ich verbinde Sie jetzt mit dem Praxisteam.", { extra: "alarm" });
+      return forward("alarm", "Anrufende Person in seelischer Krise. Sofortiger Rückruf bzw. Übernahme nötig.");
+    }
+    if (has(s, EMERG)) {
+      await say("Das klingt nach einem möglichen Notfall, das nehme ich sehr ernst. Bei Lebensgefahr legen Sie bitte auf und wählen sofort die <b>112</b>. Ich verbinde Sie jetzt direkt mit dem Praxisteam. Bitte bleiben Sie am Telefon.", { extra: "alarm" });
+      return forward("alarm", "Warnsignal erkannt: „" + text.slice(0, 80) + "“. Sofort durchgestellt, Hinweis auf 112 gegeben.");
+    }
+    if (has(s, HUMAN) && !["rx_name", "cal_name"].includes(state)) {
+      await say("Aber natürlich, sehr gerne. Ich verbinde Sie mit einer Kollegin aus der Praxis. Und falls gerade niemand frei ist, ruft Sie das Team so schnell wie möglich zurück.");
+      return forward("human", "Wunsch nach persönlichem Gespräch" + (slots.topic ? " (Thema: " + slots.topic + ")" : "") + ".");
+    }
+
+    switch (state) {
+      case "menu": {
+        if (has(s, RX)) { state = "rx_name"; slots.topic = "Rezept"; fails = 0; return say(`${pick(ACK)} Das Rezept nehme ich gerne für Sie auf. Sagen Sie mir bitte kurz Ihren Namen?`); }
+        if (has(s, CANCEL)) { state = "cal_name"; slots.topic = "Termin"; fails = 0; return say("Ach, kein Problem, das kann ja immer mal passieren. Dann trage ich die Absage gleich ein. Wie ist denn Ihr Name, bitte?"); }
+        if (has(s, BYE)) { await say("Sehr gerne. Dann wünsche ich Ihnen noch einen schönen Tag. Auf Wiederhören!"); return endCall(); }
+        fails++;
+        if (fails >= 2) { await say("Hm, ich bin mir nicht ganz sicher, ob ich Sie richtig verstanden habe. Damit nichts verloren geht, verbinde ich Sie lieber direkt mit dem Praxisteam."); return forward("human", "Anliegen nicht eindeutig: „" + text.slice(0, 80) + "“."); }
+        return say("Oh, Entschuldigung, das habe ich leider nicht ganz verstanden. Ich kann einen <b>Termin absagen</b>, ein <b>Folgerezept</b> aufnehmen oder Sie mit dem <b>Praxisteam</b> verbinden. Was möchten Sie?", { chips: MAIN_CHIPS });
+      }
+      case "rx_name": slots.name = cleanName(text); state = "rx_med"; return say(`${pick(THX)} Und um welches Medikament geht es? Wenn Sie die Stärke gerade wissen, gerne mit dazu.`);
+      case "rx_med": slots.med = text.replace(/[.!?]+$/, ""); state = "rx_way"; return say("Gut, das habe ich mir notiert. Und wie möchten Sie das Rezept bekommen: zum Abholen hier in der Praxis, oder als E-Rezept auf die Karte?", { chips: [["Abholung in der Praxis"], ["E-Rezept auf die Karte"]] });
+      case "rx_way": {
+        slots.way = has(s, ["karte", "e-rezept", "erezept", "elektron", "app"]) ? "E-Rezept auf die Gesundheitskarte" : "Abholung in der Praxis";
+        state = "rx_confirm";
+        return say(`Ich wiederhole das kurz, damit auch alles stimmt. Ein Folgerezept für <b>${esc(slots.name)}</b>, Medikament <b>${esc(slots.med)}</b>, ${esc(slots.way)}. Passt das so?`, { chips: [["Ja, richtig"], ["Nein, korrigieren"]] });
+      }
+      case "rx_confirm": {
+        if (has(s, NO)) { state = "rx_name"; return say("Kein Problem, dann gehen wir es einfach noch einmal zusammen durch. Wie ist Ihr vollständiger Name?"); }
+        if (!has(s, YES)) return say("Sagen Sie einfach „Ja“, wenn alles stimmt, oder „Nein“, dann korrigieren wir das.", { chips: [["Ja, richtig"], ["Nein, korrigieren"]] });
+        addItem({ type: "rx", title: "Folgerezept · " + slots.name, detail: `${slots.med}, ${slots.way}. Freigabe durch Ärzt:in ausstehend.`, transcript: lines });
+        stats.auto++; renderKpis(); state = "more";
+        return say("Wunderbar, vielen Dank. Ich habe alles an das Praxisteam weitergegeben. Die Ärztin schaut sich das Rezept noch an, meistens ist es am nächsten Werktag fertig. Kann ich sonst noch etwas für Sie tun?", { chips: [["Termin absagen"], ["Nein, danke"]] });
+      }
+      case "cal_name": slots.name = cleanName(text); state = "cal_date"; return say(`${pick(THX)} Und wann wäre der Termin gewesen? Also welcher Tag, und um wie viel Uhr?`, { chips: [["Morgen, 10 Uhr"], ["Donnerstag, 9:30 Uhr"]] });
+      case "cal_date": slots.date = text.replace(/[.!?]+$/, ""); state = "cal_new"; return say(`${pick(ACK)} Möchten Sie denn gleich einen neuen Termin? Dann ruft Sie das Praxisteam mit einem Vorschlag zurück.`, { chips: [["Ja, bitte Rückruf"], ["Nein, nur absagen"]] });
+      case "cal_new": {
+        slots.newApt = has(s, YES) && !has(s, ["nein", "nur absagen"]);
+        state = "cal_confirm";
+        return say(`Ich wiederhole das kurz. Absage für <b>${esc(slots.name)}</b>, Termin <b>${esc(slots.date)}</b>${slots.newApt ? ", mit Rückruf für einen neuen Termin" : ""}. Passt das so?`, { chips: [["Ja, richtig"], ["Nein, korrigieren"]] });
+      }
+      case "cal_confirm": {
+        if (has(s, NO)) { state = "cal_name"; return say("Kein Problem, das korrigieren wir. Wie ist Ihr vollständiger Name?"); }
+        if (!has(s, YES)) return say("Sagen Sie einfach „Ja“, wenn alles stimmt, oder „Nein“, dann korrigieren wir das.", { chips: [["Ja, richtig"], ["Nein, korrigieren"]] });
+        addItem({ type: "cal", title: "Terminabsage · " + slots.name, detail: `Termin ${slots.date} abgesagt.${slots.newApt ? " Rückruf für neuen Termin gewünscht." : " Platz kann neu vergeben werden."}`, transcript: lines });
+        stats.auto++; renderKpis(); state = "more";
+        return say("So, Ihr Termin ist abgesagt. Lieb, dass Sie Bescheid geben, so kann jemand anderes den Platz bekommen. Kann ich sonst noch etwas für Sie tun?", { chips: [["Folgerezept"], ["Nein, danke"]] });
+      }
+      case "more": {
+        if (has(s, RX)) { state = "rx_med"; slots.topic = "Rezept"; return say("Ja, gerne. Für welches Medikament brauchen Sie denn das Folgerezept?"); }
+        if (has(s, CANCEL)) { state = "cal_date"; slots.topic = "Termin"; return say("Ja, gerne. Für welchen Tag und welche Uhrzeit war der Termin denn?"); }
+        await say("Alles klar. Dann wünsche ich Ihnen alles Gute und noch einen schönen Tag. Auf Wiederhören!");
+        return endCall();
+      }
+    }
+  }
+  function submit() { handle($("phText").value); }
+  $("phForm").addEventListener("submit", (e) => { e.preventDefault(); submit(); });
+  $("callBtn").addEventListener("click", startCall);
+  $("hangBtn").addEventListener("click", () => endCall("Aufgelegt"));
+  $("heroCall").addEventListener("click", () => { $("demo").scrollIntoView({ behavior: "smooth", block: "center" }); startCall(); });
+
+  /* ---------- Preise ---------- */
+  let yearly = false;
+  function tween(el, to, fmtFn) {
+    const from = el._v == null ? to : el._v; el._v = to; cancelAnimationFrame(el._raf);
+    if (reduce || from === to) { el.textContent = fmtFn(to); return; }
+    const t0 = performance.now(), dur = 450;
+    const step = (now) => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = fmtFn(Math.round(from + (to - from) * e)); if (k < 1) el._raf = requestAnimationFrame(step); };
+    el._raf = requestAnimationFrame(step);
+  }
+  function renderPrices() {
+    document.querySelectorAll(".amt").forEach(el => { const m = +el.dataset.m; tween(el, yearly ? Math.round(m * 0.85) : m, v => v + " €"); });
+    $("billM").setAttribute("aria-pressed", !yearly); $("billY").setAttribute("aria-pressed", yearly);
+    document.querySelectorAll(".per").forEach(el => { el.textContent = yearly ? "/ Monat, jährlich" : "/ Monat"; });
+    calc();
+  }
+  $("billM").addEventListener("click", () => { yearly = false; renderPrices(); });
+  $("billY").addEventListener("click", () => { yearly = true; renderPrices(); });
+  document.querySelectorAll("[data-plan]").forEach(a => a.addEventListener("click", () => { $("lfPlan").value = a.dataset.plan; }));
+
+  /* ---------- Rechner ---------- */
+  const fmt = (n) => Math.round(n).toLocaleString("de-DE");
+  function calc() {
+    const calls = +$("cCalls").value, min = +$("cMin").value, share = +$("cShare").value, rate = +$("cRate").value;
+    $("oCalls").textContent = calls; $("oMin").textContent = String(min).replace(".", ","); $("oShare").textContent = share + " %"; $("oRate").textContent = rate + " €";
+    const monthCalls = calls * 21;
+    const hours = monthCalls * (share / 100) * min / 60;
+    const value = hours * rate;
+    const plan = monthCalls <= 600 ? ["Basis", 149] : monthCalls <= 1500 ? ["Praxis", 289] : ["MVZ", 549];
+    const price = yearly ? Math.round(plan[1] * 0.85) : plan[1];
+    const extra = Math.max(0, monthCalls - (plan[0] === "Basis" ? 600 : plan[0] === "Praxis" ? 1500 : 4000)) * 0.25;
+    const cost = price + extra;
+    tween($("rHours"), Math.round(hours), v => fmt(v) + " Std.");
+    tween($("rValue"), Math.round(value), v => fmt(v) + " €");
+    $("rPlan").textContent = plan[0] + " · " + fmt(cost) + " €" + (extra ? " inkl. Zusatzanrufe" : "");
+    const net = value - cost;
+    $("rNet").textContent = (net >= 0 ? "+" : "−") + fmt(Math.abs(net)) + " € / Monat";
+  }
+  ["cCalls", "cMin", "cShare", "cRate"].forEach(id => $(id).addEventListener("input", calc));
+  renderPrices();
+
+  /* ---------- Motion ---------- */
+  // Fortschrittsbalken beim Scrollen
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => { ticking = false; const h = document.documentElement, max = h.scrollHeight - h.clientHeight; $("progress").style.setProperty("--p", max > 0 ? Math.min(1, h.scrollTop / max) : 0); });
+  };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  if (!reduce) {
+    // Telefon neigt sich zum Mauszeiger, solange kein Gespräch läuft
+    const demo = $("demo");
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      demo.addEventListener("pointermove", (e) => {
+        if (!phone.classList.contains("idle")) return;
+        const r = phone.getBoundingClientRect();
+        const x = Math.max(-1, Math.min(1, (e.clientX - r.left - r.width / 2) / r.width)), y = Math.max(-1, Math.min(1, (e.clientY - r.top - r.height / 2) / r.height));
+        phone.style.setProperty("--ry", (x * 9).toFixed(1) + "deg"); phone.style.setProperty("--rx", (-y * 7).toFixed(1) + "deg");
+      });
+      demo.addEventListener("pointerleave", () => { phone.style.setProperty("--rx", "0deg"); phone.style.setProperty("--ry", "0deg"); });
+    }
+    // Abschnitte gleiten beim Scrollen herein; nur was beim Laden außerhalb des Bildschirms liegt
+    if ("IntersectionObserver" in window) {
+      const vh = innerHeight;
+      const io = new IntersectionObserver((entries) => entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const el = en.target; io.unobserve(el);
+        if (el.classList.contains("flow")) { el.classList.remove("pre"); return; }
+        el.classList.add("in");
+        setTimeout(() => { el.classList.remove("rv", "in"); el.style.removeProperty("--d"); }, 1100 + (parseInt(el.style.getPropertyValue("--d")) || 0));
+      }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+      document.querySelectorAll(".sec-head, .step, .feat, .aud, .target, .privacy, .plan, .calc, .faq details, .contact, .footnote, .price-note").forEach(el => {
+        if (el.getBoundingClientRect().top < vh * 0.92) return;
+        const sibs = Array.from(el.parentElement.children).filter(c => c.className === el.className || c.tagName === el.tagName && el.tagName === "DETAILS");
+        el.style.setProperty("--d", Math.min(5, Math.max(0, sibs.indexOf(el))) * 90 + "ms");
+        el.classList.add("rv"); io.observe(el);
+      });
+      const flow = document.querySelector(".flow");
+      if (flow && flow.getBoundingClientRect().top > vh * 0.7) { flow.classList.add("pre"); io.observe(flow); }
+    }
+  }
+
+  /* ---------- Kontaktformular (Demo) ---------- */
+  $("leadForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = $("lfName").value.trim(), praxis = $("lfPraxis").value.trim(), mail = $("lfMail").value.trim();
+    const ok = name && praxis && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+    $("lfErr").hidden = !!ok; if (!ok) return;
+    $("leadForm").hidden = true; const box = $("lfOk"); box.hidden = false;
+    box.innerHTML = `<b>Danke, ${esc(name)}!</b><br>Ihre Anfrage für das Paket ${esc($("lfPlan").value)} ist hier in der Demo erfasst. Da Lumyx ein Studienprojekt ist, wird sie nicht verschickt.`;
+  });
+})();
+</script>
+<script type="importmap">
+  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from "three";
+
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------------- 3D-Szene: Band aus leuchtenden Linien ---------------- */
+const canvas = document.getElementById("scene");
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+} catch (e) {
+  document.body.classList.add("no-webgl");
+  canvas.remove();
+}
+
+if (renderer) {
+  canvas.style.pointerEvents = "none";
+  document.body.classList.remove("no-webgl");
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearColor(0xffffff, 1);
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0xffffff, 8, 22);
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0, 0, 10);
+
+  const isSmall = innerWidth < 700;
+  const LINES = isSmall ? 90 : 160;      // Anzahl der Linien im Band
+  const SEG = isSmall ? 140 : 220;       // Punkte pro Linie
+
+  // Jede Linie ist ein dünner Streifen (2 Vertices pro Punkt), die Form entsteht komplett im Shader.
+  const count = LINES * SEG * 2;
+  const aT = new Float32Array(count), aI = new Float32Array(count), aSide = new Float32Array(count);
+  const index = [];
+  let v = 0;
+  for (let i = 0; i < LINES; i++) {
+    for (let j = 0; j < SEG; j++) {
+      for (let s = 0; s < 2; s++) {
+        aT[v] = j / (SEG - 1); aI[v] = i / (LINES - 1); aSide[v] = s ? 1 : -1; v++;
+      }
+      if (j < SEG - 1) {
+        const a = (i * SEG + j) * 2;
+        index.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
+      }
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(count * 3), 3)); // Platzhalter
+  geo.setAttribute("aT", new THREE.BufferAttribute(aT, 1));
+  geo.setAttribute("aI", new THREE.BufferAttribute(aI, 1));
+  geo.setAttribute("aSide", new THREE.BufferAttribute(aSide, 1));
+  geo.setIndex(index);
+  geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 50);
+
+  const uniforms = {
+    uTime: { value: 0 },
+    uScroll: { value: 0 },
+    uMouse: { value: new THREE.Vector2() },
+    uRes: { value: new THREE.Vector2(1, 1) },
+    uWidth: { value: isSmall ? 1.8 : 1.6 },
+  };
+
+  const mat = new THREE.ShaderMaterial({
+    uniforms,
+    side: THREE.DoubleSide,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.NormalBlending,
+    vertexShader: /* glsl */`
+      attribute float aT, aI, aSide;
+      uniform float uTime, uScroll, uWidth;
+      uniform vec2 uMouse, uRes;
+      varying float vT, vI, vEdge, vDepth;
+
+      vec3 ribbon(float t, float i) {
+        float time = uTime;
+        float x = (t - 0.5) * 16.0;
+        // Grundwelle des Bands
+        float y = sin(t * 3.2 + time * 0.45) * 1.1 + sin(t * 7.0 - time * 0.3) * 0.25;
+        float z = cos(t * 2.3 + time * 0.35) * 1.2;
+        // Verdrehung: wird beim Scrollen stärker
+        float twist = t * 3.14159 * (1.4 + uScroll * 2.5) + time * 0.25 + uScroll * 4.0;
+        float spread = (i - 0.5) * (1.4 + 1.4 * sin(t * 3.14159)) * (1.0 + uScroll * 0.8);
+        // Linien fächern sich leicht unterschiedlich auf
+        float wob = sin(i * 40.0 + t * 9.0 + time) * 0.05;
+        y += cos(twist) * spread + wob;
+        z += sin(twist) * spread;
+        // Maus zieht das Band an
+        float near = exp(-pow((x / 8.0 - uMouse.x) * 3.0, 2.0));
+        y += uMouse.y * 1.6 * near;
+        z += near * 0.8 * length(uMouse);
+        return vec3(x, y, z);
+      }
+
+      void main() {
+        vT = aT; vI = aI;
+        vec3 p = ribbon(aT, aI);
+        vec3 p2 = ribbon(aT + 0.002, aI);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        vec4 mv2 = modelViewMatrix * vec4(p2, 1.0);
+        vec4 c1 = projectionMatrix * mv;
+        vec4 c2 = projectionMatrix * mv2;
+        // Streifen immer zur Kamera gerichtet, konstante Breite in Pixeln
+        vec2 s1 = c1.xy / c1.w * uRes;
+        vec2 s2 = c2.xy / c2.w * uRes;
+        vec2 dir = normalize(s2 - s1 + 1e-5);
+        vec2 n = vec2(-dir.y, dir.x);
+        c1.xy += n * aSide * uWidth / uRes * c1.w;
+        vEdge = aSide;
+        vDepth = -mv.z;
+        gl_Position = c1;
+      }
+    `,
+    fragmentShader: /* glsl */`
+      uniform float uTime, uScroll;
+      varying float vT, vI, vEdge, vDepth;
+
+      // Ruhige Mint-Palette: helles Mint bis tiefes Petrol
+      vec3 palette(float x) {
+        vec3 c0 = vec3(0.70, 0.93, 0.85);
+        vec3 c1 = vec3(0.24, 0.81, 0.63);
+        vec3 c2 = vec3(0.04, 0.50, 0.38);
+        x = fract(x) * 2.0;
+        return x < 1.0 ? mix(c0, c1, x) : mix(c1, c2, x - 1.0);
+      }
+
+      void main() {
+        float k = vT * 0.9 + vI * 0.35 - uTime * 0.06 + uScroll * 0.6;
+        vec3 col = palette(k);
+        float edge = 1.0 - abs(vEdge);                 // weiche Kanten
+        float fade = smoothstep(0.0, 0.12, vT) * (1.0 - smoothstep(0.88, 1.0, vT));
+        float pulse = 0.6 + 0.4 * sin(vT * 30.0 - uTime * 3.0 + vI * 12.0);
+        float depth = 1.0 - smoothstep(6.0, 22.0, vDepth);
+        float dim = 0.5 - 0.3 * smoothstep(0.04, 0.2, uScroll);   // nach dem Hero leiser, damit Text lesbar bleibt
+        float a = edge * fade * depth * (0.55 + 0.45 * pulse) * dim;
+        gl_FragColor = vec4(col, a * 0.75);
+      }
+    `,
+  });
+  const ribbon = new THREE.Mesh(geo, mat);
+  scene.add(ribbon);
+
+  /* Funkelnde Partikel im Raum */
+  const PN = isSmall ? 160 : 360;
+  const pPos = new Float32Array(PN * 3), pCol = new Float32Array(PN * 3);
+  const neon = [0x3ecfa0, 0x0a7f61, 0x9fe7cf].map(c => new THREE.Color(c));
+  for (let i = 0; i < PN; i++) {
+    pPos[i * 3] = (Math.random() - 0.5) * 30;
+    pPos[i * 3 + 1] = (Math.random() - 0.5) * 30;
+    pPos[i * 3 + 2] = (Math.random() - 0.5) * 20 - 3;
+    const c = neon[i % neon.length];
+    pCol[i * 3] = c.r; pCol[i * 3 + 1] = c.g; pCol[i * 3 + 2] = c.b;
+  }
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
+  pGeo.setAttribute("color", new THREE.BufferAttribute(pCol, 3));
+  const dot = document.createElement("canvas"); dot.width = dot.height = 64;
+  const g = dot.getContext("2d"), grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grd.addColorStop(0, "rgba(255,255,255,1)"); grd.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grd; g.fillRect(0, 0, 64, 64);
+  const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({
+    size: 0.09, vertexColors: true, map: new THREE.CanvasTexture(dot),
+    transparent: true, opacity: 0.45, depthWrite: false,
+  }));
+  scene.add(particles);
+
+  /* Größe, Maus, Scroll */
+  function resize() {
+    const w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    // Auf schmalen Bildschirmen weiter weg, damit das Band ins Bild passt
+    camera.position.z = w < h ? 16 : 10;
+    camera.updateProjectionMatrix();
+    uniforms.uRes.value.set(w / 2, h / 2);
+  }
+  addEventListener("resize", resize); resize();
+
+  const mouse = new THREE.Vector2(), mouseSmooth = new THREE.Vector2();
+  addEventListener("pointermove", e => {
+    mouse.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight * 2 - 1));
+  });
+
+  let scrollSmooth = 0;
+  const clock = new THREE.Clock();
+  function frame() {
+    const dt = Math.min(clock.getDelta(), 0.05);
+    uniforms.uTime.value += dt * (reduceMotion ? 0.15 : 1);
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const target = max > 0 ? scrollY / max : 0;
+    scrollSmooth += (target - scrollSmooth) * 0.06;
+    uniforms.uScroll.value = scrollSmooth;
+    mouseSmooth.lerp(mouse, 0.05);
+    uniforms.uMouse.value.copy(mouseSmooth);
+
+    // Kamera fährt beim Scrollen um das Band herum
+    ribbon.rotation.y = scrollSmooth * Math.PI * 0.9 + mouseSmooth.x * 0.15;
+    ribbon.rotation.x = -0.25 + mouseSmooth.y * 0.1 + scrollSmooth * 0.6;
+    ribbon.position.y = -scrollSmooth * 1.5;
+    particles.rotation.y = uniforms.uTime.value * 0.02 + scrollSmooth * 1.2;
+    particles.position.y = scrollSmooth * 4;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+</script>
+</body>
+</html>
