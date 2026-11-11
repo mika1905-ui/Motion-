@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Häufige Fragen · FLUXE Studio</title>
+<meta name="description" content="Antworten zu Ablauf, Preisen, Werbespots, Webseiten und Rechtlichem.">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23d4ff3a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="faq">
+<main>
+
+  <section class="phero"><p class="kicker reveal">FAQ</p><h1 class="reveal">Gut zu wissen.</h1>
+    <p class="lead reveal">Die häufigsten Fragen – nach Themen sortiert. Deine Frage ist nicht dabei? <a href="kontakt.html" style="text-decoration:underline">Schreib mir.</a></p></section>
+  <div class="seg-wrap"><div class="section-head"><div class="seg" role="tablist" id="seg"><span class="seg-ind"></span></div></div></div>
+  <section class="section-head"><div id="faqs"></div></section>
+</main>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="site.js"></script>
+<script>
+(() => {
+  const { esc } = window.SITE;
+  const cats = [...new Set(FAQ.map(f => f.cat))];
+  document.getElementById('seg').insertAdjacentHTML('beforeend', '<button data-tab="alle">Alle</button>' + cats.map(c => `<button data-tab="${esc(c)}">${esc(c)}</button>`).join(''));
+  document.getElementById('faqs').innerHTML = ['alle', ...cats].map(c => `<div data-tabpanel="${esc(c)}" hidden><div class="faq-list" style="padding:0;margin-top:20px">${FAQ.filter(f => c === 'alle' || f.cat === c).map(f => `<details class="reveal"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('')}</div></div>`).join('');
+  const set = window.SITE.tabs(document.querySelector('main'), () => {});
+  set('alle');
+})();
+</script>
+</body>
+</html>

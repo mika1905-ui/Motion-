@@ -1,0 +1,127 @@
+/* Inhalte der Seite: Branchen, Projekte, Preise, Stellen, Team, FAQ.
+   Neue Projekte einfach unten in PROJECTS ergänzen – der Branchenfilter
+   zeigt leere Branchen automatisch als "Demnächst verfügbar". */
+
+window.BRANCHEN = [
+  { id: 'automotive', name: 'Automotive', icon: '◐', color: '#1c69d4' },
+  { id: 'tech', name: 'Tech & Elektronik', icon: '◇', color: '#ff8a3d' },
+  { id: 'food', name: 'Food & Getränke', icon: '◉', color: '#d4ff3a' },
+  { id: 'lifestyle', name: 'Lifestyle & Konsumgüter', icon: '✦', color: '#4aa8ff' },
+  { id: 'gesundheit', name: 'Gesundheit & Praxen', icon: '✚', color: '#3ecfa0' },
+  { id: 'immobilien', name: 'Immobilien', icon: '▲', color: '#c9a76b' },
+  { id: 'gastro', name: 'Gastronomie & Nightlife', icon: '☾', color: '#ff2d55' },
+  { id: 'mode', name: 'Mode & Beauty', icon: '❖', color: '#e8a0c8' },
+  { id: 'sport', name: 'Sport & Fitness', icon: '◆', color: '#ffb800' },
+  { id: 'handwerk', name: 'Handwerk & Lokales', icon: '■', color: '#9aa0a6' },
+];
+
+window.PROJECTS = [
+  { id: 'bmw', kind: 'spot', branche: 'automotive', title: 'BMW M', sub: 'One Letter.', format: '9:16 · 15 s',
+    video: 'video/bmw.mp4', poster: 'img/spots/bmw.webp', color: '#1c69d4', featured: true,
+    text: 'Sechs M-Modelle aus vier Jahrzehnten, freigestellt aus echten Fotos und in ein virtuelles Studio gesetzt: Bodenspiegelung, Kontaktschatten, Lichtkante und langsame Kamerafahrt. Eigener Score mit Sub-Pulsen auf dem Schnitt.',
+    tags: ['Studio-Look', 'Freisteller', 'Sounddesign', 'Hochformat'] },
+  { id: 'iphone', kind: 'spot', branche: 'tech', title: 'iPhone 17 Pro', sub: 'Gemacht für Pro.', format: '9:16 · 13 s',
+    video: 'video/iphone.mp4', poster: 'img/spots/iphone.webp', color: '#ff8a3d', featured: true,
+    text: 'Produkt-Spot im Keynote-Look: echte Produktfotos, sauber freigestellt und als 3D-Körper mit Aluminium-Kante, Perspektive und Spiegelung inszeniert. Kamera-Makro, Farbvarianten und Endcard.',
+    tags: ['Produkt-Spot', '3D-Inszenierung', 'Keynote-Look'] },
+  { id: 'ferrari', kind: 'spot', branche: 'automotive', title: 'Ferrari', sub: 'The Hypercar Dynasty', format: '16:9 · 13 s', wide: true,
+    video: 'video/ferrari.mp4', poster: 'img/spots/ferrari.webp', color: '#ff2800',
+    text: 'Sechs Hypercars von F40 bis F80 im Kino-Format mit Letterbox, rotem Studio und Wappen-Endcard.',
+    tags: ['Kino-Format', 'Studio-Look', '16:9'] },
+  { id: 'porsche', kind: 'spot', branche: 'automotive', title: 'Porsche', sub: 'Sechs Charaktere. Ein Herzschlag.', format: '16:9 · 13 s', wide: true,
+    video: 'video/porsche.mp4', poster: 'img/spots/porsche.webp', color: '#b5b5b5',
+    text: 'Helles Studio statt Dunkelheit: sechs Modelle in einer ruhigen, cleanen Inszenierung.',
+    tags: ['Helles Studio', '16:9'] },
+  { id: 'volta', kind: 'web', branche: 'food', title: 'VOLTA', sub: '3D-Produktseite · Energy Drink', color: '#d4ff3a', featured: true,
+    live: '../volta/', images: ['img/volta-1.webp', 'img/volta-2.webp', 'img/volta-3.webp'], mobile: 'img/volta-mobile.webp',
+    text: 'Eine Dose, die man anfassen will: Sie fällt mit einem Splash in die Szene, dreht sich beim Scrollen, öffnet die Lasche und versprüht Tropfen. Bei jedem Sortenwechsel färbt sich die ganze Seite um.',
+    tags: ['Three.js', 'Scroll-Animation', 'Shop & Abo'], note: 'Konzeptprojekt mit fiktiver Marke.' },
+  { id: 'kryo', kind: 'web', branche: 'lifestyle', title: 'KRYO', sub: '3D-Shop · Nicotine Pouches', color: '#4aa8ff',
+    live: '../kryo/', images: ['img/kryo-1.webp', 'img/kryo-2.webp', 'img/kryo-3.webp'], mobile: 'img/kryo-mobile.webp',
+    text: 'Apple-Look für ein Produkt aus dem Plastikregal: Der Deckel hebt sich, 20 Pouches fliegen heraus, jede Sorte hat eigene Farbe. Dazu Stärke-Skala, Bundles, Warenkorb und Altersabfrage.',
+    tags: ['Three.js', 'Warenkorb', '18+-Gate'], note: 'Konzeptprojekt mit fiktiver Marke.' },
+  { id: 'pablo', kind: 'web', branche: 'lifestyle', title: 'Pablo Ice Cold', sub: 'Rebrand-Konzept · Händler-Shop', color: '#ff3b3b',
+    live: '../kryo/pablo.html', images: ['img/pablo-1.webp', 'img/pablo-2.webp', 'img/pablo-3.webp'], mobile: 'img/pablo-mobile.webp',
+    text: 'Dieselbe Engine, echtes Produkt: Das Originaldesign liegt als Textur auf der 3D-Dose, Farben und Texte sind umgestellt. Zeigt, wie schnell sich das System auf eine neue Marke anpassen lässt.',
+    tags: ['Markenwechsel', 'Gleiche Engine'], note: 'Unbeauftragte Spec-Arbeit, keine Verbindung zur Marke Pablo.' },
+  { id: 'lumyx', kind: 'web', branche: 'gesundheit', title: 'Lumyx', sub: 'SaaS-Website · KI-Praxistelefon', color: '#3ecfa0', light: true, featured: true,
+    live: '../', images: ['img/lumyx-1.webp', 'img/lumyx-2.webp', 'img/lumyx-3.webp'], mobile: 'img/lumyx-mobile.webp',
+    text: 'Ruhig, klinisch sauber, vertrauenswürdig: dezentes 3D-Linienband, funktionierende Telefon-Demo mit Sprachausgabe, Praxis-Dashboard, Ersparnis-Rechner und Preis-Umschalter.',
+    tags: ['Interaktive Demo', 'Preisrechner', 'B2B'], note: 'Konzeptprojekt mit fiktiver Marke.' },
+];
+
+window.PRICES = {
+  spots: { label: 'Werbespots', items: [
+    { name: 'Social Spot', price: 290, unit: '', text: 'Ein Spot für TikTok, Reels oder Ads – Animation, Texte und eigener Sound.', list: ['10–20 Sekunden', '9:16', '2 Korrekturrunden'] },
+    { name: 'Produkt-Spot', price: 490, unit: '', badge: 'Beliebt', text: 'Dein Produkt im Studio-Look: freigestellt, in 3D inszeniert, mit Kamerafahrt.', list: ['Bis 20 Sekunden', '9:16 + 16:9', 'Freisteller & Retusche', '2 Korrekturrunden'] },
+    { name: 'Reel-Abo', price: 690, unit: '/ Monat', text: 'Jeden Monat frischer Content im gleichen Look. Ideal für Gastro, Clubs und lokale Marken.', list: ['3 Spots pro Monat', 'Planung inklusive', 'Monatlich kündbar'] },
+    { name: 'Kampagne', price: 1190, unit: '', text: 'Fünf Spots aus einem Guss für einen Launch oder eine Aktion.', list: ['5 Spots', 'Alle Formate', 'Untertitel', 'Thumbnail-Set'] },
+  ]},
+  web: { label: 'Webseiten', items: [
+    { name: 'Landingpage', price: 790, unit: '', text: 'Eine starke Seite für ein Angebot, ein Event oder eine Kampagne.', list: ['1 Seite', 'Kontaktformular', 'Mobil optimiert', 'Hosting-Setup'] },
+    { name: '3D-Website', price: 1490, unit: '', badge: 'Signature', text: 'Produkt- oder Markenseite mit echter 3D-Szene und Scroll-Animation.', list: ['Bis 5 Bereiche', '3D-Szene', 'Kontaktformular', 'SEO-Basics'] },
+    { name: 'Online-Shop', price: 2490, unit: '', text: 'Shop mit sicherer Zahlung (Karte, PayPal, Apple Pay) über Stripe oder Shopify.', list: ['Produktseiten', 'Warenkorb & Checkout', 'Rechtstexte-Einbindung', 'Einweisung'] },
+    { name: 'Relaunch', price: null, unit: '', text: 'Deine bestehende Seite modern, schnell und mobil – inklusive Umzug.', list: ['Analyse', 'Neues Design', 'Umzug & Weiterleitungen'] },
+  ]},
+  pakete: { label: 'Pakete', items: [
+    { name: 'Starter', price: 990, unit: '', text: 'Für den Start: Landingpage und ein passender Spot.', list: ['Landingpage', '1 Social Spot', 'Einheitlicher Look'] },
+    { name: 'Launch', price: 2490, unit: '', badge: 'Empfohlen', text: 'Website und drei Spots aus einem Guss für einen Produktlaunch.', list: ['3D-Website', '3 Spots', 'Alle Social-Formate', 'Launch-Begleitung'] },
+    { name: 'Brand', price: 3990, unit: '', text: 'Der komplette Auftritt: Website, Kampagne und Betreuung für 3 Monate.', list: ['3D-Website oder Shop', '5 Spots', '3 Monate Betreuung Plus'] },
+  ]},
+  betreuung: { label: 'Betreuung', items: [
+    { name: 'Basic', price: 49, unit: '/ Monat', text: 'Deine Seite bleibt sicher, schnell und erreichbar.', list: ['Hosting & Domain-Verwaltung', 'Updates & Backups', 'Erreichbarkeits-Check'] },
+    { name: 'Plus', price: 99, unit: '/ Monat', badge: 'Beliebt', text: 'Wie Basic – plus kleine Änderungen jeden Monat.', list: ['Alles aus Basic', '1 Stunde Änderungen', 'Monatlicher Kurzbericht'] },
+    { name: 'Content', price: 199, unit: '/ Monat', text: 'Website-Betreuung und ein frischer Spot pro Monat.', list: ['Alles aus Plus', '1 Social Spot / Monat', 'Priorisierte Antwort'] },
+  ]},
+};
+/* Katalog zum Dazunehmen – mit „+“ landet ein Punkt in der Anfrage. */
+window.CATALOG = [
+  { group: 'Für Spots', items: [
+    { name: 'Untertitel / Captions', price: '29 €', text: 'Eingebrannte Untertitel im Look des Spots.', why: 'Ein Großteil schaut Reels ohne Ton – ohne Text geht die Botschaft verloren.' },
+    { name: 'Zusätzliches Format', price: '39 €', text: '1:1, 4:5 oder 16:9 zusätzlich zum Hochformat.', why: 'Jede Plattform hat ihr Format. Passend zugeschnitten wirkt es nativ.' },
+    { name: 'Thumbnail-Set', price: '39 €', text: 'Drei Vorschaubilder für YouTube, Reels-Cover und Ads.', why: 'Das Vorschaubild entscheidet, ob überhaupt geklickt wird.' },
+    { name: 'Lizenzierte Musik', price: 'nach Aufwand', text: 'Bekannter Stil, sauber lizenziert für Werbung.', why: 'Nicht lizenzierte Musik kann Ads sperren oder Abmahnungen auslösen.' },
+  ]},
+  { group: 'Für Webseiten', items: [
+    { name: 'Terminbuchung einbinden', price: '79 €', text: 'Kunden buchen direkt freie Termine auf deiner Seite.', why: 'Weniger Hin-und-her per Telefon, mehr Termine auch abends und am Wochenende.' },
+    { name: 'Google-Unternehmensprofil', price: '79 €', text: 'Einrichten oder überarbeiten, mit Fotos und Öffnungszeiten.', why: 'Bei „in der Nähe“-Suchen ist das Profil oft wichtiger als die Website.' },
+    { name: 'SEO-Grundpaket', price: 'ab 149 €', text: 'Titel, Beschreibungen, Struktur und Ladezeit optimiert.', why: 'Eine schöne Seite, die keiner findet, verkauft nichts.' },
+    { name: 'Barrierefreiheits-Check', price: 'ab 149 €', text: 'Kontraste, Tastaturbedienung, Alternativtexte geprüft und verbessert.', why: 'Für viele Online-Shops gilt seit Juni 2025 das Barrierefreiheitsstärkungsgesetz.' },
+    { name: 'Mehrsprachigkeit', price: 'ab 190 €', text: 'Deine Seite zusätzlich auf Englisch oder einer weiteren Sprache.', why: 'Touristen, internationale Kunden und Fachkräfte erreichen.' },
+    { name: 'Rechtstexte einbinden', price: '49 €', text: 'Impressum, Datenschutz & AGB von einem Rechtstexte-Anbieter, sauber eingebunden.', why: 'Fehlende Pflichtangaben gehören zu den häufigsten Abmahngründen.' },
+  ]},
+  { group: 'Service', items: [
+    { name: 'Express in 48 Stunden', price: '+ 25 %', text: 'Dein Projekt rückt in der Planung nach vorne.', why: 'Für Aktionen, Events und kurzfristige Launches.' },
+    { name: 'Zusätzliche Korrekturrunde', price: '49 €', text: 'Eine weitere Feedbackschleife nach den inklusiven Runden.', why: 'Wenn mehrere Leute mitentscheiden.' },
+    { name: 'Texte & Copywriting', price: 'ab 90 €', text: 'Headlines und Texte, die verkaufen – statt Füllwörtern.', why: 'Gute Gestaltung braucht gute Worte.' },
+  ]},
+];
+
+/* Offene Stellen. Leer lassen = "Aktuell keine offenen Stellen" + Initiativbewerbung.
+   Beispiel zum Kopieren:
+   { title: 'Freelance Motion Designer (m/w/d)', type: 'Freelance · Remote', hours: 'projektbasiert',
+     text: 'Du animierst Spots für Kunden aus ...', tasks: ['...'], profile: ['...'], perks: ['...'] }, */
+window.JOBS = [];
+
+/* Team. Foto: Datei in img/team/ ablegen und Pfad eintragen. */
+window.TEAM = [
+  { name: 'Mika Wittenborn', role: 'Gründer · Konzept, Motion & Web', photo: '', text: 'BWL-Student an der FHM Bielefeld. Baut Spots und 3D-Webseiten, die man nicht wegscrollt – und kümmert sich persönlich um jedes Projekt.' },
+];
+
+window.TESTIMONIALS = []; // { quote: '...', name: '...', company: '...' }
+
+window.FAQ = [
+  { cat: 'Allgemein', q: 'Wo sitzt du – und arbeitest du nur lokal?', a: 'Ich sitze in Bielefeld und arbeite gern mit Betrieben aus OWL zusammen. Spots und Webseiten liefere ich aber deutschlandweit und remote.' },
+  { cat: 'Allgemein', q: 'Wie schnell meldest du dich?', a: 'Innerhalb von 24 Stunden an Werktagen – meistens deutlich schneller.' },
+  { cat: 'Allgemein', q: 'Was brauchst du von mir?', a: 'Logo, Produktfotos (wenn vorhanden), deine wichtigste Botschaft und ein, zwei Beispiele, die dir gefallen. Den Rest erarbeiten wir gemeinsam.' },
+  { cat: 'Werbespots', q: 'Wie lange dauert ein Werbespot?', a: 'Meist 3–5 Werktage nach dem Briefing. Express in 48 Stunden ist gegen Aufpreis möglich.' },
+  { cat: 'Werbespots', q: 'Brauche ich professionelle Fotos?', a: 'Nein. Ich kann vorhandene Produktfotos freistellen, retuschieren und im Studio-Look inszenieren.' },
+  { cat: 'Werbespots', q: 'In welchen Formaten bekomme ich den Spot?', a: 'Standard ist 9:16 für TikTok, Reels und Shorts. 16:9, 1:1 und 4:5 sind optional.' },
+  { cat: 'Webseiten', q: 'Wie lange dauert eine Website?', a: 'Eine Landingpage etwa 1–2 Wochen, eine 3D-Website 2–4 Wochen, ein Shop 3–6 Wochen.' },
+  { cat: 'Webseiten', q: 'Kann ich Inhalte später selbst ändern?', a: 'Ja, auf Wunsch baue ich ein einfaches Pflegesystem ein oder übernehme Änderungen im Betreuungspaket.' },
+  { cat: 'Webseiten', q: 'Kümmerst du dich um Hosting und Domain?', a: 'Ja, ich richte alles ein und erkläre dir, was wo liegt.' },
+  { cat: 'Preise & Zahlung', q: 'Wie läuft die Bezahlung?', a: '50 % bei Auftrag, 50 % bei Abnahme. Abos und Betreuung monatlich im Voraus.' },
+  { cat: 'Preise & Zahlung', q: 'Sind die Preise Festpreise?', a: 'Die genannten Preise sind Startpreise. Nach dem Erstgespräch bekommst du ein festes Angebot – ohne versteckte Kosten.' },
+  { cat: 'Rechtliches', q: 'Wem gehören die Rechte am Ende?', a: 'Nach vollständiger Bezahlung darfst du Spots und Website zeitlich unbegrenzt für deine Marke nutzen. Musik und Bilder sind lizenziert oder selbst erstellt.' },
+  { cat: 'Rechtliches', q: 'Schreibst du auch Impressum und Datenschutzerklärung?', a: 'Nein, Rechtstexte schreibe ich nicht. Ich binde aber Texte von Anbietern wie eRecht24 oder IT-Recht-Kanzlei sauber ein.' },
+];
