@@ -1,5 +1,14 @@
-# Red car – TikTok motion clip
+# Motion
 
+## VOLTA Energy – 3D motion website → [`site/`](site/)
+An Apple-style product page for an energy drink: a real-time 3D can (Three.js), liquid drops, scroll animations, six flavours, a shop and prices.
+Details and local setup: [`site/README.md`](site/README.md).
+
+```bash
+cd site && python3 -m http.server 8000   # → http://localhost:8000
+```
+
+## Red car – TikTok motion clip
 A 14 s vertical (1080×1920, 30 fps) clip, made in the style of the "website on a laptop" TikToks:
 a laptop in a dark room shows a car-rental landing page. On the page, a drop of glossy red liquid
 splashes down and rises into a column that forms the Ferrari shield badge — the liquid slides off, the badge springs free with a glint, then melts back. The puddle turns into a dome, bursts into spikes, then pours itself into
@@ -8,7 +17,7 @@ The clip has its own synthesized sound design, motion blur, a phone-camera focus
 
 **Output:** [`out/red_car_motion.mp4`](out/red_car_motion.mp4)
 
-## Rebuild
+### Rebuild
 
 ```bash
 pip install numpy pillow opencv-python-headless scipy   # + ffmpeg on PATH

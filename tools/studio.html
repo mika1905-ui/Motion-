@@ -1,0 +1,53 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: InterDisplay; src: url(../site/fonts/InterDisplay-Regular.woff2); font-weight: 400; }
+@font-face { font-family: InterDisplay; src: url(../site/fonts/InterDisplay-SemiBold.woff2); font-weight: 600; }
+@font-face { font-family: InterDisplay; src: url(../site/fonts/InterDisplay-Bold.woff2); font-weight: 700 800; }
+@font-face { font-family: InterDisplay; src: url(../site/fonts/InterDisplay-Black.woff2); font-weight: 900; }
+html,body{margin:0;background:transparent;overflow:hidden}
+</style>
+<script type="importmap">{ "imports": { "three": "../site/vendor/three.module.min.js" } }</script>
+</head><body><canvas id="c"></canvas>
+<script type="module">
+// Product-shot studio: renders the original VOLTA can images used on the site.
+// ?flavor=<id>&w=&h=  or  ?lineup=1
+import * as THREE from 'three';
+import { RoomEnvironment } from '../site/vendor/RoomEnvironment.js';
+import { FLAVORS, createCan, labelTexture, LiquidDrops } from '../site/js/can.js';
+const q = new URLSearchParams(location.search);
+const w = +q.get('w') || 600, h = +q.get('h') || 900;
+await Promise.all([900, 800, 600, 500].map(wt => document.fonts.load(`${wt} 100px InterDisplay`)));
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(w, h);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(-3, 4, 5); scene.add(key);
+const camera = new THREE.PerspectiveCamera(22, w / h, 0.1, 100);
+const add = (f, x, z, ry, rz = 0) => {
+  const can = createCan(labelTexture(f, renderer));
+  can.group.position.set(x, 0, z); can.group.rotation.set(0.08, ry, rz);
+  scene.add(can.group);
+  const rim = new THREE.PointLight(f.glow, 30, 10, 1.6); rim.position.set(x + 1.6, 1.4, z - 1.8); scene.add(rim);
+  return can;
+};
+if (q.get('lineup')) {
+  camera.position.set(0, 0.6, 15); camera.lookAt(0, -0.1, 0);
+  FLAVORS.forEach((f, i) => { const u = i - 2.5; add(f, u * 1.32, -Math.abs(u) * 0.55, -u * 0.14 - 0.1, 0); });
+} else {
+  const f = FLAVORS.find(x => x.id === q.get('flavor')) || FLAVORS[0];
+  camera.position.set(0, 0.35, 10.2); camera.lookAt(0, 0, 0);
+  add(f, 0, 0, -0.38, 0.06);
+  // a few frozen liquid drops for a splashy product shot
+  const drops = new LiquidDrops(40, f.liquid);
+  scene.add(drops.mesh);
+  let s = 3;
+  const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  drops.burst({ x: 0, y: 1.25, z: 0 }, { x: 0, y: 1, z: 0.2 }, 14, 4, 1.4, 0.07);
+  drops.burst({ x: 0, y: -1.25, z: 0 }, { x: 0, y: 0.5, z: 0 }, 12, 3, 1.8, 0.06);
+  for (let i = 0; i < 9; i++) drops.update(0.022, 0, { x: 0, y: 0, z: 0 });
+}
+renderer.render(scene, camera);
+window.__done = true;
+</script></body></html>
