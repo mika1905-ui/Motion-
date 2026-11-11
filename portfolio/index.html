@@ -55,7 +55,7 @@
       <img src="img/kryo-2.webp" alt="" class="hs hs2" aria-hidden="true">
       <img src="img/lumyx-1.webp" alt="" class="hs hs4" aria-hidden="true">
       <div class="reel-phone">
-        <video src="video/showreel.mp4" poster="img/spots/showreel.webp" autoplay muted loop playsinline aria-label="Showreel: Ausschnitte aus zehn Werbespots"></video>
+        <video src="video/showreel.mp4" poster="img/spots/showreel.webp" autoplay muted loop playsinline aria-label="Showreel: Ausschnitte aus den Werbespots"></video>
         <span class="reel-tag">Showreel</span>
       </div>
     </div>
@@ -73,11 +73,11 @@
     <div class="section-head reveal">
       <p class="kicker">Werbespots</p>
       <h2>Stopp den Daumen.</h2>
-      <p class="lead">Kurze Spots für TikTok, Reels und YouTube, mit eigener Animation und eigenem Sound. Antippen für Vollbild mit Ton.</p>
+      <p class="lead">Spots aus echten Produktfotos, mit Studio-Look, Kamerafahrten und eigenem Sound. Für TikTok, Reels und YouTube. Antippen für Vollbild mit Ton.</p>
     </div>
     <div class="spot-grid" id="spotGrid"></div>
     <div class="spot-wide" id="spotWide"></div>
-    <p class="spec-note reveal">Alle Spots sind unbeauftragte Spec-Arbeiten zur Demonstration. Es besteht keine Verbindung zu den gezeigten Marken; Namen und Logos gehören ihren Inhabern.</p>
+    <p class="spec-note reveal">Alle Spots sind unbeauftragte Spec-Arbeiten zur Demonstration. Es besteht keine Verbindung zu den gezeigten Marken; Namen und Logos gehören ihren Inhabern. Verwendete Fotos: <a href="bildnachweise.html">Bildnachweise</a>.</p>
   </section>
 
   <!-- ───────── WEBSEITEN ───────── -->
@@ -273,7 +273,7 @@
 
 <footer class="foot">
   <span>© <span id="year">2026</span> <span data-cfg="name">FLUXE Studio</span></span>
-  <span class="foot-links"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></span>
+  <span class="foot-links"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="bildnachweise.html">Bildnachweise</a></span>
 </footer>
 
 <script>
@@ -297,18 +297,13 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ── Werbespots ── */
 const SPOTS = [
-  { id: 'bmw',       title: 'BMW M',        sub: 'Eight Legends. One Letter.', color: '#1c69d4' },
-  { id: 'mcd',       title: "McDonald's",   sub: 'Einmal alles.',               color: '#ffbc0d' },
-  { id: 'pacha',     title: 'Pacha Ibiza',  sub: 'The night starts here.',      color: '#ff2d55' },
-  { id: 'revolut',   title: 'Revolut',      sub: 'Everything. One app.',        color: '#8b7bff' },
-  { id: 'gold',      title: 'Goldhähnchen', sub: 'Knusprig. Golden.',           color: '#f5a623' },
-  { id: 'cafe',      title: 'Café Europa',  sub: 'Party-Reel Mi · Fr · Sa',     color: '#e040fb' },
-  { id: 'iphone',    title: 'iPhone',       sub: 'Etwas Großes kommt.',         color: '#9aa4ff' },
-  { id: 'redcar',    title: 'Red Car',      sub: 'Liquid-Morph für Web-Ads',    color: '#ff2b2b' },
+  { id: 'bmw',    title: 'BMW M',       sub: 'One Letter. · Studio-Spot', color: '#1c69d4' },
+  { id: 'pacha',  title: 'Pacha Ibiza', sub: 'The night starts here.',    color: '#ff2d55' },
+  { id: 'iphone', title: 'iPhone 17 Pro', sub: 'Produkt-Spot',            color: '#ff8a3d' },
 ];
 const WIDE = [
   { id: 'ferrari', title: 'Ferrari', sub: 'The Hypercar Dynasty · 16:9', color: '#ff2800' },
-  { id: 'porsche', title: 'Porsche', sub: 'Sechs Charaktere. Ein Herzschlag. · 16:9', color: '#d5001c' },
+  { id: 'porsche', title: 'Porsche', sub: 'Sechs Charaktere. Ein Herzschlag. · 16:9', color: '#b5b5b5' },
 ];
 const card = (s, wide) => `
   <button class="spot reveal${wide ? ' wide' : ''}" style="--c:${s.color}" data-id="${s.id}" aria-label="${s.title} Spot abspielen">
