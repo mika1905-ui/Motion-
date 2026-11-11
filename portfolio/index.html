@@ -27,9 +27,10 @@
 <header class="nav" id="nav">
   <a class="logo" href="#top"><span class="dot"></span><span data-cfg="name">FLUXE Studio</span></a>
   <nav class="links" aria-label="Hauptnavigation">
-    <a href="#arbeiten">Arbeiten</a>
-    <a href="#leistungen">Leistungen</a>
-    <a href="#ablauf">Ablauf</a>
+    <a href="#spots">Spots</a>
+    <a href="#arbeiten">Webseiten</a>
+    <a href="#leistungen">Preise</a>
+    <a href="#faq">FAQ</a>
   </nav>
   <a class="btn btn-sm" href="#kontakt">Projekt anfragen</a>
 </header>
@@ -49,11 +50,14 @@
       <a class="btn btn-ghost" href="#arbeiten">Arbeiten ansehen ↓</a>
     </div>
 
-    <div class="hero-stack reveal" aria-hidden="true">
-      <img src="img/volta-1.webp" alt="" class="hs hs1">
-      <img src="img/kryo-2.webp" alt="" class="hs hs2">
-      <img src="img/pablo-1.webp" alt="" class="hs hs3">
-      <img src="img/lumyx-1.webp" alt="" class="hs hs4">
+    <div class="hero-stack reveal">
+      <img src="img/volta-1.webp" alt="" class="hs hs1" aria-hidden="true">
+      <img src="img/kryo-2.webp" alt="" class="hs hs2" aria-hidden="true">
+      <img src="img/lumyx-1.webp" alt="" class="hs hs4" aria-hidden="true">
+      <div class="reel-phone">
+        <video src="video/showreel.mp4" poster="img/spots/showreel.webp" autoplay muted loop playsinline aria-label="Showreel: Ausschnitte aus zehn Werbespots"></video>
+        <span class="reel-tag">Showreel</span>
+      </div>
     </div>
   </section>
 
@@ -64,10 +68,22 @@
     </div>
   </div>
 
-  <!-- ───────── ARBEITEN ───────── -->
+  <!-- ───────── SPOTS ───────── -->
+  <section class="spots" id="spots">
+    <div class="section-head reveal">
+      <p class="kicker">Werbespots</p>
+      <h2>Stopp den Daumen.</h2>
+      <p class="lead">Kurze Spots für TikTok, Reels und YouTube, mit eigener Animation und eigenem Sound. Antippen für Vollbild mit Ton.</p>
+    </div>
+    <div class="spot-grid" id="spotGrid"></div>
+    <div class="spot-wide" id="spotWide"></div>
+    <p class="spec-note reveal">Alle Spots sind unbeauftragte Spec-Arbeiten zur Demonstration. Es besteht keine Verbindung zu den gezeigten Marken; Namen und Logos gehören ihren Inhabern.</p>
+  </section>
+
+  <!-- ───────── WEBSEITEN ───────── -->
   <section class="work" id="arbeiten">
     <div class="section-head reveal">
-      <p class="kicker">Ausgewählte Arbeiten</p>
+      <p class="kicker">3D-Webseiten</p>
       <h2>Vier Marken.<br>Vier Welten.</h2>
       <p class="lead">Jede Seite ist live und klickbar. Am besten auf dem Laptop öffnen und langsam scrollen.</p>
     </div>
@@ -172,31 +188,41 @@
   <!-- ───────── LEISTUNGEN ───────── -->
   <section class="services" id="leistungen">
     <div class="section-head reveal">
-      <p class="kicker">Leistungen</p>
+      <p class="kicker">Leistungen &amp; Preise</p>
       <h2>Was ich für dich baue.</h2>
     </div>
-    <div class="cards">
+    <div class="cards cards-4">
       <div class="card reveal">
         <span class="ico">▶</span>
-        <h3>Motion-Werbespots</h3>
-        <p>Kurze, scharfe Spots für TikTok, Reels, Shorts und Ads. Hochformat und Querformat, mit eigenem Sounddesign.</p>
-        <ul><li>9:16 &amp; 16:9</li><li>10–30 Sekunden</li><li>Sound &amp; Texte inklusive</li></ul>
+        <h3>Werbespot</h3>
+        <p class="price"><small>ab</small> 290 €</p>
+        <p>Ein Spot für TikTok, Reels oder Ads, mit Animation, Texten und eigenem Sound.</p>
+        <ul><li>10–20 Sekunden</li><li>9:16, auf Wunsch 16:9</li><li>2 Korrekturrunden</li></ul>
+      </div>
+      <div class="card reveal">
+        <span class="ico">↻</span>
+        <h3>Reel-Abo</h3>
+        <p class="price"><small>ab</small> 690 € <small>/ Monat</small></p>
+        <p>Jeden Monat frischer Content im gleichen Look. Ideal für Gastro, Clubs und lokale Marken.</p>
+        <ul><li>3 Spots pro Monat</li><li>Planung inklusive</li><li>Monatlich kündbar</li></ul>
       </div>
       <div class="card reveal featured">
         <span class="badge">Beliebt</span>
         <span class="ico">◆</span>
-        <h3>3D-Webseiten</h3>
-        <p>Produkt- und Landingpages mit echter 3D-Szene und Scroll-Animation. Schnell, mobilfähig und ohne Baukasten.</p>
-        <ul><li>Three.js / WebGL</li><li>Shop &amp; Warenkorb möglich</li><li>Hosting-Setup inklusive</li></ul>
+        <h3>3D-Website</h3>
+        <p class="price"><small>ab</small> 1.490 €</p>
+        <p>Produkt- oder Landingpage mit echter 3D-Szene und Scroll-Animation. Kein Baukasten.</p>
+        <ul><li>Mobil optimiert</li><li>Shop möglich (Aufpreis)</li><li>Hosting-Setup inklusive</li></ul>
       </div>
       <div class="card reveal">
         <span class="ico">✦</span>
         <h3>Launch-Paket</h3>
-        <p>Website und passende Spots aus einem Guss, im gleichen Look. Ideal für Produktlaunches und neue Marken.</p>
-        <ul><li>Website + 3 Spots</li><li>Einheitliches Branding</li><li>Social-ready Formate</li></ul>
+        <p class="price"><small>ab</small> 2.490 €</p>
+        <p>Website und drei passende Spots aus einem Guss. Für Produktlaunches und neue Marken.</p>
+        <ul><li>Website + 3 Spots</li><li>Einheitliches Branding</li><li>Alle Social-Formate</li></ul>
       </div>
     </div>
-    <p class="price-hint reveal">Preise nach Umfang. Du bekommst ein festes Angebot, bevor es losgeht.</p>
+    <p class="price-hint reveal">Startpreise. Du bekommst nach einem kurzen Gespräch ein festes Angebot, bevor es losgeht.</p>
   </section>
 
   <!-- ───────── ABLAUF ───────── -->
@@ -211,6 +237,23 @@
       <li class="reveal"><b>03</b><h3>Umsetzung</h3><p>Animation, Code und Sound. Zwischenstände zum Klicken, inklusive Korrekturschleifen.</p></li>
       <li class="reveal"><b>04</b><h3>Launch</h3><p>Seite geht live, Spots kommen in allen Formaten. Danach bin ich weiter erreichbar.</p></li>
     </ol>
+  </section>
+
+  <!-- ───────── FAQ ───────── -->
+  <section class="faq" id="faq">
+    <div class="section-head reveal">
+      <p class="kicker">Häufige Fragen</p>
+      <h2>Gut zu wissen.</h2>
+    </div>
+    <div class="faq-list">
+      <details class="reveal"><summary>Wie lange dauert ein Projekt?</summary><p>Ein Werbespot ist meist in 3–5 Werktagen fertig, eine 3D-Website in 2–4 Wochen. Den genauen Zeitplan bekommst du mit dem Angebot.</p></details>
+      <details class="reveal"><summary>Wie viele Korrekturen sind dabei?</summary><p>Zwei Korrekturrunden sind immer inklusive. Kleine Textänderungen danach mache ich meistens einfach so.</p></details>
+      <details class="reveal"><summary>Was brauchst du von mir?</summary><p>Logo, Produktfotos (wenn vorhanden), deine wichtigste Botschaft und ein, zwei Beispiele, die dir gefallen. Den Rest erarbeiten wir zusammen.</p></details>
+      <details class="reveal"><summary>Wem gehören die Rechte am Ende?</summary><p>Nach vollständiger Bezahlung darfst du Spots und Website zeitlich unbegrenzt für deine Marke nutzen. Musik und Bilder sind lizenziert oder selbst erstellt.</p></details>
+      <details class="reveal"><summary>Kann die Website auch einen Shop haben?</summary><p>Ja. Je nach Größe als schlanker Shop mit sicherer Online-Zahlung (Karte, PayPal, Apple Pay) oder angebunden an Shopify. Das klären wir im Erstgespräch.</p></details>
+      <details class="reveal"><summary>Kümmerst du dich auch um Hosting und Domain?</summary><p>Ja, ich richte alles ein und erkläre dir, was wo liegt. Auf Wunsch übernehme ich auch Updates und kleine Änderungen nach dem Launch.</p></details>
+      <details class="reveal"><summary>Wie läuft die Bezahlung?</summary><p>50 % bei Auftrag, 50 % bei Abnahme. Beim Reel-Abo monatlich im Voraus.</p></details>
+    </div>
   </section>
 
   <!-- ───────── KONTAKT ───────── -->
@@ -251,6 +294,55 @@ document.getElementById('year').textContent = new Date().getFullYear();
 document.title = CONFIG.name + ' · Motion & Web';
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── Werbespots ── */
+const SPOTS = [
+  { id: 'bmw',       title: 'BMW M',        sub: 'Eight Legends. One Letter.', color: '#1c69d4' },
+  { id: 'mcd',       title: "McDonald's",   sub: 'Einmal alles.',               color: '#ffbc0d' },
+  { id: 'pacha',     title: 'Pacha Ibiza',  sub: 'The night starts here.',      color: '#ff2d55' },
+  { id: 'revolut',   title: 'Revolut',      sub: 'Everything. One app.',        color: '#8b7bff' },
+  { id: 'gold',      title: 'Goldhähnchen', sub: 'Knusprig. Golden.',           color: '#f5a623' },
+  { id: 'cafe',      title: 'Café Europa',  sub: 'Party-Reel Mi · Fr · Sa',     color: '#e040fb' },
+  { id: 'iphone',    title: 'iPhone',       sub: 'Etwas Großes kommt.',         color: '#9aa4ff' },
+  { id: 'redcar',    title: 'Red Car',      sub: 'Liquid-Morph für Web-Ads',    color: '#ff2b2b' },
+];
+const WIDE = [
+  { id: 'ferrari', title: 'Ferrari', sub: 'The Hypercar Dynasty · 16:9', color: '#ff2800' },
+  { id: 'porsche', title: 'Porsche', sub: 'Sechs Charaktere. Ein Herzschlag. · 16:9', color: '#d5001c' },
+];
+const card = (s, wide) => `
+  <button class="spot reveal${wide ? ' wide' : ''}" style="--c:${s.color}" data-id="${s.id}" aria-label="${s.title} Spot abspielen">
+    <video src="video/${s.id}.mp4" poster="img/spots/${s.id}.webp" muted loop playsinline preload="none"></video>
+    <span class="spot-info"><b>${s.title}</b><span>${s.sub}</span></span>
+    <span class="play" aria-hidden="true">▶</span>
+  </button>`;
+document.getElementById('spotGrid').innerHTML = SPOTS.map(s => card(s)).join('');
+document.getElementById('spotWide').innerHTML = WIDE.map(s => card(s, true)).join('');
+
+// autoplay muted previews only while visible
+const vio = new IntersectionObserver(es => es.forEach(e => {
+  const v = e.target.querySelector('video');
+  if (e.isIntersecting && !reduce) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
+}), { threshold: 0.5 });
+document.querySelectorAll('.spot').forEach(el => vio.observe(el));
+
+// lightbox with sound
+const lb = document.createElement('div');
+lb.className = 'lightbox'; lb.hidden = true;
+lb.innerHTML = '<button class="lb-close" aria-label="Schließen">✕</button><video controls playsinline></video>';
+document.body.appendChild(lb);
+const lbv = lb.querySelector('video');
+const closeLb = () => { lbv.pause(); lbv.removeAttribute('src'); lbv.load(); lb.hidden = true; document.body.style.overflow = ''; };
+document.addEventListener('click', e => {
+  const s = e.target.closest('.spot');
+  if (s) {
+    lb.classList.toggle('is-wide', s.classList.contains('wide'));
+    lbv.src = 'video/' + s.dataset.id + '.mp4'; lbv.muted = false;
+    lb.hidden = false; document.body.style.overflow = 'hidden';
+    lbv.play().catch(() => {});
+  } else if (e.target === lb || e.target.closest('.lb-close')) closeLb();
+});
+addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
 
 // Reveal on scroll
 const io = new IntersectionObserver(es => es.forEach(e => {
