@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from './vendor/RoomEnvironment.js';
 import {
-  BRAND, FLAVORS, STRENGTHS, PRODUCTS, BUNDLES, FREE_SHIPPING_FROM,
+  BRAND, FLAVORS, STRENGTHS, PRODUCTS, BUNDLES, FREE_SHIPPING_FROM, MG_UNIT,
   flavorById, strengthByLevel, formatPrice,
 } from './products.js';
 
@@ -49,6 +49,11 @@ function drawLidTop(flavor, level) {
   const S = 1024, c = document.createElement('canvas');
   c.width = c.height = S;
   const g = c.getContext('2d');
+  if (flavor.lidImg) { // Originalbild der Dose als Deckel-Textur
+    g.fillStyle = flavor.dark; g.fillRect(0, 0, S, S);
+    g.drawImage(flavor.lidImg, 0, 0, S, S);
+    return c;
+  }
   const grad = g.createRadialGradient(S * 0.38, S * 0.32, 40, S / 2, S / 2, S * 0.62);
   grad.addColorStop(0, flavor.light);
   grad.addColorStop(0.55, flavor.base);
@@ -370,7 +375,7 @@ FLAVORS.forEach((f, i) => {
     <h2 style="color:${f.light}">${f.name}</h2>
     <h3>${f.tagline}</h3>
     <p>${f.copy}</p>
-    <a href="#shop" class="btn primary" style="background:${f.base};box-shadow:0 8px 30px -8px ${f.base}" data-filter="${f.id}">${f.name} kaufen</a>`;
+    <a href="#shop" class="btn primary" style="background:${f.accent};box-shadow:0 8px 30px -8px ${f.accent}" data-filter="${f.id}">${f.name} kaufen</a>`;
   panels.appendChild(p);
   dots.appendChild(document.createElement('i'));
 });
@@ -393,7 +398,7 @@ function setFlavor(i) {
   if (i === currentFlavor) return;
   currentFlavor = i;
   const f = FLAVORS[i];
-  setCanFlavor(can, f, i === 3 ? 3 : 2);
+  setCanFlavor(can, f, f.level ?? (i === 3 ? 3 : 2));
   setAccent(f);
 }
 
@@ -405,16 +410,17 @@ STRENGTHS.forEach((s) => {
   row.innerHTML = `<span class="lbl">${s.label}</span>
     <div class="meter-track"><div class="meter-fill"></div></div>
     <span class="mg"><span class="dots">${dotsHtml(s.level)}</span></span>`;
-  row.title = `${s.mg} mg pro Pouch`;
+  row.title = `${s.mg} ${MG_UNIT}`;
   meter.appendChild(row);
 });
+const MAX_MG = Math.max(...STRENGTHS.map((s) => s.mg));
 const fills = [...meter.querySelectorAll('.meter-fill')];
 const mgs = [...meter.querySelectorAll('.mg')];
 function updateMeter(p) {
   fills.forEach((f, i) => {
     const k = smooth(i * 0.15, i * 0.15 + 0.35, p);
-    f.style.width = `${k * (STRENGTHS[i].mg / 16) * 100}%`;
-    mgs[i].textContent = `${Math.round(k * STRENGTHS[i].mg)} mg`;
+    f.style.width = `${k * (STRENGTHS[i].mg / MAX_MG) * 100}%`;
+    mgs[i].textContent = `${Math.round(k * STRENGTHS[i].mg)} ${MG_UNIT}`;
   });
 }
 function dotsHtml(level) {
@@ -526,10 +532,10 @@ PRODUCTS.forEach((p) => {
     ${p.badge ? `<span class="badge">${p.badge}</span>` : ''}
     <div class="img">${p.image ? `<img src="${p.image}" alt="${BRAND} ${f.name} ${s.label}" loading="lazy" />` : '<div class="skeleton"></div>'}</div>
     <h3>${f.name}</h3>
-    <div class="meta"><span class="dots">${dotsHtml(s.level)}</span>${s.label} · ${s.mg} mg</div>
+    <div class="meta"><span class="dots">${dotsHtml(s.level)}</span>${s.label} · ${s.mg} ${MG_UNIT}</div>
     <div class="row"><span class="p">${formatPrice(p.price)}</span><button class="add" aria-label="${f.name} in den Warenkorb">+</button></div>`;
   el.querySelector('.add').onclick = () =>
-    addToCart({ id: p.id, name: `${BRAND} ${f.name}`, sub: `${s.label} · ${s.mg} mg`, price: p.price, img: p.image || thumbs.get(p.id) });
+    addToCart({ id: p.id, name: `${BRAND} ${f.name}`, sub: `${s.label} · ${s.mg} ${MG_UNIT}`, price: p.price, img: p.image || thumbs.get(p.id) });
   grid.appendChild(el);
 });
 
@@ -651,8 +657,19 @@ const io = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
 // ───────────────────────── boot ─────────────────────────
-fontsReady.then(() => {
-  can = buildCan(FLAVORS[0], 2, true);
+const loadImg = (src) => new Promise((res) => {
+  const im = new Image();
+  im.onload = () => res(im);
+  im.onerror = () => res(null);
+  im.src = src;
+});
+const lidImages = Promise.all(FLAVORS.map(async (f) => {
+  if (f.lidImage) f.lidImg = await loadImg(f.lidImage);
+}));
+document.querySelectorAll('.logo').forEach((el) => { el.textContent = BRAND; });
+
+Promise.all([fontsReady, lidImages]).then(() => {
+  can = buildCan(FLAVORS[0], FLAVORS[0].level ?? 2, true);
   scene.add(can);
   setAccent(FLAVORS[0]);
   renderThumbs();

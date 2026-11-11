@@ -11,6 +11,7 @@
 export const BRAND = 'KRYO';
 export const CURRENCY = 'EUR';
 export const FREE_SHIPPING_FROM = 39;
+export const MG_UNIT = 'mg';
 
 export const FLAVORS = [
   {

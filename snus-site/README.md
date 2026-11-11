@@ -50,3 +50,13 @@ Bundles und Versandgrenze. Die Dosen-Labels werden daraus automatisch gezeichnet
 | Hero | Deckel öffnet | Sorten |
 | --- | --- | --- |
 | ![](preview/hero.png) | ![](preview/open.png) | ![](preview/flavors.png) |
+
+## Pablo-Ice-Cold-Version
+
+`pablo.html` ist dieselbe Seite mit Pablo Ice Cold & Mini Ice Cold: Sie lädt per Importmap
+`products-pablo.js` statt `products.js`, die Dosenfotos liegen als Deckel-Textur auf der 3D-Dose
+(`assets/products/pablo-*.webp`), dazu eine „So geht's“-Sektion mit dem Pouch-Foto.
+Aufrufen über <http://localhost:8000/pablo.html>.
+
+> Pablo-Logo, -Name und -Dosendesign gehören dem Hersteller. Öffentlich nur nutzen, wenn ihr
+> autorisierter Händler seid bzw. die Rechte an den Bildern habt.

@@ -349,3 +349,12 @@ body.cart-open .drawer-backdrop { opacity: 1; pointer-events: auto; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ── Lifestyle (Pablo-Seite) ───────────────────────────── */
+.lifestyle { max-width: 1180px; margin: 0 auto; padding: 100px 24px 0; display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
+.lifestyle figure { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: 0 40px 80px -40px var(--accent); }
+.lifestyle img { display: block; width: 100%; height: auto; }
+.steps { list-style: none; margin-top: 30px; display: grid; gap: 16px; color: #c7c7cc; font-size: 17px; }
+.steps li { display: flex; gap: 14px; align-items: center; }
+.steps b { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #fff; font-size: 15px; }
+@media (max-width: 900px) { .lifestyle { grid-template-columns: 1fr; gap: 32px; padding-top: 70px; } }
