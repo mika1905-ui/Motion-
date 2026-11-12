@@ -6,7 +6,8 @@
 <title>Kontakt & Termin · FLUXE Studio</title>
 <meta name="description" content="Projekt anfragen oder kostenloses Erstgespräch buchen. Antwort innerhalb von 24 Stunden.">
 <meta name="theme-color" content="#08080a">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23d4ff3a'/%3E%3C/svg%3E">
+<link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body data-page="kontakt">
@@ -34,7 +35,8 @@
               <div class="field"><span>Was brauchst du? <i>*</i></span>
                 <div class="pick" id="pickLeistung">
                   <label><input type="checkbox" name="Leistung" value="Werbespot"><span><b>Werbespot</b><small>TikTok, Reels, Ads</small></span></label>
-                  <label><input type="checkbox" name="Leistung" value="Website"><span><b>Website</b><small>Landingpage, 3D-Seite</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Website"><span><b>Website</b><small>Onepager, Firmenseite, 3D</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Chatbot"><span><b>Chatbot</b><small>FAQ- oder KI-Bot</small></span></label>
                   <label><input type="checkbox" name="Leistung" value="Online-Shop"><span><b>Online-Shop</b><small>Mit Zahlung</small></span></label>
                   <label><input type="checkbox" name="Leistung" value="Reel-Abo"><span><b>Reel-Abo</b><small>Monatlicher Content</small></span></label>
                   <label><input type="checkbox" name="Leistung" value="Betreuung"><span><b>Betreuung</b><small>Hosting &amp; Updates</small></span></label>
@@ -52,7 +54,7 @@
               <h3>Rahmen &amp; Idee</h3>
               <div class="row">
                 <label class="field"><span>Budget</span><select name="Budget">
-                  <option>Weiß ich noch nicht</option><option>bis 500 €</option><option>500 – 1.500 €</option><option>1.500 – 3.000 €</option><option>3.000 – 5.000 €</option><option>über 5.000 €</option></select></label>
+                  <option>Weiß ich noch nicht</option><option>bis 300 €</option><option>300 – 700 €</option><option>700 – 1.500 €</option><option>1.500 – 3.000 €</option><option>über 3.000 €</option></select></label>
                 <label class="field"><span>Wann soll es fertig sein?</span><select name="Zeitraum">
                   <option>Flexibel</option><option>So schnell wie möglich</option><option>In 2–4 Wochen</option><option>In 1–3 Monaten</option></select></label>
               </div>
@@ -136,7 +138,7 @@
   if (q.get('check')) pre.push(q.get('check'));
   if (q.get('frage')) pre.push(`Meine Frage: ${q.get('frage')}`);
   if (pre.length) $('#msg').value = pre.join('\n') + '\n\n';
-  const lmap = { 'Online-Shop': 'Online-Shop', 'Werbespot': 'Werbespot', 'Website': 'Website' };
+  const lmap = { 'Online-Shop': 'Online-Shop', 'Werbespot': 'Werbespot', 'Website': 'Website', 'Chatbot': 'Chatbot', 'FAQ-Chatbot': 'Chatbot', 'KI-Chatbot': 'Chatbot', 'Reel-Abo': 'Reel-Abo', 'Onepager': 'Website', '3D-Website': 'Website', 'Social Spot': 'Werbespot', 'Produkt-Spot': 'Werbespot', 'Kampagne': 'Werbespot' };
   if (q.get('leistung') && lmap[q.get('leistung')]) document.querySelector(`input[name=Leistung][value="${lmap[q.get('leistung')]}"]`).checked = true;
   $('#herkunft').value = document.referrer ? new URL(document.referrer).pathname.split('/').pop() || 'Start' : 'direkt';
 

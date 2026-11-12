@@ -32,6 +32,10 @@ window.PROJECTS = [
     video: 'video/porsche.mp4', poster: 'img/spots/porsche.webp', color: '#b5b5b5',
     text: 'Helles Studio statt Dunkelheit: sechs Modelle in einer ruhigen, cleanen Inszenierung.',
     tags: ['Helles Studio', '16:9'] },
+  { id: 'assistent', kind: 'bot', branche: 'tech', title: 'Website-Assistent', sub: 'FAQ-Chatbot · Live auf dieser Seite', color: '#d4ff3a', featured: true,
+    live: '#chat', images: ['img/chatbot-1.webp', 'img/chatbot-2.webp'], mobile: 'img/chatbot-mobile.webp',
+    text: 'Der Chat unten rechts: kennt alle Leistungen, Preise, Projekte und Abläufe dieser Website, gibt Schritt-für-Schritt-Anleitungen und leitet Besucher direkt zur richtigen Seite oder ins Formular. Läuft komplett im Browser – ohne laufende Kosten. So etwas baue ich auch für deine Website.',
+    tags: ['FAQ-Chatbot', 'Navigation', 'Anleitungen', 'Datenschutzfreundlich'], note: 'Eigenes Projekt – direkt hier live testen.' },
   { id: 'volta', kind: 'web', branche: 'food', title: 'VOLTA', sub: '3D-Produktseite · Energy Drink', color: '#d4ff3a', featured: true,
     live: '../volta/', images: ['img/volta-1.webp', 'img/volta-2.webp', 'img/volta-3.webp'], mobile: 'img/volta-mobile.webp',
     text: 'Eine Dose, die man anfassen will: Sie fällt mit einem Splash in die Szene, dreht sich beim Scrollen, öffnet die Lasche und versprüht Tropfen. Bei jedem Sortenwechsel färbt sich die ganze Seite um.',
@@ -52,48 +56,55 @@ window.PROJECTS = [
 
 window.PRICES = {
   spots: { label: 'Werbespots', items: [
-    { name: 'Social Spot', price: 290, unit: '', text: 'Ein Spot für TikTok, Reels oder Ads – Animation, Texte und eigener Sound.', list: ['10–20 Sekunden', '9:16', '2 Korrekturrunden'] },
-    { name: 'Produkt-Spot', price: 490, unit: '', badge: 'Beliebt', text: 'Dein Produkt im Studio-Look: freigestellt, in 3D inszeniert, mit Kamerafahrt.', list: ['Bis 20 Sekunden', '9:16 + 16:9', 'Freisteller & Retusche', '2 Korrekturrunden'] },
-    { name: 'Reel-Abo', price: 690, unit: '/ Monat', text: 'Jeden Monat frischer Content im gleichen Look. Ideal für Gastro, Clubs und lokale Marken.', list: ['3 Spots pro Monat', 'Planung inklusive', 'Monatlich kündbar'] },
-    { name: 'Kampagne', price: 1190, unit: '', text: 'Fünf Spots aus einem Guss für einen Launch oder eine Aktion.', list: ['5 Spots', 'Alle Formate', 'Untertitel', 'Thumbnail-Set'] },
+    { name: 'Social Spot', price: 149, unit: '', text: 'Ein Spot für TikTok, Reels oder Ads – Animation, Texte und eigener Sound.', list: ['10–20 Sekunden', '9:16', '2 Korrekturrunden'] },
+    { name: 'Produkt-Spot', price: 249, unit: '', badge: 'Beliebt', text: 'Dein Produkt im Studio-Look: freigestellt, inszeniert, mit Kamerafahrt.', list: ['Bis 20 Sekunden', '9:16 + 16:9', 'Freisteller & Retusche', '2 Korrekturrunden'] },
+    { name: 'Reel-Abo', price: 349, unit: '/ Monat', text: 'Jeden Monat frischer Content im gleichen Look. Ideal für Gastro, Clubs und lokale Betriebe.', list: ['3 Spots pro Monat', 'Planung inklusive', 'Monatlich kündbar'] },
+    { name: 'Kampagne', price: 590, unit: '', text: 'Fünf Spots aus einem Guss für einen Launch oder eine Aktion.', list: ['5 Spots', 'Alle Formate', 'Untertitel', 'Thumbnail-Set'] },
   ]},
   web: { label: 'Webseiten', items: [
-    { name: 'Landingpage', price: 790, unit: '', text: 'Eine starke Seite für ein Angebot, ein Event oder eine Kampagne.', list: ['1 Seite', 'Kontaktformular', 'Mobil optimiert', 'Hosting-Setup'] },
-    { name: '3D-Website', price: 1490, unit: '', badge: 'Signature', text: 'Produkt- oder Markenseite mit echter 3D-Szene und Scroll-Animation.', list: ['Bis 5 Bereiche', '3D-Szene', 'Kontaktformular', 'SEO-Basics'] },
-    { name: 'Online-Shop', price: 2490, unit: '', text: 'Shop mit sicherer Zahlung (Karte, PayPal, Apple Pay) über Stripe oder Shopify.', list: ['Produktseiten', 'Warenkorb & Checkout', 'Rechtstexte-Einbindung', 'Einweisung'] },
-    { name: 'Relaunch', price: null, unit: '', text: 'Deine bestehende Seite modern, schnell und mobil – inklusive Umzug.', list: ['Analyse', 'Neues Design', 'Umzug & Weiterleitungen'] },
+    { name: 'Onepager', price: 390, unit: '', text: 'Eine moderne Seite mit allem Wichtigen – ideal für kleine Betriebe und Selbstständige.', list: ['1 Seite, mehrere Bereiche', 'Kontaktformular', 'Mobil optimiert', 'Hosting-Setup'] },
+    { name: 'Website', price: 690, unit: '', badge: 'Beliebt', text: 'Klassische Unternehmens-Website mit mehreren Unterseiten – schnell, modern, ohne Baukasten.', list: ['Bis 5 Seiten', 'Kontaktformular', 'SEO-Basics', 'Impressum & Datenschutz eingebunden'] },
+    { name: '3D-Website', price: 990, unit: '', text: 'Produkt- oder Markenseite mit echter 3D-Szene und Scroll-Animation – für den Wow-Effekt.', list: ['Bis 5 Bereiche', '3D-Szene', 'Kontaktformular', 'SEO-Basics'] },
+    { name: 'Online-Shop', price: 1290, unit: '', text: 'Shop mit sicherer Zahlung (Karte, PayPal, Apple Pay) über Stripe oder Shopify.', list: ['Produktseiten', 'Warenkorb & Checkout', 'Rechtstexte-Einbindung', 'Einweisung'] },
+  ]},
+  chatbots: { label: 'Chatbots', items: [
+    { name: 'FAQ-Chatbot', price: 190, unit: '', badge: 'Einstieg', text: 'Ein Assistent für deine Website, der Fragen zu Leistungen, Preisen und Öffnungszeiten beantwortet und Besucher weiterleitet.', list: ['Bis 50 Fragen & Antworten', 'In deinem Design', 'Leitet zu Seiten & Formular', 'Keine laufenden Kosten'] },
+    { name: 'KI-Chatbot', price: 490, unit: '', text: 'Antwortet frei in ganzen Sätzen auf Basis deiner Inhalte – rund um die Uhr.', list: ['Trainiert auf deine Inhalte', 'Anfragen per E-Mail weiterleiten', 'Datenschutz-Hinweis', 'KI-Kosten nach Nutzung (meist wenige €/Monat)'] },
+    { name: 'Chatbot-Betreuung', price: 19, unit: '/ Monat', text: 'Antworten aktuell halten, neue Fragen ergänzen, Auswertung, welche Fragen gestellt werden.', list: ['Monatliche Anpassungen', 'Neue Fragen ergänzen', 'Monatlich kündbar'] },
   ]},
   pakete: { label: 'Pakete', items: [
-    { name: 'Starter', price: 990, unit: '', text: 'Für den Start: Landingpage und ein passender Spot.', list: ['Landingpage', '1 Social Spot', 'Einheitlicher Look'] },
-    { name: 'Launch', price: 2490, unit: '', badge: 'Empfohlen', text: 'Website und drei Spots aus einem Guss für einen Produktlaunch.', list: ['3D-Website', '3 Spots', 'Alle Social-Formate', 'Launch-Begleitung'] },
-    { name: 'Brand', price: 3990, unit: '', text: 'Der komplette Auftritt: Website, Kampagne und Betreuung für 3 Monate.', list: ['3D-Website oder Shop', '5 Spots', '3 Monate Betreuung Plus'] },
+    { name: 'Starter', price: 490, unit: '', text: 'Für den Start: Onepager und ein passender Spot.', list: ['Onepager', '1 Social Spot', 'Einheitlicher Look'] },
+    { name: 'Business', price: 990, unit: '', badge: 'Empfohlen', text: 'Website, Chatbot und drei Spots – der komplette Auftritt für lokale Betriebe.', list: ['Website (bis 5 Seiten)', 'FAQ-Chatbot', '3 Social Spots', 'Alle Social-Formate'] },
+    { name: 'Launch', price: 1690, unit: '', text: 'Der große Auftritt: 3D-Website oder Shop, fünf Spots und drei Monate Betreuung.', list: ['3D-Website oder Shop', '5 Spots', 'FAQ-Chatbot', '3 Monate Betreuung Plus'] },
   ]},
   betreuung: { label: 'Betreuung', items: [
-    { name: 'Basic', price: 49, unit: '/ Monat', text: 'Deine Seite bleibt sicher, schnell und erreichbar.', list: ['Hosting & Domain-Verwaltung', 'Updates & Backups', 'Erreichbarkeits-Check'] },
-    { name: 'Plus', price: 99, unit: '/ Monat', badge: 'Beliebt', text: 'Wie Basic – plus kleine Änderungen jeden Monat.', list: ['Alles aus Basic', '1 Stunde Änderungen', 'Monatlicher Kurzbericht'] },
-    { name: 'Content', price: 199, unit: '/ Monat', text: 'Website-Betreuung und ein frischer Spot pro Monat.', list: ['Alles aus Plus', '1 Social Spot / Monat', 'Priorisierte Antwort'] },
+    { name: 'Basic', price: 19, unit: '/ Monat', text: 'Deine Seite bleibt sicher, schnell und erreichbar.', list: ['Hosting & Domain-Verwaltung', 'Updates & Backups', 'Erreichbarkeits-Check'] },
+    { name: 'Plus', price: 49, unit: '/ Monat', badge: 'Beliebt', text: 'Wie Basic – plus kleine Änderungen jeden Monat.', list: ['Alles aus Basic', '1 Stunde Änderungen', 'Chatbot-Pflege inklusive'] },
+    { name: 'Content', price: 129, unit: '/ Monat', text: 'Website-Betreuung und ein frischer Spot pro Monat.', list: ['Alles aus Plus', '1 Social Spot / Monat', 'Priorisierte Antwort'] },
   ]},
 };
 /* Katalog zum Dazunehmen – mit „+“ landet ein Punkt in der Anfrage. */
 window.CATALOG = [
   { group: 'Für Spots', items: [
-    { name: 'Untertitel / Captions', price: '29 €', text: 'Eingebrannte Untertitel im Look des Spots.', why: 'Ein Großteil schaut Reels ohne Ton – ohne Text geht die Botschaft verloren.' },
-    { name: 'Zusätzliches Format', price: '39 €', text: '1:1, 4:5 oder 16:9 zusätzlich zum Hochformat.', why: 'Jede Plattform hat ihr Format. Passend zugeschnitten wirkt es nativ.' },
-    { name: 'Thumbnail-Set', price: '39 €', text: 'Drei Vorschaubilder für YouTube, Reels-Cover und Ads.', why: 'Das Vorschaubild entscheidet, ob überhaupt geklickt wird.' },
+    { name: 'Untertitel / Captions', price: '15 €', text: 'Eingebrannte Untertitel im Look des Spots.', why: 'Ein Großteil schaut Reels ohne Ton – ohne Text geht die Botschaft verloren.' },
+    { name: 'Zusätzliches Format', price: '19 €', text: '1:1, 4:5 oder 16:9 zusätzlich zum Hochformat.', why: 'Jede Plattform hat ihr Format. Passend zugeschnitten wirkt es nativ.' },
+    { name: 'Thumbnail-Set', price: '19 €', text: 'Drei Vorschaubilder für YouTube, Reels-Cover und Ads.', why: 'Das Vorschaubild entscheidet, ob überhaupt geklickt wird.' },
     { name: 'Lizenzierte Musik', price: 'nach Aufwand', text: 'Bekannter Stil, sauber lizenziert für Werbung.', why: 'Nicht lizenzierte Musik kann Ads sperren oder Abmahnungen auslösen.' },
   ]},
   { group: 'Für Webseiten', items: [
-    { name: 'Terminbuchung einbinden', price: '79 €', text: 'Kunden buchen direkt freie Termine auf deiner Seite.', why: 'Weniger Hin-und-her per Telefon, mehr Termine auch abends und am Wochenende.' },
-    { name: 'Google-Unternehmensprofil', price: '79 €', text: 'Einrichten oder überarbeiten, mit Fotos und Öffnungszeiten.', why: 'Bei „in der Nähe“-Suchen ist das Profil oft wichtiger als die Website.' },
-    { name: 'SEO-Grundpaket', price: 'ab 149 €', text: 'Titel, Beschreibungen, Struktur und Ladezeit optimiert.', why: 'Eine schöne Seite, die keiner findet, verkauft nichts.' },
-    { name: 'Barrierefreiheits-Check', price: 'ab 149 €', text: 'Kontraste, Tastaturbedienung, Alternativtexte geprüft und verbessert.', why: 'Für viele Online-Shops gilt seit Juni 2025 das Barrierefreiheitsstärkungsgesetz.' },
-    { name: 'Mehrsprachigkeit', price: 'ab 190 €', text: 'Deine Seite zusätzlich auf Englisch oder einer weiteren Sprache.', why: 'Touristen, internationale Kunden und Fachkräfte erreichen.' },
-    { name: 'Rechtstexte einbinden', price: '49 €', text: 'Impressum, Datenschutz & AGB von einem Rechtstexte-Anbieter, sauber eingebunden.', why: 'Fehlende Pflichtangaben gehören zu den häufigsten Abmahngründen.' },
+    { name: 'Chatbot für deine Website', price: 'ab 149 €', text: 'Ein Assistent, der Besucherfragen beantwortet und zur Anfrage führt – wie hier unten rechts.', why: 'Viele Besucher fragen lieber kurz, als eine Seite zu durchsuchen – auch nachts.' },
+    { name: 'Terminbuchung einbinden', price: '39 €', text: 'Kunden buchen direkt freie Termine auf deiner Seite.', why: 'Weniger Hin-und-her per Telefon, mehr Termine auch abends und am Wochenende.' },
+    { name: 'WhatsApp-Button', price: '19 €', text: 'Ein Tipp, und Kunden schreiben dir direkt auf WhatsApp.', why: 'Für viele Kunden ist WhatsApp die bequemste Art, Kontakt aufzunehmen.' },
+    { name: 'Google-Unternehmensprofil', price: '49 €', text: 'Einrichten oder überarbeiten, mit Fotos und Öffnungszeiten.', why: 'Bei „in der Nähe“-Suchen ist das Profil oft wichtiger als die Website.' },
+    { name: 'SEO-Grundpaket', price: 'ab 79 €', text: 'Titel, Beschreibungen, Struktur und Ladezeit optimiert.', why: 'Eine schöne Seite, die keiner findet, verkauft nichts.' },
+    { name: 'Barrierefreiheits-Check', price: 'ab 99 €', text: 'Kontraste, Tastaturbedienung, Alternativtexte geprüft und verbessert.', why: 'Für viele Online-Shops gilt seit Juni 2025 das Barrierefreiheitsstärkungsgesetz.' },
+    { name: 'Mehrsprachigkeit', price: 'ab 99 €', text: 'Deine Seite zusätzlich auf Englisch oder einer weiteren Sprache.', why: 'Touristen, internationale Kunden und Fachkräfte erreichen.' },
+    { name: 'Rechtstexte einbinden', price: '29 €', text: 'Impressum, Datenschutz & AGB von einem Rechtstexte-Anbieter, sauber eingebunden.', why: 'Fehlende Pflichtangaben gehören zu den häufigsten Abmahngründen.' },
   ]},
   { group: 'Service', items: [
     { name: 'Express in 48 Stunden', price: '+ 25 %', text: 'Dein Projekt rückt in der Planung nach vorne.', why: 'Für Aktionen, Events und kurzfristige Launches.' },
-    { name: 'Zusätzliche Korrekturrunde', price: '49 €', text: 'Eine weitere Feedbackschleife nach den inklusiven Runden.', why: 'Wenn mehrere Leute mitentscheiden.' },
-    { name: 'Texte & Copywriting', price: 'ab 90 €', text: 'Headlines und Texte, die verkaufen – statt Füllwörtern.', why: 'Gute Gestaltung braucht gute Worte.' },
+    { name: 'Zusätzliche Korrekturrunde', price: '29 €', text: 'Eine weitere Feedbackschleife nach den inklusiven Runden.', why: 'Wenn mehrere Leute mitentscheiden.' },
+    { name: 'Texte & Copywriting', price: 'ab 49 €', text: 'Headlines und Texte, die verkaufen – statt Füllwörtern.', why: 'Gute Gestaltung braucht gute Worte.' },
   ]},
 ];
 
@@ -105,7 +116,7 @@ window.JOBS = [];
 
 /* Team. Foto: Datei in img/team/ ablegen und Pfad eintragen. */
 window.TEAM = [
-  { name: 'Mika Wittenborn', role: 'Gründer · Konzept, Motion & Web', photo: '', text: 'BWL-Student an der FHM Bielefeld. Baut Spots und 3D-Webseiten, die man nicht wegscrollt – und kümmert sich persönlich um jedes Projekt.' },
+  { name: 'Mika Wittenborn', role: 'Gründer · Konzept, Motion & Web', photo: 'img/team/mika.png', text: 'BWL-Student an der FHM Bielefeld. Baut Werbespots, Webseiten und Chatbots, die man nicht wegscrollt – und kümmert sich persönlich um jedes Projekt.' },
 ];
 
 window.TESTIMONIALS = []; // { quote: '...', name: '...', company: '...' }
@@ -114,14 +125,18 @@ window.FAQ = [
   { cat: 'Allgemein', q: 'Wo sitzt du – und arbeitest du nur lokal?', a: 'Ich sitze in Bielefeld und arbeite gern mit Betrieben aus OWL zusammen. Spots und Webseiten liefere ich aber deutschlandweit und remote.' },
   { cat: 'Allgemein', q: 'Wie schnell meldest du dich?', a: 'Innerhalb von 24 Stunden an Werktagen – meistens deutlich schneller.' },
   { cat: 'Allgemein', q: 'Was brauchst du von mir?', a: 'Logo, Produktfotos (wenn vorhanden), deine wichtigste Botschaft und ein, zwei Beispiele, die dir gefallen. Den Rest erarbeiten wir gemeinsam.' },
-  { cat: 'Werbespots', q: 'Wie lange dauert ein Werbespot?', a: 'Meist 3–5 Werktage nach dem Briefing. Express in 48 Stunden ist gegen Aufpreis möglich.' },
+  { cat: 'Werbespots', q: 'Wie lange dauert ein Werbespot?', a: 'Meist 3–5 Werktage nach dem Briefing. Express in 48 Stunden ist gegen 25 % Aufpreis möglich.' },
   { cat: 'Werbespots', q: 'Brauche ich professionelle Fotos?', a: 'Nein. Ich kann vorhandene Produktfotos freistellen, retuschieren und im Studio-Look inszenieren.' },
   { cat: 'Werbespots', q: 'In welchen Formaten bekomme ich den Spot?', a: 'Standard ist 9:16 für TikTok, Reels und Shorts. 16:9, 1:1 und 4:5 sind optional.' },
-  { cat: 'Webseiten', q: 'Wie lange dauert eine Website?', a: 'Eine Landingpage etwa 1–2 Wochen, eine 3D-Website 2–4 Wochen, ein Shop 3–6 Wochen.' },
-  { cat: 'Webseiten', q: 'Kann ich Inhalte später selbst ändern?', a: 'Ja, auf Wunsch baue ich ein einfaches Pflegesystem ein oder übernehme Änderungen im Betreuungspaket.' },
+  { cat: 'Webseiten', q: 'Wie lange dauert eine Website?', a: 'Ein Onepager etwa 1 Woche, eine Website mit mehreren Seiten 1–2 Wochen, eine 3D-Website 2–4 Wochen, ein Shop 3–5 Wochen.' },
+  { cat: 'Webseiten', q: 'Muss es eine 3D-Website sein?', a: 'Nein. Die meisten Betriebe brauchen eine klassische, schnelle Website – die gibt es ab 390 €. 3D ist ein Extra für Marken, die besonders auffallen wollen.' },
+  { cat: 'Webseiten', q: 'Kann ich Inhalte später selbst ändern?', a: 'Ja, auf Wunsch baue ich ein einfaches Pflegesystem ein oder übernehme Änderungen im Betreuungspaket (ab 19 € im Monat).' },
   { cat: 'Webseiten', q: 'Kümmerst du dich um Hosting und Domain?', a: 'Ja, ich richte alles ein und erkläre dir, was wo liegt.' },
+  { cat: 'Chatbots', q: 'Was kann ein Chatbot auf meiner Website?', a: 'Er beantwortet typische Fragen zu Leistungen, Preisen, Öffnungszeiten oder Terminen – rund um die Uhr – und leitet Besucher zur passenden Seite oder ins Kontaktformular. Den Chat unten rechts auf dieser Seite kannst du direkt ausprobieren.' },
+  { cat: 'Chatbots', q: 'Was ist der Unterschied zwischen FAQ- und KI-Chatbot?', a: 'Der FAQ-Chatbot (ab 190 €) antwortet mit festgelegten Antworten und hat keine laufenden Kosten. Der KI-Chatbot (ab 490 €) formuliert frei auf Basis deiner Inhalte; dafür fallen kleine KI-Kosten je nach Nutzung an, meist wenige Euro im Monat.' },
+  { cat: 'Chatbots', q: 'Ist ein Chatbot datenschutzkonform?', a: 'Der FAQ-Chatbot läuft komplett im Browser und sendet keine Daten nach außen. Beim KI-Chatbot gibt es einen Datenschutz-Hinweis und einen Anbieter mit Auftragsverarbeitungsvertrag.' },
   { cat: 'Preise & Zahlung', q: 'Wie läuft die Bezahlung?', a: '50 % bei Auftrag, 50 % bei Abnahme. Abos und Betreuung monatlich im Voraus.' },
   { cat: 'Preise & Zahlung', q: 'Sind die Preise Festpreise?', a: 'Die genannten Preise sind Startpreise. Nach dem Erstgespräch bekommst du ein festes Angebot – ohne versteckte Kosten.' },
   { cat: 'Rechtliches', q: 'Wem gehören die Rechte am Ende?', a: 'Nach vollständiger Bezahlung darfst du Spots und Website zeitlich unbegrenzt für deine Marke nutzen. Musik und Bilder sind lizenziert oder selbst erstellt.' },
-  { cat: 'Rechtliches', q: 'Schreibst du auch Impressum und Datenschutzerklärung?', a: 'Nein, Rechtstexte schreibe ich nicht. Ich binde aber Texte von Anbietern wie eRecht24 oder IT-Recht-Kanzlei sauber ein.' },
+  { cat: 'Rechtliches', q: 'Schreibst du auch Impressum und Datenschutzerklärung?', a: 'Nein, Rechtstexte schreibe ich nicht. Ich binde aber Texte von Anbietern wie eRecht24 oder IT-Recht-Kanzlei sauber ein (29 €).' },
 ];

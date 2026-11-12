@@ -16,9 +16,9 @@ const count = id => P.filter(p => p.branche === id).length;
 const NAV = [
   { href: 'arbeiten.html', label: 'Arbeiten', key: 'arbeiten', flyout: {
       head: 'Arbeiten nach Branche', big: B.slice(0, 5).map(b => [`arbeiten.html#${b.id}`, b.name, count(b.id) ? `${count(b.id)} Projekt${count(b.id) > 1 ? 'e' : ''}` : 'Demnächst']),
-      small: [['arbeiten.html', 'Alle Projekte'], ['arbeiten.html#spots', 'Nur Werbespots'], ['arbeiten.html#web', 'Nur Webseiten'], ...B.slice(5).map(b => [`arbeiten.html#${b.id}`, b.name])] } },
+      small: [['arbeiten.html', 'Alle Projekte'], ['arbeiten.html#spots', 'Nur Werbespots'], ['arbeiten.html#web', 'Nur Webseiten'], ['arbeiten.html#bots', 'Nur Chatbots'], ...B.slice(5).map(b => [`arbeiten.html#${b.id}`, b.name])] } },
   { href: 'leistungen.html', label: 'Leistungen', key: 'leistungen', flyout: {
-      head: 'Leistungen', big: [['leistungen.html#spots', 'Werbespots', 'TikTok · Reels · Ads'], ['leistungen.html#web', '3D-Webseiten', 'Landingpages · Markenseiten'], ['leistungen.html#shop', 'Online-Shops', 'Stripe · Shopify'], ['leistungen.html#betreuung', 'Betreuung', 'Hosting · Updates · Content']],
+      head: 'Leistungen', big: [['leistungen.html#spots', 'Werbespots', 'TikTok · Reels · Ads'], ['leistungen.html#web', 'Webseiten', 'Onepager · Firmen-Website · 3D'], ['leistungen.html#chatbots', 'Chatbots', 'FAQ- & KI-Assistenten'], ['leistungen.html#shop', 'Online-Shops', 'Stripe · Shopify'], ['leistungen.html#betreuung', 'Betreuung', 'Hosting · Updates · Content']],
       small: [['leistungen.html#ablauf', 'So läuft ein Projekt'], ['preise.html', 'Preise ansehen'], ['faq.html', 'Häufige Fragen']] } },
   { href: 'preise.html', label: 'Preise', key: 'preise' },
   { href: 'check.html', label: 'Gratis-Check', key: 'check' },
@@ -31,7 +31,7 @@ const header = document.createElement('header');
 header.className = 'gnav'; header.id = 'nav';
 header.innerHTML = `
   <div class="gnav-bar">
-    <a class="logo" href="index.html" aria-label="${esc(C.brand)} – Startseite"><span class="dot"></span><span>${esc(C.brand)}</span></a>
+    <a class="logo" href="index.html" aria-label="${esc(C.brand)} – Startseite"><img class="logo-mark" src="brand/fluxe-mark.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
     <nav class="gnav-links" aria-label="Hauptnavigation">
       ${NAV.map((n, i) => `<a href="${n.href}" class="${page === n.key ? 'active' : ''}" ${n.flyout ? `data-fly="${i}" aria-haspopup="true"` : ''}>${n.label}</a>`).join('')}
     </nav>
@@ -49,7 +49,7 @@ header.innerHTML = `
 `;
 document.body.prepend(header);
 // mobile menu lives outside the header: the header's backdrop-filter would otherwise clip it to 60 px
-const SUBTXT = { arbeiten: 'Projekte nach Branche', leistungen: 'Spots, Webseiten, Shops', preise: 'Pakete & Katalog', check: 'Kostenlos & unverbindlich', ueber: 'Wer dahinter steckt', karriere: 'Jobs & Initiativbewerbung', faq: 'Häufige Fragen', kontakt: 'Anfrage & Termin' };
+const SUBTXT = { arbeiten: 'Projekte nach Branche', leistungen: 'Spots, Webseiten, Chatbots', preise: 'Pakete & Katalog', check: 'Kostenlos & unverbindlich', ueber: 'Wer dahinter steckt', karriere: 'Jobs & Initiativbewerbung', faq: 'Häufige Fragen', kontakt: 'Anfrage & Termin' };
 const mnav = document.createElement('div');
 mnav.className = 'mnav'; mnav.hidden = true; mnav.id = 'mnav';
 mnav.setAttribute('role', 'dialog'); mnav.setAttribute('aria-label', 'Menü');
@@ -115,8 +115,8 @@ footer.innerHTML = `
     <div class="foot-cta-btns"><a class="btn btn-big" href="kontakt.html">Projekt anfragen</a><a class="btn btn-ghost" href="kontakt.html#termin">Kostenloses Erstgespräch</a></div>
   </div>
   <div class="foot-grid">
-    <div><a class="logo" href="index.html"><span class="dot"></span><span>${esc(C.brand)}</span></a>
-      <p class="foot-claim">Werbespots & 3D-Webseiten aus ${esc(C.city)}.<br>${esc(C.region)}.</p>
+    <div><a class="logo" href="index.html"><img class="logo-mark" src="brand/fluxe-mark.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
+      <p class="foot-claim">Werbespots, Webseiten & Chatbots aus ${esc(C.city)}.<br>${esc(C.region)}.</p>
       ${C.email ? `<a class="foot-mail" href="mailto:${esc(C.email)}">${esc(C.email)}</a>` : ''}<p class="foot-claim">Antwort innerhalb von ${esc(C.responseTime || '24 Stunden')}.</p></div>
     <div><p class="fh">Arbeiten</p>${B.slice(0, 6).map(b => `<a href="arbeiten.html#${b.id}">${esc(b.name)}</a>`).join('')}</div>
     <div><p class="fh">Studio</p><a href="check.html">Gratis-Check</a><a href="leistungen.html">Leistungen</a><a href="preise.html">Preise</a><a href="ueber-mich.html">Über mich</a><a href="ueber-mich.html#team">Team</a><a href="karriere.html">Karriere</a><a href="faq.html">FAQ</a></div>
@@ -143,7 +143,7 @@ window.SITE.projectCard = p => p.kind === 'spot' ? `
   </button>` : `
   <button class="pcard web-card reveal" style="--c:${p.color}" data-project="${p.id}" aria-label="${esc(p.title)} ansehen">
     <span class="pmedia"><span class="pbrowser"><i></i><i></i><i></i></span><img src="${p.images[0]}" alt="" loading="lazy"><img class="pmob" src="${p.mobile}" alt="" loading="lazy"></span>
-    <span class="pinfo"><small>${esc(bName(p.branche))} · Website</small><b>${esc(p.title)}</b><span>${esc(p.sub)}</span></span>
+    <span class="pinfo"><small>${esc(bName(p.branche))} · ${p.kind === 'bot' ? 'Chatbot' : 'Website'}</small><b>${esc(p.title)}</b><span>${esc(p.sub)}</span></span>
   </button>`;
 window.SITE.soonCard = b => `
   <a class="soon-card reveal" style="--c:${b.color}" href="kontakt.html?branche=${encodeURIComponent(b.name)}">
@@ -166,11 +166,11 @@ const openProject = id => {
        <div class="pm-dots">${p.images.map((_, i) => `<button aria-label="Bild ${i + 1}" class="${i ? '' : 'on'}" data-i="${i}"></button>`).join('')}</div></div>`;
   $('.pm-body', modal).innerHTML = `${media}
     <div class="pm-text" style="--accent:${p.color}">
-      <p class="kicker">${esc(bName(p.branche))} · ${p.kind === 'spot' ? 'Werbespot' : 'Website'}</p>
+      <p class="kicker">${esc(bName(p.branche))} · ${({ spot: 'Werbespot', web: 'Website', bot: 'Chatbot' })[p.kind]}</p>
       <h3>${esc(p.title)}</h3><p class="pm-sub">${esc(p.sub)}</p>
       <p>${esc(p.text)}</p>
       <ul class="tags">${p.tags.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
-      <div class="pm-cta">${p.live ? `<a class="btn btn-accent" href="${p.live}" target="_blank" rel="noopener">Live ansehen ↗</a>` : ''}<a class="btn btn-ghost" href="kontakt.html?projekt=${encodeURIComponent(p.title)}">So etwas anfragen</a></div>
+      <div class="pm-cta">${p.live === '#chat' ? '<button class="btn btn-accent" type="button" data-trychat>Jetzt live testen</button>' : p.live ? `<a class="btn btn-accent" href="${p.live}" target="_blank" rel="noopener">Live ansehen ↗</a>` : ''}<a class="btn btn-ghost" href="kontakt.html?projekt=${encodeURIComponent(p.title)}">So etwas anfragen</a></div>
       <p class="note">${esc(p.note || 'Unbeauftragte Spec-Arbeit zur Demonstration. Keine Verbindung zur gezeigten Marke.')}</p>
     </div>`;
   modal.hidden = false; document.body.style.overflow = 'hidden';
@@ -181,6 +181,7 @@ const openProject = id => {
 const closeModal = () => { const v = $('video', modal); if (v) v.pause(); modal.hidden = true; $('.pm-body', modal).innerHTML = ''; document.body.style.overflow = ''; };
 document.addEventListener('click', e => {
   const c = e.target.closest('[data-project]'); if (c) { e.preventDefault(); openProject(c.dataset.project); return; }
+  if (e.target.closest('[data-trychat]')) { closeModal(); if (window.FLUXEBOT) window.FLUXEBOT.open(true); return; }
   if (e.target === modal || e.target.closest('.pm-close')) closeModal();
 });
 addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
