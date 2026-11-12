@@ -716,3 +716,25 @@ html.menu-open .bot-fab, html.menu-open .wa-float, html.menu-open .sel-bar { dis
 .quote blockquote { margin: 0; font-size: 17px; line-height: 1.55; color: #e8e8ea; }
 .quote figcaption { margin-top: auto; display: flex; flex-direction: column; gap: 2px; padding-top: 16px; border-top: 1px solid var(--line); }
 .quote figcaption b { font-size: 16px; } .quote figcaption span { font-size: 13px; color: var(--muted); }
+
+/* ── 3D-Projektkarussell ── */
+.ring { position: relative; margin-top: clamp(40px, 6vw, 70px); }
+.ring-stage { position: relative; height: clamp(400px, 46vw, 560px); perspective: 1500px; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; outline: none; }
+.ring-stage:active { cursor: grabbing; }
+.ring-track { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; will-change: transform; }
+.ring-card { position: absolute; left: calc(var(--w) / -2); top: calc(var(--w) * -0.889); --w: clamp(190px, 21vw, 300px); width: var(--w); aspect-ratio: 9 / 16; padding: 0; border: 1px solid rgba(255,255,255,.12); border-radius: clamp(20px, 2vw, 30px); overflow: hidden; background: #000; cursor: pointer; backface-visibility: hidden; -webkit-backface-visibility: hidden; transition: box-shadow .4s, border-color .4s; color: #fff; }
+.ring-card img, .ring-card video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; pointer-events: none; }
+.ring-card.wide img, .ring-card.wide video { object-position: center; }
+.ring-card video { opacity: 0; transition: opacity .5s; }
+.ring-card.playing video { opacity: 1; }
+.ring-card.front { border-color: color-mix(in srgb, var(--c) 70%, transparent); box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 60px color-mix(in srgb, var(--c) 28%, transparent); }
+.ring-card .snd { position: absolute; right: 12px; top: 12px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: rgba(0,0,0,.55); font-size: 14px; backdrop-filter: blur(8px); }
+.ring-ui { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 30px); margin-top: 18px; }
+.ring-arrow { flex: none; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line); background: rgba(255,255,255,.05); color: var(--ink); font-size: 26px; line-height: 1; cursor: pointer; transition: background .25s, transform .25s; }
+.ring-arrow:hover { background: rgba(255,255,255,.12); transform: scale(1.06); }
+.ring-label { min-width: 0; width: min(360px, 62vw); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; }
+.ring-label small { font-size: 12px; font-weight: 600; letter-spacing: .04em; color: var(--c, var(--lime)); }
+.ring-label b { font-size: clamp(20px, 2.4vw, 26px); letter-spacing: -.02em; }
+.ring-label span { font-size: 14px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.ring-hint { text-align: center; color: #6e6e74; font-size: 12px; margin: 10px 0 0; }
+@media (max-width: 600px) { .ring-card { --w: 46vw; } .ring-stage { height: calc(46vw * 1.78 + 40px); } .ring-arrow { width: 42px; height: 42px; font-size: 22px; } }
