@@ -13,7 +13,7 @@
 <link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
 <link rel="preload" href="fonts/InterDisplay-Black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20261112e">
+<link rel="stylesheet" href="styles.css?v=20261112f">
 </head>
 <body data-page="start">
 <main>
@@ -56,6 +56,28 @@
       <div><b>1</b><span>Ansprechpartner von Idee bis Launch</span></div>
       <div><b>Fix</b><span>Festes Angebot vor Projektstart</span></div>
       <div><b>OWL</b><span>Aus Bielefeld – vor Ort &amp; remote</span></div>
+    </div>
+  </section>
+
+  <!-- ───────── MISSION ───────── -->
+  <section class="sec" id="mission">
+    <div class="sec-head reveal"><p class="kicker">Mission</p><h2>Wofür ich das mache.</h2>
+      <p class="lead">Viele gute Betriebe sind online unsichtbar – nicht, weil ihr Angebot schlecht ist, sondern weil ihr Auftritt nicht zeigt, wie gut sie sind. Das will ich ändern: mit Spots, Webseiten und Chatbots, die man sich leisten kann und die messbar etwas bringen.</p></div>
+    <div class="values">
+      <div class="reveal"><i>◎</i><b>Gesehen werden</b><p>Spots und Seiten, die im Feed und bei Google auffallen – statt unterzugehen.</p></div>
+      <div class="reveal"><i>↗</i><b>Mehr Anfragen</b><p>Klare Wege zur Anfrage, Terminbuchung und Chatbot – damit aus Besuchern Kunden werden.</p></div>
+      <div class="reveal"><i>◷</i><b>Zeit sparen</b><p>Weniger Telefon-Hin-und-her, weniger Routinefragen – mehr Zeit fürs eigentliche Geschäft.</p></div>
+    </div>
+    <div class="m100 reveal">
+      <div class="m100-num"><b>100</b><span>zufriedene Kunden – das Ziel</span></div>
+      <div class="m100-txt">
+        <p class="kicker">Mission 100</p>
+        <h3>Mein Ziel: 100 Betriebe, die sagen: „Das hat sich gelohnt.“</h3>
+        <p>Nicht 100 Projekte – 100 zufriedene Kunden. Jeder davon bekommt persönliche Betreuung, ein festes Angebot und ein Ergebnis, das man sieht.</p>
+        <div class="m100-bar" id="m100bar" hidden><span id="m100fill"></span></div>
+        <p class="m100-state" id="m100state">Die Reise beginnt gerade – die ersten Kunden bekommen Startkonditionen und besonders viel Aufmerksamkeit.</p>
+        <a class="btn" href="kontakt.html">Einer der ersten 100 werden</a>
+      </div>
     </div>
   </section>
 
@@ -119,9 +141,9 @@
   </section>
 </main>
 
-<script src="config.js?v=20261112e"></script>
-<script src="data.js?v=20261112e"></script>
-<script src="site.js?v=20261112e"></script>
+<script src="config.js?v=20261112f"></script>
+<script src="data.js?v=20261112f"></script>
+<script src="site.js?v=20261112f"></script>
 <script>
 (() => {
   const { esc, projectCard } = window.SITE;
@@ -133,6 +155,12 @@
   const q = document.getElementById('quotes');
   q.innerHTML = TESTIMONIALS.length ? TESTIMONIALS.map(t => `<div class="quote reveal"><p>„${esc(t.quote)}“</p><span>${esc(t.name)} · ${esc(t.company)}</span></div>`).join('')
     : [1, 2, 3].map(i => `<div class="soon-card static reveal" style="--c:${['#d4ff3a', '#4aa8ff', '#ff8a3d'][i - 1]}"><span class="soon-ico">“</span><span class="soon-badge">Demnächst verfügbar</span><b>${i === 1 ? 'Deine Stimme hier?' : i === 2 ? 'Erste Projekte laufen' : 'Bewertungen folgen'}</b><span>${i === 1 ? 'Die ersten Kunden bekommen Startkonditionen – und einen Platz auf dieser Seite.' : i === 2 ? 'Echte Kundenstimmen erscheinen hier, sobald die ersten Projekte live sind.' : 'Ehrliche Bewertungen statt erfundener Zitate.'}</span></div>`).join('');
+  const n = Math.max(0, Math.min(100, +(window.CONFIG.zufriedeneKunden || 0)));
+  if (n > 0) {
+    document.getElementById('m100bar').hidden = false;
+    document.getElementById('m100fill').style.width = n + '%';
+    document.getElementById('m100state').textContent = `${n} von 100 – danke an alle, die schon dabei sind.`;
+  }
   window.SITE.refresh();
   // hero parallax
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(pointer: fine)').matches) {
