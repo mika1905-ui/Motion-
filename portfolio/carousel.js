@@ -1,5 +1,5 @@
 /* 3D-Projektkarussell im Hero: Swipen/Ziehen dreht den Ring, Pfeile & Tastatur ebenso,
-   Tippen auf die vordere Karte öffnet das Projekt (Showreel: Ton an/aus). */
+   Tippen auf die vordere Karte öffnet das Projekt. */
 (() => {
   const host = document.getElementById('ring');
   if (!host) return;
@@ -7,18 +7,17 @@
   const { esc } = window.SITE;
   const bName = id => (B.find(b => b.id === id) || {}).name || '';
   const kindName = { spot: 'Werbespot', web: 'Website', bot: 'Chatbot' };
-  const items = [{ id: '__reel', title: 'Showreel', sub: 'Tippen für Ton', video: 'video/showreel.mp4', poster: 'img/spots/showreel.webp', color: '#d4ff3a', kicker: 'FLUXE Studio' }]
-    .concat(P.map(p => ({ id: p.id, title: p.title, sub: p.sub, color: p.color, kicker: `${bName(p.branche)} · ${kindName[p.kind] || ''}`,
-      video: p.kind === 'spot' ? p.video : null, poster: p.ring || (p.kind === 'spot' ? p.poster : (p.mobile || p.images[0])), wide: !!p.wide })));
+  const items = P.map(p => ({ id: p.id, title: p.title, sub: p.sub, color: p.color, kicker: `${bName(p.branche)} · ${kindName[p.kind] || ''}`,
+      video: p.kind === 'spot' ? p.video : null, poster: p.ring || (p.kind === 'spot' ? p.poster : (p.mobile || p.images[0])), wide: !!p.wide }));
   const N = items.length, STEP = 360 / N;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   host.innerHTML = `
     <div class="ring-stage"><div class="ring-track">
-      ${items.map((it, i) => `<button class="ring-card${it.wide ? ' wide' : ''}" style="--c:${it.color}" data-i="${i}" tabindex="-1" aria-label="${esc(it.title)}${it.id === '__reel' ? ' – Ton an/aus' : ' – Projekt öffnen'}">
+      ${items.map((it, i) => `<button class="ring-card${it.wide ? ' wide' : ''}" style="--c:${it.color}" data-i="${i}" tabindex="-1" aria-label="${esc(it.title)} – Projekt öffnen">
         <img src="${esc(it.poster)}" alt="" loading="eager" decoding="async" draggable="false">
-        ${it.video ? `<video muted loop playsinline preload="${it.id === '__reel' ? 'auto' : 'none'}" data-src="${esc(it.video)}"></video>` : ''}
-        ${it.id === '__reel' ? '<span class="reel-tag">Showreel</span><span class="snd" aria-hidden="true">🔇</span>' : ''}
+        ${it.video ? `<video muted loop playsinline preload="none" data-src="${esc(it.video)}"></video>` : ''}
+        <span class="shade" aria-hidden="true"></span>
       </button>`).join('')}
     </div></div>
     <div class="ring-ui">
@@ -40,14 +39,24 @@
     track.style.setProperty('--r', radius + 'px');
   };
   const norm = a => ((a % 360) + 540) % 360 - 180;
+  // only touch the DOM when the ring actually moved; darkening via a composited overlay (no CSS filter → no repaints)
+  const shades = cards.map(c => c.querySelector('.shade'));
+  const prev = cards.map(() => ({ o: -1, d: -1, pe: null }));
+  let lastRot = NaN;
   const apply = () => {
-    track.style.transform = `translateZ(${-radius}px) rotateY(${rot}deg)`;
+    if (Math.abs(rot - lastRot) < 0.01) return;
+    lastRot = rot;
+    track.style.transform = `translateZ(${-radius}px) rotateY(${rot.toFixed(3)}deg)`;
     let best = 0, bd = 999;
     cards.forEach((c, i) => {
       const a = Math.abs(norm(i * STEP + rot));
-      c.style.opacity = a > 120 ? 0 : (1 - Math.max(0, a - 30) / 110).toFixed(3);
-      c.style.filter = `brightness(${(1 - Math.min(a, 90) / 160).toFixed(3)})`;
-      c.style.pointerEvents = a > 100 ? 'none' : '';
+      const o = a > 120 ? 0 : +(1 - Math.max(0, a - 30) / 110).toFixed(2);
+      const d = +(Math.min(a, 90) / 160).toFixed(2);
+      const pe = a > 100 ? 'none' : '';
+      const p = prev[i];
+      if (p.o !== o) { c.style.opacity = o; c.style.visibility = o ? '' : 'hidden'; p.o = o; }
+      if (p.d !== d) { shades[i].style.opacity = d; p.d = d; }
+      if (p.pe !== pe) { c.style.pointerEvents = pe; p.pe = pe; }
       if (a < bd) { bd = a; best = i; }
     });
     if (best !== front) setFront(best);
@@ -76,12 +85,16 @@
       else { vel = 0; rot += (target - rot) * Math.min(1, 0.12 * dt); }
       // autoplay when idle
       if (!reduce && !document.documentElement.classList.contains('still') && now - idle > 5000 && visible && !document.hidden) {
-        idle = now; const cur = cards[front].querySelector('video');
-        if (!(items[front].id === '__reel' && cur && !cur.muted)) step(1);
+        idle = now; step(1);
       }
     }
-    apply(); requestAnimationFrame(tick);
+    apply();
+    // sleep when the ring is off-screen or the tab is hidden; wake on interaction / visibility
+    if (visible && !document.hidden) requestAnimationFrame(tick); else running = false;
   };
+  let running = false;
+  const wake = () => { if (!running) { running = true; last = performance.now(); requestAnimationFrame(tick); } };
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && visible) wake(); });
 
   // pointer / touch
   stage.addEventListener('pointerdown', e => {
@@ -110,14 +123,6 @@
   const activate = i => {
     if (i !== front) { goTo(i); return; }
     const it = items[i];
-    if (it.id === '__reel') {
-      const v = cards[i].querySelector('video'); if (!v.src) v.src = v.dataset.src;
-      v.muted = !v.muted; v.play().catch(() => {});
-      cards[i].querySelector('.snd').textContent = v.muted ? '🔇' : '🔊';
-      lab.querySelector('span').textContent = v.muted ? 'Tippen für Ton' : 'Tippen zum Stummschalten';
-      idle = performance.now() + 60000;
-      return;
-    }
     const v = cards[i].querySelector('video'); if (v) v.pause();
     const fake = document.createElement('button'); fake.dataset.project = it.id; fake.hidden = true;
     document.body.appendChild(fake); fake.click(); fake.remove();
@@ -132,7 +137,7 @@
   stage.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) { e.preventDefault(); rot -= e.deltaX * 0.15; target = Math.round(rot / STEP) * STEP; idle = performance.now(); } }, { passive: false });
 
   let visible = true;
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; const v = cards[front] && cards[front].querySelector('video'); if (v) { if (visible && !reduce) v.play().catch(() => {}); else v.pause(); } }, { threshold: .2 }).observe(host);
-  addEventListener('resize', layout);
-  layout(); apply(); idle = performance.now(); requestAnimationFrame(tick);
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake(); const v = cards[front] && cards[front].querySelector('video'); if (v) { if (visible && !reduce) v.play().catch(() => {}); else v.pause(); } }, { threshold: .2 }).observe(host);
+  addEventListener('resize', () => { layout(); lastRot = NaN; apply(); });
+  layout(); apply(); idle = performance.now(); wake();
 })();
