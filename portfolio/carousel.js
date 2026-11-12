@@ -9,14 +9,14 @@
   const kindName = { spot: 'Werbespot', web: 'Website', bot: 'Chatbot' };
   const items = [{ id: '__reel', title: 'Showreel', sub: 'Tippen für Ton', video: 'video/showreel.mp4', poster: 'img/spots/showreel.webp', color: '#d4ff3a', kicker: 'FLUXE Studio' }]
     .concat(P.map(p => ({ id: p.id, title: p.title, sub: p.sub, color: p.color, kicker: `${bName(p.branche)} · ${kindName[p.kind] || ''}`,
-      video: p.kind === 'spot' ? p.video : null, poster: p.kind === 'spot' ? p.poster : (p.mobile || p.images[0]), wide: !!p.wide })));
+      video: p.kind === 'spot' ? p.video : null, poster: p.ring || (p.kind === 'spot' ? p.poster : (p.mobile || p.images[0])), wide: !!p.wide })));
   const N = items.length, STEP = 360 / N;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   host.innerHTML = `
     <div class="ring-stage"><div class="ring-track">
       ${items.map((it, i) => `<button class="ring-card${it.wide ? ' wide' : ''}" style="--c:${it.color}" data-i="${i}" tabindex="-1" aria-label="${esc(it.title)}${it.id === '__reel' ? ' – Ton an/aus' : ' – Projekt öffnen'}">
-        <img src="${esc(it.poster)}" alt="" loading="${i < 4 || i > N - 3 ? 'eager' : 'lazy'}" draggable="false">
+        <img src="${esc(it.poster)}" alt="" loading="eager" decoding="async" draggable="false">
         ${it.video ? `<video muted loop playsinline preload="${it.id === '__reel' ? 'auto' : 'none'}" data-src="${esc(it.video)}"></video>` : ''}
         ${it.id === '__reel' ? '<span class="reel-tag">Showreel</span><span class="snd" aria-hidden="true">🔇</span>' : ''}
       </button>`).join('')}
