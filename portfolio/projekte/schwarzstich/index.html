@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schwarzstich Tattoo</title>
+<link rel="stylesheet" href="fonts.css">
+<meta name="robots" content="noindex">
+<style>
+/* Layout: Flash-Sheet-Ästhetik. Schwarze Haut-Leinwand, Knochenweiß, Oxblood-Rot als einziger Akzent.
+   Blackletter nur für die Marke, kondensierte Groteske für Headlines, Mono für Nummerierung wie auf Flash-Bögen. */
+:root{
+  --ink:#0d0c0b;
+  --ink-2:#161412;
+  --bone:#ebe3d3;
+  --ash:#8e877b;
+  --line:#2c2925;
+  --blood:#b8291f;
+  --f-brand:"Pirata One", "UnifrakturMaguntia", Georgia, serif;
+  --f-head:"Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --f-body:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --gut:clamp(16px,4vw,48px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--ink)}
+body{background:var(--ink);color:var(--bone);font-family:var(--f-body);font-size:17px;line-height:1.6;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--blood);outline-offset:3px}
+h1,h2,h3{font-family:var(--f-head);text-transform:uppercase;line-height:.92;letter-spacing:.01em;text-wrap:balance}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.wrap{max-width:1280px;margin:0 auto;padding:0 var(--gut)}
+section{padding:clamp(72px,10vw,128px) 0;border-top:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:end;margin-bottom:clamp(36px,5vw,64px)}
+.sec-head .num{font-family:var(--f-brand);font-size:clamp(56px,8vw,104px);color:var(--blood);line-height:.8}
+.sec-head h2{font-size:clamp(44px,7vw,96px);font-weight:900}
+.sec-head p{grid-column:1/-1;max-width:62ch;color:var(--ash)}
+.btn{display:inline-flex;align-items:center;gap:12px;font-family:var(--f-head);font-weight:800;font-size:20px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:14px 26px;border:2px solid var(--bone);color:var(--bone);background:transparent;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn:hover{background:var(--bone);color:var(--ink)}
+.btn.red{background:var(--blood);border-color:var(--blood);color:var(--bone)}
+.btn.red:hover{background:var(--bone);border-color:var(--bone);color:var(--ink)}
+.soon{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--blood);border:1px dashed var(--blood);padding:3px 8px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;background:rgba(13,12,11,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:68px}
+.logo{font-family:var(--f-brand);font-size:34px;text-decoration:none;line-height:1}
+.logo span{color:var(--blood)}
+nav ul{display:flex;gap:28px;list-style:none}
+nav ul a{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--ash);transition:color .2s}
+nav ul a:hover{color:var(--bone)}
+nav .btn{font-size:16px;padding:9px 18px}
+@media (max-width:900px){nav ul{display:none}}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);min-height:min(820px,92vh);border-bottom:1px solid var(--line)}
+.hero-copy{padding:clamp(48px,7vw,96px) var(--gut);display:flex;flex-direction:column;justify-content:space-between;gap:40px;position:relative}
+.hero-copy .mono span{color:var(--blood)}
+.hero h1{font-family:var(--f-brand);text-transform:none;font-weight:400;font-size:clamp(64px,8.6vw,150px);line-height:.82;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--blood)}
+.hero-sub{font-family:var(--f-head);font-weight:800;font-size:clamp(28px,3.4vw,46px);text-transform:uppercase;line-height:.95;max-width:16ch}
+.hero-sub b{color:var(--blood);font-weight:800}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.hero-meta{display:flex;gap:32px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px}
+.hero-meta div{display:grid;gap:2px}
+.hero-meta strong{font-family:var(--f-head);font-size:26px;font-weight:800;text-transform:uppercase}
+.hero-img{position:relative;overflow:hidden;border-left:1px solid var(--line)}
+.hero-img img{width:100%;height:100%;object-fit:cover;object-position:60% 40%;filter:grayscale(.35) contrast(1.08)}
+.hero-img::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--ink) 0%,rgba(13,12,11,0) 28%),linear-gradient(0deg,rgba(13,12,11,.7),rgba(13,12,11,0) 35%)}
+.hero-img figcaption{position:absolute;right:var(--gut);bottom:24px;z-index:2;text-align:right}
+@media (max-width:900px){.hero{grid-template-columns:1fr}.hero-img{height:min(62vh,560px);border-left:0;border-top:1px solid var(--line);order:-1}.hero-img::after{background:linear-gradient(0deg,var(--ink),rgba(13,12,11,0) 45%)}}
+
+/* MARQUEE */
+.ticker{background:var(--blood);color:var(--bone);overflow:hidden;white-space:nowrap;border-bottom:1px solid var(--line)}
+.ticker-track{display:inline-flex;gap:0;animation:roll 38s linear infinite;padding:14px 0}
+.ticker-track span{font-family:var(--f-head);font-weight:900;font-size:26px;text-transform:uppercase;letter-spacing:.04em;padding:0 22px}
+.ticker-track span::after{content:"✦";margin-left:44px;font-size:16px;vertical-align:middle;opacity:.7}
+@keyframes roll{to{transform:translateX(-50%)}}
+
+/* STILE: Flash-Sheet */
+.flash{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.flash article{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 24px 30px;display:grid;gap:12px;align-content:start;position:relative;transition:background .25s}
+.flash article:hover{background:var(--ink-2)}
+.flash article:hover h3{color:var(--blood)}
+.flash .no{font-family:var(--f-mono);font-size:12px;color:var(--ash);letter-spacing:.12em}
+.flash h3{font-size:36px;font-weight:800;transition:color .25s}
+.flash p{color:var(--ash);font-size:15px}
+.flash .tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--bone);opacity:.6}
+
+/* ARBEITEN */
+.gallery{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:120px;gap:12px}
+.gallery figure{position:relative;overflow:hidden;background:var(--ink-2)}
+.gallery img{width:100%;height:100%;object-fit:cover;filter:grayscale(.2);transition:transform .6s ease,filter .4s}
+.gallery figure:hover img{transform:scale(1.04);filter:grayscale(0)}
+.gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:40px 18px 16px;background:linear-gradient(0deg,rgba(13,12,11,.92),rgba(13,12,11,0));display:flex;justify-content:space-between;align-items:end;gap:12px}
+.gallery figcaption strong{font-family:var(--f-head);font-size:26px;font-weight:800;text-transform:uppercase;line-height:1}
+.g1{grid-column:1/6;grid-row:span 5}
+.g2{grid-column:6/10;grid-row:span 3}
+.g3{grid-column:10/13;grid-row:span 3}
+.g4{grid-column:6/13;grid-row:span 2}
+.g4 img{object-position:50% 30%}
+.g5{grid-column:1/13;grid-row:span 1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border:1px dashed var(--line);background:transparent}
+.g5 strong{font-family:var(--f-head);font-size:28px;font-weight:800;text-transform:uppercase}
+@media (max-width:800px){.gallery{grid-template-columns:1fr 1fr;grid-auto-rows:150px}.g1{grid-column:1/-1;grid-row:span 4}.g2,.g3{grid-column:span 1;grid-row:span 2}.g4{grid-column:1/-1;grid-row:span 2}.g5{grid-column:1/-1;flex-direction:column;justify-content:center;align-items:flex-start;padding:16px}}
+
+/* PREISE */
+.price{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(32px,6vw,80px);align-items:center}
+.price-big{font-family:var(--f-head);font-weight:900;text-transform:uppercase;font-size:clamp(56px,9vw,128px);line-height:.86}
+.price-big em{font-style:normal;color:var(--blood);font-family:var(--f-brand);text-transform:none;font-weight:400;display:block;font-size:.9em}
+.factors{list-style:none;display:grid;border-top:1px solid var(--line)}
+.factors li{display:grid;grid-template-columns:48px 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--line)}
+.factors li b{font-family:var(--f-head);font-size:22px;text-transform:uppercase;font-weight:800;display:block}
+.factors li span{color:var(--ash);font-size:15px}
+.factors li i{font-style:normal;font-family:var(--f-mono);font-size:12px;color:var(--blood);padding-top:6px}
+@media (max-width:860px){.price{grid-template-columns:1fr}}
+
+/* ABLAUF */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:s}
+.steps li{list-style:none;padding:28px 24px 8px 0;border-top:2px solid var(--line);position:relative;display:grid;gap:10px;align-content:start}
+.steps li::before{content:"";position:absolute;top:-2px;left:0;width:48px;height:2px;background:var(--blood)}
+.steps .n{font-family:var(--f-brand);font-size:64px;line-height:.8;color:var(--blood)}
+.steps h3{font-size:30px;font-weight:800}
+.steps p{color:var(--ash);font-size:15px;max-width:30ch}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr;row-gap:24px}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+
+/* TEAM */
+.team{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.member{display:grid;gap:14px;align-content:start}
+.member .ph{aspect-ratio:3/4;overflow:hidden;background:var(--ink-2);position:relative;border:1px solid var(--line)}
+.member .ph img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1);transition:filter .5s,transform .6s}
+.member:hover .ph img{filter:grayscale(0);transform:scale(1.03)}
+.member .ph .badge{position:absolute;top:12px;left:12px;background:var(--ink);font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;padding:4px 8px;text-transform:uppercase}
+.member h3{font-size:32px;font-weight:800}
+.member .styles{display:flex;flex-wrap:wrap;gap:6px}
+.member .styles span{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:3px 8px;color:var(--ash)}
+.member.ghost .ph{display:grid;place-items:center;border-style:dashed;background:repeating-linear-gradient(135deg,transparent 0 14px,rgba(235,227,211,.03) 14px 15px)}
+.member.ghost .ph b{font-family:var(--f-brand);font-size:84px;color:var(--line);font-weight:400}
+@media (max-width:1000px){.team{grid-template-columns:1fr 1fr}}
+@media (max-width:440px){.team{grid-template-columns:1fr}}
+
+/* STUDIO */
+.studio{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,6vw,80px);align-items:center}
+.studio-img{aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line)}
+.studio-img img{width:100%;height:100%;object-fit:cover;filter:sepia(.15) contrast(1.05)}
+.checks{list-style:none;display:grid;gap:0;margin-top:28px;border-top:1px solid var(--line)}
+.checks li{padding:14px 0;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:baseline}
+.checks li::before{content:"✦";color:var(--blood);font-size:13px}
+.studio h2{font-size:clamp(44px,6vw,84px);font-weight:900;margin:14px 0 18px}
+.studio p{color:var(--ash);max-width:58ch}
+@media (max-width:860px){.studio{grid-template-columns:1fr}}
+
+/* ANFRAGE */
+.req{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,6vw,80px);align-items:start}
+.req-side h2{font-size:clamp(52px,8vw,112px);font-weight:900}
+.req-side h2 em{font-style:normal;color:var(--blood)}
+.req-side p{color:var(--ash);margin:20px 0;max-width:42ch}
+.req-side .note{border-left:2px solid var(--blood);padding:4px 0 4px 16px;color:var(--bone);font-size:15px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;background:var(--ink-2);border:1px solid var(--line);padding:clamp(20px,3.5vw,40px)}
+.f{display:grid;gap:8px}
+.f.full{grid-column:1/-1}
+label,.legend{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--bone);font:inherit;font-size:16px;padding:13px 14px;border-radius:0;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blood)}
+textarea{min-height:130px;resize:vertical}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ash) 50%),linear-gradient(135deg,var(--ash) 50%,transparent 50%);background-position:calc(100% - 20px) 55%,calc(100% - 14px) 55%;background-size:6px 6px;background-repeat:no-repeat}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{cursor:pointer;border:1px solid var(--line);padding:8px 14px;color:var(--bone);font-size:12px;transition:all .2s}
+.chips input:checked+label{background:var(--blood);border-color:var(--blood)}
+.chips input:focus-visible+label{outline:2px solid var(--bone);outline-offset:2px}
+.drop{border:1px dashed var(--ash);padding:18px;display:flex;gap:14px;align-items:center;cursor:pointer;color:var(--ash);font-size:15px}
+.drop:hover{border-color:var(--bone);color:var(--bone)}
+.drop input{display:none}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ash);text-transform:none;letter-spacing:0;font-family:var(--f-body)}
+.check input{margin-top:4px;accent-color:var(--blood);width:18px;height:18px;flex:none}
+.err{color:#ff6b5e;font-size:14px;grid-column:1/-1;min-height:1em}
+form .btn{justify-self:start}
+.thanks{display:none;background:var(--ink-2);border:1px solid var(--blood);padding:clamp(24px,4vw,48px);gap:18px}
+.thanks.show{display:grid}
+.thanks h3{font-size:clamp(40px,5vw,64px);font-weight:900}
+.thanks dl{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:15px;border-top:1px solid var(--line);padding-top:16px}
+.thanks dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ash);padding-top:3px}
+@media (max-width:900px){.req{grid-template-columns:1fr}}
+@media (max-width:560px){form{grid-template-columns:1fr}}
+
+/* FAQ */
+.faq{display:grid;border-top:1px solid var(--line);max-width:920px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;padding:22px 0;font-family:var(--f-head);font-weight:800;font-size:clamp(24px,3vw,32px);text-transform:uppercase;line-height:1}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--blood);font-family:var(--f-mono);font-weight:400;transition:transform .25s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--ash);padding:0 0 24px;max-width:66ch}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:64px 0 32px}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:32px}
+.fnav a,.foot ul a{text-decoration:none;color:var(--ash);transition:color .2s}.fnav a:hover,.foot ul a:hover{color:var(--bone)}
+.foot .logo{font-size:56px}
+.foot h4{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);font-weight:400;margin-bottom:12px}
+.foot p,.foot li{font-size:15px;list-style:none;display:grid;gap:6px}
+.foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:56px;padding-top:20px;border-top:1px solid var(--line)}
+
+
+
+/* Seiten / Reiter */
+.page{display:none}
+.page.on{display:block}
+main>.page.on:first-of-type, main>.page.on{border-top:0}
+main>.page.on~.page.on{border-top:1px solid var(--line)}
+nav ul a{position:relative;padding:6px 0}
+nav ul a[aria-current="page"]{color:var(--bone)}
+nav ul a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--blood)}
+.mob{display:none}
+.nav-r{display:flex;gap:12px;align-items:center}
+.burger{display:none;width:44px;height:44px;background:transparent;border:1px solid var(--line);cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:7px}
+.burger span{display:block;width:20px;height:2px;background:var(--bone);transition:transform .25s}
+.burger[aria-expanded="true"] span:first-child{transform:translateY(4.5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:last-child{transform:translateY(-4.5px) rotate(-45deg)}
+@media (max-width:900px){
+  .burger{display:flex}
+  nav ul{display:none;position:absolute;top:68px;left:0;right:0;flex-direction:column;gap:0;background:var(--ink);border-bottom:1px solid var(--line);padding:8px var(--gut) 20px}
+  nav ul.open{display:flex}
+  nav ul .mob{display:block}
+  nav ul .mob a{color:var(--blood)}
+  nav ul a{display:block;font-family:var(--f-head);font-weight:800;font-size:34px;letter-spacing:.02em;padding:10px 0;color:var(--ash)}
+  nav ul a[aria-current="page"]{color:var(--blood)}
+  nav ul a[aria-current="page"]::after{display:none}
+  nav .nav-r .btn{display:none}
+}
+/* Start-Teaser */
+.teaser-sec{border-top:0;padding:clamp(56px,8vw,96px) 0}
+.teasers{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:16px}
+.teaser{border:1px solid var(--line);padding:28px 24px;text-decoration:none;display:grid;gap:12px;align-content:start;min-height:320px;transition:background .25s,border-color .25s;position:relative;overflow:hidden}
+.teaser:hover{background:var(--ink-2);border-color:var(--blood)}
+.teaser .no{font-family:var(--f-mono);font-size:12px;color:var(--ash);letter-spacing:.12em}
+.teaser h3{font-size:clamp(44px,5vw,64px);font-weight:900}
+.teaser p{color:var(--ash);font-size:15px}
+.teaser .go{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--blood);margin-top:auto}
+.teaser.img{padding:0}
+.teaser.img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:grayscale(.3);transition:transform .6s}
+.teaser.img:hover img{transform:scale(1.04)}
+.teaser.img div{position:relative;z-index:1;align-self:end;padding:80px 24px 24px;display:grid;gap:10px;background:linear-gradient(0deg,rgba(13,12,11,.95),rgba(13,12,11,0))}
+.cta-band{margin-top:16px;border:1px solid var(--line);background:var(--ink-2);padding:24px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+.cta-band p{color:var(--ash);max-width:60ch}
+.cta-band strong{color:var(--bone);font-family:var(--f-head);font-size:24px;text-transform:uppercase;margin-right:6px}
+@media (max-width:860px){.teasers{grid-template-columns:1fr}.teaser{min-height:220px}.teaser.img{min-height:320px}}
+
+
+/* Feinschliff */
+.page.on{animation:pagein .45s ease both}
+@keyframes pagein{from{opacity:.001;transform:translateY(10px)}}
+@media (prefers-reduced-motion:reduce){.page.on{animation:none}}
+.pick{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blood);text-decoration:none;margin-top:6px;justify-self:start;border-bottom:1px solid transparent;transition:border-color .2s}
+.pick:hover{border-color:var(--blood)}
+.flash article{grid-template-rows:auto auto 1fr auto auto}
+.gallery figure{cursor:zoom-in}
+.lb{position:fixed;inset:0;z-index:100;background:rgba(8,7,6,.94);display:grid;place-items:center;padding:56px var(--gut) 32px}
+.lb[hidden]{display:none}
+.lb figure{display:grid;gap:12px;max-height:100%;justify-items:center}
+.lb img{max-height:calc(100vh - 140px);width:auto;max-width:100%;object-fit:contain;border:1px solid var(--line)}
+.lb-x{position:absolute;top:14px;right:var(--gut);width:44px;height:44px;background:transparent;border:1px solid var(--line);color:var(--bone);font-size:18px;cursor:pointer}
+.lb-x:hover{border-color:var(--blood);color:var(--blood)}
+.statement{margin:clamp(48px,7vw,88px) 0 clamp(32px,5vw,56px);display:grid;gap:16px;max-width:900px}
+.statement p{font-family:var(--f-brand);font-size:clamp(36px,5vw,64px);line-height:1.02;color:var(--bone)}
+.statement cite{font-style:normal;color:var(--blood)}
+.f.bad input,.f.bad textarea,.f.bad select{border-color:#ff6b5e}
+.f.bad .check{color:#ff6b5e}
+.form-note{grid-column:1/-1;font-size:13px;color:var(--ash)}
+@media (max-width:1000px){.foot{grid-template-columns:1fr 1fr}.foot>div:first-child{grid-column:1/-1}}
+@media (max-width:420px){.foot .logo{font-size:44px}}
+.check>span{display:block}
+.check .soon{margin-left:4px;vertical-align:1px}
+
+/* Laden: eine Sequenz im Hero, sonst ruhig. Ruhezustand ist sichtbar. */
+@media (prefers-reduced-motion:no-preference){
+  .hero h1,.hero-sub,.hero-actions{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+  .hero-sub{animation-delay:.12s}.hero-actions{animation-delay:.22s}
+  .hero-img img{animation:develop 1.6s ease-out both}
+}
+@media (prefers-reduced-motion:reduce){.ticker-track{animation:none}html{scroll-behavior:auto}}
+@keyframes rise{from{transform:translateY(24px);opacity:.001}}
+@keyframes develop{from{filter:grayscale(1) contrast(1.4) brightness(.4);transform:scale(1.06)}}
+</style>
+</head>
+<body>
+
+<nav aria-label="Hauptnavigation">
+  <div class="wrap">
+    <a href="#start" class="logo">Schwarz<span>stich</span></a>
+    <ul id="menu">
+      <li><a href="#start">Start</a></li>
+      <li><a href="#stile">Stile</a></li>
+      <li><a href="#arbeiten">Arbeiten</a></li>
+      <li><a href="#preise">Preise</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#studio">Studio</a></li>
+      <li class="mob"><a href="#anfrage">Anfrage</a></li>
+    </ul>
+    <div class="nav-r">
+      <a href="#anfrage" class="btn red">Anfragen</a>
+      <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page" data-page="start">
+<header class="hero">
+  <div class="hero-copy">
+    <p class="mono">Tattoo Atelier <span>✦</span> Seit Tag eins mit Nadel &amp; Haltung</p>
+    <div>
+      <h1>Schwarz<em>stich</em></h1>
+    </div>
+    <p class="hero-sub">Jeder Stil. <b>Jede Haut.</b> Ein Design nur für dich.</p>
+    <div class="hero-actions">
+      <a href="#anfrage" class="btn red">Termin anfragen →</a>
+      <a href="#arbeiten" class="btn">Arbeiten ansehen</a>
+    </div>
+    <div class="hero-meta">
+      <div><span class="mono">Stile</span><strong>Alle</strong></div>
+      <div><span class="mono">Preise</span><strong>Auf Anfrage</strong></div>
+      <div><span class="mono">Beratung</span><strong>Persönlich</strong></div>
+    </div>
+  </div>
+  <figure class="hero-img">
+    <img src="img/hero-zeus.jpg" alt="Tätowierer arbeitet an einem Black-&amp;-Grey-Rückenstück mit Zeus-Porträt">
+    <figcaption class="mono">Rückenstück · Black &amp; Grey Realism · in Arbeit</figcaption>
+  </figure>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Realism</span><span>Black &amp; Grey</span><span>Fineline</span><span>Traditional</span><span>Neo Traditional</span><span>Japanese</span><span>Blackwork</span><span>Dotwork</span><span>Ornamental</span><span>Lettering</span><span>Color</span><span>Cover-up</span>
+    <span>Realism</span><span>Black &amp; Grey</span><span>Fineline</span><span>Traditional</span><span>Neo Traditional</span><span>Japanese</span><span>Blackwork</span><span>Dotwork</span><span>Ornamental</span><span>Lettering</span><span>Color</span><span>Cover-up</span>
+  </div>
+</div>
+
+<section class="teaser-sec">
+  <div class="wrap">
+    <div class="teasers">
+      <a class="teaser" href="#stile"><span class="no">No. 01</span><h3>Stile</h3><p>Von Fineline bis Full Sleeve. Wir stechen alle Arten von Tattoos.</p><span class="go">Ansehen →</span></a>
+      <a class="teaser img" href="#arbeiten"><img src="img/sleeve-samurai.jpg" alt=""><div><span class="no">No. 02</span><h3>Arbeiten</h3><span class="go">Zur Galerie →</span></div></a>
+      <a class="teaser" href="#team"><span class="no">No. 03</span><h3>Team</h3><p>Lerne die Artists kennen und finde die Handschrift, die zu dir passt.</p><span class="go">Kennenlernen →</span></a>
+    </div>
+    <blockquote class="statement">
+      <p>„Ein Tattoo bleibt für immer. Deshalb nehmen wir uns Zeit, bevor die Nadel startet.“</p>
+      <cite class="mono">Das Schwarzstich-Team</cite>
+    </blockquote>
+    <div class="cta-band">
+      <p><strong>Preis auf Anfrage.</strong> Schick uns deine Idee, wir melden uns mit einem Termin zur Besprechung.</p>
+      <a href="#anfrage" class="btn red">Idee einreichen →</a>
+    </div>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section class="page" data-page="stile">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">I</span>
+      <h2>Unsere Stile</h2>
+      <p>Wir stechen alle Arten von Tattoos. Vom feinen Schriftzug am Handgelenk bis zum kompletten Rückenstück. Such dir einen Stil aus oder lass uns gemeinsam herausfinden, was zu deiner Idee passt.</p>
+    </div>
+    <div class="flash">
+      <article><span class="no">No. 01</span><h3>Realism</h3><p>Porträts, Statuen, Tiere. Fotorealistisch mit weichen Übergängen und tiefem Kontrast.</p><span class="tag">Großflächig · Mehrere Sessions</span><a class="pick" href="#anfrage" data-style="Realism">Diesen Stil anfragen →</a></article>
+      <article><span class="no">No. 02</span><h3>Black &amp; Grey</h3><p>Graustufen-Shading mit verdünntem Schwarz. Zeitlos und altert ruhig.</p><span class="tag">Sleeves · Rücken · Brust</span><a class="pick" href="#anfrage" data-style="Black &amp; Grey">Diesen Stil anfragen →</a></article>
+      <article><span class="no">No. 03</span><h3>Fineline</h3><p>Dünne Linien, filigrane Motive, Mini-Tattoos und Schriftzüge mit feinster Nadel.</p><span class="tag">Klein · Präzise</span><a class="pick" href="#anfrage" data-style="Fineline">Diesen Stil anfragen →</a></article>
+      <article><span class="no">No. 04</span><h3>Traditional</h3><p>Old School mit kräftiger Outline, satten Farben und klassischen Flash-Motiven.</p><span class="tag">Bold Lines · Farbe</span><a class="pick" href="#anfrage" data-style="Traditional">Diesen Stil anfragen →</a></article>
+      <article><span class="no">No. 05</span><h3>Japanese</h3><p>Samurai, Koi, Hannya, Kirschblüten. Erzählte Kompositionen über ganze Körperpartien.</p><span class="tag">Irezumi-inspiriert</span><a class="pick" href="#anfrage" data-style="Japanese">Diesen Stil anfragen →</a></article>
+      <article><span class="no">No. 06</span><h3>Blackwork</h3><p>Flächiges Schwarz, Ornamentik, Dotwork und grafische Muster mit starker Wirkung.</p><span class="tag">Grafisch · Ornamental</span><a class="pick" href="#anfrage" data-style="Blackwork / Dotwork">Diesen Stil anfragen →</a></article>
+      <article><span class="no">No. 07</span><h3>Neo Trad &amp; Color</h3><p>Moderne Farbarbeiten mit Tiefe, Leuchtkraft und klarer Lesbarkeit auf Distanz.</p><span class="tag">Farbe · Illustrativ</span><a class="pick" href="#anfrage" data-style="Neo Trad / Color">Diesen Stil anfragen →</a></article>
+      <article><span class="no">No. 08</span><h3>Cover-up</h3><p>Altes Tattoo, neue Geschichte. Wir planen das Überdecken so, dass vom Alten nichts mehr stört.</p><span class="tag">Beratung empfohlen</span><a class="pick" href="#anfrage" data-style="Cover-up">Diesen Stil anfragen →</a></article>
+    </div>
+  </div>
+</section>
+
+<section class="page" data-page="arbeiten">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">II</span>
+      <h2>Arbeiten</h2>
+      <p>Ein Auszug aus dem, was bei uns unter die Haut geht. Fertig verheilte Stücke und Momentaufnahmen aus laufenden Sessions.</p>
+    </div>
+    <div class="gallery">
+      <figure class="g1" tabindex="0" role="button" aria-label="Bild vergrößern"><img src="img/sleeve-samurai.jpg" alt="Kompletter Black-&amp;-Grey-Sleeve mit Samurai, Geisha, Hannya-Maske und Kirschblüten"><figcaption><strong>Samurai Sleeve</strong><span class="mono">Japanese · B&amp;G</span></figcaption></figure>
+      <figure class="g2" tabindex="0" role="button" aria-label="Bild vergrößern"><img src="img/back-skull.jpg" alt="Großes Schädel-Tattoo mit Hauern auf dem Rücken während der Session"><figcaption><strong>Beast Skull</strong><span class="mono">Dark Realism</span></figcaption></figure>
+      <figure class="g3" tabindex="0" role="button" aria-label="Bild vergrößern"><img src="img/zeus-detail.jpg" alt="Detail eines Zeus-Porträts mit lockigem Bart im Black-&amp;-Grey-Stil"><figcaption><strong>Zeus</strong><span class="mono">Realism</span></figcaption></figure>
+      <figure class="g4" tabindex="0" role="button" aria-label="Bild vergrößern"><img src="img/hero-zeus.jpg" alt="Rückenstück mit Zeus und Ornamentik, Ansicht über die Schulter des Tätowierers"><figcaption><strong>Olymp Backpiece</strong><span class="mono">Rücken · in Arbeit</span></figcaption></figure>
+      <div class="g5"><strong>Mehr Arbeiten auf Instagram</strong><span class="soon">Coming soon</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" data-page="preise">
+  <div class="wrap price">
+    <div>
+      <p class="mono" style="margin-bottom:18px"><span style="color:var(--blood)">III</span> &nbsp;Preise</p>
+      <p class="price-big">Preis auf <em>Anfrage</em></p>
+      <p style="color:var(--ash);margin-top:24px;max-width:48ch">Kein Tattoo ist wie das andere, deshalb gibt es bei uns keine Preisliste von der Stange. Schick uns deine Idee über das Formular. Wir melden uns bei dir mit einem Termin zur Besprechung und nennen dir dort einen fairen Preis.</p>
+      <div style="margin-top:28px"><a href="#anfrage" class="btn red">Jetzt anfragen →</a></div>
+    </div>
+    <ul class="factors" aria-label="Was den Preis beeinflusst">
+      <li><i>01</i><div><b>Größe</b><span>Von wenigen Zentimetern bis zum Full Sleeve.</span></div></li>
+      <li><i>02</i><div><b>Körperstelle</b><span>Manche Stellen brauchen mehr Zeit und Ruhe.</span></div></li>
+      <li><i>03</i><div><b>Detailgrad</b><span>Linework, Shading, Farbe und Realismus.</span></div></li>
+      <li><i>04</i><div><b>Sessions</b><span>Großprojekte planen wir über mehrere Termine.</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="page" data-page="preise">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">IV</span>
+      <h2>So läuft's</h2>
+    </div>
+    <ol class="steps">
+      <li><span class="n">1</span><h3>Anfrage</h3><p>Formular ausfüllen, Idee beschreiben, gern mit Referenzbild.</p></li>
+      <li><span class="n">2</span><h3>Besprechung</h3><p>Wir melden uns mit einem Termin. Gemeinsam klären wir Motiv, Stelle, Größe und Preis.</p></li>
+      <li><span class="n">3</span><h3>Design</h3><p>Dein Artist zeichnet ein Unikat, angepasst an deinen Körper.</p></li>
+      <li><span class="n">4</span><h3>Session</h3><p>Stechen, Folie drauf, Pflegeanleitung mit nach Hause.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="page" data-page="team">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">VI</span>
+      <h2>Das Team</h2>
+      <p>Jeder Artist hat seine Handschrift. Bei der Besprechung finden wir heraus, wer am besten zu deinem Projekt passt.</p>
+    </div>
+    <div class="team">
+      <div class="member">
+        <div class="ph"><img src="img/team-1.jpg" alt="Tätowierer mit Bart und Ohrtunnel bei der Arbeit"><span class="badge">Artist 01</span></div>
+        <h3>Name folgt</h3>
+        <p class="mono">Inhaber · Realism</p>
+        <div class="styles"><span>Realism</span><span>Black &amp; Grey</span><span>Backpieces</span></div>
+        <a class="pick" href="#anfrage" data-artist="Artist 01 · Realism">Bei diesem Artist anfragen →</a>
+      </div>
+      <div class="member">
+        <div class="ph"><img src="img/team-2.jpg" alt="Tätowierer mit Cap zeichnet ein Design auf dem Tablet"><span class="badge">Artist 02</span></div>
+        <h3>Name folgt</h3>
+        <p class="mono">Traditional · Design</p>
+        <div class="styles"><span>Traditional</span><span>Neo Trad</span><span>Color</span></div>
+        <a class="pick" href="#anfrage" data-artist="Artist 02 · Traditional">Bei diesem Artist anfragen →</a>
+      </div>
+      <div class="member">
+        <div class="ph"><img src="img/team-3.jpg" alt="Tätowierer übt Linework am Arbeitsplatz, daneben ein Tablet mit Entwurf"><span class="badge">Artist 03</span></div>
+        <h3>Name folgt</h3>
+        <p class="mono">Fineline · Blackwork</p>
+        <div class="styles"><span>Fineline</span><span>Blackwork</span><span>Lettering</span></div>
+        <a class="pick" href="#anfrage" data-artist="Artist 03 · Fineline">Bei diesem Artist anfragen →</a>
+      </div>
+      <div class="member ghost">
+        <div class="ph"><b>?</b><span class="badge">Guest Spot</span></div>
+        <h3>Gast-Artists</h3>
+        <p class="mono"><span class="soon">Coming soon</span></p>
+        <div class="styles"><span>Wechselnde Stile</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page" data-page="studio">
+  <div class="wrap studio">
+    <figure class="studio-img"><img src="img/studio.jpg" alt="Arbeitsplatz im Studio mit Tattoomaschine, Farben, Handschuhen und Flash-Bildern an der Wand"></figure>
+    <div>
+      <p class="mono"><span style="color:var(--blood)">VII</span> &nbsp;Das Studio</p>
+      <h2>Sauber. Ruhig. Deins.</h2>
+      <p>Bei uns sitzt du nicht am Fließband. Jeder Arbeitsplatz wird vor und nach jedem Termin komplett vorbereitet, damit du dich voll auf dein Tattoo konzentrieren kannst.</p>
+      <ul class="checks">
+        <li>Einwegnadeln und Einwegmaterial für jeden Termin</li>
+        <li>Desinfizierte Arbeitsplätze und abgedecktes Equipment</li>
+        <li>Individuelle Entwürfe statt Katalog-Motive</li>
+        <li>Pflegeanleitung und Nachsorge nach jeder Session</li>
+        <li>Fotos vom Studio <span class="soon">Coming soon</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="page" data-page="anfrage">
+  <div class="wrap req">
+    <div class="req-side">
+      <p class="mono"><span style="color:var(--blood)">VIII</span> &nbsp;Anfrage</p>
+      <h2 style="margin-top:14px">Erzähl uns <em>deine Idee</em></h2>
+      <p>Je genauer deine Beschreibung, desto besser können wir planen. Wir melden uns bei dir mit einem Termin zur Besprechung, dort klären wir alles Weitere inklusive Preis.</p>
+      <p class="note">Die Anfrage ist kostenlos und unverbindlich.</p>
+    </div>
+
+    <div>
+      <form id="reqForm" novalidate>
+        <div class="f"><label for="name">Name *</label><input type="text" id="name" name="name" autocomplete="name" required></div>
+        <div class="f"><label for="email">E-Mail *</label><input type="email" id="email" name="email" autocomplete="email" required></div>
+        <div class="f"><label for="phone">Telefon</label><input type="tel" id="phone" name="phone" autocomplete="tel"></div>
+        <div class="f"><label for="style">Stil</label>
+          <select id="style" name="style">
+            <option>Weiß ich noch nicht</option><option>Realism</option><option>Black &amp; Grey</option><option>Fineline</option><option>Traditional</option><option>Japanese</option><option>Blackwork / Dotwork</option><option>Neo Trad / Color</option><option>Lettering</option><option>Cover-up</option>
+          </select></div>
+        <div class="f full"><label for="artist">Wunsch-Artist</label>
+          <select id="artist" name="artist"><option>Egal, passt am besten zum Stil</option><option>Artist 01 · Realism</option><option>Artist 02 · Traditional</option><option>Artist 03 · Fineline</option></select></div>
+        <div class="f full"><span class="legend" id="size-l">Größe</span>
+          <div class="chips" role="radiogroup" aria-labelledby="size-l">
+            <input type="radio" name="size" id="s1" value="Klein (bis 5 cm)"><label for="s1">Klein · bis 5 cm</label>
+            <input type="radio" name="size" id="s2" value="Mittel (5–15 cm)" checked><label for="s2">Mittel · 5–15 cm</label>
+            <input type="radio" name="size" id="s3" value="Groß (ab 15 cm)"><label for="s3">Groß · ab 15 cm</label>
+            <input type="radio" name="size" id="s4" value="Sleeve / Rücken"><label for="s4">Sleeve / Rücken</label>
+          </div></div>
+        <div class="f"><label for="spot">Körperstelle</label><input type="text" id="spot" name="spot" placeholder="z. B. Unterarm innen"></div>
+        <div class="f"><span class="legend" id="color-l">Farbe</span>
+          <div class="chips" role="radiogroup" aria-labelledby="color-l">
+            <input type="radio" name="color" id="c1" value="Schwarz/Grau" checked><label for="c1">Schwarz/Grau</label>
+            <input type="radio" name="color" id="c2" value="Farbig"><label for="c2">Farbig</label>
+            <input type="radio" name="color" id="c3" value="Offen"><label for="c3">Offen</label>
+          </div></div>
+        <div class="f full"><label for="idea">Deine Idee *</label><textarea id="idea" name="idea" placeholder="Motiv, Bedeutung, Stimmung, was dir wichtig ist …" required></textarea></div>
+        <div class="f full">
+          <label class="drop" for="ref"><input type="file" id="ref" name="ref" accept="image/*" multiple><span style="font-size:22px;color:var(--blood)">+</span><span id="refText">Referenzbilder hinzufügen (optional)</span></label>
+        </div>
+        <div class="f full"><label for="days">Wann passt es dir für die Besprechung?</label><input type="text" id="days" name="days" placeholder="z. B. Di–Do nachmittags"></div>
+        <div class="f full"><label class="check" for="age"><input type="checkbox" id="age" required><span>Ich bin mindestens 18 Jahre alt. *</span></label></div>
+        <div class="f full"><label class="check" for="privacy"><input type="checkbox" id="privacy" required><span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden. * <br>Datenschutzerklärung <span class="soon">Coming soon</span></span></label></div>
+        <p class="form-note">* Pflichtfelder</p>
+        <p class="err" id="err" role="alert"></p>
+        <button type="submit" class="btn red">Anfrage senden →</button>
+      </form>
+
+      <div class="thanks" id="thanks" aria-live="polite">
+        <span class="mono" style="color:var(--blood)">✦ Anfrage vorbereitet</span>
+        <h3 id="thanksH">Danke!</h3>
+        <p style="color:var(--ash)">So sieht deine Anfrage aus. Sobald sie bei uns ist, melden wir uns mit einem Termin zur Besprechung bei dir.</p>
+        <dl id="summary"></dl>
+        <p class="note" style="border-left:2px solid var(--blood);padding-left:14px">Der Online-Versand wird gerade eingerichtet <span class="soon">Coming soon</span><br>Bis dahin erreichst du uns per E-Mail oder Instagram (Kontaktdaten folgen).</p>
+        <button type="button" class="btn" id="again" style="justify-self:start">Anfrage bearbeiten</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page" data-page="preise">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="num">V</span>
+      <h2>Fragen</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Was kostet mein Tattoo?</summary><p>Das hängt von Größe, Körperstelle, Detailgrad und Anzahl der Sessions ab. Schick uns eine Anfrage, im Besprechungstermin bekommst du einen konkreten Preis.</p></details>
+      <details><summary>Macht ihr auch Cover-ups?</summary><p>Ja. Bring am besten ein Foto vom alten Tattoo mit in die Anfrage, dann können wir im Gespräch direkt einschätzen, was möglich ist.</p></details>
+      <details><summary>Wie bereite ich mich vor?</summary><p>Ausgeschlafen kommen, vorher gut essen, viel trinken und am Tag davor auf Alkohol verzichten. Bequeme Kleidung, die die Stelle gut freilässt, macht die Session für alle angenehmer.</p></details>
+      <details><summary>Kann ich ohne Termin vorbeikommen?</summary><p>Walk-in-Tage sind in Planung <span class="soon">Coming soon</span>. Aktuell arbeiten wir nur mit Termin nach vorheriger Besprechung.</p></details>
+      <details><summary>Was ist mit Gutscheinen?</summary><p>Gutscheine zum Verschenken <span class="soon">Coming soon</span>.</p></details>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Bildansicht" hidden>
+  <button class="lb-x" id="lbX" aria-label="Schließen">✕</button>
+  <figure><img id="lbImg" alt=""><figcaption id="lbCap" class="mono"></figcaption></figure>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a href="#start" class="logo">Schwarz<span>stich</span></a><p style="color:var(--ash);margin-top:12px;max-width:32ch">Tattoo Atelier für alle Stile. Preise auf Anfrage.</p></div>
+      <div><h4>Seiten</h4><ul class="fnav"><li><a href="#stile">Stile</a></li><li><a href="#arbeiten">Arbeiten</a></li><li><a href="#preise">Preise &amp; FAQ</a></li><li><a href="#team">Team</a></li><li><a href="#studio">Studio</a></li></ul></div>
+      <div><h4>Adresse</h4><p>Straße &amp; Ort<br><span class="soon">Coming soon</span></p></div>
+      <div><h4>Öffnungszeiten</h4><p>Termine nach Vereinbarung<br><span class="soon">Coming soon</span></p></div>
+      <div><h4>Kontakt</h4><ul><li><a href="#anfrage">Anfrageformular</a></li><li>Instagram <span class="soon">Coming soon</span></li><li>E-Mail <span class="soon">Coming soon</span></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span class="mono">© 2026 Schwarzstich Tattoo</span>
+      <span class="mono">Impressum · Datenschutz <span class="soon">Coming soon</span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const PAGES=['start','stile','arbeiten','preise','team','studio','anfrage'];
+  const TITLES={start:'Schwarzstich Tattoo',stile:'Stile · Schwarzstich Tattoo',arbeiten:'Arbeiten · Schwarzstich Tattoo',preise:'Preise & FAQ · Schwarzstich Tattoo',team:'Team · Schwarzstich Tattoo',studio:'Studio · Schwarzstich Tattoo',anfrage:'Anfrage · Schwarzstich Tattoo'};
+  let first=true;
+  const menu=document.getElementById('menu'), burger=document.getElementById('burger');
+  function show(){
+    let h=(location.hash||'').slice(1);
+    if(!PAGES.includes(h))h='start';
+    document.querySelectorAll('.page').forEach(el=>el.classList.toggle('on',el.dataset.page===h));
+    document.querySelectorAll('#menu a').forEach(a=>{a.getAttribute('href')==='#'+h?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});
+    menu.classList.remove('open');burger.setAttribute('aria-expanded','false');
+    document.title=TITLES[h];
+    window.scrollTo(0,0);
+    if(!first){const hd=document.querySelector('.page.on h1, .page.on h2');if(hd){hd.setAttribute('tabindex','-1');hd.focus({preventScroll:true});}}
+    first=false;
+  }
+  document.querySelectorAll('.pick').forEach(a=>a.addEventListener('click',()=>{
+    if(a.dataset.style){const sel=document.getElementById('style');[...sel.options].forEach(o=>{if(o.textContent===a.dataset.style.replace('&amp;','&'))sel.value=o.value;});}
+    if(a.dataset.artist){document.getElementById('artist').value=a.dataset.artist;}
+  }));
+  const lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),lbCap=document.getElementById('lbCap');let lbFrom=null;
+  function openLb(f){const im=f.querySelector('img');lbImg.src=im.src;lbImg.alt=im.alt;lbCap.textContent=f.querySelector('figcaption').innerText.replace(/\n+/g,' · ');lbFrom=f;lb.hidden=false;document.getElementById('lbX').focus();}
+  function closeLb(){lb.hidden=true;if(lbFrom)lbFrom.focus();}
+  document.querySelectorAll('.gallery figure').forEach(f=>{f.addEventListener('click',()=>openLb(f));f.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openLb(f);}});});
+  document.getElementById('lbX').addEventListener('click',closeLb);
+  lb.addEventListener('click',e=>{if(e.target===lb)closeLb();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)closeLb();});
+  burger.addEventListener('click',()=>{const o=menu.classList.toggle('open');burger.setAttribute('aria-expanded',String(o));});
+  window.addEventListener('hashchange',show);
+  show();
+  const form=document.getElementById('reqForm'), thanks=document.getElementById('thanks'), err=document.getElementById('err');
+  const ref=document.getElementById('ref'), refText=document.getElementById('refText');
+  form.addEventListener('input',e=>{const f=e.target.closest('.f');if(f)f.classList.remove('bad');});
+  ref.addEventListener('change',()=>{
+    const n=ref.files.length;
+    refText.textContent=n?(n===1?ref.files[0].name:n+' Bilder ausgewählt'):'Referenzbilder hinzufügen (optional)';
+  });
+  function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const v=id=>document.getElementById(id).value.trim();
+    const missing=[];
+    form.querySelectorAll('.f.bad').forEach(f=>f.classList.remove('bad'));
+    const bad=(id,label)=>{missing.push(label);document.getElementById(id).closest('.f').classList.add('bad');};
+    if(!v('name'))bad('name','Name');
+    if(!/^\S+@\S+\.\S+$/.test(v('email')))bad('email','gültige E-Mail');
+    if(!v('idea'))bad('idea','deine Idee');
+    if(!document.getElementById('age').checked)bad('age','Altersbestätigung');
+    if(!document.getElementById('privacy').checked)bad('privacy','Einverständnis');
+    if(missing.length){err.textContent='Bitte ergänze: '+missing.join(', ')+'.';const fb=form.querySelector('.f.bad input, .f.bad textarea');if(fb)fb.focus();return;}
+    err.textContent='';
+    const rows=[
+      ['Name',v('name')],['E-Mail',v('email')],['Telefon',v('phone')||'–'],
+      ['Stil',v('style')],['Artist',v('artist')],['Größe',form.size.value],['Stelle',v('spot')||'–'],
+      ['Farbe',form.color.value],['Idee',v('idea')],
+      ['Referenzen',ref.files.length?ref.files.length+' Bild(er)':'–'],['Wunschzeit',v('days')||'–']
+    ];
+    document.getElementById('summary').innerHTML=rows.map(r=>'<dt>'+r[0]+'</dt><dd>'+esc(r[1])+'</dd>').join('');
+    document.getElementById('thanksH').textContent='Danke, '+v('name').split(' ')[0]+'!';
+    form.style.display='none';thanks.classList.add('show');
+    window.scrollTo(0,0);
+  });
+  document.getElementById('again').addEventListener('click',()=>{
+    thanks.classList.remove('show');form.style.display='';window.scrollTo(0,0);
+  });
+})();
+</script>
+</body>
+</html>
