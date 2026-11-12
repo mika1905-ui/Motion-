@@ -307,5 +307,6 @@ updSel();
 
 window.SITE.refresh();
 // Chat-Assistent laden
-const bs = document.createElement('script'); bs.src = 'chat.js'; document.body.appendChild(bs);
+const ver = (document.currentScript && document.currentScript.src.split('?v=')[1]) || String(Date.now());
+if (!window.FLUXEBOT_LOADING) { window.FLUXEBOT_LOADING = true; const bs = document.createElement('script'); bs.src = 'chat.js?v=' + ver; document.body.appendChild(bs); }
 })();
