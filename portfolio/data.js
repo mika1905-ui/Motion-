@@ -33,7 +33,7 @@ window.PROJECTS = [
     text: 'Helles Studio statt Dunkelheit: sechs Modelle in einer ruhigen, cleanen Inszenierung.',
     tags: ['Helles Studio', '16:9'] },
   { id: 'assistent', kind: 'bot', branche: 'tech', title: 'Website-Assistent', sub: 'FAQ-Chatbot · Live auf dieser Seite', color: '#d4ff3a', featured: true,
-    live: '#chat', images: ['img/chatbot-v2-1.webp', 'img/chatbot-v2-2.webp'], mobile: 'img/chatbot-v2-mobile.webp',
+    live: '#chat', images: ['img/chatbot-v2-1.webp', 'img/chatbot-v2-2.webp'], mobile: 'img/chatbot-v2-mobile.webp', ring: 'img/chatbot-ring.webp',
     text: 'Der Chat unten rechts: kennt alle Leistungen, Preise, Projekte und Abläufe dieser Website, gibt Schritt-für-Schritt-Anleitungen und leitet Besucher direkt zur richtigen Seite oder ins Formular. Läuft komplett im Browser – ohne laufende Kosten. So etwas baue ich auch für deine Website.',
     tags: ['FAQ-Chatbot', 'Navigation', 'Anleitungen', 'Datenschutzfreundlich'], note: 'Eigenes Projekt – direkt hier live testen.' },
   { id: 'volta', kind: 'web', branche: 'food', title: 'VOLTA', sub: '3D-Produktseite · Energy Drink', color: '#d4ff3a', featured: true,
