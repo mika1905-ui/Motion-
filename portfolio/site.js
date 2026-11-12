@@ -141,8 +141,10 @@ window.SITE.projectCard = p => p.kind === 'spot' ? `
     <span class="pmedia"><video src="${p.video}" poster="${p.poster}" muted loop playsinline preload="none"></video><span class="play" aria-hidden="true">▶</span></span>
     <span class="pinfo"><small>${esc(bName(p.branche))} · Werbespot · ${esc(p.format)}</small><b>${esc(p.title)}</b><span>${esc(p.sub)}</span></span>
   </button>` : `
-  <button class="pcard web-card reveal" style="--c:${p.color}" data-project="${p.id}" aria-label="${esc(p.title)} ansehen">
-    <span class="pmedia"><span class="pbrowser"><i></i><i></i><i></i></span><img src="${p.images[0]}" alt="" loading="lazy"><img class="pmob" src="${p.mobile}" alt="" loading="lazy"></span>
+  <button class="pcard ${p.kind === 'bot' ? 'bot-card' : 'web-card'} reveal" style="--c:${p.color}" data-project="${p.id}" aria-label="${esc(p.title)} ansehen">
+    ${p.kind === 'bot'
+      ? `<span class="pmedia"><img src="${p.mobile}" alt="" loading="lazy"></span>`
+      : `<span class="pmedia"><span class="pbrowser"><i></i><i></i><i></i></span><img src="${p.images[0]}" alt="" loading="lazy">${p.mobile ? `<img class="pmob" src="${p.mobile}" alt="" loading="lazy">` : ''}</span>`}
     <span class="pinfo"><small>${esc(bName(p.branche))} · ${p.kind === 'bot' ? 'Chatbot' : 'Website'}</small><b>${esc(p.title)}</b><span>${esc(p.sub)}</span></span>
   </button>`;
 window.SITE.soonCard = b => `
