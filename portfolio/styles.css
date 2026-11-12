@@ -30,14 +30,18 @@ h1, h2, h3 { margin: 0; letter-spacing: -.035em; line-height: .98; }
 
 /* ── ambient background ── */
 .blobs { position: fixed; inset: 0; z-index: -2; pointer-events: none; overflow: hidden; }
-.blob { position: absolute; width: 46vmax; height: 46vmax; border-radius: 50%; filter: blur(90px); opacity: .22; animation: drift 22s ease-in-out infinite alternate; }
-.b1 { background: #d4ff3a; top: -18vmax; left: -12vmax; }
-.b2 { background: #4aa8ff; top: 20vh; right: -20vmax; animation-delay: -7s; opacity: .16; }
-.b3 { background: #ff3b3b; bottom: -26vmax; left: 25vw; animation-delay: -14s; opacity: .12; }
+/* soft glows as radial gradients (no CSS blur filter) on their own GPU layer → smooth on phones too */
+.blob { position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%; opacity: .22; will-change: transform; transform: translateZ(0);
+  background: radial-gradient(closest-side, var(--bc) 0%, color-mix(in srgb, var(--bc) 45%, transparent) 38%, transparent 100%);
+  animation: drift 22s ease-in-out infinite alternate; }
+.b1 { --bc: #d4ff3a; top: -25vmax; left: -19vmax; }
+.b2 { --bc: #4aa8ff; top: 12vh; right: -27vmax; animation-delay: -7s; opacity: .16; }
+.b3 { --bc: #ff3b3b; bottom: -33vmax; left: 18vw; animation-delay: -14s; opacity: .12; }
 @keyframes drift { to { transform: translate(8vmax, 6vmax) scale(1.15); } }
 .grain { position: fixed; inset: -50%; z-index: -1; pointer-events: none; opacity: .05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 1s steps(4) infinite; }
+  animation: grain 1s steps(4) infinite; will-change: transform; }
+@media (max-width: 760px), (pointer: coarse) { .grain { animation: none; } }
 @keyframes grain { 25% { transform: translate(-3%, 2%); } 50% { transform: translate(2%, -3%); } 75% { transform: translate(-2%, -1%); } }
 
 /* ── nav ── */
@@ -89,12 +93,6 @@ h1, h2, h3 { margin: 0; letter-spacing: -.035em; line-height: .98; }
 .hs1 { transform: translateX(-50%) rotateX(var(--rx)) rotateY(var(--ry)) translate3d(-62%, 8%, -120px) rotateY(22deg); }
 .hs4 { transform: translateX(-50%) rotateX(var(--rx)) rotateY(var(--ry)) translate3d(62%, 8%, -120px) rotateY(-22deg); }
 .hs2 { transform: translateX(-50%) rotateX(var(--rx)) rotateY(var(--ry)) translate3d(0, -8%, -320px); opacity: .5; }
-.reel-phone { position: absolute; left: 50%; top: 0; height: 100%; aspect-ratio: 9 / 16; transform: translateX(-50%) rotateX(var(--rx)) rotateY(var(--ry));
-  border-radius: clamp(22px, 3vw, 38px); overflow: hidden; border: clamp(5px, .7vw, 9px) solid #1b1b1f; background: #000; z-index: 5;
-  box-shadow: 0 50px 100px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.12), 0 0 120px rgba(212,255,58,.15); transition: transform .9s cubic-bezier(.16,1,.3,1); }
-.reel-phone video { width: 100%; height: 100%; object-fit: cover; display: block; }
-.reel-tag { position: absolute; top: 12px; left: 12px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: rgba(0,0,0,.55); backdrop-filter: blur(8px); padding: 5px 10px; border-radius: 999px; display: flex; align-items: center; gap: 6px; }
-.reel-tag::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #ff3b3b; animation: pulse 2s infinite; }
 
 /* ── spots ── */
 .spots { padding: clamp(90px, 14vw, 160px) 0 0; }
@@ -728,7 +726,8 @@ html.menu-open .bot-fab, html.menu-open .wa-float, html.menu-open .sel-bar { dis
 .ring-card video { opacity: 0; transition: opacity .5s; }
 .ring-card.playing video { opacity: 1; }
 .ring-card.front { border-color: color-mix(in srgb, var(--c) 70%, transparent); box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 60px color-mix(in srgb, var(--c) 28%, transparent); }
-.ring-card .snd { position: absolute; right: 12px; top: 12px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: rgba(0,0,0,.55); font-size: 14px; backdrop-filter: blur(8px); }
+.ring-card .shade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; will-change: opacity; }
+.ring-card { will-change: opacity; }
 .ring-ui { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 30px); margin-top: 18px; }
 .ring-arrow { flex: none; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line); background: rgba(255,255,255,.05); color: var(--ink); font-size: 26px; line-height: 1; cursor: pointer; transition: background .25s, transform .25s; }
 .ring-arrow:hover { background: rgba(255,255,255,.12); transform: scale(1.06); }
