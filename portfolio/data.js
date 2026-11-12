@@ -60,6 +60,14 @@ window.PROJECTS = [
     live: 'projekte/schwarzstich/', images: ['img/schwarzstich-1.webp', 'img/schwarzstich-2.webp', 'img/schwarzstich-3.webp'], mobile: 'img/schwarzstich-mobile.webp',
     text: 'Düstere, kraftvolle Website für ein Tattoo-Atelier: Blackletter-Branding, laufendes Stil-Band (Fineline bis Japanese), Bereiche für Stile, Arbeiten und Team sowie ein direkter Weg zur Terminanfrage mit Ideen-Upload.',
     tags: ['Branding', 'Galerie', 'Terminanfrage', 'Mobile first'], note: 'Konzeptprojekt mit fiktiver Marke.' },
+  { id: 'aurene', kind: 'web', branche: 'mode', title: 'AURÈNE', sub: 'Maison de Parfum · Online-Shop', color: '#c8a46a', featured: true,
+    live: 'projekte/aurene/', images: ['img/aurene-1.webp', 'img/aurene-2.webp', 'img/aurene-3.webp'], mobile: 'img/aurene-mobile.webp',
+    text: 'Luxuriöser Parfum-Shop mit 3D-Flakon, der sich beim Scrollen dreht und die Duftnoten (Kopf, Herz, Basis) entfaltet. Farbwechsel je Duft, Duftfinder, Discovery-Set, Warenkorb und Cookie-Einwilligung.',
+    tags: ['3D-Flakon', 'Online-Shop', 'Duftfinder', 'Scroll-Animation'], note: 'Konzeptprojekt mit fiktiver Marke.' },
+  { id: 'beschte', kind: 'web', branche: 'handwerk', title: 'Elektrotechnik Beschte', sub: 'Elektro-Meisterbetrieb · Website & Chatbot', color: '#FFC93C', featured: true,
+    live: 'projekte/beschte/', images: ['img/beschte-1.webp', 'img/beschte-2.webp', 'img/beschte-3.webp'], mobile: 'img/beschte-mobile.webp',
+    text: 'Website für einen Elektro-Meisterbetrieb: 24/7-Notdienst prominent, neun Leistungsbereiche von Photovoltaik bis Wallbox, Karriere mit Stellen und 2-Minuten-Bewerbung, FAQ, Anfrageformular und Chat-Assistent „Volti“, der Anfragen Schritt für Schritt aufnimmt.',
+    tags: ['Handwerk', 'Chatbot', 'Karriere & Bewerbung', 'Anfrageformular'], note: 'Kontaktdaten in dieser Vorschau durch Platzhalter ersetzt.' },
   { id: 'lumyx', kind: 'web', branche: 'gesundheit', title: 'Lumyx', sub: 'SaaS-Website · KI-Praxistelefon', color: '#3ecfa0', light: true, featured: true,
     live: '../', images: ['img/lumyx-1.webp', 'img/lumyx-2.webp', 'img/lumyx-3.webp'], mobile: 'img/lumyx-mobile.webp',
     text: 'Ruhig, klinisch sauber, vertrauenswürdig: dezentes 3D-Linienband, funktionierende Telefon-Demo mit Sprachausgabe, Praxis-Dashboard, Ersparnis-Rechner und Preis-Umschalter.',
@@ -135,7 +143,7 @@ window.TEAM = [
 /* Kundenstimmen, die auf der Website erscheinen.
    Nur echte Bewertungen von echten Kunden eintragen – mit deren schriftlicher Zustimmung.
    Erfundene oder gekaufte Bewertungen sind in Deutschland verboten (UWG, Anhang Nr. 23b/23c). */
-window.TESTIMONIALS = [  // echte Kundenstimmen, Veröffentlichung von den Kunden freigegeben
+window.TESTIMONIALS = [  // echte Kundenstimmen (alle 5/5 Sterne), Veröffentlichung von den Kunden freigegeben
 
   { quote: 'Durch das monatliche Video-Abo konnte ich regelmäßig extrem starke Reels veröffentlichen, die viral gegangen sind und meine Reichweite massiv gepusht haben.', name: 'Leon (27)', company: 'Content Creator & Influencer' },
   { quote: 'Herausragende Umsetzung. Unsere neue Website sorgt nicht nur für deutlich zufriedenere Kunden, sondern spart uns im Alltag durch die integrierten Automatisierungen enorm viel Zeit.', name: 'Melanie (47)', company: 'Geschäftsführerin, Software-Agentur' },
