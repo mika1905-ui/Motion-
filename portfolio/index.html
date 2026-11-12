@@ -13,7 +13,7 @@
 <link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
 <link rel="preload" href="fonts/InterDisplay-Black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20261112g">
+<link rel="stylesheet" href="styles.css?v=20261112h">
 </head>
 <body data-page="start">
 <main>
@@ -31,15 +31,7 @@
       <a class="btn btn-ghost" href="kontakt.html#termin">Kostenloses Erstgespräch</a>
     </div>
 
-    <div class="hero-stack reveal">
-      <img src="img/volta-1.webp" alt="" class="hs hs1" aria-hidden="true">
-      <img src="img/kryo-2.webp" alt="" class="hs hs2" aria-hidden="true">
-      <img src="img/lumyx-1.webp" alt="" class="hs hs4" aria-hidden="true">
-      <div class="reel-phone">
-        <video src="video/showreel.mp4" poster="img/spots/showreel.webp" autoplay muted loop playsinline aria-label="Showreel: Ausschnitte aus den Werbespots"></video>
-        <span class="reel-tag">Showreel</span>
-      </div>
-    </div>
+    <div class="ring reveal" id="ring" aria-roledescription="Karussell" aria-label="Projekte"></div>
   </section>
 
   <div class="marquee" aria-hidden="true">
@@ -131,9 +123,10 @@
   </section>
 </main>
 
-<script src="config.js?v=20261112g"></script>
-<script src="data.js?v=20261112g"></script>
-<script src="site.js?v=20261112g"></script>
+<script src="config.js?v=20261112h"></script>
+<script src="data.js?v=20261112h"></script>
+<script src="site.js?v=20261112h"></script>
+<script src="carousel.js?v=20261112h"></script>
 <script>
 (() => {
   const { esc, projectCard } = window.SITE;
@@ -147,14 +140,6 @@
     : [1, 2, 3].map(i => `<div class="soon-card static reveal" style="--c:${['#d4ff3a', '#4aa8ff', '#ff8a3d'][i - 1]}"><span class="soon-ico">“</span><span class="soon-badge">Demnächst verfügbar</span><b>${i === 1 ? 'Deine Stimme hier?' : i === 2 ? 'Erste Projekte laufen' : 'Bewertungen folgen'}</b><span>${i === 1 ? 'Die ersten Kunden bekommen Startkonditionen – und einen Platz auf dieser Seite.' : i === 2 ? 'Echte Kundenstimmen erscheinen hier, sobald die ersten Projekte live sind.' : 'Ehrliche Bewertungen statt erfundener Zitate.'}</span></div>`).join('');
   document.getElementById('quoteNote').textContent = window.TESTIMONIALS_NOTE || '';
   window.SITE.refresh();
-  // hero parallax
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(pointer: fine)').matches) {
-    const stack = document.querySelector('.hero-stack');
-    addEventListener('pointermove', e => {
-      stack.style.setProperty('--rx', ((0.5 - e.clientY / innerHeight) * 6).toFixed(2) + 'deg');
-      stack.style.setProperty('--ry', ((e.clientX / innerWidth - 0.5) * 8).toFixed(2) + 'deg');
-    }, { passive: true });
-  }
 })();
 </script>
 </body>
