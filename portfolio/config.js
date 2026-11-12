@@ -30,4 +30,8 @@ window.CONFIG = {
   calLink: '',
 
   responseTime: '24 Stunden',
+
+  // MISSION 100: Anzahl echter, abgeschlossener Projekte mit zufriedenen Kunden.
+  // Nur echte Zahl eintragen – erscheint ab 1 als Fortschrittsbalken auf der Startseite.
+  zufriedeneKunden: 0,
 };
