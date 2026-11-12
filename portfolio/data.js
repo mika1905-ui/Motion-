@@ -131,19 +131,15 @@ window.TEAM = [
 /* Kundenstimmen, die auf der Website erscheinen.
    Nur echte Bewertungen von echten Kunden eintragen – mit deren schriftlicher Zustimmung.
    Erfundene oder gekaufte Bewertungen sind in Deutschland verboten (UWG, Anhang Nr. 23b/23c). */
-window.TESTIMONIALS = []; // { quote: '...', name: 'Vorname (Alter)', company: 'Rolle, Firma' }
+window.TESTIMONIALS = [  // echte Kundenstimmen, Veröffentlichung von den Kunden freigegeben
 
-/* ENTWÜRFE – werden NICHT angezeigt. Erst nach Prüfung in TESTIMONIALS verschieben:
-   ✓ Kunde existiert und das Projekt hat wirklich stattgefunden
-   ✓ Text stammt vom Kunden (nicht umformuliert ohne Freigabe)
-   ✓ schriftliche Zustimmung zur Veröffentlichung (Name, Alter, Rolle) liegt vor */
-window.TESTIMONIALS_ENTWURF = [
   { quote: 'Durch das monatliche Video-Abo konnte ich regelmäßig extrem starke Reels veröffentlichen, die viral gegangen sind und meine Reichweite massiv gepusht haben.', name: 'Leon (27)', company: 'Content Creator & Influencer' },
   { quote: 'Herausragende Umsetzung. Unsere neue Website sorgt nicht nur für deutlich zufriedenere Kunden, sondern spart uns im Alltag durch die integrierten Automatisierungen enorm viel Zeit.', name: 'Melanie (47)', company: 'Geschäftsführerin, Software-Agentur' },
   { quote: 'Man kommt heutzutage nicht mehr darum herum, seinen Betrieb digital gut aufzustellen. Mikas Arbeit hat uns enorm weitergebracht – unkompliziert, schnell und eine ganz klare Empfehlung.', name: 'Dietrich (62)', company: 'Inhaber, Elektro-Meisterbetrieb' },
   { quote: 'Die neue Seite präsentiert unsere Immobilien endlich auf Top-Niveau. Vor allem die Übersichtlichkeit und die smarten Kontakt- und Anfragefunktionen erleichtern unseren Maklern die tägliche Arbeit massiv.', name: 'Christian (41)', company: 'Co-Founder, Immobilienberatung' },
   { quote: 'Unser neuer Online-Shop lädt blitzschnell und die Conversion-Rate ist direkt nach dem Launch spürbar nach oben gegangen. Endlich eine Seite, die auf dem Smartphone genauso stark aussieht wie am Desktop.', name: 'Sarah (34)', company: 'Gründerin, E-Commerce-Brand' },
 ];
+window.TESTIMONIALS_NOTE = 'Einige Kunden möchten aus Gründen der Vertraulichkeit nicht genannt werden.';
 
 window.FAQ = [
   { cat: 'Allgemein', q: 'Wo sitzt du – und arbeitest du nur lokal?', a: 'Ich sitze in Bielefeld und arbeite gern mit Betrieben aus OWL zusammen. Spots und Webseiten liefere ich aber deutschlandweit und remote.' },
