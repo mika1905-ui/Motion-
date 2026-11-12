@@ -134,6 +134,7 @@
   if (q.get('projekt')) pre.push(`Gesehen: ${q.get('projekt')} – so etwas in der Art wünsche ich mir.`);
   if (q.get('rechner')) pre.push(`Aus dem Preisrechner: ${q.get('rechner')}`);
   if (q.get('check')) pre.push(q.get('check'));
+  if (q.get('frage')) pre.push(`Meine Frage: ${q.get('frage')}`);
   if (pre.length) $('#msg').value = pre.join('\n') + '\n\n';
   const lmap = { 'Online-Shop': 'Online-Shop', 'Werbespot': 'Werbespot', 'Website': 'Website' };
   if (q.get('leistung') && lmap[q.get('leistung')]) document.querySelector(`input[name=Leistung][value="${lmap[q.get('leistung')]}"]`).checked = true;

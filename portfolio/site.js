@@ -46,15 +46,25 @@ header.innerHTML = `
       <div class="fly-col fly-small"><p class="fly-head">Mehr</p>${n.flyout.small.map(([h, t]) => `<a href="${h}">${esc(t)}</a>`).join('')}</div>
     </div>` : '').join('')}
   </div>
-  <div class="mnav" hidden>
-    ${NAV.map(n => `<div class="mnav-item">${n.flyout ? `<button class="mnav-toggle" aria-expanded="false">${n.label}<i>›</i></button>
-      <div class="mnav-sub" hidden><a href="${n.href}">Übersicht</a>${n.flyout.big.concat(n.flyout.small.filter(s => s[0] !== n.href)).map(([h, t]) => `<a href="${h}">${esc(t)}</a>`).join('')}</div>`
-      : `<a href="${n.href}">${n.label}</a>`}</div>`).join('')}
+`;
+document.body.prepend(header);
+// mobile menu lives outside the header: the header's backdrop-filter would otherwise clip it to 60 px
+const SUBTXT = { arbeiten: 'Projekte nach Branche', leistungen: 'Spots, Webseiten, Shops', preise: 'Pakete & Katalog', check: 'Kostenlos & unverbindlich', ueber: 'Wer dahinter steckt', karriere: 'Jobs & Initiativbewerbung', faq: 'Häufige Fragen', kontakt: 'Anfrage & Termin' };
+const mnav = document.createElement('div');
+mnav.className = 'mnav'; mnav.hidden = true; mnav.id = 'mnav';
+mnav.setAttribute('role', 'dialog'); mnav.setAttribute('aria-label', 'Menü');
+mnav.innerHTML = `<nav class="mnav-list">
+    ${NAV.map((n, i) => `<div class="mnav-item" style="--i:${i}">${n.flyout
+      ? `<button class="mnav-toggle" aria-expanded="false"><span>${n.label}<small>${SUBTXT[n.key] || ''}</small></span><i aria-hidden="true">+</i></button>
+         <div class="mnav-sub"><div><a href="${n.href}">Übersicht</a>${n.flyout.big.concat(n.flyout.small.filter(x => x[0] !== n.href)).map(([h, t, st]) => `<a href="${h}">${esc(t)}${st ? `<small>${esc(st)}</small>` : ''}</a>`).join('')}</div></div>`
+      : `<a class="mnav-link ${page === n.key ? 'active' : ''}" href="${n.href}"><span>${n.label}<small>${SUBTXT[n.key] || ''}</small></span><i aria-hidden="true">→</i></a>`}</div>`).join('')}
+  </nav>
+  <div class="mnav-cta">
     <a class="btn" href="kontakt.html#termin">Termin vereinbaren</a>
-    ${C.whatsapp ? `<a class="btn btn-ghost" href="https://wa.me/${esc(C.whatsapp)}" target="_blank" rel="noopener">Über WhatsApp schreiben</a>` : ''}
+    ${C.whatsapp ? `<a class="btn btn-ghost" href="https://wa.me/${esc(C.whatsapp)}" target="_blank" rel="noopener">Über WhatsApp schreiben</a>` : `<a class="btn btn-ghost" href="kontakt.html">Projekt anfragen</a>`}
     <p class="mnav-note">Antwort innerhalb von ${esc(C.responseTime || '24 Stunden')}</p>
   </div>`;
-document.body.prepend(header);
+header.after(mnav);
 document.body.insertAdjacentHTML('afterbegin', '<div class="blobs" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div><div class="grain" aria-hidden="true"></div><div class="fly-dim"></div>');
 
 // desktop flyouts (hover + keyboard)
@@ -76,15 +86,22 @@ header.addEventListener('mouseleave', closeFly);
 addEventListener('keydown', e => { if (e.key === 'Escape') { header.classList.remove('fly-open'); } });
 
 // mobile menu
-const burger = $('.burger', header), mnav = $('.mnav', header);
-burger.addEventListener('click', () => {
-  const open = mnav.hidden;
+const burger = $('.burger', header);
+const setMenu = open => {
   mnav.hidden = !open; header.classList.toggle('m-open', open);
-  burger.setAttribute('aria-expanded', open); document.body.style.overflow = open ? 'hidden' : '';
-});
+  requestAnimationFrame(() => mnav.classList.toggle('show', open));
+  burger.setAttribute('aria-expanded', open); burger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+  document.documentElement.style.overflow = open ? 'hidden' : '';
+  document.documentElement.classList.toggle('menu-open', open);
+};
+burger.addEventListener('click', () => setMenu(mnav.hidden));
 $$('.mnav-toggle', mnav).forEach(b => b.addEventListener('click', () => {
-  const sub = b.nextElementSibling; sub.hidden = !sub.hidden; b.setAttribute('aria-expanded', !sub.hidden);
+  const item = b.parentElement, open = !item.classList.contains('open');
+  $$('.mnav-item.open', mnav).forEach(x => { if (x !== item) { x.classList.remove('open'); $('.mnav-toggle', x).setAttribute('aria-expanded', false); } });
+  item.classList.toggle('open', open); b.setAttribute('aria-expanded', open);
 }));
+mnav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && !mnav.hidden) setMenu(false); });
 const onScroll = () => header.classList.toggle('solid', scrollY > 10);
 addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
@@ -288,4 +305,6 @@ document.addEventListener('click', e => {
 updSel();
 
 window.SITE.refresh();
+// Chat-Assistent laden
+const bs = document.createElement('script'); bs.src = 'chat.js'; document.body.appendChild(bs);
 })();
