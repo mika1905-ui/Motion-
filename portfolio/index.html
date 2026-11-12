@@ -13,7 +13,7 @@
 <link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
 <link rel="preload" href="fonts/InterDisplay-Black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20261112j">
+<link rel="stylesheet" href="styles.css?v=20261112k">
 </head>
 <body data-page="start">
 <main>
@@ -123,10 +123,10 @@
   </section>
 </main>
 
-<script src="config.js?v=20261112j"></script>
-<script src="data.js?v=20261112j"></script>
-<script src="site.js?v=20261112j"></script>
-<script src="carousel.js?v=20261112j"></script>
+<script src="config.js?v=20261112k"></script>
+<script src="data.js?v=20261112k"></script>
+<script src="site.js?v=20261112k"></script>
+<script src="carousel.js?v=20261112k"></script>
 <script>
 (() => {
   const { esc, projectCard } = window.SITE;
@@ -136,7 +136,7 @@
       <span><b>${esc(b.name)}</b>${count(b.id) ? `<small>${count(b.id)} Projekt${count(b.id) > 1 ? 'e' : ''}</small>` : '<small class="soon">Demnächst verfügbar</small>'}</span></a>`).join('');
   document.getElementById('featured').innerHTML = PROJECTS.filter(p => p.featured).slice(0, 3).map(projectCard).join('');
   const q = document.getElementById('quotes');
-  q.innerHTML = TESTIMONIALS.length ? TESTIMONIALS.map(t => `<figure class="quote reveal"><span class="stars" aria-hidden="true">“</span><blockquote>${esc(t.quote)}</blockquote><figcaption><b>${esc(t.name)}</b><span>${esc(t.company)}</span></figcaption></figure>`).join('')
+  q.innerHTML = TESTIMONIALS.length ? TESTIMONIALS.map(t => `<figure class="quote reveal"><span class="rating" role="img" aria-label="5 von 5 Sternen">★★★★★</span><blockquote>${esc(t.quote)}</blockquote><figcaption><b>${esc(t.name)}</b><span>${esc(t.company)}</span></figcaption></figure>`).join('')
     : [1, 2, 3].map(i => `<div class="soon-card static reveal" style="--c:${['#d4ff3a', '#4aa8ff', '#ff8a3d'][i - 1]}"><span class="soon-ico">“</span><span class="soon-badge">Demnächst verfügbar</span><b>${i === 1 ? 'Deine Stimme hier?' : i === 2 ? 'Erste Projekte laufen' : 'Bewertungen folgen'}</b><span>${i === 1 ? 'Die ersten Kunden bekommen Startkonditionen – und einen Platz auf dieser Seite.' : i === 2 ? 'Echte Kundenstimmen erscheinen hier, sobald die ersten Projekte live sind.' : 'Ehrliche Bewertungen statt erfundener Zitate.'}</span></div>`).join('');
   document.getElementById('quoteNote').textContent = window.TESTIMONIALS_NOTE || '';
   window.SITE.refresh();

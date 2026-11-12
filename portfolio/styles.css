@@ -739,3 +739,4 @@ html.menu-open .bot-fab, html.menu-open .wa-float, html.menu-open .sel-bar { dis
 .ring-hint { text-align: center; color: #6e6e74; font-size: 12px; margin: 10px 0 0; }
 @media (max-width: 600px) { .ring-card { --w: 46vw; } .ring-stage { height: calc(46vw * 1.78 + 40px); } .ring-arrow { width: 42px; height: 42px; font-size: 22px; } }
 .ring-card { background: #0c0c0f; transform-style: flat; }
+.quote .rating { font-size: 20px; letter-spacing: 3px; color: #ffc93c; line-height: 1; text-shadow: 0 0 18px rgba(255,201,60,.35); }

@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURÈNE — Maison de Parfum</title>
+<link rel="stylesheet" href="fonts.css">
+<meta name="robots" content="noindex">
+<meta name="description" content="AURÈNE – Eaux de Parfum aus Berlin. Nachfüllbare Flakons, 92 % Inhaltsstoffe natürlichen Ursprungs, vegan.">
+<style>
+:root{
+  --ink:#0d0b09; --ink2:#16130f; --cream:#efe7da; --cream2:#e4d9c6; --muted:#9a8f80;
+  --accent:#d08a3c; --accent-soft:rgba(208,138,60,.18);
+  --serif:'Instrument Serif',Georgia,serif; --sans:'Inter Tight',system-ui,sans-serif;
+  --ease:cubic-bezier(.2,.7,.1,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--ink);color:var(--cream);font-family:var(--sans);font-weight:400;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background-color 1s}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+::selection{background:var(--accent);color:var(--ink)}
+
+/* grain */
+body::after{content:"";position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-4%)}60%{transform:translate(-4%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+
+/* preloader */
+#loader{position:fixed;inset:0;z-index:200;background:var(--ink);display:flex;flex-direction:column;justify-content:space-between;padding:28px;transition:transform 1.1s var(--ease)}
+#loader.done{transform:translateY(-100%)}
+#loader .lg{font-family:var(--serif);font-size:clamp(64px,16vw,220px);letter-spacing:.02em;line-height:.8}
+#loader .row{display:flex;justify-content:space-between;align-items:flex-end;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+#loader .pct{font-family:var(--serif);font-size:clamp(48px,10vw,120px);color:var(--cream);letter-spacing:0}
+
+/* 3d canvas */
+#gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:1;pointer-events:none;transition:opacity .6s}
+#glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60vw 60vw at var(--gx,70%) var(--gy,50%),var(--accent-soft),transparent 60%);transition:background .8s}
+
+/* top bars */
+.announce{position:relative;z-index:30;background:var(--accent);color:var(--ink);font-size:12px;letter-spacing:.06em;overflow:hidden;white-space:nowrap;height:32px;display:flex;align-items:center;transition:background 1s}
+.announce .track{display:inline-flex;gap:48px;animation:marq 28s linear infinite;padding-left:48px}
+.announce span{font-weight:500}
+header{position:sticky;top:0;z-index:40;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:16px 28px;transition:background .4s,backdrop-filter .4s}
+header.scrolled{background:rgba(13,11,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+header nav{display:flex;gap:26px;font-size:13px;letter-spacing:.04em}
+header nav a{position:relative;opacity:.85}
+header nav a::after{content:"";position:absolute;left:0;bottom:-4px;height:1px;width:100%;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
+header nav a:hover::after{transform:scaleX(1);transform-origin:left}
+.logo{font-family:var(--serif);font-size:30px;letter-spacing:.14em;line-height:1}
+.hicons{display:flex;justify-content:flex-end;gap:18px;align-items:center;font-size:13px}
+.hicons svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.3}
+.bagbtn{display:flex;align-items:center;gap:8px}
+.bagcount{min-width:20px;height:20px;border-radius:20px;background:var(--cream);color:var(--ink);font-size:11px;display:grid;place-items:center;font-weight:600;transition:transform .3s}
+.bagcount.bump{transform:scale(1.35)}
+.burger{display:none}
+
+/* hero */
+section{position:relative;z-index:2}
+.hero{min-height:calc(100vh - 32px);display:grid;grid-template-columns:1.05fr 1fr;align-items:center;padding:0 28px 40px}
+.hero .eyebrow{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;display:flex;align-items:center;gap:12px}
+.hero .eyebrow i{width:40px;height:1px;background:var(--muted);display:inline-block}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(64px,10.5vw,180px);line-height:.86;letter-spacing:-.02em}
+.hero h1 em{color:var(--accent);transition:color 1s}
+.line{display:block;overflow:hidden}
+.line>span{display:inline-block;transform:translateY(110%);transition:transform 1.3s var(--ease)}
+.ready .line>span{transform:none}
+.ready .line:nth-child(2)>span{transition-delay:.1s}
+.ready .line:nth-child(3)>span{transition-delay:.2s}
+.hero .sub{max-width:420px;margin-top:32px;font-size:16px;line-height:1.6;color:#c9bfb0;opacity:0;transform:translateY(20px);transition:1s var(--ease) .5s}
+.ready .hero .sub,.ready .hero .ctas{opacity:1;transform:none}
+.hero .ctas{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap;opacity:0;transform:translateY(20px);transition:1s var(--ease) .65s}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:17px 28px;border-radius:100px;font-size:14px;font-weight:500;letter-spacing:.02em;transition:transform .4s var(--ease),background .4s,color .4s;will-change:transform}
+.btn.solid{background:var(--cream);color:var(--ink)}
+.btn.solid:hover{background:var(--accent)}
+.btn.ghost{border:1px solid rgba(239,231,218,.35)}
+.btn.ghost:hover{background:rgba(239,231,218,.08)}
+.btn.dark{background:var(--ink);color:var(--cream)}
+.btn.dark:hover{background:var(--accent);color:var(--ink)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+.hero-right{height:100%;position:relative;min-height:70vh}
+.scent-ui{position:absolute;right:0;bottom:6vh;display:flex;flex-direction:column;align-items:flex-end;gap:14px;text-align:right}
+.scent-name{font-family:var(--serif);font-size:34px;line-height:1}
+.scent-name small{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.dots{display:flex;gap:10px}
+.dots button{width:30px;height:30px;border-radius:50%;border:1px solid rgba(239,231,218,.3);display:grid;place-items:center;transition:transform .3s,border-color .3s}
+.dots button i{width:16px;height:16px;border-radius:50%;display:block}
+.dots button.on{border-color:var(--cream);transform:scale(1.15)}
+.hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);pointer-events:none;opacity:.0}
+.spray{position:absolute;right:0;top:12vh;width:96px;height:96px;border-radius:50%;border:1px solid rgba(239,231,218,.3);display:grid;place-items:center;font-size:11px;letter-spacing:.18em;text-transform:uppercase;transition:transform .4s var(--ease),background .4s}
+.spray:hover{background:rgba(239,231,218,.08);transform:scale(1.06)}
+.spray .ring{position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--accent);animation:pulse 2.4s infinite}
+@keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+.scroll-cue{position:absolute;left:28px;bottom:24px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;align-items:center}
+.scroll-cue i{width:1px;height:40px;background:linear-gradient(var(--cream),transparent);animation:cue 2s infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.drag-area{position:absolute;inset:0;z-index:1;pointer-events:auto;cursor:grab;touch-action:pan-y}
+.drag-area:active{cursor:grabbing}
+
+/* marquee */
+.marquee{z-index:3;background:var(--cream);color:var(--ink);overflow:hidden;white-space:nowrap;padding:22px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.marquee .track{display:inline-flex;gap:40px;animation:marq 40s linear infinite;font-family:var(--serif);font-size:clamp(34px,5vw,72px);line-height:1;align-items:center}
+.marquee .track b{font-weight:400;font-style:italic;color:var(--accent);transition:color 1s}
+.marquee .star{width:.5em;height:.5em;display:inline-block;background:var(--ink);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* akte / scent story */
+.akte{height:320vh}
+.akte .sticky{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 28px;overflow:hidden}
+.akte .left{height:100%;position:relative}
+.floaters span{position:absolute;font-family:var(--serif);font-style:italic;font-size:clamp(18px,2vw,28px);color:var(--cream);opacity:0;white-space:nowrap;transition:opacity .8s,transform 1.4s var(--ease);will-change:transform}
+.akte .right{position:relative;height:60vh}
+.act{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(40px);transition:opacity .7s,transform .9s var(--ease);pointer-events:none}
+.act.on{opacity:1;transform:none;pointer-events:auto}
+.act .num{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;transition:color 1s}
+.act h2{font-family:var(--serif);font-weight:400;font-size:clamp(52px,7vw,110px);line-height:.9;letter-spacing:-.01em}
+.act p{max-width:440px;margin-top:22px;color:#c9bfb0;line-height:1.6}
+.act .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.chip{border:1px solid rgba(239,231,218,.28);border-radius:100px;padding:9px 16px;font-size:13px}
+.progress{position:absolute;right:28px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px}
+.progress i{width:2px;height:44px;background:rgba(239,231,218,.18);position:relative;overflow:hidden;display:block}
+.progress i b{position:absolute;inset:0;background:var(--cream);transform:scaleY(0);transform-origin:top}
+
+/* section heads */
+.shead{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:48px;flex-wrap:wrap}
+.shead h2{font-family:var(--serif);font-weight:400;font-size:clamp(48px,7vw,112px);line-height:.9;letter-spacing:-.01em}
+.shead h2 em{font-style:italic}
+.shead p{max-width:380px;line-height:1.6;opacity:.75}
+.kicker{font-size:12px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:18px;opacity:.6}
+
+/* shop */
+.shop{background:var(--cream);color:var(--ink);padding:120px 28px;border-radius:28px 28px 0 0;margin-top:-1px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.filters button{border:1px solid rgba(13,11,9,.25);border-radius:100px;padding:9px 16px;font-size:13px;transition:.3s}
+.filters button.on,.filters button:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
+.card{position:relative;cursor:pointer}
+.card .media{position:relative;aspect-ratio:4/5;border-radius:18px;overflow:hidden;background:var(--bgc,#ddd)}
+.card .media::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 45%,rgba(255,255,255,.35),transparent 70%)}
+.card .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.card:hover .media img{transform:scale(1.06) rotate(-2deg)}
+.badge{position:absolute;left:14px;top:14px;z-index:2;background:var(--ink);color:var(--cream);font-size:11px;letter-spacing:.08em;padding:6px 11px;border-radius:100px;text-transform:uppercase}
+.quick{position:absolute;left:14px;right:14px;bottom:14px;z-index:2;background:var(--cream);color:var(--ink);border-radius:100px;padding:14px;font-size:13px;font-weight:500;text-align:center;transform:translateY(130%);transition:transform .5s var(--ease),background .3s}
+.card:hover .quick{transform:none}
+.quick:hover{background:var(--ink);color:var(--cream)}
+.card .info{display:flex;justify-content:space-between;gap:12px;padding:16px 4px 0}
+.card h3{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1}
+.card .notes{font-size:13px;opacity:.6;margin-top:6px}
+.card .price{text-align:right;font-size:15px;font-weight:500;white-space:nowrap}
+.card .price small{display:block;font-size:11px;font-weight:400;opacity:.55;margin-top:4px}
+.stars{display:flex;align-items:center;gap:6px;font-size:12px;margin-top:8px;opacity:.75}
+.stars i{letter-spacing:1px;font-style:normal}
+.legal-hint{font-size:12px;opacity:.55;margin-top:28px}
+
+/* discovery */
+.discovery{background:var(--cream);color:var(--ink);padding:0 28px 120px}
+.disc{display:grid;grid-template-columns:1.1fr 1fr;border-radius:28px;overflow:hidden;background:var(--ink);color:var(--cream)}
+.disc .vis{position:relative;min-height:460px;background:radial-gradient(circle at 50% 60%,#2a2219,#0d0b09 70%);display:flex;align-items:flex-end;justify-content:center;gap:2%;padding:0 6% 12%}
+.vial{width:12%;max-width:52px;aspect-ratio:1/3.6;border-radius:8px 8px 12px 12px;position:relative;background:linear-gradient(90deg,rgba(255,255,255,.25),rgba(255,255,255,.05) 40%,rgba(255,255,255,.18));border:1px solid rgba(255,255,255,.25);animation:bob 4s ease-in-out infinite}
+.vial::before{content:"";position:absolute;left:3px;right:3px;bottom:3px;height:72%;border-radius:4px 4px 9px 9px;background:var(--c);opacity:.9}
+.vial::after{content:"";position:absolute;left:-1px;right:-1px;top:-24%;height:24%;border-radius:6px 6px 2px 2px;background:linear-gradient(90deg,#8d7752,#e8d3a3,#8d7752)}
+@keyframes bob{50%{transform:translateY(-14px)}}
+.disc .txt{padding:56px;display:flex;flex-direction:column;justify-content:center}
+.disc h3{font-family:var(--serif);font-weight:400;font-size:clamp(40px,4.5vw,68px);line-height:.95}
+.disc p{margin:20px 0 28px;line-height:1.6;opacity:.75;max-width:420px}
+.disc ul{list-style:none;display:grid;gap:10px;margin-bottom:32px;font-size:14px}
+.disc li::before{content:"✦  ";color:var(--accent)}
+
+/* ingredients */
+.ingr{background:var(--ink2);padding:140px 28px}
+.ing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(239,231,218,.12);border:1px solid rgba(239,231,218,.12);border-radius:24px;overflow:hidden}
+.ing{background:var(--ink2);padding:28px;min-height:360px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;cursor:default}
+.ing .orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff8,transparent 30%),radial-gradient(circle,var(--c1),var(--c2));filter:saturate(1.1);transition:transform 1.2s var(--ease);box-shadow:0 30px 80px -20px var(--c1)}
+.ing:hover .orb{transform:scale(1.5) translate(10%,8%)}
+.ing .lat{font-family:var(--serif);font-style:italic;font-size:30px;line-height:1;margin-top:28px}
+.ing .meta{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.55;margin-top:10px}
+.ing p{font-size:14px;line-height:1.55;opacity:.75;margin-top:14px}
+.ing .pct{position:absolute;right:24px;top:24px;font-family:var(--serif);font-size:20px;opacity:.6}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:64px}
+.fact b{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(48px,6vw,88px);line-height:1;color:var(--accent);transition:color 1s}
+.fact span{font-size:14px;opacity:.7}
+details.inci{margin-top:48px;border-top:1px solid rgba(239,231,218,.18);border-bottom:1px solid rgba(239,231,218,.18)}
+details.inci summary{list-style:none;cursor:pointer;padding:22px 0;display:flex;justify-content:space-between;font-size:15px}
+details.inci summary::-webkit-details-marker{display:none}
+details.inci summary::after{content:"+";font-size:22px;line-height:1;transition:transform .3s}
+details.inci[open] summary::after{transform:rotate(45deg)}
+details.inci p{padding-bottom:24px;font-size:13px;line-height:1.7;opacity:.7;max-width:900px}
+
+/* flakon */
+.flakon{height:220vh}
+.flakon .sticky{position:sticky;top:0;height:100vh;padding:100px 28px 40px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.flakon .top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.flakon h2{font-family:var(--serif);font-weight:400;font-size:clamp(48px,7vw,112px);line-height:.9}
+.flakon .specs{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;font-size:13px;opacity:.85}
+.flakon .specs b{display:block;font-family:var(--serif);font-weight:400;font-size:28px;margin-bottom:6px}
+#hotspots{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .4s}
+.hs{position:absolute;left:0;top:0;display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.06em;white-space:nowrap;will-change:transform}
+.hs i{width:12px;height:12px;border-radius:50%;background:var(--cream);box-shadow:0 0 0 6px rgba(239,231,218,.18);flex:none;animation:hsp 2s infinite}
+@keyframes hsp{50%{box-shadow:0 0 0 12px rgba(239,231,218,0)}}
+.hs span{background:rgba(13,11,9,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(239,231,218,.2);padding:8px 12px;border-radius:100px}
+.hs.l{flex-direction:row-reverse;transform-origin:right}
+
+/* finder */
+.finder{background:var(--accent);color:var(--ink);padding:120px 28px;transition:background 1s}
+.finder-box{max-width:980px;margin:0 auto;text-align:center}
+.finder h2{font-family:var(--serif);font-weight:400;font-size:clamp(48px,7vw,104px);line-height:.9}
+.qstep{display:none;margin-top:48px}
+.qstep.on{display:block;animation:fadeUp .7s var(--ease)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}}
+.qstep h4{font-size:13px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:24px;font-weight:500}
+.qopts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.qopts button{border:1px solid rgba(13,11,9,.35);border-radius:18px;padding:26px 18px;font-family:var(--serif);font-size:28px;transition:.3s var(--ease)}
+.qopts button small{display:block;font-family:var(--sans);font-size:12px;opacity:.65;margin-top:6px}
+.qopts button:hover{background:var(--ink);color:var(--cream);transform:translateY(-4px)}
+.qbar{height:2px;background:rgba(13,11,9,.15);margin-top:40px;border-radius:2px;overflow:hidden}
+.qbar b{display:block;height:100%;background:var(--ink);width:0;transition:width .6s var(--ease)}
+.result{display:grid;grid-template-columns:260px 1fr;gap:36px;text-align:left;align-items:center;background:var(--cream);border-radius:24px;padding:24px}
+.result img{border-radius:16px;background:var(--bgc)}
+.result h3{font-family:var(--serif);font-weight:400;font-size:52px;line-height:.95}
+.result p{margin:14px 0 22px;line-height:1.6;opacity:.75}
+.result .r-actions{display:flex;gap:10px;flex-wrap:wrap}
+.match{font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.6}
+
+/* social */
+.social{background:var(--ink);padding:140px 0 120px;overflow:hidden}
+.social .shead{padding:0 28px}
+.demo-tag{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(239,231,218,.3);border-radius:100px;padding:5px 10px;opacity:.6;margin-left:10px;vertical-align:middle}
+.reels{display:flex;gap:16px;padding:0 28px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.reels::-webkit-scrollbar{display:none}
+.reel{flex:0 0 280px;aspect-ratio:9/16;border-radius:20px;position:relative;overflow:hidden;scroll-snap-align:start;background:var(--g);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.reel::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.65))}
+.reel .big{position:absolute;top:22px;left:20px;right:20px;font-family:var(--serif);font-size:44px;line-height:.9;z-index:1}
+.reel .play{position:absolute;top:50%;left:50%;width:64px;height:64px;margin:-32px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);display:grid;place-items:center;z-index:1}
+.reel .play::after{content:"";border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+.reel .who{position:relative;z-index:1;font-size:13px}
+.reel .who b{display:block;font-weight:500}
+.reel .who span{opacity:.75}
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:64px 28px 0}
+.review{border:1px solid rgba(239,231,218,.15);border-radius:20px;padding:28px}
+.review .stars{opacity:1;color:var(--accent);margin:0 0 16px;font-size:14px}
+.review q{font-family:var(--serif);font-size:24px;line-height:1.2;quotes:"„" "“"}
+.review .by{margin-top:20px;font-size:13px;opacity:.6}
+
+/* newsletter + usp + footer */
+.usps{background:var(--cream);color:var(--ink);display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(13,11,9,.12)}
+.usp{padding:36px 28px;border-right:1px solid rgba(13,11,9,.12);font-size:14px;line-height:1.5}
+.usp:last-child{border-right:0}
+.usp b{display:block;font-family:var(--serif);font-weight:400;font-size:24px;margin-bottom:6px}
+.news{background:var(--cream);color:var(--ink);padding:120px 28px;text-align:center;border-top:1px solid rgba(13,11,9,.12)}
+.news h2{font-family:var(--serif);font-weight:400;font-size:clamp(48px,8vw,128px);line-height:.88}
+.news form{display:flex;max-width:520px;margin:40px auto 0;border:1px solid var(--ink);border-radius:100px;padding:6px}
+.news input{flex:1;background:none;border:0;padding:0 20px;font:inherit;font-size:15px;outline:none;min-width:0;color:var(--ink)}
+.news small{display:block;margin-top:16px;font-size:12px;opacity:.6}
+footer{background:var(--ink);padding:96px 28px 28px;position:relative;z-index:2;overflow:hidden}
+.fcols{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:40px}
+.fcols h5{font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.5;font-weight:500;margin-bottom:18px}
+.fcols a{display:block;font-size:14px;margin-bottom:10px;opacity:.85}
+.fcols a:hover{opacity:1;color:var(--accent)}
+.pay{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.pay span{border:1px solid rgba(239,231,218,.2);border-radius:6px;padding:6px 10px;font-size:11px;letter-spacing:.04em;opacity:.8}
+.mega{font-family:var(--serif);font-size:25vw;line-height:.8;letter-spacing:.02em;text-align:center;margin-top:80px;color:transparent;-webkit-text-stroke:1px rgba(239,231,218,.25);user-select:none}
+.fbottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;opacity:.5;margin-top:24px}
+
+/* drawer + modal */
+.scrim{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .5s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100vw);z-index:110;background:var(--cream);color:var(--ink);transform:translateX(100%);transition:transform .7s var(--ease);display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.dhead{display:flex;justify-content:space-between;align-items:center;padding:22px 24px;border-bottom:1px solid rgba(13,11,9,.12)}
+.dhead h3{font-family:var(--serif);font-weight:400;font-size:32px}
+.x{width:40px;height:40px;border-radius:50%;border:1px solid rgba(13,11,9,.2);display:grid;place-items:center;font-size:20px}
+.ship{padding:16px 24px;font-size:13px;border-bottom:1px solid rgba(13,11,9,.12)}
+.ship .bar{height:4px;background:rgba(13,11,9,.1);border-radius:4px;margin-top:10px;overflow:hidden}
+.ship .bar b{display:block;height:100%;background:var(--ink);transition:width .6s var(--ease)}
+.items{flex:1;overflow-y:auto;padding:8px 24px}
+.item{display:grid;grid-template-columns:84px 1fr auto;gap:14px;padding:16px 0;border-bottom:1px solid rgba(13,11,9,.1);align-items:center}
+.item img{width:84px;height:104px;object-fit:cover;border-radius:10px;background:var(--bgc)}
+.item h4{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1}
+.item .v{font-size:12px;opacity:.6;margin-top:4px}
+.qty{display:inline-flex;align-items:center;border:1px solid rgba(13,11,9,.2);border-radius:100px;margin-top:10px}
+.qty button{width:30px;height:30px}
+.qty span{min-width:22px;text-align:center;font-size:13px}
+.item .rm{font-size:12px;text-decoration:underline;opacity:.5;margin-top:8px;display:block;text-align:right}
+.empty{text-align:center;padding:60px 10px}
+.empty p{font-family:var(--serif);font-size:30px;margin-bottom:20px}
+.samples{padding:14px 24px;border-top:1px solid rgba(13,11,9,.12)}
+.samples h5{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;margin-bottom:10px}
+.samples .sm{display:flex;gap:8px;flex-wrap:wrap}
+.samples button{border:1px solid rgba(13,11,9,.25);border-radius:100px;padding:7px 12px;font-size:12px}
+.samples button.on{background:var(--ink);color:var(--cream)}
+.dfoot{padding:20px 24px 24px;border-top:1px solid rgba(13,11,9,.12)}
+.sumrow{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+.sumrow.total{font-size:18px;font-weight:500;margin-top:8px}
+.dfoot .btn{width:100%;justify-content:center;margin-top:16px}
+.dfoot small{display:block;text-align:center;font-size:11px;opacity:.55;margin-top:10px}
+
+.modal{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:20px;pointer-events:none}
+.modal .panel{background:var(--cream);color:var(--ink);border-radius:24px;width:min(1040px,100%);max-height:92vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr;opacity:0;transform:translateY(40px) scale(.98);transition:.6s var(--ease)}
+.modal.on{pointer-events:auto}
+.modal.on .panel{opacity:1;transform:none}
+.pv-media{background:var(--bgc);position:relative;min-height:420px}
+.pv-media img{width:100%;height:100%;object-fit:cover}
+.pv-body{padding:40px;position:relative}
+.pv-body .x{position:absolute;right:20px;top:20px}
+.pv-body h3{font-family:var(--serif);font-weight:400;font-size:56px;line-height:.9;margin:10px 0 6px}
+.pv-body .desc{line-height:1.6;opacity:.75;margin:18px 0}
+.pyr{display:grid;gap:8px;margin:22px 0}
+.pyr div{display:grid;grid-template-columns:110px 1fr;font-size:14px;padding-bottom:8px;border-bottom:1px solid rgba(13,11,9,.1)}
+.pyr div span:first-child{font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.55;padding-top:2px}
+.sizes{display:flex;gap:8px;margin:18px 0 8px}
+.sizes button{flex:1;border:1px solid rgba(13,11,9,.25);border-radius:14px;padding:12px 6px;font-size:14px;line-height:1.3;transition:.3s}
+.sizes button small{display:block;font-size:11px;opacity:.6}
+.sizes button.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.pv-price{display:flex;justify-content:space-between;align-items:baseline;margin:18px 0}
+.pv-price b{font-size:26px;font-weight:500}
+.pv-price small{font-size:12px;opacity:.6}
+.pv-add{display:flex;gap:10px}
+.pv-add .btn{flex:1;justify-content:center}
+.acc details{border-bottom:1px solid rgba(13,11,9,.12)}
+.acc summary{cursor:pointer;list-style:none;padding:16px 0;font-size:14px;display:flex;justify-content:space-between}
+.acc summary::after{content:"+"}
+.acc details[open] summary::after{content:"–"}
+.acc p{font-size:13px;line-height:1.6;opacity:.7;padding-bottom:16px}
+.dialog .panel{grid-template-columns:1fr;max-width:460px;padding:40px;text-align:center}
+.dialog h3{font-family:var(--serif);font-weight:400;font-size:44px;line-height:.95;margin-bottom:14px}
+.dialog p{opacity:.7;line-height:1.6;margin-bottom:24px}
+
+.toast{position:fixed;left:50%;bottom:24px;z-index:130;transform:translate(-50%,140%);background:var(--cream);color:var(--ink);padding:14px 20px;border-radius:100px;font-size:14px;display:flex;gap:12px;align-items:center;transition:transform .6s var(--ease);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.toast.on{transform:translate(-50%,0)}
+.toast i{width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--cream);display:grid;place-items:center;font-style:normal;font-size:12px}
+.cookie{position:fixed;left:20px;bottom:20px;z-index:95;max-width:380px;background:var(--ink2);border:1px solid rgba(239,231,218,.18);border-radius:20px;padding:22px;font-size:13px;line-height:1.55;transform:translateY(140%);transition:transform .8s var(--ease)}
+.cookie.on{transform:none}
+.cookie div{display:flex;gap:8px;margin-top:14px}
+.cookie .btn{padding:11px 18px;font-size:13px}
+
+.reveal{opacity:0;transform:translateY(50px);transition:opacity 1s var(--ease),transform 1.2s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.mobnav{position:fixed;inset:0;z-index:105;background:var(--ink);padding:100px 28px;display:flex;flex-direction:column;gap:8px;transform:translateY(-100%);transition:transform .7s var(--ease)}
+.mobnav.on{transform:none}
+.mobnav a{font-family:var(--serif);font-size:52px;line-height:1.1}
+.mobnav .x{position:absolute;right:24px;top:24px;border-color:rgba(239,231,218,.3)}
+
+/* cursor */
+#cur{position:fixed;left:0;top:0;width:10px;height:10px;margin:-5px;border-radius:50%;background:var(--cream);z-index:150;pointer-events:none;mix-blend-mode:difference;transition:width .3s,height .3s,margin .3s}
+#cur.big{width:70px;height:70px;margin:-35px}
+@media (hover:none){#cur{display:none}}
+
+@media (max-width:900px){
+  header{grid-template-columns:auto 1fr auto;padding:14px 18px}
+  header nav{display:none}
+  .burger{display:block}
+  .logo{font-size:24px;text-align:center}
+  .hicons .hide-m{display:none}
+  .hero{grid-template-columns:1fr;padding:0 18px 28px;min-height:calc(100svh - 32px);align-content:end}
+  .hero-right{position:absolute;inset:0;min-height:0}
+  .hero-left{position:relative;z-index:2;pointer-events:none}
+  .hero-left .ctas{pointer-events:auto}
+  .hero h1{font-size:clamp(58px,17vw,120px)}
+  .hero .sub{font-size:15px;margin-top:18px}
+  .hero .eyebrow{margin-bottom:16px}
+  .scent-ui{top:12px;bottom:auto;right:18px}
+  .scent-name{font-size:26px}
+  .spray{top:14px;left:18px;right:auto;width:72px;height:72px;font-size:9px}
+  .hero h1{font-size:clamp(52px,15vw,110px)}
+  .scroll-cue{display:none}
+  .akte .sticky{grid-template-columns:1fr;padding:0 18px;align-content:end}
+  .akte .left{position:absolute;inset:0}
+  .akte .right{height:46vh;margin-bottom:5vh}
+  .progress{right:14px;top:22vh}
+  .shop,.ingr,.finder,.news{padding:88px 18px}
+  .discovery{padding:0 18px 88px}
+  .disc{grid-template-columns:1fr}
+  .disc .vis{min-height:280px}
+  .disc .txt{padding:32px 24px}
+  .ing-grid{grid-template-columns:1fr 1fr}
+  .ing{min-height:300px;padding:20px}
+  .ing .orb{width:80px;height:80px}
+  .ing .lat{font-size:24px}
+  .facts{grid-template-columns:1fr 1fr}
+  .flakon .sticky{padding:90px 18px 28px}
+  .flakon .specs{grid-template-columns:1fr 1fr;gap:14px}
+  .flakon .specs b{font-size:22px}
+  .hs span{font-size:11px;padding:6px 10px}
+  .result{grid-template-columns:1fr}
+  .result img{max-width:220px;margin:0 auto}
+  .reviews{grid-template-columns:1fr;padding:48px 18px 0}
+  .reels{padding:0 18px}
+  .social .shead{padding:0 18px}
+  .reel{flex-basis:230px}
+  .usps{grid-template-columns:1fr 1fr}
+  .usp:nth-child(2){border-right:0}
+  .usp{border-bottom:1px solid rgba(13,11,9,.12);padding:24px 18px}
+  .fcols{grid-template-columns:1fr 1fr}
+  .fcols>div:first-child{grid-column:1/-1}
+  footer{padding:72px 18px 24px}
+  .modal{padding:0;align-items:end}
+  .modal .panel{grid-template-columns:1fr;border-radius:24px 24px 0 0;max-height:94vh}
+  .pv-media{min-height:300px;max-height:46vh}
+  .pv-body{padding:28px 20px}
+  .pv-body h3{font-size:44px}
+  .dialog .panel{border-radius:24px;margin:20px;width:auto}
+  .modal.dialog{align-items:center}
+  .cookie{left:12px;right:12px;bottom:12px;max-width:none}
+  .card .quick{transform:none;padding:11px;font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="row"><span>Maison de Parfum</span><span>Berlin — Est. 2026</span></div>
+  <div class="lg">AURÈNE</div>
+  <div class="row"><span>Flakon wird gegossen …</span><span class="pct" id="pct">0</span></div>
+</div>
+
+<div id="glow"></div>
+<canvas id="gl"></canvas>
+<div id="hotspots"></div>
+<div id="cur"></div>
+
+<div class="announce"><div class="track" id="ann"></div></div>
+
+<header id="hdr">
+  <nav>
+    <a href="#shop">Shop</a><a href="#duefte">Duftnoten</a><a href="#inhalt">Inhaltsstoffe</a><a href="#flakon">Flakon</a><a href="#finder">Duftfinder</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Menü"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 8h18M3 16h18"/></svg></button>
+  <a href="#" class="logo">AURÈNE</a>
+  <div class="hicons">
+    <button class="hide-m" aria-label="Suche"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+    <button class="hide-m" aria-label="Konto"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button>
+    <button class="bagbtn" id="openBag" aria-label="Warenkorb"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="bagcount" id="bagCount">0</span></button>
+  </div>
+</header>
+
+<div class="mobnav" id="mobnav">
+  <button class="x" id="closeNav">×</button>
+  <a href="#shop">Shop</a><a href="#duefte">Duftnoten</a><a href="#inhalt">Inhaltsstoffe</a><a href="#flakon">Flakon</a><a href="#finder">Duftfinder</a>
+</div>
+
+<main>
+<!-- HERO -->
+<section class="hero" id="hero" data-stage="hero">
+  <div class="hero-left">
+    <div class="eyebrow"><i></i><span id="heroNo">Nº 01 — Eau de Parfum</span></div>
+    <h1><span class="line"><span>Riech</span></span><span class="line"><span>nach <em>dir</em>,</span></span><span class="line"><span>nicht nach allen.</span></span></h1>
+    <p class="sub">Fünf Düfte. Jeder in drei Akten komponiert – mit 22 % Parfumöl, 92 % Inhaltsstoffen natürlichen Ursprungs und einem Flakon, den du nie wieder wegwirfst.</p>
+    <div class="ctas">
+      <a href="#shop" class="btn solid magnet">Kollektion entdecken <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="#finder" class="btn ghost magnet">Duftfinder · 30 Sek.</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="drag-area" id="drag"></div>
+    <button class="spray" id="spray" style="z-index:2"><span class="ring"></span>Sprühen</button>
+    <div class="scent-ui" style="z-index:2">
+      <div class="scent-name" id="scentName"><small>Ziehen zum Drehen</small>Nuit d'Ambre</div>
+      <div class="dots" id="dots"></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><i></i>Scrollen</div>
+</section>
+
+<div class="marquee"><div class="track" id="marq"></div></div>
+
+<!-- AKTE / NOTES -->
+<section class="akte" id="duefte" data-stage="akte">
+  <div class="sticky">
+    <div class="left"><div class="floaters" id="floaters"></div></div>
+    <div class="right" id="acts"></div>
+    <div class="progress"><i><b></b></i><i><b></b></i><i><b></b></i></div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section class="shop" id="shop">
+  <div class="shead">
+    <div><div class="kicker">Die Kollektion · 05 Düfte</div><h2>Fünf Düfte.<br><em>Null</em> Kompromisse.</h2></div>
+    <p>Unisex komponiert in Grasse, abgefüllt in Berlin. Jeder Duft in 30, 50 und 100 ml – und als Nachfüllung, die 30 % günstiger ist.</p>
+  </div>
+  <div class="filters" id="filters">
+    <button class="on" data-f="all">Alle</button><button data-f="warm">Warm & Ambriert</button><button data-f="frisch">Frisch</button><button data-f="holzig">Holzig</button><button data-f="blumig">Blumig</button>
+  </div>
+  <div class="grid" id="grid"></div>
+  <p class="legal-hint">Alle Preise inkl. MwSt., zzgl. <a href="#" style="text-decoration:underline">Versandkosten</a>. Grundpreis je 100 ml angegeben.</p>
+</section>
+
+<!-- DISCOVERY -->
+<section class="discovery">
+  <div class="disc reveal">
+    <div class="vis" id="vials"></div>
+    <div class="txt">
+      <div class="kicker">Discovery Set</div>
+      <h3>Alle fünf Düfte.<br>Eine Woche testen.</h3>
+      <p>5 × 2 ml Proben im Reiseformat. Den Kaufpreis bekommst du als Gutschein für deinen ersten Flakon zurück.</p>
+      <ul><li>5 Proben à 2 ml – je ca. 30 Sprühstöße</li><li>24 € Gutschein inklusive</li><li>Kostenloser Versand</li></ul>
+      <div><button class="btn solid magnet" id="addDisc">In den Warenkorb – 24,00 €</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENTS -->
+<section class="ingr" id="inhalt">
+  <div class="shead">
+    <div><div class="kicker">Inhaltsstoffe</div><h2>Was <em>wirklich</em><br>drin ist.</h2></div>
+    <p>Wir legen jede Rohstoffquelle offen. Keine Phthalate, keine Parabene, keine Tierversuche – und Ethanol aus französischen Zuckerrüben.</p>
+  </div>
+  <div class="ing-grid" id="ingGrid"></div>
+  <div class="facts">
+    <div class="fact reveal"><b data-count="92">0</b><span>% Inhaltsstoffe natürlichen Ursprungs</span></div>
+    <div class="fact reveal"><b data-count="22">0</b><span>% Parfumöl-Konzentration (Eau de Parfum)</span></div>
+    <div class="fact reveal"><b data-count="12">0</b><span>Stunden Haltbarkeit auf der Haut*</span></div>
+    <div class="fact reveal"><b data-count="0">0</b><span>Phthalate, Parabene, Tierversuche</span></div>
+  </div>
+  <details class="inci"><summary>Vollständige INCI-Liste (Nº 01 Nuit d'Ambre)</summary>
+    <p>ALCOHOL DENAT., PARFUM (FRAGRANCE), AQUA (WATER), LIMONENE, LINALOOL, COUMARIN, BENZYL BENZOATE, BENZYL SALICYLATE, CITRONELLOL, GERANIOL, EUGENOL, CITRAL, FARNESOL. — *Die Haltbarkeit variiert je nach Hauttyp und Umgebung. Enthält Allergene laut EU-Kosmetikverordnung 1223/2009.</p>
+  </details>
+</section>
+
+<!-- FLAKON -->
+<section class="flakon" id="flakon" data-stage="flakon">
+  <div class="sticky">
+    <div class="top">
+      <div><div class="kicker">Der Flakon</div><h2>Gebaut,<br>um <em>zu bleiben</em>.</h2></div>
+      <p style="max-width:340px;line-height:1.6;opacity:.75">Scroll weiter – der Flakon zerlegt sich. Schwerer Glasboden, magnetische Kappe, nachfüllbar in 20 Sekunden.</p>
+    </div>
+    <div class="specs">
+      <div><b>420 g</b>Gewicht des 50-ml-Flakons</div>
+      <div><b>12 mm</b>massiver Glasboden</div>
+      <div><b>100 %</b>recyceltes Flintglas</div>
+      <div><b>∞</b>nachfüllbar per Schraubhals</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINDER -->
+<section class="finder" id="finder">
+  <div class="finder-box">
+    <div class="kicker">Duftfinder</div>
+    <h2>Dein Duft in<br><em>vier</em> Fragen.</h2>
+    <div id="quiz"></div>
+    <div class="qbar"><b id="qbar"></b></div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section class="social">
+  <div class="shead">
+    <div><div class="kicker">#AURÈNEsillage</div><h2>Die Spur, über<br>die alle <em>reden</em>.</h2></div>
+    <p>Teile deinen Moment mit #AURÈNEsillage – jeden Monat verlosen wir einen 100-ml-Flakon. <span class="demo-tag">Beispielinhalte</span></p>
+  </div>
+  <div class="reels" id="reels"></div>
+  <div class="reviews" id="reviews"></div>
+</section>
+
+<div class="usps">
+  <div class="usp"><b>Gratis Versand</b>ab 79 € innerhalb Deutschlands, DHL GoGreen</div>
+  <div class="usp"><b>2 Proben gratis</b>zu jeder Bestellung, frei wählbar</div>
+  <div class="usp"><b>30 Tage Rückgabe</b>auch geöffnet – wenn der Duft nicht passt</div>
+  <div class="usp"><b>Klarna & PayPal</b>Kauf auf Rechnung oder in 3 Raten</div>
+</div>
+
+<section class="news">
+  <div class="kicker">Newsletter</div>
+  <h2>10 % auf deinen<br><em>ersten</em> Duft.</h2>
+  <form id="newsForm"><input type="email" required placeholder="Deine E-Mail-Adresse" aria-label="E-Mail"><button class="btn dark">Anmelden</button></form>
+  <small>Abmeldung jederzeit. Es gilt unsere Datenschutzerklärung.</small>
+</section>
+</main>
+
+<footer>
+  <div class="fcols">
+    <div>
+      <div class="logo" style="font-size:40px">AURÈNE</div>
+      <p style="opacity:.6;margin-top:14px;max-width:320px;line-height:1.6;font-size:14px">Maison de Parfum. Komponiert in Grasse, abgefüllt in Berlin.</p>
+      <div class="pay"><span>PayPal</span><span>Klarna</span><span>Apple Pay</span><span>Google Pay</span><span>VISA</span><span>Mastercard</span><span>SEPA</span></div>
+    </div>
+    <div><h5>Shop</h5><a href="#shop">Alle Düfte</a><a href="#shop">Discovery Set</a><a href="#shop">Nachfüllungen</a><a href="#shop">Geschenkkarten</a></div>
+    <div><h5>Service</h5><a href="#">Versand & Lieferung</a><a href="#">Rückgabe & Widerruf</a><a href="#">FAQ</a><a href="#">Kontakt</a><a href="#">Bestellstatus</a></div>
+    <div><h5>Rechtliches</h5><a href="#">Impressum</a><a href="#">AGB</a><a href="#">Datenschutz</a><a href="#">Widerrufsbelehrung</a><a href="#">Cookie-Einstellungen</a></div>
+  </div>
+  <div class="mega">AURÈNE</div>
+  <div class="fbottom"><span>© 2026 AURÈNE — fiktive Marke, Demo-Shop</span><span>Instagram · TikTok · Pinterest</span></div>
+</footer>
+
+<!-- cart -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Warenkorb">
+  <div class="dhead"><h3>Warenkorb</h3><button class="x" data-close>×</button></div>
+  <div class="ship" id="ship"></div>
+  <div class="items" id="items"></div>
+  <div class="samples" id="samples"></div>
+  <div class="dfoot" id="dfoot"></div>
+</aside>
+
+<div class="modal" id="pv"><div class="panel" id="pvPanel"></div></div>
+<div class="modal dialog" id="dlg"><div class="panel" id="dlgPanel"></div></div>
+<div class="toast" id="toast"><i>✓</i><span id="toastTxt"></span></div>
+<div class="cookie" id="cookie">Wir nutzen Cookies, um den Shop zu verbessern und dir passende Düfte zu zeigen. Mehr in der Datenschutzerklärung.<div><button class="btn solid" data-ck>Alle akzeptieren</button><button class="btn ghost" data-ck>Nur notwendige</button></div></div>
+
+<script src="vendor/three.min.js"></script>
+<script src="vendor/RoomEnvironment.js"></script>
+<script>
+/* ================= DATA ================= */
+const P = [
+ {id:'n01',no:'Nº 01',name:"Nuit d'Ambre",fam:'warm',tag:'Bestseller',liquid:'#c9741f',cap:'#c9a35c',bg:'#e8c99a',accent:'#d08a3c',rating:4.9,reviews:2184,
+  top:['Bergamotte','Safran'],heart:['Damaszener Rose','Labdanum'],base:['Ambra','Bourbon-Vanille','Sandelholz'],
+  desc:'Warm, harzig, ein bisschen gefährlich. Ein Ambra-Duft für die Stunden nach Mitternacht – mit Safran, der wie Leder auf der Haut liegt.'},
+ {id:'n02',no:'Nº 02',name:'Figue Fumée',fam:'holzig',tag:'Neu',liquid:'#7d8a3a',cap:'#5a5a58',bg:'#cfd2b0',accent:'#a3b04a',rating:4.8,reviews:964,
+  top:['Grüne Feige','Rosa Pfeffer'],heart:['Feigenblatt','Iris'],base:['Vetiver','Atlas-Zeder','Weihrauch'],
+  desc:'Eine reife Feige im Rauch eines Lagerfeuers. Milchig-grün zu Beginn, dann trocken, holzig und erstaunlich sexy.'},
+ {id:'n03',no:'Nº 03',name:'Bleu Sel',fam:'frisch',tag:'',liquid:'#5fa0bf',cap:'#c9ccd1',bg:'#c8dbe2',accent:'#6fb3d2',rating:4.7,reviews:1311,
+  top:['Meersalz','Pink Grapefruit'],heart:['Muskatellersalbei','Neroli'],base:['Ambroxan','Treibholz','Weißer Moschus'],
+  desc:'Haut nach einem Tag am Meer. Salzig, sonnig, mineralisch – der Duft, nach dem dich Fremde im Aufzug fragen.'},
+ {id:'n04',no:'Nº 04',name:'Rose Noire',fam:'blumig',tag:'Limited',liquid:'#8e1b3c',cap:'#1d1b1a',bg:'#e2b6bf',accent:'#d0476e',rating:4.9,reviews:1702,
+  top:['Himbeere','Litschi'],heart:['Türkische Rose','Pfingstrose'],base:['Patchouli','Oud-Akkord','Wildleder'],
+  desc:'Keine Großmutter-Rose. Dunkel, fruchtig, mit Oud und Leder – eine Rose, die um drei Uhr nachts noch tanzt.'},
+ {id:'n05',no:'Nº 05',name:'Soie Blanche',fam:'frisch',tag:'',liquid:'#e9dcc6',cap:'#d8c7a8',bg:'#ece3d4',accent:'#cdb48a',rating:4.8,reviews:876,
+  top:['Aldehyde','Birne'],heart:['Orangenblüte','Iris-Butter'],base:['Kaschmirholz','Weißer Moschus','Tonka'],
+  desc:'Frisch gewaschene Seide auf warmer Haut. Ein Skin-Scent, der näher kommt, je länger du ihn trägst.'}
+];
+const SIZES=[{ml:30,f:.69},{ml:50,f:1},{ml:100,f:1.47}];
+const BASE=129;
+const priceOf=(ml)=>Math.round(BASE*SIZES.find(s=>s.ml===ml).f)-0.01+0.01; // round euros
+const price=(ml)=>({30:89,50:129,100:189})[ml];
+const eur=v=>v.toLocaleString('de-DE',{style:'currency',currency:'EUR'});
+const gp=(ml)=>eur(price(ml)/ml*100)+' / 100 ml';
+const ING=[
+ {lat:'Citrus bergamia',de:'Bergamotte',o:'Kalabrien, IT',pct:'Kopf',c1:'#e8c84a',c2:'#6b8a2a',t:'Kaltgepresst aus der Schale, bergaptenfrei. Bringt das erste Licht in Nº 01.'},
+ {lat:'Rosa damascena',de:'Damaszener Rose',o:'Isparta, TR',pct:'Herz',c1:'#e05a7a',c2:'#5e0f25',t:'Im Morgengrauen von Hand gepflückt – 3.500 kg Blüten für 1 kg Absolue.'},
+ {lat:'Ficus carica',de:'Feigenblatt',o:'Provence, FR',pct:'Herz',c1:'#a8b85a',c2:'#2f3a14',t:'CO₂-Extrakt aus Blättern, milchig-grün und überraschend cremig.'},
+ {lat:'Santalum album',de:'Sandelholz',o:'Western Australia',pct:'Basis',c1:'#d9a46a',c2:'#5a3415',t:'Aus nachhaltig bewirtschafteten Plantagen, zertifiziert und rückverfolgbar.'},
+ {lat:'Vanilla planifolia',de:'Bourbon-Vanille',o:'Madagaskar',pct:'Basis',c1:'#f0d9a8',c2:'#6e4a1e',t:'Direkt von einer Kooperative in Sava bezogen – fair, ohne Zwischenhandel.'},
+ {lat:'Iris pallida',de:'Iris-Butter',o:'Toskana, IT',pct:'Herz',c1:'#b9a6e0',c2:'#3b2e63',t:'Die Wurzeln reifen drei Jahre, bevor sie destilliert werden. Pudrig, kühl, kostbar.'},
+ {lat:'Vetiveria zizanioides',de:'Vetiver',o:'Haiti',pct:'Basis',c1:'#9a8a5a',c2:'#2a2412',t:'Rauchig-erdige Wurzel, gibt Nº 02 seine trockene Tiefe.'},
+ {lat:'Ambrox® biotech',de:'Ambroxan',o:'Biotechnologisch',pct:'Basis',c1:'#cfd8dc',c2:'#45606b',t:'Ersetzt tierisches Ambra vollständig – mineralisch, salzig, unendlich.'}
+];
+
+/* ================= HELPERS ================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const lerp=(a,b,t)=>a+(b-a)*t, clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const smooth=t=>t*t*(3-2*t);
+let store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const isMobile=()=>innerWidth<=900;
+let current=0; // hero scent
+const images={}; // product snapshots
+
+/* ================= STATIC UI ================= */
+$('#ann').innerHTML=Array(2).fill('<span>Gratis Versand ab 79 €</span><span>✦</span><span>2 Proben zu jeder Bestellung</span><span>✦</span><span>Nº 04 Rose Noire – limitiert auf 3.000 Flakons</span><span>✦</span><span>Kauf auf Rechnung mit Klarna</span><span>✦</span>').join('');
+$('#marq').innerHTML=Array(2).fill(`<span>Kopfnote</span><i class="star"></i><b>Herznote</b><i class="star"></i><span>Basisnote</span><i class="star"></i><b>Sillage</b><i class="star"></i><span>Nachfüllbar</span><i class="star"></i><b>Vegan</b><i class="star"></i>`).join('');
+$('#dots').innerHTML=P.map((p,i)=>`<button aria-label="${p.name}" data-i="${i}" class="${i?'':'on'}"><i style="background:${p.liquid}"></i></button>`).join('');
+$('#vials').innerHTML=P.map((p,i)=>`<div class="vial" style="--c:${p.liquid};animation-delay:${i*.3}s"></div>`).join('');
+$('#ingGrid').innerHTML=ING.map(g=>`<div class="ing reveal" style="--c1:${g.c1};--c2:${g.c2}"><span class="pct">${g.pct}</span><div class="orb"></div><div><div class="lat">${g.lat}</div><div class="meta">${g.de} · ${g.o}</div><p>${g.t}</p></div></div>`).join('');
+const acts=[['I. Kopfnote','Der erste<br>Eindruck.','Die ersten 15 Minuten. Flüchtige, helle Moleküle – das, was im Raum ankommt, bevor du es tust.','top'],
+            ['II. Herznote','Der<br>Charakter.','Von 15 Minuten bis drei Stunden. Hier entscheidet sich, wer der Duft wirklich ist.','heart'],
+            ['III. Basisnote','Die<br>Erinnerung.','Bis zu zwölf Stunden. Schwere, warme Moleküle – das, was am Schal hängen bleibt.','base']];
+function renderActs(){const p=P[current];
+  $('#acts').innerHTML=acts.map((a,i)=>`<div class="act" data-a="${i}"><div class="num">${a[0]} · ${p.no} ${p.name}</div><h2>${a[1]}</h2><p>${a[2]}</p><div class="chips">${p[a[3]].map(n=>`<span class="chip">${n}</span>`).join('')}</div></div>`).join('');
+  const all=[...p.top,...p.heart,...p.base];
+  $('#floaters').innerHTML=all.map((n,i)=>`<span data-g="${i<p.top.length?0:i<p.top.length+p.heart.length?1:2}">${n}</span>`).join('');
+  $$('#floaters span').forEach((s,i)=>{const a=i/all.length*Math.PI*2;s.dataset.a=a});
+  lastAct=-1;
+}
+const reels=[['Der Aufzug-Test','@lina.scent','Nº 03 · 1,2 Mio Aufrufe','linear-gradient(160deg,#5fa0bf,#1a3440)'],['Blind Test mit Freunden','@jonas_riecht','Nº 01 · 860 Tsd.','linear-gradient(160deg,#c9741f,#2a1607)'],['Nachfüllen in 20 Sek.','@aurene','Refill · 2,4 Mio','linear-gradient(160deg,#d8c7a8,#3d3324)'],['Date-Night Duft?','@mira.notes','Nº 04 · 540 Tsd.','linear-gradient(160deg,#8e1b3c,#1b0610)'],['Feige oder Rauch?','@tobi.wears','Nº 02 · 410 Tsd.','linear-gradient(160deg,#7d8a3a,#141808)']];
+$('#reels').innerHTML=reels.map(r=>`<div class="reel" style="--g:${r[3]}"><div class="big">${r[0]}</div><div class="play"></div><div class="who"><b>${r[1]}</b><span>${r[2]}</span></div></div>`).join('');
+const revs=[['Ich wurde dreimal an einem Tag gefragt, was ich trage. Hält locker bis abends.','Sarah K. · Nº 01 · Verifizierter Kauf'],['Endlich ein frischer Duft, der nicht nach Duschgel riecht. Der Flakon ist ein Kunstwerk.','Daniel M. · Nº 03 · Verifizierter Kauf'],['Das Discovery Set hat mich überzeugt – Rose Noire ist jetzt mein Signature-Duft.','Aylin T. · Nº 04 · Verifizierter Kauf']];
+$('#reviews').innerHTML=revs.map(r=>`<div class="review reveal"><div class="stars"><i>★★★★★</i></div><q>${r[0]}</q><div class="by">${r[1]}</div></div>`).join('');
+
+/* ================= SHOP ================= */
+function renderGrid(f='all'){
+  $('#grid').innerHTML=P.filter(p=>f==='all'||p.fam===f).map(p=>`
+  <article class="card reveal in" data-id="${p.id}">
+    <div class="media" style="--bgc:${p.bg}">${p.tag?`<span class="badge">${p.tag}</span>`:''}<img data-img="${p.id}" alt="${p.name} Flakon" ${images[p.id]?`src="${images[p.id]}"`:''}><button class="quick" data-add="${p.id}">+ In den Warenkorb · 50 ml</button></div>
+    <div class="info"><div><h3>${p.name}</h3><div class="notes">${p.no} · ${p.top[0]}, ${p.heart[0]}, ${p.base[0]}</div><div class="stars"><i>★★★★★</i>${p.rating} (${p.reviews.toLocaleString('de-DE')})</div></div>
+    <div class="price">ab ${eur(89)}<small>${gp(30)}</small></div></div>
+  </article>`).join('');
+}
+renderGrid();
+$('#filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#filters button').forEach(x=>x.classList.toggle('on',x===b));renderGrid(b.dataset.f)});
+$('#grid').addEventListener('click',e=>{const add=e.target.closest('[data-add]');if(add){e.stopPropagation();addToCart(add.dataset.add,50);return}const c=e.target.closest('.card');if(c)openPV(c.dataset.id)});
+
+/* product view */
+let pvSize=50,pvQty=1;
+function openPV(id){const p=P.find(x=>x.id===id);pvSize=50;pvQty=1;
+  const draw=()=>{$('#pvPanel').innerHTML=`
+   <div class="pv-media" style="--bgc:${p.bg}"><img src="${images[p.id]||''}" alt="${p.name}"></div>
+   <div class="pv-body"><button class="x" data-closepv>×</button>
+    <div class="kicker" style="opacity:.55">${p.no} · Eau de Parfum</div><h3>${p.name}</h3>
+    <div class="stars" style="opacity:.8"><i>★★★★★</i>${p.rating} · ${p.reviews.toLocaleString('de-DE')} Bewertungen</div>
+    <p class="desc">${p.desc}</p>
+    <div class="pyr"><div><span>Kopfnote</span><span>${p.top.join(', ')}</span></div><div><span>Herznote</span><span>${p.heart.join(', ')}</span></div><div><span>Basisnote</span><span>${p.base.join(', ')}</span></div></div>
+    <div class="sizes">${SIZES.map(s=>`<button data-s="${s.ml}" class="${s.ml===pvSize?'on':''}">${s.ml} ml<small>${eur(price(s.ml))}</small></button>`).join('')}</div>
+    <div class="pv-price"><b>${eur(price(pvSize)*pvQty)}</b><small>inkl. MwSt. · ${gp(pvSize)}</small></div>
+    <div class="pv-add"><div class="qty" style="margin:0"><button data-q="-1">–</button><span>${pvQty}</span><button data-q="1">+</button></div><button class="btn dark" data-pvadd>In den Warenkorb</button></div>
+    <p style="font-size:12px;opacity:.6;margin-top:12px">✓ Auf Lager · Lieferung in 1–3 Werktagen · 2 Gratisproben</p>
+    <div class="acc" style="margin-top:18px">
+     <details><summary>Inhaltsstoffe (INCI)</summary><p>ALCOHOL DENAT., PARFUM (FRAGRANCE), AQUA (WATER), LIMONENE, LINALOOL, COUMARIN, BENZYL BENZOATE, CITRONELLOL, GERANIOL. Vegan, ohne Phthalate und Parabene.</p></details>
+     <details><summary>Anwendung</summary><p>Auf Pulspunkte sprühen – Handgelenke, Halsansatz, hinter die Ohren. Nicht verreiben. Aus 15 cm Entfernung sprühen.</p></details>
+     <details><summary>Versand & Rückgabe</summary><p>Gratis Versand ab 79 €, sonst 4,95 €. 30 Tage Rückgaberecht, auch bei geöffneten Flakons (max. 10 % entnommen).</p></details>
+    </div>
+   </div>`};
+  draw();$('#pv').classList.add('on');scrim(true);
+  $('#pvPanel').onclick=e=>{const s=e.target.closest('[data-s]'),q=e.target.closest('[data-q]');
+    if(s){pvSize=+s.dataset.s;draw()} if(q){pvQty=Math.max(1,pvQty+ +q.dataset.q);draw()}
+    if(e.target.closest('[data-pvadd]')){addToCart(p.id,pvSize,pvQty);closeAll();setTimeout(openCart,300)}
+    if(e.target.closest('[data-closepv]'))closeAll();};
+}
+
+/* ================= CART ================= */
+let cart=store.get('aurene_cart',[]), samples=store.get('aurene_samples',[]);
+const FREE=79;
+function itemInfo(it){if(it.id==='disc')return{name:'Discovery Set',v:'5 × 2 ml · inkl. 24 € Gutschein',price:24,bg:'#2a2219',img:''};
+  const p=P.find(x=>x.id===it.id);return{name:p.name,v:`${p.no} · Eau de Parfum · ${it.ml} ml · ${gp(it.ml)}`,price:price(it.ml),bg:p.bg,img:images[p.id]||''}}
+function addToCart(id,ml,qty=1){const ex=cart.find(c=>c.id===id&&c.ml===ml);ex?ex.qty+=qty:cart.push({id,ml,qty});saveCart();
+  const n=id==='disc'?'Discovery Set':P.find(p=>p.id===id).name;toast(`${n} hinzugefügt`);
+  const bc=$('#bagCount');bc.classList.add('bump');setTimeout(()=>bc.classList.remove('bump'),300);}
+function saveCart(){store.set('aurene_cart',cart);store.set('aurene_samples',samples);renderCart()}
+function renderCart(){
+  const count=cart.reduce((a,c)=>a+c.qty,0);$('#bagCount').textContent=count;
+  const sub=cart.reduce((a,c)=>a+itemInfo(c).price*c.qty,0);
+  const rest=Math.max(0,FREE-sub);
+  $('#ship').innerHTML=(sub===0?'Noch 79,00 € bis zum kostenlosen Versand':rest>0?`Noch <b>${eur(rest)}</b> bis zum kostenlosen Versand`:'✦ Du hast kostenlosen Versand')+`<div class="bar"><b style="width:${Math.min(100,sub/FREE*100)}%"></b></div>`;
+  $('#items').innerHTML=cart.length?cart.map((c,i)=>{const f=itemInfo(c);return`<div class="item"><img style="--bgc:${f.bg}" ${f.img?`src="${f.img}"`:''} alt=""><div><h4>${f.name}</h4><div class="v">${f.v}</div><div class="qty"><button data-ci="${i}" data-d="-1">–</button><span>${c.qty}</span><button data-ci="${i}" data-d="1">+</button></div></div><div style="text-align:right;font-size:14px">${eur(f.price*c.qty)}<button class="rm" data-rm="${i}">Entfernen</button></div></div>`}).join('')
+   :`<div class="empty"><p>Dein Warenkorb ist leer.</p><button class="btn dark" data-close>Düfte entdecken</button></div>`;
+  $('#samples').style.display=cart.length?'block':'none';
+  $('#samples').innerHTML=`<h5>2 Gratisproben wählen (${samples.length}/2)</h5><div class="sm">${P.map(p=>`<button data-sm="${p.id}" class="${samples.includes(p.id)?'on':''}">${p.name}</button>`).join('')}</div>`;
+  const ship=sub===0?0:rest>0?4.95:0;
+  $('#dfoot').style.display=cart.length?'block':'none';
+  $('#dfoot').innerHTML=`<div class="sumrow"><span>Zwischensumme</span><span>${eur(sub)}</span></div><div class="sumrow"><span>Versand</span><span>${ship?eur(ship):'Kostenlos'}</span></div><div class="sumrow total"><span>Gesamt</span><span>${eur(sub+ship)}</span></div><div style="font-size:11px;opacity:.55">inkl. ${eur((sub+ship)-(sub+ship)/1.19)} MwSt.</div><button class="btn dark" data-checkout>Zur Kasse</button><small>PayPal · Klarna · Apple Pay · Kreditkarte</small>`;
+}
+$('#drawer').addEventListener('click',e=>{const t=e.target;
+  if(t.closest('[data-close]'))closeAll();
+  const d=t.closest('[data-d]');if(d){const c=cart[+d.dataset.ci];c.qty+= +d.dataset.d;if(c.qty<1)cart.splice(+d.dataset.ci,1);saveCart()}
+  const r=t.closest('[data-rm]');if(r){cart.splice(+r.dataset.rm,1);saveCart()}
+  const s=t.closest('[data-sm]');if(s){const id=s.dataset.sm;samples.includes(id)?samples=samples.filter(x=>x!==id):samples.length<2&&samples.push(id);saveCart()}
+  if(t.closest('[data-checkout]')){closeAll();setTimeout(()=>dialog('Fast geschafft.','Das ist ein Demo-Shop – hier würde der Checkout (z. B. Shopify, Stripe oder Klarna) angebunden. Dein Warenkorb bleibt gespeichert.'),350)}
+});
+function openCart(){$('#drawer').classList.add('on');scrim(true)}
+function scrim(on){$('#scrim').classList.toggle('on',on);document.body.style.overflow=on?'hidden':''}
+function closeAll(){$$('.drawer,.modal,.mobnav').forEach(x=>x.classList.remove('on'));scrim(false)}
+$('#openBag').onclick=openCart;$('#scrim').onclick=closeAll;
+$('#pv').addEventListener('click',e=>{if(e.target.id==='pv')closeAll()});
+$('#dlg').addEventListener('click',e=>{if(e.target.id==='dlg'||e.target.closest('[data-closedlg]'))closeAll()});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
+function dialog(h,p){$('#dlgPanel').innerHTML=`<h3>${h}</h3><p>${p}</p><button class="btn dark" data-closedlg style="justify-content:center">Verstanden</button>`;$('#dlg').classList.add('on');scrim(true)}
+let tt;function toast(t){$('#toastTxt').textContent=t;$('#toast').classList.add('on');clearTimeout(tt);tt=setTimeout(()=>$('#toast').classList.remove('on'),2200)}
+$('#addDisc').onclick=()=>addToCart('disc',0);
+$('#newsForm').onsubmit=e=>{e.preventDefault();e.target.reset();dialog('Willkommen.','Dein Code <b>BONJOUR10</b> ist für deine erste Bestellung gültig. (Demo – es wurde keine E-Mail verschickt.)')};
+$('#burger').onclick=()=>{$('#mobnav').classList.add('on')};$('#closeNav').onclick=closeAll;
+$$('#mobnav a').forEach(a=>a.onclick=closeAll);
+if(!store.get('aurene_ck',false))setTimeout(()=>$('#cookie').classList.add('on'),2600);
+$$('[data-ck]').forEach(b=>b.onclick=()=>{store.set('aurene_ck',true);$('#cookie').classList.remove('on')});
+renderCart();
+
+/* ================= QUIZ ================= */
+const Q=[
+ {q:'Wann trägst du ihn?',o:[['Tagsüber','Büro, Uni, Alltag',{n03:2,n05:2,n02:1}],['Abends','Dinner, Date, Bar',{n01:2,n04:2}],['Immer','Mein Signature-Duft',{n02:2,n05:1,n01:1}]]},
+ {q:'Welche Welt zieht dich an?',o:[['Wald','Holz, Rauch, Erde',{n02:3}],['Meer','Salz, Wind, Sonne',{n03:3}],['Garten','Blüten, Früchte',{n04:2,n05:2}],['Feuer','Harz, Vanille, Wärme',{n01:3}]]},
+ {q:'Wie laut darf er sein?',o:[['Ein Hauch','Nur wer nah ist',{n05:2,n03:1}],['Präsent','Man bemerkt ihn',{n02:2,n03:1}],['Unvergesslich','Raum gehört mir',{n01:2,n04:2}]]},
+ {q:'Welches Gefühl suchst du?',o:[['Ruhe','Klar & geerdet',{n05:2,n02:1}],['Verführung','Warm & nah',{n01:2,n04:1}],['Freiheit','Leicht & wach',{n03:2}],['Mysterium','Dunkel & tief',{n04:2,n02:1}]]}
+];
+let qi=0,score={};
+function renderQuiz(){
+  $('#qbar').style.width=(qi/Q.length*100)+'%';
+  if(qi<Q.length){const s=Q[qi];
+    $('#quiz').innerHTML=`<div class="qstep on"><h4>Frage ${qi+1} / ${Q.length} — ${s.q}</h4><div class="qopts">${s.o.map((o,i)=>`<button data-o="${i}">${o[0]}<small>${o[1]}</small></button>`).join('')}</div></div>`;
+  }else{const best=P.slice().sort((a,b)=>(score[b.id]||0)-(score[a.id]||0))[0];const pct=Math.min(98,82+(score[best.id]||0)*2);
+    $('#quiz').innerHTML=`<div class="qstep on"><div class="result"><img src="${images[best.id]||''}" style="--bgc:${best.bg}" alt=""><div><div class="match">${pct} % Match</div><h3>${best.no}<br>${best.name}</h3><p>${best.desc}</p><div class="r-actions"><button class="btn dark" data-qadd="${best.id}">50 ml · ${eur(129)}</button><button class="btn ghost" style="border-color:rgba(13,11,9,.3)" data-q3d="${P.indexOf(best)}">In 3D ansehen</button><button class="btn" data-qre style="text-decoration:underline">Neu starten</button></div></div></div></div>`;}
+}
+$('#quiz').addEventListener('click',e=>{const o=e.target.closest('[data-o]');
+  if(o){Object.entries(Q[qi].o[+o.dataset.o][2]).forEach(([k,v])=>score[k]=(score[k]||0)+v);qi++;renderQuiz()}
+  const a=e.target.closest('[data-qadd]');if(a){addToCart(a.dataset.qadd,50)}
+  if(e.target.closest('[data-qre]')){qi=0;score={};renderQuiz()}
+  const d=e.target.closest('[data-q3d]');if(d){setScent(+d.dataset.q3d);scrollTo({top:0,behavior:'smooth'})}
+});
+renderQuiz();
+
+/* ================= REVEAL / COUNT / CURSOR / MAGNET ================= */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+  const b=e.target.querySelector('[data-count]');if(b&&!b.done){b.done=1;const to=+b.dataset.count;let t0=performance.now();(function f(t){const k=clamp((t-t0)/1400);b.textContent=Math.round(to*smooth(k));if(k<1)requestAnimationFrame(f)})(t0)}
+  io.unobserve(e.target)}}),{threshold:.15});
+const observeAll=()=>$$('.reveal:not(.in)').forEach(el=>io.observe(el));observeAll();
+const cur=$('#cur');let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY});
+document.addEventListener('mouseover',e=>{cur.classList.toggle('big',!!e.target.closest('a,button,.card,.drag-area'))});
+$$('.magnet').forEach(b=>{b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.35}px)`});b.addEventListener('pointerleave',()=>b.style.transform='')});
+addEventListener('scroll',()=>$('#hdr').classList.toggle('scrolled',scrollY>40),{passive:true});
+
+/* ================= SCENT SWITCH ================= */
+function setScent(i){current=i;const p=P[i];
+  $$('#dots button').forEach((b,j)=>b.classList.toggle('on',j===i));
+  $('#scentName').innerHTML=`<small>${p.no} · ${p.top[0]} · ${p.base[0]}</small>${p.name}`;
+  $('#heroNo').textContent=`${p.no} — Eau de Parfum`;
+  document.documentElement.style.setProperty('--accent',p.accent);
+  document.documentElement.style.setProperty('--accent-soft',hexA(p.accent,.2));
+  $('.inci summary').textContent=`Vollständige INCI-Liste (${p.no} ${p.name})`;
+  renderActs();
+  if(window.B)B.setScent(p);
+}
+function hexA(h,a){const n=parseInt(h.slice(1),16);return`rgba(${n>>16},${n>>8&255},${n&255},${a})`}
+$('#dots').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setScent(+b.dataset.i)});
+let lastAct=-1;renderActs();
+
+/* ================= THREE ================= */
+function makeLabel(p){
+  const c=document.createElement('canvas');c.width=512;c.height=512;const x=c.getContext('2d');
+  const light=p.id==='n05';x.fillStyle=light?'rgba(30,24,18,.92)':'rgba(246,238,224,.95)';x.textAlign='center';
+  x.font='400 70px "Instrument Serif", Georgia, serif';
+  const s='AURÈNE';let w=0;const sp=10;for(const ch of s)w+=x.measureText(ch).width+sp;let px=256-w/2;x.textAlign='left';
+  for(const ch of s){x.fillText(ch,px,180);px+=x.measureText(ch).width+sp}
+  x.textAlign='center';x.fillRect(206,214,100,1.5);
+  x.font='italic 400 54px "Instrument Serif", Georgia, serif';x.fillText(p.name,256,300);
+  x.font='500 20px "Inter Tight", sans-serif';x.fillText(p.no+'  ·  EAU DE PARFUM',256,360);
+  x.font='400 17px "Inter Tight", sans-serif';x.globalAlpha=.7;x.fillText('50 ML  ·  1.7 FL.OZ.  ·  BERLIN',256,395);
+  const t=new THREE.CanvasTexture(c);t.anisotropy=8;t.encoding=THREE.sRGBEncoding;return t;
+}
+function rr(w,h,r){const s=new THREE.Shape(),x=-w/2,y=-h/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s}
+function box(w,h,d,r,b){const g=new THREE.ExtrudeGeometry(rr(w,h,r),{depth:d,bevelEnabled:true,bevelThickness:b,bevelSize:b,bevelSegments:6,curveSegments:16});g.center();return g}
+function makeEnv(renderer,scene){const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new THREE.RoomEnvironment(),0.04).texture;pm.dispose()}
+function createBottle(p){
+  const g=new THREE.Group();
+  const glass=new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:.03,transmission:1,thickness:.9,ior:1.5,clearcoat:1,clearcoatRoughness:.04,envMapIntensity:1.4,specularIntensity:1,attenuationColor:new THREE.Color('#f4efe6'),attenuationDistance:4});
+  const body=new THREE.Mesh(box(1.5,1.9,.82,.16,.07),glass);g.add(body);
+  const liqMat=new THREE.MeshPhysicalMaterial({color:new THREE.Color(p.liquid),roughness:.18,metalness:0,clearcoat:1,clearcoatRoughness:.1,sheen:1,sheenColor:new THREE.Color(p.liquid),envMapIntensity:.9});
+  liqMat.emissive=new THREE.Color(p.liquid);liqMat.emissiveIntensity=.12;
+  const liq=new THREE.Mesh(box(1.24,1.32,.56,.1,.03),liqMat);liq.position.y=-.2;g.add(liq);
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.28,48),glass);neck.position.y=1.08;g.add(neck);
+  const capMat=new THREE.MeshPhysicalMaterial({color:new THREE.Color(p.cap),metalness:1,roughness:.22,clearcoat:.6,envMapIntensity:1.3});
+  const collar=new THREE.Mesh(new THREE.CylinderGeometry(.19,.21,.1,48),capMat);collar.position.y=1.06;g.add(collar);
+  const stem=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,.12,24),capMat);stem.position.y=1.2;g.add(stem);
+  const cap=new THREE.Group();const capM=new THREE.Mesh(box(.78,.62,.78,.08,.03),capMat);cap.add(capM);
+  const capTop=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.02,48),new THREE.MeshPhysicalMaterial({color:new THREE.Color(p.cap),metalness:1,roughness:.55}));capTop.position.y=.33;cap.add(capTop);
+  cap.position.y=1.47;cap.userData.y=1.47;g.add(cap);
+  const label=new THREE.Mesh(new THREE.PlaneGeometry(1.15,1.15),new THREE.MeshBasicMaterial({map:makeLabel(p),transparent:true,depthWrite:false}));
+  label.position.set(0,.02,.485);g.add(label);
+  return {g,liqMat,capMat,cap,label,capTopMat:capTop.material};
+}
+
+function initThree(){
+  const canvas=$('#gl');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,isMobile()?1.6:2));
+  renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+  const scene=new THREE.Scene();makeEnv(renderer,scene);
+  const cam=new THREE.PerspectiveCamera(32,1,.1,100);cam.position.set(0,0,9);
+  const key=new THREE.DirectionalLight(0xffffff,1.2);key.position.set(3,4,5);scene.add(key);
+  const rim=new THREE.PointLight(new THREE.Color(P[0].accent),6,12);rim.position.set(-3,1,-2);scene.add(rim);
+  const rim2=new THREE.PointLight(0xffffff,3,12);rim2.position.set(3,-1,-3);scene.add(rim2);
+  // backdrop disc (gives refraction something to bend)
+  const bd=new THREE.Mesh(new THREE.CircleGeometry(2.6,64),new THREE.MeshBasicMaterial({color:new THREE.Color(P[0].accent),transparent:true,opacity:.0}));
+  const B0=createBottle(P[0]);const root=new THREE.Group();root.add(B0.g);scene.add(root);
+  // background stripes behind bottle for refraction
+  const stripes=new THREE.Group();for(let i=0;i<7;i++){const m=new THREE.Mesh(new THREE.PlaneGeometry(.05,5),new THREE.MeshBasicMaterial({color:0xefe7da,transparent:true,opacity:.18}));m.position.set(-1.5+i*.5,0,-1.4);stripes.add(m)}root.add(stripes);
+  // dust
+  const N=isMobile()?350:800;const pg=new THREE.BufferGeometry();const pos=new Float32Array(N*3),spd=new Float32Array(N);
+  for(let i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*14;pos[i*3+1]=(Math.random()-.5)*9;pos[i*3+2]=(Math.random()-.5)*6-1;spd[i]=.1+Math.random()*.4}
+  pg.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const sc=document.createElement('canvas');sc.width=sc.height=64;const sx=sc.getContext('2d');const gr=sx.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,'rgba(255,255,255,1)');gr.addColorStop(.3,'rgba(255,255,255,.5)');gr.addColorStop(1,'rgba(255,255,255,0)');sx.fillStyle=gr;sx.fillRect(0,0,64,64);
+  const spr=new THREE.CanvasTexture(sc);
+  const dustMat=new THREE.PointsMaterial({size:.05,map:spr,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,color:new THREE.Color(P[0].accent),opacity:.8});
+  scene.add(new THREE.Points(pg,dustMat));
+  // spray particles
+  const SN=500;const sgeo=new THREE.BufferGeometry();const sp=new Float32Array(SN*3),sv=new Float32Array(SN*3),sl=new Float32Array(SN);
+  for(let i=0;i<SN;i++){sp[i*3+1]=-999}
+  sgeo.setAttribute('position',new THREE.BufferAttribute(sp,3));
+  const sprayMat=new THREE.PointsMaterial({size:.09,map:spr,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,color:0xffffff,opacity:.55});
+  scene.add(new THREE.Points(sgeo,sprayMat));let sIdx=0;
+  function spray(){const np=new THREE.Vector3(0,1.25,0);B0.g.localToWorld(np);
+    for(let k=0;k<260;k++){const i=sIdx++%SN;sp[i*3]=np.x;sp[i*3+1]=np.y;sp[i*3+2]=np.z;
+      const a=(Math.random()-.5)*.9,b=(Math.random()-.5)*.6;sv[i*3]=-Math.cos(a)*(2+Math.random()*3);sv[i*3+1]=Math.sin(b)*2+.6;sv[i*3+2]=Math.sin(a)*2+1;sl[i]=1+Math.random()*.8}
+    tCap=.5;setTimeout(()=>tCap=0,700)}
+  $('#spray').onclick=spray;
+
+  // snapshots for product imagery
+  (function snapshots(){const r2=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r2.setSize(600,750,false);r2.setPixelRatio(1);
+    r2.outputEncoding=THREE.sRGBEncoding;r2.toneMapping=THREE.ACESFilmicToneMapping;
+    const s2=new THREE.Scene();makeEnv(r2,s2);const c2=new THREE.PerspectiveCamera(30,600/750,.1,100);c2.position.set(0,.1,8.2);
+    const l=new THREE.DirectionalLight(0xffffff,1.3);l.position.set(3,4,5);s2.add(l);
+    P.forEach(p=>{const b=createBottle(p);b.g.rotation.set(.05,-.45,0);b.g.position.y=-.15;s2.add(b.g);
+      const sh=new THREE.Mesh(new THREE.CircleGeometry(1.3,48),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.18}));sh.rotation.x=-Math.PI/2;sh.position.y=-1.2;sh.scale.set(1,.35,1);s2.add(sh);
+      // backdrop stripes so glass reads
+      const bgp=new THREE.Mesh(new THREE.PlaneGeometry(12,12),new THREE.MeshBasicMaterial({color:new THREE.Color(p.bg)}));bgp.position.z=-3;s2.add(bgp);
+      r2.render(s2,c2);images[p.id]=r2.domElement.toDataURL('image/jpeg',.88);
+      s2.remove(b.g);s2.remove(sh);s2.remove(bgp)});
+    r2.dispose();r2.forceContextLoss&&r2.forceContextLoss();
+    $$('img[data-img]').forEach(im=>im.src=images[im.dataset.img]);
+  })();
+
+  // state
+  let tColor=new THREE.Color(P[0].liquid),tCapC=new THREE.Color(P[0].cap),tAcc=new THREE.Color(P[0].accent),tCap=0,capLift=0;
+  window.B={setScent(p){tColor.set(p.liquid);tCapC.set(p.cap);tAcc.set(p.accent);
+      B0.label.material.map.dispose();B0.label.material.map=makeLabel(p);B0.label.material.needsUpdate=true;
+      spin+=Math.PI*1.2;pulse=1}};
+  let spin=0,dragV=0,dragging=false,lastX=0,pulse=0;
+  const drag=$('#drag');
+  drag.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX});
+  addEventListener('pointerup',()=>dragging=false);
+  addEventListener('pointermove',e=>{if(dragging){dragV=(e.clientX-lastX)*.012;spin+=dragV;lastX=e.clientX}});
+  let tx=0,ty=0;addEventListener('pointermove',e=>{tx=e.clientX/innerWidth-.5;ty=e.clientY/innerHeight-.5});
+
+  function resize(){renderer.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+  resize();addEventListener('resize',resize);
+
+  // stages
+  const stageEls=$$('[data-stage]');
+  const S=()=>isMobile()?{hero:{x:0,y:.95,s:.72,r:-.3,cap:0},akte:{x:0,y:1.15,s:.6,r:0,cap:0},flakon:{x:0,y:-.35,s:.82,r:-.5,cap:1}}
+                       :{hero:{x:1.55,y:-.05,s:1.05,r:-.35,cap:0},akte:{x:-1.75,y:-.05,s:1.05,r:0,cap:0},flakon:{x:0,y:-.45,s:1.12,r:-.5,cap:1}};
+  const st={x:1.55,y:0,s:1,r:0,cap:0,op:1};
+  const hs=[['Magnetkappe aus Zamak',0,1.8,0,1],['Schraubhals – nachfüllbar',0.2,1.1,0,0],['12 mm massiver Glasboden',.6,-.98,.4,0],['100 % recyceltes Glas',-.75,.4,.4,1]];
+  $('#hotspots').innerHTML=hs.map(h=>`<div class="hs ${h[4]?'l':''}"><i></i><span>${h[0]}</span></div>`).join('');
+  const hsEls=$$('#hotspots .hs');const v=new THREE.Vector3();
+
+  let last=performance.now();
+  function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;
+    // stage weights
+    const vh=innerHeight,mid=vh/2;let W={},tot=0,akteP=0,flakP=0;
+    stageEls.forEach(el=>{const r=el.getBoundingClientRect();let w;
+      if(mid>=r.top&&mid<=r.bottom)w=1;else{const d=mid<r.top?r.top-mid:mid-r.bottom;w=clamp(1-d/(vh*.55))}
+      W[el.dataset.stage]=w;tot+=w;
+      if(el.dataset.stage==='akte')akteP=clamp(-r.top/(r.height-vh));
+      if(el.dataset.stage==='flakon')flakP=clamp(-r.top/(r.height-vh));});
+    const stages=S();const tgt={x:0,y:0,s:0,r:0,cap:0};
+    if(tot>0){for(const k in W){const w=W[k]/tot;for(const p in tgt)tgt[p]+=stages[k][p]*w}}
+    else Object.assign(tgt,stages.flakon);
+    tgt.cap*=smooth(clamp(flakP*1.6));
+    const k=1-Math.pow(.0015,dt);
+    for(const p in tgt)st[p]=lerp(st[p],tgt[p],k);
+    st.op=lerp(st.op,clamp(Math.max(...Object.values(W))*1.4),k);
+    canvas.style.opacity=st.op.toFixed(3);
+    // akte progress
+    if(W.akte>0.5){const a=Math.min(2,Math.floor(akteP*3));if(a!==lastAct){lastAct=a;$$('.act').forEach((el,i)=>el.classList.toggle('on',i===a));
+        $$('#floaters span').forEach((s,i)=>{const on=+s.dataset.g<=a;s.style.opacity=on?(+s.dataset.g===a?1:.35):0})}
+      $$('.progress b').forEach((b,i)=>b.style.transform=`scaleY(${clamp(akteP*3-i)})`);
+      const F=$$('#floaters span');F.forEach((s,i)=>{const ang=+s.dataset.a+akteP*2.4;const R=isMobile()?Math.min(innerWidth*.38,170):Math.min(innerWidth*.2,260);
+        const cxp=isMobile()?innerWidth/2:innerWidth*.24,cyp=isMobile()?innerHeight*.28:innerHeight/2;
+        s.style.transform=`translate(${cxp+Math.cos(ang)*R-40}px,${cyp+Math.sin(ang)*R*.75}px)`});
+    }
+    // motion
+    spin+=dragV;dragV*=.92;
+    const auto=dragging?0:dt*.35;spin+=auto*(W.flakon>.5?.4:1);
+    const rotY=st.r+spin+(W.akte>.5?akteP*Math.PI*2:0);
+    root.position.set(st.x,st.y+Math.sin(now/1400)*.06,0);
+    root.scale.setScalar(st.s*(1+pulse*.06));pulse*=.92;
+    B0.g.rotation.y=lerp(B0.g.rotation.y,rotY,k*1.5);
+    B0.g.rotation.x=lerp(B0.g.rotation.x,ty*.25+.06,k);B0.g.rotation.z=lerp(B0.g.rotation.z,-tx*.12,k);
+    capLift=lerp(capLift,st.cap*.95+tCap*.1,k);B0.cap.position.y=B0.cap.userData.y+capLift;B0.cap.rotation.y=capLift*1.2;
+    stripes.rotation.y=-B0.g.rotation.y*.0;
+    B0.liqMat.color.lerp(tColor,k);B0.liqMat.emissive.lerp(tColor,k);B0.liqMat.sheenColor.lerp(tColor,k);
+    B0.capMat.color.lerp(tCapC,k);B0.capTopMat.color.lerp(tCapC,k);
+    rim.color.lerp(tAcc,k);dustMat.color.lerp(tAcc,k);
+    // dust drift
+    const a=pg.attributes.position.array;for(let i=0;i<N;i++){a[i*3+1]+=spd[i]*dt*.3;a[i*3]+=Math.sin(now/2000+i)*dt*.03;if(a[i*3+1]>4.5)a[i*3+1]=-4.5}
+    pg.attributes.position.needsUpdate=true;
+    // spray
+    for(let i=0;i<SN;i++){if(sl[i]>0){sl[i]-=dt*.9;sp[i*3]+=sv[i*3]*dt;sp[i*3+1]+=sv[i*3+1]*dt;sp[i*3+2]+=sv[i*3+2]*dt;sv[i*3]*=.96;sv[i*3+1]=sv[i*3+1]*.96-.15*dt;sv[i*3+2]*=.96;if(sl[i]<=0)sp[i*3+1]=-999}}
+    sgeo.attributes.position.needsUpdate=true;
+    cam.position.x=lerp(cam.position.x,tx*.4,k*.5);cam.position.y=lerp(cam.position.y,-ty*.3,k*.5);cam.lookAt(0,0,0);
+    renderer.render(scene,cam);
+    // hotspots
+    const hop=clamp((W.flakon-.6)*2.5)*smooth(clamp(flakP*2));$('#hotspots').style.opacity=hop.toFixed(2);
+    if(hop>0){root.updateMatrixWorld();hsEls.forEach((el,i)=>{const h=hs[i];v.set(h[1],h[2]+(i===0?capLift:0),h[3]);B0.g.localToWorld(v);v.project(cam);
+      let x=(v.x*.5+.5)*innerWidth,y=(-v.y*.5+.5)*innerHeight;const off=h[4]?-el.offsetWidth+6:-6;
+      el.style.transform=`translate(${x+off}px,${y-6}px)`})}
+    document.documentElement.style.setProperty('--gx',((root.position.x/8+.5)*100).toFixed(1)+'%');
+    // cursor
+    cx+= (mx-cx)*.2;cy+=(my-cy)*.2;cur.style.transform=`translate(${cx}px,${cy}px)`;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ================= BOOT ================= */
+let pct=0;const pi=setInterval(()=>{pct=Math.min(pct+Math.random()*12,window.THREE?96:80);$('#pct').textContent=Math.floor(pct)},90);
+function finish(){clearInterval(pi);$('#pct').textContent=100;setTimeout(()=>{$('#loader').classList.add('done');document.body.classList.add('ready')},250)}
+function fallbackCursor(){(function f(){cx+=(mx-cx)*.2;cy+=(my-cy)*.2;cur.style.transform=`translate(${cx}px,${cy}px)`;requestAnimationFrame(f)})()}
+(document.fonts?document.fonts.ready:Promise.resolve()).then(()=>{
+  try{if(!window.THREE||!THREE.RoomEnvironment)throw 0;initThree()}
+  catch(e){console.warn('3D nicht verfügbar',e);$('#gl').style.display='none';fallbackCursor();}
+  finish();
+});
+setTimeout(()=>{if(!document.body.classList.contains('ready'))finish()},5000);
+</script>
+</body>
+</html>

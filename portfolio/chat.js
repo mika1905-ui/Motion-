@@ -21,7 +21,7 @@ const BSYN = {
   gesundheit: ['gesundheit', 'praxis', 'arzt', 'zahnarzt', 'physio', 'medizin', 'pflege', 'therapie'],
   immobilien: ['immobilie', 'makler', 'wohnung', 'haus ', 'bau', 'architekt'],
   gastro: ['gastro', 'restaurant', 'bar ', 'club', 'nightlife', 'cafe', 'imbiss', 'hotel', 'event', 'party', 'disco'],
-  mode: ['mode', 'fashion', 'beauty', 'tattoo', 'piercing', 'friseur', 'kosmetik', 'nagel', 'barber', 'kleidung', 'schmuck'],
+  mode: ['mode', 'fashion', 'beauty', 'tattoo', 'piercing', 'parfum', 'parfuem', 'duft', 'friseur', 'kosmetik', 'nagel', 'barber', 'kleidung', 'schmuck'],
   sport: ['sport', 'fitness', 'gym', 'studio fitness', 'verein', 'yoga', 'trainer'],
   handwerk: ['handwerk', 'elektriker', 'dachdecker', 'maler', 'tischler', 'schreiner', 'installateur', 'sanitaer', 'gartenbau', 'lokal'],
 };
