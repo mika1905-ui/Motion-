@@ -80,20 +80,21 @@ export function createCan(tex, opts = {}) {
 
   // condensation droplets on the body
   const dropGeo = new THREE.SphereGeometry(1, 14, 10);
-  const dropMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0, roughness: 0.02, transmission: 0.2, transparent: true, opacity: 0.55, clearcoat: 1, ior: 1.33 });
-  const N = withDrops ? 420 : 0;
+  // condensation: clear water beads that refract the label behind them
+  const dropMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0, roughness: 0.03, transmission: 1, thickness: 0.015, ior: 1.33, specularIntensity: 1, envMapIntensity: 1.4 });
+  const N = withDrops ? 900 : 0;
   const droplets = new THREE.InstancedMesh(dropGeo, dropMat, N);
   const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3();
   const e = new THREE.Euler();
   for (let i = 0; i < N; i++) {
     const th = Math.random() * Math.PI * 2;
     const y = bot + 0.12 + Math.pow(Math.random(), 0.8) * (bodyH - 0.24);
-    const big = Math.random() < 0.12;
-    const sz = big ? 0.02 + Math.random() * 0.018 : 0.006 + Math.random() * 0.011;
-    p.set(Math.sin(th) * (r + sz * 0.25), y, Math.cos(th) * (r + sz * 0.25));
+    const big = Math.random() < 0.07;
+    const sz = big ? 0.014 + Math.random() * 0.012 : 0.0035 + Math.random() * 0.008;
+    p.set(Math.sin(th) * (r + sz * 0.12), y, Math.cos(th) * (r + sz * 0.12));
     e.set(0, th, 0);
     q.setFromEuler(e);
-    s.set(sz, sz * (big ? 1.5 : 1.15), sz * 0.45);
+    s.set(sz, sz * (big ? 1.35 : 1.08), sz * 0.3);
     m.compose(p, q, s);
     droplets.setMatrixAt(i, m);
   }
@@ -123,8 +124,10 @@ export class LiquidDrops {
     }
     const geo = new THREE.LatheGeometry(pts, 20);
     geo.computeVertexNormals();
-    this.mat = new THREE.MeshPhysicalMaterial({ color, metalness: 0.05, roughness: 0.03, clearcoat: 1, clearcoatRoughness: 0.0,
-      ior: 1.36, specularIntensity: 1, transparent: true, opacity: 0.9, emissive: color, emissiveIntensity: 0.35, envMapIntensity: 1.6 });
+    // real liquid: refractive, tinted by absorption (thicker = deeper colour), glossy highlights
+    this.mat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0, roughness: 0.02, transmission: 1, thickness: 0.14,
+      attenuationColor: color, attenuationDistance: 0.09, ior: 1.34, specularIntensity: 1, clearcoat: 1, clearcoatRoughness: 0,
+      emissive: color, emissiveIntensity: 0.06, envMapIntensity: 1.8 });
     this.mesh = new THREE.InstancedMesh(geo, this.mat, count);
     this.mesh.frustumCulled = false;
     this.count = count;
@@ -138,7 +141,7 @@ export class LiquidDrops {
     this._up = new THREE.Vector3(0, 1, 0); this._dir = new THREE.Vector3();
     for (let i = 0; i < count; i++) this._hide(i);
   }
-  setColor(c) { this.mat.color.set(c); this.mat.emissive.set(c); }
+  setColor(c) { this.mat.attenuationColor.set(c); this.mat.emissive.set(c); }
   _hide(i) { this._m.makeScale(0, 0, 0); this.mesh.setMatrixAt(i, this._m); }
   _free() { for (let i = 0; i < this.count; i++) if (this.mode[i] === 0) return i; return -1; }
 
@@ -220,4 +223,29 @@ export class LiquidDrops {
     }
     this.mesh.instanceMatrix.needsUpdate = true;
   }
+}
+
+/** Product-photography environment: dark studio with tall softboxes → crisp vertical highlights on metal & lacquer. */
+export function studioEnvironment(renderer) {
+  const env = new THREE.Scene();
+  const room = new THREE.Mesh(new THREE.BoxGeometry(30, 20, 30), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.045, 0.048, 0.06), side: THREE.BackSide }));
+  env.add(room);
+  const box = (w, h, x, y, z, k, ry = 0, rx = 0) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(1, 1, 1).multiplyScalar(k), side: THREE.DoubleSide }));
+    m.position.set(x, y, z); m.rotation.set(rx, ry, 0); m.lookAt(0, y * 0.3, 0);
+    env.add(m);
+  };
+  box(2.2, 12, -7, 0.5, 3.5, 9);       // main strip softbox, front-left
+  box(1.4, 12, 7.5, 0.5, 1.5, 6);      // rim strip right
+  box(1.0, 12, 4.5, 0.5, -7, 4);       // back-right kicker
+  box(1.2, 12, -5, 0.5, -6.5, 2.5);    // back-left kicker
+  box(10, 6, 0, 9, 0, 2.2);            // overhead
+  box(6, 4, 1.5, 0.5, 9, 0.9);         // soft front fill
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.11, 0.11, 0.12) }));
+  floor.rotation.x = -Math.PI / 2; floor.position.y = -6;
+  env.add(floor);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const tex = pmrem.fromScene(env, 0.012).texture;
+  pmrem.dispose();
+  return tex;
 }

@@ -1,7 +1,6 @@
 // Red Bull spec – 24er Tray in 3D: printed cardboard tray + 24 cans, scroll-driven "fill the tray" motion.
 import * as THREE from 'three';
-import { RoomEnvironment } from '../vendor/RoomEnvironment.js';
-import { CAN, FLAVORS, createCan, labelTextures } from './can.js';
+import { CAN, FLAVORS, createCan, labelTextures, studioEnvironment } from './can.js';
 
 const COLS = 6, ROWS = 4, P = CAN.r * 2 + 0.03;
 const IW = COLS * P, ID = ROWS * P, WALL = 0.82, T = 0.035;
@@ -141,8 +140,7 @@ export async function initTray({ canvas, section, flavor = 0, onCount }) {
   renderer.toneMappingExposure = 1.05;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   const scene = new THREE.Scene();
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environment = studioEnvironment(renderer);
   const key = new THREE.DirectionalLight(0xffffff, 2);
   key.position.set(-4, 8, 6);
   scene.add(key);

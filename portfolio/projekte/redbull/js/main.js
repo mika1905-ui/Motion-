@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import { RoomEnvironment } from '../vendor/RoomEnvironment.js';
-import { FLAVORS, createCan, labelTextures, LiquidDrops } from './can.js';
+import { FLAVORS, createCan, labelTextures, LiquidDrops, studioEnvironment } from './can.js';
 import { loadLabelAssets } from './label.js';
 import { initTray } from './tray.js';
 
@@ -171,8 +170,7 @@ async function initStage() {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
   camera.position.set(0, 0, 9);
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environment = studioEnvironment(renderer);
 
   const key = new THREE.DirectionalLight(0xffffff, 2.2);
   key.position.set(-3, 4, 5);

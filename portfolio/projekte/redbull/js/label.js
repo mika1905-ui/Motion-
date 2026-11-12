@@ -12,10 +12,10 @@ const FONT = 'Jost, "Futura", "Century Gothic", Arial, sans-serif';
 
 export const FLAVORS = [
   { id: 'original', kind: 'classic', name: 'Red Bull Energy Drink', short: 'Original', sub: 'Der Klassiker',
-    base: '#24418f', baseHi: '#3557ad', glow: '#3d6bff', liquid: '#f3c623', ui: '#4f7dff',
+    base: '#233775', baseHi: '#3b569b', silver: ['#eceef1', '#dfe1e6'], glow: '#3d6bff', liquid: '#f3c623', ui: '#4f7dff',
     desc: 'Das Original seit 1987. Mit Koffein, Taurin und B-Vitaminen – belebt Geist und Körper.', price: 1.69, sugar: '11 g' },
   { id: 'zero', kind: 'classic', zero: true, name: 'Red Bull Zero', short: 'Zero', sub: 'Zero Zucker · Zero Kalorien',
-    base: '#8fbbe6', baseHi: '#acd0f2', glow: '#8cc8ff', liquid: '#f6dc78', ui: '#9fd0ff',
+    base: '#9cc3e6', baseHi: '#94c0e5', silver: ['#e4e8ef', '#d6dbe3'], glow: '#8cc8ff', liquid: '#f6dc78', ui: '#9fd0ff',
     desc: 'Der Geschmack von Red Bull – ohne Zucker und ohne Kalorien. Gleiche 80 mg Koffein pro Dose.', price: 1.69, sugar: '0 g' },
   { id: 'orange', kind: 'edition', word: 'ORANGE', name: 'The Orange Edition', short: 'Orange', sub: 'Orange-Kumquat',
     c1: '#f6741d', c2: '#e2520a', ink: '#ffffff', accent: '#ffffff', glow: '#ff7a1f', liquid: '#ff8a1c', ui: '#ff8a2e',
@@ -41,13 +41,23 @@ export const FLAVORS = [
 ];
 
 let bullsImg = null;
-export async function loadLabelAssets(base = '') {
+const fronts = {};                 // real product photos, unwrapped to label space (front ±74°)
+export const FRONT_SPAN = 74;
+let assetsReady = null;
+export function loadLabelAssets() { return assetsReady || (assetsReady = loadAll()); }
+async function loadAll() {
   const fonts = Promise.all(['700 50px Jost', '800 50px Jost', '500 50px Jost', 'italic 500 50px Jost', '400 50px Jost']
     .map(f => document.fonts.load(f).catch(() => {})));
   const img = new Image();
   img.decoding = 'async';
   img.src = new URL('../img/rb-bulls.webp', import.meta.url).href;
-  await Promise.race([Promise.all([fonts, img.decode().catch(() => {})]), new Promise(r => setTimeout(r, 4000))]);
+  const fr = ['original', 'zero'].map(id => {
+    const i = new Image();
+    i.decoding = 'async';
+    i.src = new URL(`../img/front-${id}.webp`, import.meta.url).href;
+    return i.decode().then(() => { fronts[id] = i; }).catch(() => {});
+  });
+  await Promise.race([Promise.all([fonts, img.decode().catch(() => {}), ...fr]), new Promise(r => setTimeout(r, 6000))]);
   bullsImg = img.complete && img.naturalWidth ? img : null;
 }
 
@@ -167,16 +177,18 @@ function wordmark(ctx, X, H, cx, base, cap, width, color) {
 /* ---------- classic: Original & Zero ---------- */
 function drawClassic(ctx, W, H, f) {
   const X = x => W / 2 + x * H;
-  ctx.fillStyle = f.base;
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, f.baseHi); bg.addColorStop(1, f.base);
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
   // soft vertical light on the blue
   const lg = ctx.createLinearGradient(0, 0, W, 0);
   for (let i = 0; i <= 8; i++) lg.addColorStop(i / 8, i % 2 ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)');
   ctx.fillStyle = lg; ctx.fillRect(0, 0, W, H);
 
-  const split = 0.522;
+  const split = f.zero ? 0.516 : 0.522;
   const xd = v => 0.111 - 0.212 * v;           // front diagonal
-  const sil = silverFill(ctx, 0, W, 0, H);
+  const sil = silverFill(ctx, 0, W, 0, H, f.silver[0], f.silver[1]);
   ctx.fillStyle = sil;
   wrap(ctx, W, () => {
     // top half: silver between front diagonal and back diagonal
@@ -190,6 +202,7 @@ function drawClassic(ctx, W, H, f) {
   });
   grain(ctx, W, H, 0.03);
 
+  const photo = fronts[f.id];
   if (f.zero) {
     // silver top band with repeating "ZERO KALORIEN"
     ctx.fillStyle = silverFill(ctx, 0, W, 0, 0.045 * H, '#f1f2f4', '#d3d7dc');
@@ -202,12 +215,19 @@ function drawClassic(ctx, W, H, f) {
     for (let x = -tw; x < W + tw * 2; x += tw) ctx.fillText(t, x, 0.024 * H);
     ctx.restore();
     ctx.textBaseline = 'alphabetic';
-  } else {
+  } else if (!photo) {
     ctx.fillStyle = '#f0c75e';
     ctx.font = `500 ${0.021 * H}px ${FONT}`;
     ctx.textAlign = 'left';
     ctx.fillText('Am besten eiskalt.', X(-0.222), 0.104 * H);
     ctx.fillText('Kohlensäurehaltig.', X(-0.222), 0.131 * H);
+  }
+
+  if (photo) {
+    const fw = (2 * FRONT_SPAN / 360) * ASPECT * H;
+    ctx.drawImage(photo, W / 2 - fw / 2, 0, fw, H);
+    backPanels(ctx, W, H, X, f, true);
+    return;
   }
 
   // wordmark, bulls, descriptor
@@ -346,16 +366,18 @@ export function drawMaterialMap(label, f) {
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
   const ctx = c.getContext('2d', { willReadFrequently: true });
+  ctx.filter = 'blur(1.2px)';           // no speckles where photo highlights touch the thresholds
   ctx.drawImage(label, 0, 0, w, h);
+  ctx.filter = 'none';
   const d = ctx.getImageData(0, 0, w, h), p = d.data;
   const paintWhite = f.id === 'summer';
   for (let i = 0; i < p.length; i += 4) {
     const r = p[i], g = p[i + 1], b = p[i + 2];
     const mx = Math.max(r, g, b), mn = Math.min(r, g, b), sat = mx ? (mx - mn) / mx : 0, lum = (r + g + b) / 765;
     let metal = Math.max(0, 1 - sat / 0.14) * Math.min(1, Math.max(0, (lum - 0.5) / 0.2));
-    if (lum > 0.965 || (paintWhite && lum > 0.86)) metal = 0;   // white ink / pearl-white paint
+    if ((f.kind === 'edition' && lum > 0.965) || (paintWhite && lum > 0.86)) metal = 0;   // white ink / pearl-white paint
     const m = 0.2 + 0.68 * metal;              // printed colours keep a slight metallic sheen
-    const rough = 0.36 - 0.2 * metal;
+    const rough = 0.34 - 0.08 * metal;   // satin aluminium, not a mirror
     p[i] = 255; p[i + 1] = Math.round(rough * 255); p[i + 2] = Math.round(m * 255); p[i + 3] = 255;
   }
   ctx.putImageData(d, 0, 0);
