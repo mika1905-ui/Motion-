@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Red Bull – 3D-Produktseite (Spec-Arbeit · FLUXE Studio)</title>
+  <meta name="description" content="Unbeauftragte Konzeptarbeit von FLUXE Studio: 3D-Produktseite für Red Bull mit Original, Zero, sieben Editions und dem 24er Tray. Keine offizielle Seite von Red Bull.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#050a1c">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/Jost-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts-jost.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+</head>
+<body>
+  <div class="loader" id="loader"><div class="loader-bulls"></div><span>RED BULL · SPEC</span></div>
+
+  <div class="spec-bar">Spec-Arbeit von <a href="../../index.html">FLUXE Studio</a> · nicht offiziell von Red Bull · Demo-Shop</div>
+
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#top" class="logo" aria-label="Red Bull Spec – nach oben"><img src="img/rb-bulls.webp" alt="" width="58" height="23">Red Bull</a>
+      <nav class="links">
+        <a href="#inhalt">Inhalt</a>
+        <a href="#geschmack">Sorten</a>
+        <a href="#tray">24er Tray</a>
+        <a href="#shop">Shop</a>
+        <a href="#preise">Preise</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <button class="bag" id="bag" aria-label="Warenkorb (Demo)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l1 14H5L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+        <span class="bag-count" id="bagCount">0</span>
+      </button>
+      <a href="#shop" class="btn btn-small">Kaufen</a>
+    </div>
+  </header>
+
+  <!-- 3D layers -->
+  <div class="glow" id="glow" aria-hidden="true"></div>
+  <div class="hero-clip" aria-hidden="true"><div class="hero-word" id="heroWord">FLÜGEL</div></div>
+  <canvas id="stage" aria-hidden="true"></canvas>
+  <img class="fallback-can" id="fallback" src="img/can-original.webp" alt="" hidden>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-top reveal">
+        <p class="eyebrow">Red Bull Energy Drink · 250 ml</p>
+        <h1>Verleiht<br><span class="grad">Flügel.</span></h1>
+      </div>
+      <div class="hero-bottom reveal">
+        <p class="hero-price">Ab <strong>1,69 €</strong> · 9 Sorten · 24er Tray</p>
+        <div class="cta">
+          <a href="#shop" class="btn">Jetzt entdecken</a>
+          <a href="#tray" class="btn btn-ghost">Das 24er Tray ›</a>
+        </div>
+      </div>
+      <div class="scroll-hint" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- FEATURES (sticky, scroll driven) -->
+    <section class="features" id="inhalt">
+      <div class="sticky">
+        <div class="feat-copy">
+          <p class="eyebrow">Was drin ist</p>
+          <h2>Belebt Geist<br>und Körper.</h2>
+          <ol class="feat-list" id="featList">
+            <li><b>80 mg</b><span>Koffein pro 250-ml-Dose – etwa so viel wie in einer Tasse Kaffee.</span></li>
+            <li><b>Taurin</b><span>Eine Aminosäure, die auch natürlich im Körper vorkommt.</span></li>
+            <li><b>B-Vitamine</b><span>B6 und B12 tragen zur Verringerung von Müdigkeit und Ermüdung bei.</span></li>
+            <li><b>Zero</b><span>Lieber ohne Zucker? Red Bull Zero – gleiche 80 mg Koffein.</span></li>
+          </ol>
+          <div class="feat-progress"><span id="featBar"></span></div>
+        </div>
+        <p class="pssst" id="pssst">Zisch.</p>
+      </div>
+    </section>
+
+    <!-- FLAVOURS -->
+    <section class="flavors" id="geschmack">
+      <div class="sticky">
+        <div class="flav-copy">
+          <p class="eyebrow">Neun Sorten</p>
+          <h2 class="flav-name" id="flavName">Original</h2>
+          <p class="flav-sub" id="flavSub">Der Klassiker</p>
+          <p class="flav-desc" id="flavDesc"></p>
+          <div class="flav-meta">
+            <div><b id="flavKcal">11 g</b><span>Zucker / 100 ml</span></div>
+            <div><b>80 mg</b><span>Koffein / Dose</span></div>
+            <div><b id="flavPrice">1,69 €</b><span>pro Dose</span></div>
+          </div>
+          <div class="flav-actions">
+            <button class="btn" id="flavAdd">In den Warenkorb</button>
+            <div class="flav-arrows">
+              <button class="round" id="flavPrev" aria-label="Vorherige Sorte">‹</button>
+              <button class="round" id="flavNext" aria-label="Nächste Sorte">›</button>
+            </div>
+          </div>
+        </div>
+        <div class="swatches" id="swatches" role="tablist" aria-label="Sorte wählen"></div>
+      </div>
+    </section>
+
+    <!-- 24er TRAY (sticky 3D) -->
+    <section class="tray" id="tray">
+      <div class="sticky">
+        <canvas id="trayStage" aria-label="3D-Ansicht: 24er Tray füllt sich beim Scrollen"></canvas>
+        <img class="tray-fallback" id="trayFallback" src="img/tray-original.webp" alt="Red Bull 24er Tray" hidden>
+        <div class="tray-copy">
+          <p class="eyebrow">Das 24er Tray</p>
+          <h2>24 Dosen.<br>Ein Griff.</h2>
+          <p class="tray-count"><b id="trayCount">0</b><span>/ 24</span></p>
+          <div class="feat-progress"><span id="trayBar"></span></div>
+          <p class="tray-name"><span id="trayName">Original</span> · 24 × 250 ml</p>
+          <p class="tray-price"><b>34,99 €</b> <small>1,46 € / Dose · zzgl. 6,00 € Pfand</small></p>
+          <div class="chips" id="trayChips" role="tablist" aria-label="Sorte für das Tray"></div>
+          <button class="btn" id="trayAdd">Tray in den Warenkorb</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENTO -->
+    <section class="bento-wrap" id="power">
+      <div class="container">
+        <p class="eyebrow reveal">In Zahlen</p>
+        <h2 class="section-title reveal">Kleine Dose.<br>Große Wirkung.</h2>
+        <div class="bento">
+          <article class="card c-big reveal tilt">
+            <img src="img/lineup.webp" alt="Die sieben Red Bull Editions nebeneinander" loading="lazy" width="1208" height="468">
+            <div class="card-copy"><h3>Die Editions.</h3><p>Sieben Geschmäcker. Gleiche Wirkung.</p></div>
+          </article>
+          <article class="card c-num reveal tilt"><div class="nv"><span class="num" data-count="80">0</span><span class="unit">mg</span></div><p>Koffein pro 250-ml-Dose</p></article>
+          <article class="card c-num c-lime reveal tilt"><div class="nv"><span class="num" data-count="0">0</span><span class="unit">g</span></div><p>Zucker in Red Bull Zero</p></article>
+          <article class="card c-num reveal tilt"><div class="nv"><span class="num" data-count="24">0</span><span class="unit">×</span></div><p>Dosen im Tray</p></article>
+          <article class="card c-wide reveal tilt">
+            <div><h3>Eiskalt am besten.</h3><p>Kühlschrank auf, Lasche hoch – los. Red Bull schmeckt bei 4 °C am besten.</p></div>
+            <img src="img/zero-photo.webp" alt="Red Bull Zero Dose" loading="lazy" width="508" height="1324">
+          </article>
+          <article class="card c-num reveal tilt"><div class="nv"><span class="num" data-count="100">0</span><span class="unit">%</span></div><p>recycelbare Aluminiumdose</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOP -->
+    <section class="shop" id="shop">
+      <div class="container">
+        <p class="eyebrow reveal">Shop · Demo</p>
+        <h2 class="section-title reveal">Such dir deine<br>Sorte aus.</h2>
+        <div class="seg reveal" id="packSeg" role="radiogroup" aria-label="Packungsgröße">
+          <button data-pack="1" class="on">Einzeldose</button>
+          <button data-pack="24">24er Tray</button>
+        </div>
+        <div class="products" id="products"></div>
+        <p class="fine">Beispielpreise im Konzept, inkl. MwSt., zzgl. 0,25 € Pfand pro Dose. Der Warenkorb ist eine Demo – es wird nichts verkauft.</p>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="preise">
+      <div class="container">
+        <p class="eyebrow reveal">Preise</p>
+        <h2 class="section-title reveal">Mehr Dosen.<br>Weniger zahlen.</h2>
+        <div class="tiers">
+          <article class="tier reveal">
+            <h3>Einzeldose</h3>
+            <p class="tier-sub">250 ml · jede Sorte</p>
+            <p class="tier-price">1,69 €</p>
+            <p class="tier-unit">zzgl. 0,25 € Pfand</p>
+            <ul><li>Alle 9 Sorten</li><li>Gekühlt im Handel</li><li>Zum Probieren</li></ul>
+            <button class="btn btn-ghost-dark" data-add="Einzeldose" data-price="1.69">Auswählen</button>
+          </article>
+          <article class="tier tier-hot reveal">
+            <span class="badge">Beliebt</span>
+            <h3>24er Tray</h3>
+            <p class="tier-sub">24 × 250 ml · 1 Sorte</p>
+            <p class="tier-price">34,99 €</p>
+            <p class="tier-unit">1,46 € / Dose</p>
+            <ul><li>Spare 14 %</li><li>Sorte frei wählbar</li><li>Stabiles Tray, stapelbar</li></ul>
+            <button class="btn" data-add="24er Tray" data-price="34.99">Auswählen</button>
+          </article>
+          <article class="tier reveal">
+            <h3>Editions-Mix</h3>
+            <p class="tier-sub">24 × 250 ml · 3 Editions</p>
+            <p class="tier-price">36,99 €</p>
+            <p class="tier-unit">1,54 € / Dose</p>
+            <ul><li>Je 8 Dosen von 3 Sorten</li><li>Mix frei wählbar</li><li>Ideal fürs Büro</li></ul>
+            <button class="btn btn-ghost-dark" data-add="Editions-Mix" data-price="36.99">Auswählen</button>
+          </article>
+          <article class="tier reveal">
+            <h3>Tray-Abo</h3>
+            <p class="tier-sub">24er Tray · jeden Monat</p>
+            <p class="tier-price">31,99 €<small>/Monat</small></p>
+            <p class="tier-unit">1,33 € / Dose</p>
+            <ul><li>Spare 21 %</li><li>Sorte jederzeit tauschen</li><li>Monatlich kündbar</li></ul>
+            <button class="btn btn-ghost-dark" data-add="Tray-Abo" data-price="31.99">Abo starten</button>
+          </article>
+        </div>
+        <p class="fine">Alle Preise sind Beispielpreise dieses Konzepts und keine Angebote von Red Bull.</p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <div class="container narrow">
+        <h2 class="section-title reveal">Fragen? Antworten.</h2>
+        <details class="reveal"><summary>Wie viel Koffein ist in einer Dose?</summary><p>Eine 250-ml-Dose enthält 80 mg Koffein (32 mg/100 ml) – ungefähr so viel wie eine Tasse Kaffee.</p></details>
+        <details class="reveal"><summary>Was ist der Unterschied zwischen Original und Zero?</summary><p>Red Bull Zero kommt ohne Zucker und ist mit Süßungsmitteln gesüßt. Koffein, Taurin und B-Vitamine sind gleich.</p></details>
+        <details class="reveal"><summary>Was sind die Editions?</summary><p>Red Bull mit anderem Geschmack – von Orange-Kumquat bis Kokos-Blaubeere. Die Wirkung bleibt dieselbe.</p></details>
+        <details class="reveal"><summary>Ist das die offizielle Red-Bull-Seite?</summary><p>Nein. Diese Seite ist eine unbeauftragte Konzeptarbeit (Spec-Arbeit) von FLUXE Studio und zeigt, wie eine 3D-Produktseite aussehen kann. Es besteht keine Verbindung zu Red Bull. Marken, Logos und Produktbilder gehören der Red Bull GmbH.</p></details>
+        <details class="reveal"><summary>Für wen ist Red Bull nicht geeignet?</summary><p>Erhöhter Koffeingehalt. Für Kinder und schwangere oder stillende Frauen nicht empfohlen.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="foot-top">
+        <a href="#top" class="logo"><img src="img/rb-bulls.webp" alt="" width="58" height="23">Red Bull · Spec</a>
+        <p>Ein Konzept von <a href="../../index.html"><b>FLUXE Studio</b></a></p>
+      </div>
+      <div class="foot-cols">
+        <div><h4>Seite</h4><a href="#geschmack">Sorten</a><a href="#tray">24er Tray</a><a href="#shop">Shop</a></div>
+        <div><h4>Info</h4><a href="#inhalt">Inhalt</a><a href="#faq">FAQ</a><a href="#preise">Preise</a></div>
+        <div><h4>FLUXE Studio</h4><a href="../../arbeiten.html">Alle Arbeiten</a><a href="../../kontakt.html">Projekt anfragen</a><a href="../../impressum.html">Impressum</a></div>
+      </div>
+      <p class="fine">Unbeauftragte Konzeptarbeit (Spec-Arbeit) von FLUXE Studio – keine Verbindung zu Red Bull, kein Verkauf. „Red Bull“, das Doppelstier-Logo und die Produktabbildungen sind Marken bzw. Eigentum der Red Bull GmbH. Nährwert- und Preisangaben sind Beispiele; verbindlich sind die Angaben auf der Originaldose. Erhöhter Koffeingehalt. Für Kinder und schwangere oder stillende Frauen nicht empfohlen.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
