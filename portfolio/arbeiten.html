@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arbeiten · FLUXE Studio</title>
+<meta name="description" content="Werbespots, Webseiten und Chatbots nach Branchen: Automotive, Tech, Food & Getränke, Lifestyle, Gesundheit und mehr.">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css?v=20261112o">
+</head>
+<body data-page="arbeiten">
+<main>
+  <section class="phero">
+    <p class="kicker reveal">Arbeiten</p>
+    <h1 class="reveal">Was ich gebaut habe.<br>Und für wen.</h1>
+    <p class="lead reveal">Wähle deine Branche – die Auswahl filtert sich automatisch. Tippe auf eine Karte für Video, Bilder und die Geschichte dahinter.</p>
+  </section>
+
+  <div class="seg-wrap"><div class="section-head">
+    <div class="seg" role="tablist" aria-label="Branche wählen" id="seg"><span class="seg-ind"></span></div>
+    <div class="chips" id="chips" aria-label="Art filtern"></div>
+  </div></div>
+
+  <section class="section-head">
+    <div class="pgrid" id="grid" aria-live="polite"></div>
+    <p class="spec-note" style="padding:0;margin-top:24px">Alle gezeigten Arbeiten sind Konzept- bzw. unbeauftragte Spec-Arbeiten zur Demonstration. Keine Verbindung zu den gezeigten Marken; Namen und Logos gehören ihren Inhabern. <a href="bildnachweise.html">Bildnachweise</a>.</p>
+  </section>
+</main>
+<script src="config.js?v=20261112o"></script>
+<script src="data.js?v=20261112o"></script>
+<script src="site.js?v=20261112o"></script>
+<script>
+(() => {
+  const { esc, projectCard, soonCard } = window.SITE;
+  const seg = document.getElementById('seg'), chips = document.getElementById('chips'), grid = document.getElementById('grid');
+  const n = id => PROJECTS.filter(p => p.branche === id).length;
+  seg.insertAdjacentHTML('beforeend', `<button data-tab="alle" role="tab">Alle<span class="n">${PROJECTS.length}</span></button>` +
+    BRANCHEN.map(b => `<button data-tab="${b.id}" role="tab">${esc(b.name)}<span class="n">${n(b.id) || '·'}</span></button>`).join(''));
+  const KINDS = [['all', 'Alles'], ['spot', 'Werbespots'], ['web', 'Webseiten'], ['bot', 'Chatbots']];
+  let branche = 'alle', kind = 'all';
+  const render = () => {
+    chips.innerHTML = KINDS.map(([k, l]) => {
+      const c = PROJECTS.filter(p => (branche === 'alle' || p.branche === branche) && (k === 'all' || p.kind === k)).length;
+      return `<button data-kind="${k}" class="${kind === k ? 'on' : ''}">${l} ${c}</button>`;
+    }).join('');
+    const list = PROJECTS.filter(p => (branche === 'alle' || p.branche === branche) && (kind === 'all' || p.kind === kind));
+    let html = list.map(projectCard).join('');
+    if (branche === 'alle') html += BRANCHEN.filter(b => !n(b.id)).map(soonCard).join('');
+    else if (!list.length) {
+      const b = BRANCHEN.find(x => x.id === branche);
+      html += n(branche) ? `<p class="empty-note">Hier gibt es in dieser Branche noch keine ${({ spot: 'Werbespots', web: 'Webseiten', bot: 'Chatbots' })[kind]} – schau bei „Alles“.</p>` : soonCard(b);
+    }
+    grid.innerHTML = html;
+    window.SITE.refresh();
+  };
+  const set = window.SITE.tabs(seg.parentElement, id => { branche = id; history.replaceState(null, '', id === 'alle' ? location.pathname : '#' + id); render(); });
+  chips.addEventListener('click', e => { const b = e.target.closest('[data-kind]'); if (b) { kind = b.dataset.kind; render(); } });
+  const fromHash = () => {
+    const h = location.hash.slice(1);
+    if (h === 'spots' || h === 'web' || h === 'bots') { kind = ({ spots: 'spot', web: 'web', bots: 'bot' })[h]; set('alle'); }
+    else set(BRANCHEN.some(b => b.id === h) ? h : 'alle');
+    const cur = seg.querySelector('.on'); if (cur) cur.scrollIntoView({ block: 'nearest', inline: 'center' });
+  };
+  addEventListener('hashchange', fromHash); fromHash();
+})();
+</script>
+</body>
+</html>

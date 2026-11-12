@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Über mich & Team · FLUXE Studio</title>
+<meta name="description" content="Mika Wittenborn – Werbespots, Webseiten und Chatbots aus Bielefeld. BWL-Student an der FHM Bielefeld.">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css?v=20261112o">
+</head>
+<body data-page="ueber">
+<main>
+  <section class="phero">
+    <p class="kicker reveal">Über mich</p>
+    <h1 class="reveal">Hi, ich bin<br><span data-cfg="owner">Mika Wittenborn</span>.</h1>
+    <div class="pills reveal"><span>⌖ Bielefeld</span><span>20 Jahre</span><span>BWL-Student · FHM Bielefeld</span><span>Gründer <span data-cfg="brand">FLUXE Studio</span></span></div>
+  </section>
+
+  <section class="section-head">
+    <div class="story">
+      <div class="member reveal" id="founder"></div>
+      <div class="reveal">
+        <p class="big">Ich baue Werbespots, Webseiten und Chatbots, die man <em>nicht wegscrollt</em>. Nicht als Agentur mit zwölf Ansprechpartnern, sondern persönlich – vom ersten Gespräch bis zum Launch.</p>
+        <p class="lead" style="margin-top:22px">Im BWL-Studium an der FHM Bielefeld lerne ich, wie Unternehmen ticken: Zielgruppen, Zahlen, Verkauf. In meinen Projekten verbinde ich das mit Motion Design, Webentwicklung und Chatbots. Heraus kommen Spots und Seiten, die nicht nur gut aussehen, sondern etwas bewirken – mehr Anfragen, mehr Verkäufe, mehr Aufmerksamkeit.</p>
+        <div class="pm-cta" style="margin-top:26px"><a class="btn" href="kontakt.html#termin">Lass uns kennenlernen</a><a class="btn btn-ghost" href="arbeiten.html">Meine Arbeiten</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head reveal"><p class="kicker">Geschichte</p><h2>Wie es angefangen hat.</h2></div>
+    <div class="timeline reveal">
+      <div class="tl"><small>Der Anfang</small><h3>Neugier auf Bewegung</h3><p>Erste Animationen, erste Webseiten – aus Spaß und weil mich gute Werbung schon immer fasziniert hat.</p></div>
+      <div class="tl"><small>Studium</small><h3>BWL an der FHM Bielefeld</h3><p>Marketing, Vertrieb, Unternehmensführung – das Handwerkszeug, um Kreatives mit echten Zielen zu verbinden.</p></div>
+      <div class="tl"><small>2026</small><h3>Die ersten Projekte</h3><p>Studio-Spots für Auto- und Tech-Marken, Webseiten für Getränke, Lifestyle und Gesundheit und ein eigener Website-Chatbot – als Konzepte, die zeigen, was möglich ist.</p></div>
+      <div class="tl soon"><small>Jetzt</small><h3><span data-cfg="brand">FLUXE Studio</span> startet</h3><p>Der Schritt in die Selbstständigkeit. Die ersten Kunden aus Bielefeld und OWL bekommen Startkonditionen – und viel persönliche Aufmerksamkeit.</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head reveal"><p class="kicker">Wie ich arbeite</p><h2>Drei Versprechen.</h2></div>
+    <div class="values">
+      <div class="reveal"><i>◷</i><b>Schnell erreichbar</b><p>Antwort innerhalb von 24 Stunden. Kein Ticket-System, kein Callcenter.</p></div>
+      <div class="reveal"><i>€</i><b>Faire, feste Preise</b><p>Du weißt vorher, was es kostet – bezahlbar auch für kleine Betriebe. Ohne versteckte Posten.</p></div>
+      <div class="reveal"><i>✦</i><b>Ergebnis statt Show</b><p>Alles, was ich baue, hat ein Ziel: Aufmerksamkeit, Anfragen, Verkäufe.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="team">
+    <div class="sec-head reveal"><p class="kicker">Team</p><h2>Wer dahinter steckt.</h2>
+      <p class="lead">Aktuell bin ich allein – mit einem Netzwerk aus Kreativen für Foto, Sprecher und Musik, wenn ein Projekt es braucht. Das Team wächst.</p></div>
+    <div class="team" id="teamGrid"></div>
+  </section>
+</main>
+<script src="config.js?v=20261112o"></script>
+<script src="data.js?v=20261112o"></script>
+<script src="site.js?v=20261112o"></script>
+<script>
+(() => {
+  const { esc } = window.SITE;
+  const ini = n => n.split(' ').map(x => x[0]).join('').slice(0, 2);
+  const member = m => `<div class="member reveal"><div class="ph">${m.photo ? `<img src="${esc(m.photo)}" alt="${esc(m.name)}">` : esc(ini(m.name))}</div>
+    <div class="mi"><b>${esc(m.name)}</b><small>${esc(m.role)}</small><p>${esc(m.text)}</p>${m.photo ? '' : '<p class="note" style="margin-top:10px">Foto folgt</p>'}</div></div>`;
+  const f = TEAM[0];
+  document.getElementById('founder').outerHTML = member(f);
+  document.getElementById('teamGrid').innerHTML = TEAM.map(member).join('') +
+    `<a class="member open reveal" href="karriere.html"><div class="ph">+</div><div class="mi"><b>Dein Platz?</b><small>Freelance &amp; Nebenjob</small><p>Du bist gut in Video, 3D, Design oder Code? Schau in die Karriere-Seite.</p></div></a>` +
+    `<div class="member open reveal"><div class="ph">◎</div><div class="mi"><b>Netzwerk</b><small>Foto · Sprecher · Musik</small><p>Für größere Projekte hole ich Spezialisten dazu – abgestimmt und aus einer Hand für dich.</p></div></div>`;
+  window.SITE.refresh();
+})();
+</script>
+</body>
+</html>

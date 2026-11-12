@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kontakt & Termin · FLUXE Studio</title>
+<meta name="description" content="Projekt anfragen oder kostenloses Erstgespräch buchen. Antwort innerhalb von 24 Stunden.">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css?v=20261112o">
+</head>
+<body data-page="kontakt">
+<main>
+  <section class="phero">
+    <p class="kicker reveal">Kontakt</p>
+    <h1 class="reveal">Lass uns etwas<br>bauen.</h1>
+    <p class="lead reveal">Erzähl mir in drei kurzen Schritten von deinem Projekt – oder buch direkt ein kostenloses Erstgespräch. Antwort innerhalb von <span data-cfg="responseTime">24 Stunden</span>.</p>
+  </section>
+
+  <section class="section-head" id="tabs">
+    <div class="seg" role="tablist" aria-label="Kontaktweg"><span class="seg-ind"></span>
+      <button data-tab="anfrage" role="tab">Projekt anfragen</button>
+      <button data-tab="termin" role="tab">Termin buchen</button>
+    </div>
+
+    <div class="contact-grid" style="margin-top:26px">
+      <div>
+        <div data-tabpanel="anfrage" id="anfrage">
+          <form class="form panel" id="form" novalidate>
+            <div class="steps-bar"><span class="done"></span><span></span><span></span></div>
+
+            <div class="step" data-step="1">
+              <h3>Worum geht es?</h3>
+              <div class="field"><span>Was brauchst du? <i>*</i></span>
+                <div class="pick" id="pickLeistung">
+                  <label><input type="checkbox" name="Leistung" value="Werbespot"><span><b>Werbespot</b><small>TikTok, Reels, Ads</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Website"><span><b>Website</b><small>Onepager, Firmenseite, 3D</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Chatbot"><span><b>Chatbot</b><small>FAQ- oder KI-Bot</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Online-Shop"><span><b>Online-Shop</b><small>Mit Zahlung</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Reel-Abo"><span><b>Reel-Abo</b><small>Monatlicher Content</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Betreuung"><span><b>Betreuung</b><small>Hosting &amp; Updates</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Noch unsicher"><span><b>Noch unsicher</b><small>Lass uns reden</small></span></label>
+                </div>
+              </div>
+              <div class="row">
+                <label class="field"><span>Branche</span><select name="Branche" id="branche"></select></label>
+                <label class="field"><span>Website oder Instagram</span><input name="Link" type="text" placeholder="z. B. instagram.com/deinbetrieb" autocomplete="url"></label>
+              </div>
+              <div class="field" id="selWrap" hidden><span>Deine Auswahl aus den Preisen</span><div class="sel-chips" id="selChips"></div></div>
+            </div>
+
+            <div class="step" data-step="2" hidden>
+              <h3>Rahmen &amp; Idee</h3>
+              <div class="row">
+                <label class="field"><span>Budget</span><select name="Budget">
+                  <option>Weiß ich noch nicht</option><option>bis 500 €</option><option>500 – 1.500 €</option><option>1.500 – 3.000 €</option><option>3.000 – 5.000 €</option><option>über 5.000 €</option></select></label>
+                <label class="field"><span>Wann soll es fertig sein?</span><select name="Zeitraum">
+                  <option>Flexibel</option><option>So schnell wie möglich</option><option>In 2–4 Wochen</option><option>In 1–3 Monaten</option></select></label>
+              </div>
+              <label class="field"><span>Erzähl kurz von deinem Projekt <i>*</i></span>
+                <textarea name="Nachricht" id="msg" required minlength="10" placeholder="Was verkaufst du, an wen, und was soll der Spot oder die Seite erreichen?"></textarea></label>
+            </div>
+
+            <div class="step" data-step="3" hidden>
+              <h3>Wie erreiche ich dich?</h3>
+              <div class="row">
+                <label class="field"><span>Name <i>*</i></span><input name="Name" required autocomplete="name"></label>
+                <label class="field"><span>Firma / Betrieb</span><input name="Firma" autocomplete="organization"></label>
+              </div>
+              <div class="row">
+                <label class="field"><span>E-Mail <i>*</i></span><input name="E_Mail" type="email" required autocomplete="email"></label>
+                <label class="field"><span>Telefon</span><input name="Telefon" type="tel" autocomplete="tel"></label>
+              </div>
+              <div class="row">
+                <label class="field"><span>Wie möchtest du kontaktiert werden?</span><select name="Kontaktweg"><option>E-Mail</option><option>Rückruf</option><option>WhatsApp</option></select></label>
+                <label class="field"><span>Wie hast du mich gefunden?</span><select name="Quelle"><option>Bitte wählen</option><option>Instagram</option><option>TikTok</option><option>Google</option><option>Empfehlung</option><option>Andere</option></select></label>
+              </div>
+              <label class="consent"><input type="checkbox" name="Datenschutz" value="zugestimmt" required><span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verarbeitet werden. Mehr in der <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>. <i style="color:var(--lime);font-style:normal">*</i></span></label>
+            </div>
+
+            <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <input type="hidden" name="Auswahl" id="auswahl">
+            <input type="hidden" name="Herkunft" id="herkunft">
+            <div class="form-status" hidden role="status"></div>
+            <div class="step-nav">
+              <button type="button" class="btn btn-ghost" id="back" hidden>← Zurück</button>
+              <button type="button" class="btn" id="next" style="margin-left:auto">Weiter →</button>
+              <button type="submit" class="btn" id="send" hidden style="margin-left:auto">Anfrage senden</button>
+            </div>
+          </form>
+        </div>
+        <div data-tabpanel="termin" id="termin" hidden>
+          <div id="booking"></div>
+        </div>
+      </div>
+
+      <aside>
+        <p class="kicker" style="margin-bottom:14px">Lieber direkt?</p>
+        <a class="ccard" href="#termin" data-goto="termin"><i>◷</i><span><b>Termin vereinbaren</b><small>Kostenloses Erstgespräch</small></span></a>
+        <a class="ccard" data-if="phone" id="cPhone" href="#"><i>✆</i><span><b data-cfg="phone"></b><small>Anrufen</small></span></a>
+        <a class="ccard" data-if="whatsapp" id="cWa" href="#" target="_blank" rel="noopener"><i>✉</i><span><b>WhatsApp</b><small>Nachricht schreiben</small></span></a>
+        <a class="ccard" data-if="email" id="cMail" href="#"><i>@</i><span><b data-cfg="email"></b><small>E-Mail</small></span></a>
+        <a class="ccard" data-if="instagram" id="cIg" href="#" target="_blank" rel="noopener"><i>◎</i><span><b>Instagram</b><small>Arbeiten &amp; Einblicke</small></span></a>
+        <div class="ccard" style="cursor:default"><i>⌖</i><span><b data-cfg="city">Bielefeld</b><small data-cfg="region">Bielefeld, OWL &amp; remote</small></span></div>
+        <p class="spec-note" style="padding:0;margin-top:14px">Antwort innerhalb von <span data-cfg="responseTime">24 Stunden</span> an Werktagen.</p>
+      </aside>
+    </div>
+  </section>
+</main>
+<script src="config.js?v=20261112o"></script>
+<script src="data.js?v=20261112o"></script>
+<script src="site.js?v=20261112o"></script>
+<script>
+(() => {
+  const C = window.CONFIG, { esc } = window.SITE;
+  const $ = s => document.querySelector(s);
+  // direct contact links
+  if ($('#cPhone')) $('#cPhone').href = 'tel:' + C.phone.replace(/\s/g, '');
+  if ($('#cWa')) $('#cWa').href = 'https://wa.me/' + C.whatsapp;
+  if ($('#cMail')) $('#cMail').href = 'mailto:' + C.email;
+  if ($('#cIg')) $('#cIg').href = C.instagram;
+
+  // tabs
+  const set = window.SITE.tabs($('#tabs'), id => history.replaceState(null, '', '#' + id));
+  set(location.hash === '#termin' ? 'termin' : 'anfrage');
+  document.querySelectorAll('[data-goto]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); set(a.dataset.goto); $('#tabs').scrollIntoView({ behavior: 'smooth' }); }));
+  addEventListener('hashchange', () => set(location.hash === '#termin' ? 'termin' : 'anfrage'));
+  window.SITE.booking($('#booking'));
+
+  // prefill
+  $('#branche').innerHTML = '<option>Bitte wählen</option>' + BRANCHEN.map(b => `<option>${esc(b.name)}</option>`).join('') + '<option>Andere</option>';
+  const q = new URLSearchParams(location.search);
+  if (q.get('branche')) $('#branche').value = q.get('branche');
+  const pre = [];
+  if (q.get('projekt')) pre.push(`Gesehen: ${q.get('projekt')} – so etwas in der Art wünsche ich mir.`);
+  if (q.get('rechner')) pre.push(`Aus dem Preisrechner: ${q.get('rechner')}`);
+  if (q.get('check')) pre.push(q.get('check'));
+  if (q.get('frage')) pre.push(`Meine Frage: ${q.get('frage')}`);
+  if (pre.length) $('#msg').value = pre.join('\n') + '\n\n';
+  const lmap = { 'Online-Shop': 'Online-Shop', 'Werbespot': 'Werbespot', 'Website': 'Website', 'Chatbot': 'Chatbot', 'FAQ-Chatbot': 'Chatbot', 'KI-Chatbot': 'Chatbot', 'Reel-Abo': 'Reel-Abo', 'Onepager': 'Website', '3D-Website': 'Website', 'Social Spot': 'Werbespot', 'Produkt-Spot': 'Werbespot', 'Kampagne': 'Werbespot' };
+  if (q.get('leistung') && lmap[q.get('leistung')]) document.querySelector(`input[name=Leistung][value="${lmap[q.get('leistung')]}"]`).checked = true;
+  $('#herkunft').value = document.referrer ? new URL(document.referrer).pathname.split('/').pop() || 'Start' : 'direkt';
+
+  // selection from price catalog
+  const renderSel = () => {
+    const sel = window.SITE.selection.get();
+    $('#selWrap').hidden = !sel.length; $('#auswahl').value = sel.join(' | ');
+    $('#selChips').innerHTML = sel.map(s => `<button type="button" data-rm="${esc(s)}" aria-label="${esc(s)} entfernen">${esc(s)}</button>`).join('');
+  };
+  $('#selChips').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (b) { window.SITE.selection.set(window.SITE.selection.get().filter(x => x !== b.dataset.rm)); renderSel(); } });
+  renderSel();
+
+  // steps
+  const form = $('#form'), steps = [...form.querySelectorAll('.step')], bars = [...form.querySelectorAll('.steps-bar span')];
+  let cur = 0;
+  const show = i => {
+    cur = i; steps.forEach((s, j) => s.hidden = j !== i); bars.forEach((b, j) => b.classList.toggle('done', j <= i));
+    $('#back').hidden = i === 0; $('#next').hidden = i === steps.length - 1; $('#send').hidden = i !== steps.length - 1;
+    const st = form.querySelector('.form-status'); st.hidden = true;
+  };
+  const valid = i => {
+    const s = steps[i];
+    if (i === 0 && !s.querySelector('input[name=Leistung]:checked') && !window.SITE.selection.get().length) {
+      const st = form.querySelector('.form-status'); st.className = 'form-status warn'; st.textContent = 'Bitte wähle mindestens eine Leistung (oder „Noch unsicher“).'; st.hidden = false; return false;
+    }
+    return [...s.querySelectorAll('input,select,textarea')].every(el => el.reportValidity());
+  };
+  $('#next').addEventListener('click', () => { if (valid(cur)) { show(cur + 1); form.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
+  $('#back').addEventListener('click', () => show(cur - 1));
+  show(0);
+  form.addEventListener('submit', e => { if (!valid(cur)) { e.preventDefault(); e.stopImmediatePropagation(); } }, true);
+  window.SITE.form(form, {
+    subject: d => `Neue Projektanfrage: ${d.Leistung || d.Auswahl || 'Projekt'} – ${d.Name || ''}${d.Firma ? ' (' + d.Firma + ')' : ''}`,
+    onDone: () => { window.SITE.selection.clear(); location.href = 'danke.html'; },
+  });
+})();
+</script>
+</body>
+</html>

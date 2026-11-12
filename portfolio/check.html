@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gratis-Check · FLUXE Studio</title>
+<meta name="description" content="Kostenloser Check deines Instagram-, TikTok- oder Website-Auftritts: 3 konkrete Verbesserungen als kurzes Video.">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css?v=20261112o">
+</head>
+<body data-page="check">
+<main>
+  <section class="phero">
+    <p class="kicker reveal"><span class="soon-badge" style="--c:#d4ff3a">Gratis</span></p>
+    <h1 class="reveal">Wie wirkt dein<br>Auftritt?</h1>
+    <p class="lead reveal">Schick mir deinen Instagram-, TikTok- oder Website-Link. Du bekommst innerhalb von 48 Stunden ein kurzes Video mit <b>drei konkreten Verbesserungen</b> – kostenlos und ohne Verpflichtung.</p>
+  </section>
+
+  <section class="section-head">
+    <div class="track-steps reveal" style="max-width:720px"><div><i>1</i>Link schicken</div><div><i>2</i>Ich schaue rein</div><div><i>3</i>Video in 48 h</div><div><i>4</i>Du entscheidest</div></div>
+    <div class="contact-grid" style="margin-top:40px">
+      <form class="form panel reveal" id="form" novalidate>
+        <h3 style="font-size:28px;font-weight:800">Check anfordern</h3>
+        <div class="field"><span>Was soll ich prüfen? <i>*</i></span>
+          <div class="pick">
+            <label><input type="checkbox" name="Pruefen" value="Instagram"><span><b>Instagram</b><small>Profil &amp; Reels</small></span></label>
+            <label><input type="checkbox" name="Pruefen" value="TikTok"><span><b>TikTok</b><small>Profil &amp; Videos</small></span></label>
+            <label><input type="checkbox" name="Pruefen" value="Website"><span><b>Website</b><small>Wirkung &amp; Mobil</small></span></label>
+          </div>
+        </div>
+        <label class="field"><span>Link(s) <i>*</i></span><input name="Links" required placeholder="z. B. instagram.com/deinbetrieb, deinbetrieb.de"></label>
+        <div class="row">
+          <label class="field"><span>Name <i>*</i></span><input name="Name" required autocomplete="name"></label>
+          <label class="field"><span>E-Mail <i>*</i></span><input name="E_Mail" type="email" required autocomplete="email"></label>
+        </div>
+        <label class="field"><span>Was ist dir am wichtigsten? (optional)</span><input name="Ziel" placeholder="z. B. mehr Reichweite, mehr Anfragen, moderner wirken"></label>
+        <label class="consent"><input type="checkbox" name="Datenschutz" value="zugestimmt" required><span>Ich bin einverstanden, dass meine Angaben zur Erstellung des Checks verarbeitet werden. <a href="datenschutz.html" target="_blank">Datenschutz</a> <i style="color:var(--lime);font-style:normal">*</i></span></label>
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="form-status" hidden role="status"></div>
+        <button class="btn" type="submit">Gratis-Check anfordern</button>
+      </form>
+      <aside class="reveal">
+        <div class="values" style="grid-template-columns:1fr;margin:0">
+          <div><i>◎</i><b>Ehrlich &amp; konkret</b><p>Keine Verkaufsmasche – drei Dinge, die du sofort selbst umsetzen kannst.</p></div>
+          <div><i>▶</i><b>Als kurzes Video</b><p>2–4 Minuten Bildschirmaufnahme, in der ich dir zeige, was ich meine.</p></div>
+          <div><i>✦</i><b>Danach entscheidest du</b><p>Du willst Hilfe bei der Umsetzung? Dann reden wir. Sonst nicht.</p></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+<script src="config.js?v=20261112o"></script>
+<script src="data.js?v=20261112o"></script>
+<script src="site.js?v=20261112o"></script>
+<script>
+(() => {
+  const form = document.getElementById('form');
+  form.addEventListener('submit', e => {
+    if (!form.querySelector('input[name=Pruefen]:checked')) {
+      e.preventDefault(); e.stopImmediatePropagation();
+      const st = form.querySelector('.form-status'); st.className = 'form-status warn'; st.textContent = 'Bitte wähle aus, was ich prüfen soll.'; st.hidden = false;
+    }
+  }, true);
+  window.SITE.form(form, { subject: d => `Gratis-Check: ${d.Pruefen} – ${d.Name}`, onDone: () => location.href = 'danke.html?typ=check' });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Karriere · FLUXE Studio</title>
+<meta name="description" content="Arbeite mit FLUXE Studio in Bielefeld: Freelance, Nebenjob oder Praktikum in Motion Design, 3D, Webentwicklung und Content.">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css?v=20261112o">
+</head>
+<body data-page="karriere">
+<main>
+  <section class="phero">
+    <p class="kicker reveal">Karriere</p>
+    <h1 class="reveal">Arbeite mit<br><span data-cfg="brand">FLUXE Studio</span>.</h1>
+    <p class="lead reveal">Hier entstehen Spots und Webseiten für echte Betriebe aus Bielefeld und OWL. Ich stelle nicht nach Plan ein, sondern wenn die richtige Person kommt – als Freelancer, im Nebenjob oder Praktikum.</p>
+  </section>
+
+  <section class="section-head">
+    <div class="values">
+      <div class="reveal"><i>⌖</i><b>Ort</b><p>Bielefeld &amp; remote – Treffen in der Stadt, Arbeit von überall.</p></div>
+      <div class="reveal"><i>◆</i><b>Bereiche</b><p>Motion Design, 3D, Webentwicklung, Content &amp; Social Media.</p></div>
+      <div class="reveal"><i>✦</i><b>Was du bekommst</b><p>Echte Projekte fürs Portfolio, faire Bezahlung, kurze Wege, viel Freiheit.</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head reveal"><p class="kicker">Offene Stellen</p><h2 id="jobsHead">Aktuell ausgeschrieben.</h2></div>
+    <div id="jobs" style="margin-top:20px"></div>
+  </section>
+
+  <section class="sec" id="bewerbung">
+    <div class="contact-grid">
+      <form class="form panel reveal" id="form" novalidate>
+        <h3 style="font-size:30px;font-weight:800" id="formHead">Initiativbewerbung</h3>
+        <p style="color:var(--muted);margin:0">Ein paar Sätze reichen für den Anfang. Arbeitsproben gern als Link.</p>
+        <div class="row">
+          <label class="field"><span>Name <i>*</i></span><input name="Name" required autocomplete="name"></label>
+          <label class="field"><span>E-Mail <i>*</i></span><input name="E_Mail" type="email" required autocomplete="email"></label>
+        </div>
+        <div class="row">
+          <label class="field"><span>Stelle / Bereich <i>*</i></span><select name="Stelle" id="stelle" required></select></label>
+          <label class="field"><span>Art</span><select name="Art"><option>Freelance</option><option>Nebenjob / Werkstudent</option><option>Praktikum</option><option>Noch offen</option></select></label>
+        </div>
+        <label class="field"><span>Portfolio / Arbeitsproben (Link)</span><input name="Portfolio" placeholder="Behance, Instagram, Website, Google Drive …"></label>
+        <label class="field"><span>Erzähl kurz von dir <i>*</i></span><textarea name="Nachricht" required minlength="20" placeholder="Was kannst du, was willst du lernen, wie viel Zeit hast du?"></textarea></label>
+        <label class="consent"><input type="checkbox" name="Datenschutz" value="zugestimmt" required><span>Ich bin einverstanden, dass meine Angaben für das Bewerbungsverfahren verarbeitet und nach spätestens 6 Monaten gelöscht werden. <a href="datenschutz.html" target="_blank">Datenschutz</a> <i style="color:var(--lime);font-style:normal">*</i></span></label>
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="form-status" hidden role="status"></div>
+        <button class="btn" type="submit">Bewerbung senden</button>
+      </form>
+      <aside class="reveal">
+        <p class="kicker" style="margin-bottom:14px">So geht's weiter</p>
+        <div class="timeline" style="margin-top:0">
+          <div class="tl"><small>1</small><h3 style="font-size:22px">Du schreibst</h3><p>Kurz und ehrlich, Arbeitsproben als Link.</p></div>
+          <div class="tl"><small>2</small><h3 style="font-size:22px">Ich melde mich</h3><p>Innerhalb von einer Woche – auch wenn es gerade nicht passt.</p></div>
+          <div class="tl"><small>3</small><h3 style="font-size:22px">Kennenlernen</h3><p>Ein Kaffee in Bielefeld oder ein Video-Call.</p></div>
+          <div class="tl" style="padding-bottom:0"><small>4</small><h3 style="font-size:22px">Erstes Projekt</h3><p>Wir starten mit einer kleinen, bezahlten Aufgabe.</p></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+<script src="config.js?v=20261112o"></script>
+<script src="data.js?v=20261112o"></script>
+<script src="site.js?v=20261112o"></script>
+<script>
+(() => {
+  const { esc } = window.SITE;
+  const jobs = document.getElementById('jobs'), stelle = document.getElementById('stelle');
+  const areas = ['Initiativ – Motion Design', 'Initiativ – 3D / WebGL', 'Initiativ – Webentwicklung', 'Initiativ – Content & Social Media', 'Initiativ – Vertrieb & Kundenkontakt'];
+  if (JOBS.length) {
+    jobs.innerHTML = JOBS.map((j, i) => `<details class="job reveal" ${i ? '' : 'open'}><summary><span><b>${esc(j.title)}</b><small>${esc(j.type)} · ${esc(j.hours)}</small></span><span class="add-btn" style="pointer-events:none">Details</span></summary>
+      <div class="jb"><p>${esc(j.text)}</p>
+        ${j.tasks ? `<h4>Deine Aufgaben</h4><ul>${j.tasks.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+        ${j.profile ? `<h4>Das bringst du mit</h4><ul>${j.profile.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+        ${j.perks ? `<h4>Das bekommst du</h4><ul>${j.perks.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+        <a class="btn" href="#bewerbung" data-job="${esc(j.title)}" style="margin-top:14px">Jetzt bewerben</a></div></details>`).join('');
+  } else {
+    document.getElementById('jobsHead').textContent = 'Gerade keine Ausschreibung.';
+    jobs.innerHTML = `<div class="soon-card static reveal" style="--c:#d4ff3a"><span class="soon-ico">✦</span><span class="soon-badge">Demnächst verfügbar</span>
+      <b>Die ersten Stellen kommen bald</b><span>Sobald das Studio wächst, findest du hier Freelance-Jobs, Nebenjobs und Praktika. Du willst nicht warten? Dann bewirb dich initiativ – gute Leute suche ich immer.</span>
+      <a class="soon-link" href="#bewerbung">Initiativbewerbung →</a></div>`;
+  }
+  stelle.innerHTML = JOBS.map(j => `<option>${esc(j.title)}</option>`).join('') + areas.map(a => `<option>${esc(a)}</option>`).join('');
+  document.addEventListener('click', e => { const b = e.target.closest('[data-job]'); if (b) { stelle.value = b.dataset.job; document.getElementById('formHead').textContent = 'Bewerbung: ' + b.dataset.job; } });
+  window.SITE.form(document.getElementById('form'), { subject: d => `Bewerbung: ${d.Stelle} – ${d.Name}`, onDone: () => location.href = 'danke.html?typ=bewerbung' });
+  window.SITE.refresh();
+})();
+</script>
+</body>
+</html>
