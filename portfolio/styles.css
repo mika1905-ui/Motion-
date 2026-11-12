@@ -706,3 +706,4 @@ html.menu-open .bot-fab, html.menu-open .wa-float, html.menu-open .sel-bar { dis
 .logo:hover .logo-mark { transform: rotate(-12deg) scale(1.06); }
 .bot-ava { background: transparent; border: 0; }
 .bot-ava img { width: 34px; height: 34px; }
+.bot-card .pmedia > img { object-position: top center; }

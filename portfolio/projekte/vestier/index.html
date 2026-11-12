@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VÉSTIER — Private Estates</title>
+<link rel="stylesheet" href="../fonts.css">
+<meta name="robots" content="noindex">
+<style>
+:root{
+  --ink:#0b0b0c; --ink2:#1d1d1f; --mute:#6e6e73; --line:#e5e5ea; --paper:#fbfbfd; --white:#fff;
+  --gold:#b89b6a; --gold2:#d9c39a;
+  --serif:'Instrument Serif',Georgia,serif; --sans:'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
+  --ease:cubic-bezier(.2,.7,.1,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink2);-webkit-font-smoothing:antialiased;overflow-x:hidden;letter-spacing:-.011em}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.wrap{width:min(1180px,100% - 48px);margin-inline:auto}
+.serif{font-family:var(--serif);font-weight:400;font-style:italic;letter-spacing:-.01em}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h2.big{font-size:clamp(40px,6.4vw,84px);line-height:1.02;font-weight:600;letter-spacing:-.035em;color:var(--ink)}
+.lead{font-size:clamp(18px,1.6vw,21px);line-height:1.5;color:var(--mute);max-width:640px}
+section{position:relative}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(40px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;height:56px;display:flex;align-items:center;transition:background .4s,backdrop-filter .4s,color .4s,border-color .4s;color:#fff;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(251,251,253,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);color:var(--ink);border-color:rgba(0,0,0,.06)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:700;letter-spacing:.32em;font-size:15px}
+.logo small{display:block;font-weight:500;letter-spacing:.3em;font-size:8px;opacity:.6;margin-top:2px}
+.nav ul{display:flex;gap:30px;list-style:none;font-size:13px;opacity:.9}
+.nav ul a:hover{opacity:.6}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:980px;font-size:14px;font-weight:500;transition:transform .3s var(--ease),background .3s,color .3s}
+.btn:hover{transform:scale(1.03)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-light{background:#fff;color:var(--ink)}
+.btn-ghost{border:1px solid currentColor}
+.btn-gold{background:var(--gold);color:#fff}
+.nav .btn{padding:7px 16px;font-size:12px}
+.nav.solid .btn-light{background:var(--ink);color:#fff}
+.burger{display:none;width:28px;height:28px;position:relative}
+.burger span{position:absolute;left:4px;right:4px;height:1.5px;background:currentColor;transition:.3s}
+.burger span:nth-child(1){top:10px}.burger span:nth-child(2){top:17px}
+.menu-open .burger span:nth-child(1){top:14px;transform:rotate(45deg)}
+.menu-open .burger span:nth-child(2){top:14px;transform:rotate(-45deg)}
+.mmenu{position:fixed;inset:56px 0 0 0;background:rgba(251,251,253,.97);backdrop-filter:blur(20px);z-index:49;padding:30px 28px;display:flex;flex-direction:column;gap:6px;opacity:0;pointer-events:none;transition:.4s var(--ease)}
+.mmenu a{font-size:30px;font-weight:600;letter-spacing:-.03em;padding:8px 0;color:var(--ink);transform:translateY(-10px);transition:.5s var(--ease)}
+.menu-open .mmenu{opacity:1;pointer-events:auto}
+.menu-open .mmenu a{transform:none}
+.menu-open .nav{background:rgba(251,251,253,.97);color:var(--ink)}
+
+/* hero */
+.hero{height:100svh;min-height:620px;overflow:hidden;background:#000;color:#fff}
+.hero-img{position:absolute;inset:-6% 0 0 0;height:112%;width:100%;object-fit:cover;transform-origin:center;animation:heroIn 2.6s var(--ease) both}
+@keyframes heroIn{from{transform:scale(1.18);filter:brightness(.4)}to{transform:scale(1);filter:brightness(1)}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,.15) 60%,rgba(0,0,0,.75) 100%)}
+.hero-c{position:absolute;inset:auto 0 0 0;z-index:2;padding-bottom:clamp(40px,8vh,90px)}
+.hero h1{font-size:clamp(46px,9vw,128px);line-height:.95;font-weight:600;letter-spacing:-.045em;max-width:1000px}
+.hero h1 .ln{display:block;overflow:hidden}
+.hero h1 .ln span{display:inline-block;animation:up 1.4s var(--ease) both}
+.hero h1 .ln:nth-child(2) span{animation-delay:.15s}
+@keyframes up{from{transform:translateY(105%)}to{transform:none}}
+.hero-meta{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:28px;flex-wrap:wrap;animation:fade 1.6s .6s var(--ease) both}
+@keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.hero-meta p{max-width:430px;font-size:17px;line-height:1.5;opacity:.85}
+.hero-tag{position:absolute;top:84px;right:24px;z-index:2;font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.8;animation:fade 1.6s 1s both;text-align:right}
+.scroll-hint{position:absolute;left:50%;bottom:18px;z-index:2;width:1px;height:44px;background:rgba(255,255,255,.25);overflow:hidden}
+.scroll-hint::after{content:"";position:absolute;left:0;top:-50%;width:1px;height:50%;background:#fff;animation:drip 2s infinite}
+@keyframes drip{to{top:100%}}
+
+/* statement */
+.statement{padding:clamp(120px,18vw,220px) 0}
+.statement p{font-size:clamp(30px,4.6vw,62px);line-height:1.12;font-weight:600;letter-spacing:-.035em;max-width:1050px}
+.statement .w{color:var(--ink);opacity:.12;transition:opacity .25s linear}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.stat{padding:36px 0 0}
+.stat b{display:block;font-size:clamp(40px,5vw,64px);font-weight:600;letter-spacing:-.04em;color:var(--ink)}
+.stat span{font-size:14px;color:var(--mute)}
+
+/* showcase sticky */
+.show{height:260vh;background:var(--paper)}
+.show-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.show-frame{position:relative;width:62vw;height:62vh;border-radius:32px;overflow:hidden;will-change:width,height,border-radius}
+.show-frame img{width:100%;height:100%;object-fit:cover;transform:scale(1.25);will-change:transform}
+.show-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.7),rgba(0,0,0,0) 55%)}
+.show-txt{position:absolute;left:0;right:0;bottom:0;z-index:2;color:#fff;padding:clamp(24px,5vw,64px);opacity:0;transform:translateY(30px)}
+.show-txt h3{font-size:clamp(36px,6vw,84px);font-weight:600;letter-spacing:-.04em;line-height:1}
+.show-txt .row{display:flex;gap:28px;flex-wrap:wrap;margin-top:18px;font-size:15px;opacity:.9}
+.show-pre{position:absolute;top:12vh;left:0;right:0;text-align:center}
+
+/* listings */
+.listings{padding:140px 0 120px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:44px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:9px 16px;border-radius:980px;font-size:13px;background:#ececf0;color:var(--ink2);transition:.3s}
+.chip.on{background:var(--ink);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:#fff;border-radius:26px;overflow:hidden;cursor:pointer;transition:transform .6s var(--ease),box-shadow .6s var(--ease),opacity .5s;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.card:hover{transform:translateY(-6px);box-shadow:0 30px 60px -20px rgba(0,0,0,.18)}
+.card.big{grid-column:span 2}
+.card .ph{position:relative;aspect-ratio:4/3;overflow:hidden;background:#ddd}
+.card.big .ph{aspect-ratio:16/9.6}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.card:hover .ph img{transform:scale(1.06)}
+.badge{position:absolute;top:16px;left:16px;padding:6px 12px;border-radius:980px;font-size:11px;font-weight:600;letter-spacing:.04em;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--ink)}
+.badge.dark{background:rgba(0,0,0,.6);color:#fff}
+.badge.gold{background:var(--gold);color:#fff}
+.card .bd{padding:22px 24px 26px}
+.card .loc{font-size:12px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
+.card h3{font-size:24px;font-weight:600;letter-spacing:-.025em;margin:6px 0 14px;color:var(--ink)}
+.card .specs{display:flex;gap:16px;font-size:13px;color:var(--mute);flex-wrap:wrap}
+.card .price{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:17px;color:var(--ink)}
+.card .price i{font-style:normal;font-size:13px;font-weight:500;color:var(--gold)}
+.card.hide{display:none}
+
+/* off market */
+.dark{background:#000;color:#f5f5f7}
+.off{padding:150px 0}
+.off h2.big{color:#fff}
+.off .lead{color:#a1a1a6}
+.vault{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:60px}
+.lock{position:relative;border-radius:26px;overflow:hidden;aspect-ratio:3/4;background:#111}
+.lock img{width:100%;height:100%;object-fit:cover;filter:blur(22px) brightness(.55) saturate(1.2);transform:scale(1.2)}
+.lock .lc{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:26px}
+.lock .ic{width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.3);display:grid;place-items:center}
+.lock h4{font-size:26px;font-weight:600;letter-spacing:-.025em}
+.lock p{font-size:14px;color:#c7c7cc;margin-top:6px}
+.lock .mask{letter-spacing:.2em;color:var(--gold2)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:90px;border-top:1px solid #2a2a2c;padding-top:44px}
+.steps b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:44px;color:var(--gold2)}
+.steps h5{font-size:19px;font-weight:600;margin:10px 0 8px;color:#fff}
+.steps p{color:#a1a1a6;font-size:15px;line-height:1.55}
+
+/* marquee */
+.marq{padding:46px 0;border-block:1px solid var(--line);overflow:hidden;white-space:nowrap;background:var(--paper)}
+.marq-in{display:inline-flex;gap:60px;animation:mq 38s linear infinite;font-size:clamp(28px,4vw,52px);font-weight:600;letter-spacing:-.035em;color:var(--ink)}
+.marq-in span:nth-child(even){font-family:var(--serif);font-style:italic;font-weight:400;color:var(--gold)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* services */
+.serv{padding:140px 0}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:56px}
+.scard{background:#fff;border-radius:24px;padding:30px 26px 34px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .5s var(--ease)}
+.scard:hover{transform:translateY(-4px)}
+.scard svg{width:30px;height:30px;stroke:var(--ink);fill:none;stroke-width:1.4}
+.scard h4{font-size:20px;font-weight:600;letter-spacing:-.02em;color:var(--ink);margin-bottom:8px}
+.scard p{font-size:14px;color:var(--mute);line-height:1.55}
+
+/* team */
+.team{padding:140px 0;background:#f2f2f5}
+.tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:56px}
+.tm .av{aspect-ratio:4/5;border-radius:24px;display:grid;place-items:center;font-family:var(--serif);font-style:italic;font-size:64px;color:rgba(255,255,255,.92);position:relative;overflow:hidden;transition:transform .6s var(--ease)}
+.tm:hover .av{transform:scale(.98)}
+.tm .av::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.25),transparent 60%)}
+.tm h4{font-size:17px;font-weight:600;margin-top:14px;color:var(--ink)}
+.tm p{font-size:13px;color:var(--mute);margin-top:3px}
+.tm .lang{font-size:11px;color:var(--gold);letter-spacing:.1em;margin-top:6px}
+
+/* career */
+.career{padding:140px 0}
+.cgrid{display:grid;grid-template-columns:1fr 1.4fr;gap:70px;align-items:start}
+.perks{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px}
+.perk{background:#fff;border-radius:18px;padding:18px;font-size:14px;color:var(--ink2)}
+.perk b{display:block;font-size:22px;letter-spacing:-.03em;color:var(--ink);margin-bottom:2px}
+.acc{border-top:1px solid var(--line)}
+.acc-i{border-bottom:1px solid var(--line)}
+.acc-h{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 0;text-align:left}
+.acc-h h4{font-size:clamp(18px,2vw,22px);font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.acc-h small{display:block;font-size:13px;color:var(--mute);font-weight:400;margin-top:4px;letter-spacing:0}
+.pl{flex:none;width:30px;height:30px;border-radius:50%;background:#ececf0;position:relative;transition:transform .5s var(--ease),background .3s}
+.pl::before,.pl::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.5px;background:var(--ink);transform:translate(-50%,-50%)}
+.pl::after{transform:translate(-50%,-50%) rotate(90deg)}
+.acc-i.open .pl{transform:rotate(45deg);background:var(--ink)}
+.acc-i.open .pl::before,.acc-i.open .pl::after{background:#fff}
+.acc-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease)}
+.acc-i.open .acc-b{grid-template-rows:1fr}
+.acc-b>div{overflow:hidden}
+.acc-b p,.acc-b ul{font-size:15px;line-height:1.65;color:var(--mute);padding-bottom:26px;max-width:720px}
+.acc-b ul{padding-left:18px}
+.acc-b .btn{margin-bottom:26px}
+
+/* faq */
+.faq{padding:140px 0;background:#fff}
+.fgrid{display:grid;grid-template-columns:1fr 1.6fr;gap:70px}
+
+/* contact */
+.contact{padding:150px 0;background:#000;color:#f5f5f7}
+.contact h2.big{color:#fff}
+.ccols{display:grid;grid-template-columns:1fr 1.25fr;gap:70px;margin-top:20px}
+.offices{margin-top:44px;display:grid;gap:22px}
+.offices div{border-top:1px solid #2a2a2c;padding-top:16px;font-size:14px;color:#a1a1a6;line-height:1.55}
+.offices b{color:#fff;font-weight:600;font-size:15px;display:block;margin-bottom:2px}
+form{background:#111113;border-radius:30px;padding:clamp(24px,4vw,44px);display:grid;gap:16px}
+.tabs{display:flex;background:#1c1c1e;border-radius:980px;padding:4px;gap:4px;margin-bottom:6px}
+.tab{flex:1;padding:10px 8px;border-radius:980px;font-size:13px;color:#a1a1a6;transition:.3s}
+.tab.on{background:#fff;color:#000;font-weight:500}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{font-size:12px;color:#8e8e93;display:grid;gap:7px}
+input,select,textarea{font:inherit;font-size:15px;color:#fff;background:#1c1c1e;border:1px solid #2c2c2e;border-radius:14px;padding:14px 16px;outline:none;transition:border-color .3s;width:100%;-webkit-appearance:none;appearance:none}
+select{background-image:linear-gradient(45deg,transparent 50%,#8e8e93 50%),linear-gradient(135deg,#8e8e93 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{min-height:110px;resize:vertical}
+.chk{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:#a1a1a6;line-height:1.45}
+.chk input{width:20px;height:20px;padding:0;flex:none;border-radius:6px;margin-top:1px;position:relative;cursor:pointer}
+.chk input:checked{background:var(--gold);border-color:var(--gold)}
+.chk input:checked::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+form .btn{justify-content:center;padding:16px;font-size:15px;margin-top:6px}
+.ok{display:none;text-align:center;padding:50px 10px}
+.ok.show{display:block;animation:fade .8s var(--ease)}
+.ok .ring{width:72px;height:72px;border-radius:50%;border:1.5px solid var(--gold);display:grid;place-items:center;margin:0 auto 22px}
+.ok h4{font-size:28px;font-weight:600;letter-spacing:-.03em;color:#fff}
+.ok p{color:#a1a1a6;margin-top:10px;font-size:15px;line-height:1.55}
+
+footer{background:#000;color:#6e6e73;font-size:12px;padding:30px 0 50px;border-top:1px solid #1c1c1e}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.modal .bg{position:absolute;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .5s}
+.sheet{position:relative;width:min(1000px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:30px 30px 0 0;transform:translateY(100%);transition:transform .7s var(--ease)}
+.modal.open{pointer-events:auto}
+.modal.open .bg{opacity:1}
+.modal.open .sheet{transform:none}
+.sheet .mimg{aspect-ratio:16/8;overflow:hidden;position:relative}
+.sheet .mimg img{width:100%;height:100%;object-fit:cover}
+.x{position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);z-index:3;display:grid;place-items:center;font-size:20px;line-height:1}
+.mbody{padding:34px clamp(22px,4vw,48px) 44px}
+.mbody h3{font-size:clamp(32px,4vw,48px);font-weight:600;letter-spacing:-.04em;color:var(--ink);margin:6px 0 10px}
+.mspecs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0}
+.mspecs div{background:#f5f5f7;border-radius:16px;padding:16px}
+.mspecs b{display:block;font-size:22px;letter-spacing:-.03em;color:var(--ink)}
+.mspecs span{font-size:12px;color:var(--mute)}
+.mbody .desc{color:var(--mute);line-height:1.65;font-size:16px;max-width:680px}
+.feat{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 28px}
+.feat span{font-size:12px;padding:7px 12px;border-radius:980px;border:1px solid var(--line)}
+.mfoot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:24px}
+.mfoot .p{font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--ink)}
+.mfoot .p small{display:block;font-size:12px;color:var(--mute);font-weight:400;letter-spacing:0}
+.locked-note{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--mute);background:#f5f5f7;padding:12px 16px;border-radius:14px;margin-bottom:22px}
+
+/* responsive */
+@media (max-width:980px){
+  .nav ul,.nav .btn{display:none}.burger{display:block}
+  .grid,.vault{grid-template-columns:1fr 1fr}
+  .card.big{grid-column:span 2}
+  .sgrid,.tgrid{grid-template-columns:1fr 1fr}
+  .cgrid,.fgrid,.ccols{grid-template-columns:1fr;gap:40px}
+  .stats{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr;gap:30px}
+}
+@media (max-width:640px){
+  .wrap{width:calc(100% - 40px)}
+  .grid,.vault,.sgrid{grid-template-columns:1fr}
+  .card.big{grid-column:auto}
+  .card.big .ph{aspect-ratio:4/3}
+  .vault .lock{aspect-ratio:4/3}
+  .f2{grid-template-columns:1fr}
+  .mspecs{grid-template-columns:1fr 1fr}
+  .sheet .mimg{aspect-ratio:4/3}
+  .hero-tag{display:none}
+  .show{height:220vh}
+  .show-frame{width:84vw;height:56vh;border-radius:24px}
+  .tgrid{gap:14px}
+  .tm .av{font-size:46px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="logo">VÉSTIER<small>PRIVATE ESTATES</small></a>
+    <ul>
+      <li><a href="#bestand">Bestand</a></li>
+      <li><a href="#offmarket">Off-Market</a></li>
+      <li><a href="#service">Service</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#karriere">Karriere</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="#kontakt" class="btn btn-light">Privat anfragen</a>
+    <button class="burger" id="burger" aria-label="Menü"><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mmenu" id="mmenu">
+  <a href="#bestand">Bestand</a><a href="#offmarket">Off-Market</a><a href="#service">Service</a><a href="#team">Team</a><a href="#karriere">Karriere</a><a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <img class="hero-img" id="heroImg" src="img/finca-sa-pedra.jpg" alt="Finca mit Pool in Port d'Andratx, Mallorca">
+  <div class="hero-tag">Finca Sa Pedra<br>Port d'Andratx · Mallorca</div>
+  <div class="hero-c wrap">
+    <h1><span class="ln"><span>Adressen, die man</span></span><span class="ln"><span>nicht <em class="serif">sucht.</em></span></span></h1>
+    <div class="hero-meta">
+      <p>Seit 2009 vermitteln wir die außergewöhnlichsten Residenzen zwischen Mallorca, Ibiza, Côte d'Azur, Marbella und München. Viele davon erscheinen nie öffentlich.</p>
+      <a href="#bestand" class="btn btn-light">Bestand entdecken →</a>
+    </div>
+  </div>
+  <div class="scroll-hint"></div>
+</header>
+
+<!-- STATEMENT -->
+<section class="statement">
+  <div class="wrap">
+    <div class="eyebrow rv" style="margin-bottom:30px">Unsere Haltung</div>
+    <p id="words">Wir vermarkten keine Immobilien. Wir verbinden Menschen mit Orten, die man nicht ersetzen kann. Diskret. Persönlich. Und nur, wenn es wirklich passt.</p>
+    <div class="stats" style="margin-top:90px">
+      <div class="stat rv"><b data-count="2.4" data-dec="1" data-suf=" Mrd. €">0</b><span>vermitteltes Volumen</span></div>
+      <div class="stat rv d1"><b data-count="68" data-suf=" %">0</b><span>Off-Market-Transaktionen</span></div>
+      <div class="stat rv d2"><b data-count="5">0</b><span>Standorte in 3 Ländern</span></div>
+      <div class="stat rv d3"><b data-count="11" data-suf=" Spr.">0</b><span>im Team gesprochen</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STICKY SHOWCASE -->
+<section class="show" id="show">
+  <div class="show-sticky">
+    <div class="show-pre" id="showPre"><div class="eyebrow">Objekt des Monats</div></div>
+    <div class="show-frame" id="showFrame">
+      <img id="showImg" src="img/casa-lumen.jpg" alt="Casa Lumen, Ibiza">
+      <div class="show-txt" id="showTxt">
+        <div class="eyebrow" style="color:var(--gold2)">Santa Eulària · Ibiza</div>
+        <h3>Casa <span class="serif">Lumen</span></h3>
+        <div class="row"><span>410 m² Wohnfläche</span><span>5 Suiten</span><span>Salzwasser-Pool</span><span>8.750.000 €</span></div>
+        <button class="btn btn-light" style="margin-top:24px" onclick="openProp('casa-lumen')">Details ansehen →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LISTINGS -->
+<section class="listings" id="bestand">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="eyebrow rv">Immobilienbestand</div>
+        <h2 class="big rv d1" style="margin-top:14px">Ausgewählt.<br><span class="serif">Nicht gesammelt.</span></h2>
+      </div>
+      <div class="chips rv d2" id="chips">
+        <button class="chip on" data-f="all">Alle</button>
+        <button class="chip" data-f="Mallorca">Mallorca</button>
+        <button class="chip" data-f="Ibiza">Ibiza</button>
+        <button class="chip" data-f="Marbella">Marbella</button>
+        <button class="chip" data-f="Côte d'Azur">Côte d'Azur</button>
+        <button class="chip" data-f="München">München</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marq"><div class="marq-in" id="marq"></div></div>
+
+<!-- OFF MARKET -->
+<section class="off dark" id="offmarket">
+  <div class="wrap">
+    <div class="eyebrow rv">Diskrete Vermarktung</div>
+    <h2 class="big rv d1" style="margin:14px 0 22px">Was hier steht,<br><span class="serif">steht nirgendwo sonst.</span></h2>
+    <p class="lead rv d2">Rund zwei Drittel unserer Objekte werden nie öffentlich gelistet. Eigentümer, die Prominenz, Familie oder schlicht Ruhe schützen, vertrauen uns ihre Häuser im Verborgenen an. Zugang erhalten verifizierte Interessenten nach Unterzeichnung einer Vertraulichkeitsvereinbarung.</p>
+    <div class="vault">
+      <div class="lock rv"><img src="img/villa-sierra.jpg" alt=""><div class="lc"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div><span class="eyebrow mask">Ref. VS-0417</span><h4>Saint-Tropez</h4><p>Villa am Wasser · ca. 900 m² · Preis nur nach NDA</p></div></div></div>
+      <div class="lock rv d1"><img src="img/villa-blanca.jpg" alt=""><div class="lc"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div><span class="eyebrow mask">Ref. VS-0398</span><h4>Lago di Como</h4><p>Historische Villa mit Bootshaus · Fotos auf Anfrage</p></div></div></div>
+      <div class="lock rv d2"><img src="img/haus-achtzehn.jpg" alt=""><div class="lc"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div><span class="eyebrow mask">Ref. VS-0422</span><h4>Kitzbühel</h4><p>Chalet in Alleinlage · Lage wird persönlich genannt</p></div></div></div>
+    </div>
+    <div style="margin-top:40px" class="rv"><a href="#kontakt" class="btn btn-gold" onclick="setTopic('offmarket')">Zugang zum Off-Market-Portfolio anfragen →</a></div>
+    <div class="steps">
+      <div class="rv"><b>01</b><h5>Erstgespräch</h5><p>Ein persönliches, vertrauliches Gespräch über Ihre Wünsche – in München, Palma oder dort, wo Sie gerade sind.</p></div>
+      <div class="rv d1"><b>02</b><h5>Verifizierung & NDA</h5><p>Nach Identitäts- und Finanzierungsnachweis erhalten Sie ein Dossier mit Objekten, die exakt zu Ihnen passen.</p></div>
+      <div class="rv d2"><b>03</b><h5>Private Besichtigung</h5><p>Ohne Schilder, ohne Publikum. Auf Wunsch inklusive Transfer, Architekt und Steuerberatung vor Ort.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE -->
+<section class="serv" id="service">
+  <div class="wrap">
+    <div class="eyebrow rv">Leistungen</div>
+    <h2 class="big rv d1" style="margin-top:14px">Alles aus <span class="serif">einer Hand.</span></h2>
+    <div class="sgrid">
+      <div class="scard rv"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><div><h4>Verkauf</h4><p>Bewertung, Inszenierung, Film & Fotografie – öffentlich oder komplett diskret.</p></div></div>
+      <div class="scard rv d1"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg><div><h4>Suchmandat</h4><p>Wir suchen exklusiv für Sie – auch Häuser, die (noch) nicht zum Verkauf stehen.</p></div></div>
+      <div class="scard rv d2"><svg viewBox="0 0 24 24"><path d="M4 19h16M6 16V9M10 16V9M14 16V9M18 16V9M3 9l9-5 9 5"/></svg><div><h4>Kauf­begleitung</h4><p>Notar, NIE-Nummer, Due Diligence, Finanzierung – mit unserem Partnernetzwerk.</p></div></div>
+      <div class="scard rv d3"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg><div><h4>Concierge</h4><p>Hausverwaltung, Renovierung, Interior Design und Vermietung nach dem Kauf.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team" id="team">
+  <div class="wrap">
+    <div class="eyebrow rv">Team</div>
+    <h2 class="big rv d1" style="margin-top:14px">Menschen, <span class="serif">keine Makler.</span></h2>
+    <p class="lead rv d2" style="margin-top:20px">Wir sind bewusst klein. Jeder Kunde hat genau einen Ansprechpartner – vom ersten Gespräch bis zur Schlüsselübergabe.</p>
+    <div class="tgrid" id="tgrid"></div>
+  </div>
+</section>
+
+<!-- CAREER -->
+<section class="career" id="karriere">
+  <div class="wrap cgrid">
+    <div>
+      <div class="eyebrow rv">Karriere</div>
+      <h2 class="big rv d1" style="margin-top:14px">Arbeiten, wo andere <span class="serif">Urlaub machen.</span></h2>
+      <p class="lead rv d2" style="margin-top:20px">Wir suchen Persönlichkeiten mit Stil, Diskretion und Hunger. Branchenerfahrung hilft – Haltung ist Pflicht.</p>
+      <div class="perks">
+        <div class="perk rv"><b>Top 5 %</b>Provisionsbeteiligung im Markt</div>
+        <div class="perk rv d1"><b>5 Orte</b>Rotation zwischen Standorten</div>
+        <div class="perk rv d2"><b>30 Tage</b>Urlaub plus Sabbatical-Option</div>
+        <div class="perk rv d3"><b>Academy</b>Sprachen, Recht, Verhandlung</div>
+      </div>
+    </div>
+    <div class="acc rv" id="jobs"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="wrap fgrid">
+    <div>
+      <div class="eyebrow rv">FAQ</div>
+      <h2 class="big rv d1" style="margin-top:14px">Gute <span class="serif">Fragen.</span></h2>
+      <p class="lead rv d2" style="margin-top:20px">Was Sie vielleicht wissen möchten, bevor wir uns kennenlernen.</p>
+    </div>
+    <div class="acc rv" id="faqs"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="kontakt">
+  <div class="wrap">
+    <div class="eyebrow rv">Kontakt</div>
+    <h2 class="big rv d1" style="margin-top:14px">Sprechen wir <span class="serif">unter vier Augen.</span></h2>
+    <div class="ccols">
+      <div>
+        <p class="lead rv" style="color:#a1a1a6;margin-top:20px">Jede Anfrage wird vertraulich behandelt und innerhalb von 24 Stunden von einem Partner persönlich beantwortet.</p>
+        <div class="offices">
+          <div class="rv"><b>München · Headquarter</b>Maximilianstraße 18 · 80539 München<br>+49 89 0000 1818 · private@vestier.example</div>
+          <div class="rv d1"><b>Palma de Mallorca</b>Passeig des Born · 07012 Palma</div>
+          <div class="rv d2"><b>Ibiza</b>Marina Botafoch · 07800 Eivissa</div>
+          <div class="rv d3"><b>Marbella & Côte d'Azur</b>Puerto Banús · Boulevard du Cap, Antibes</div>
+        </div>
+      </div>
+      <form id="form" class="rv d1" novalidate>
+        <div id="formInner" style="display:grid;gap:16px">
+          <div class="tabs" id="tabs">
+            <button type="button" class="tab on" data-t="kauf">Kaufen</button>
+            <button type="button" class="tab" data-t="verkauf">Verkaufen</button>
+            <button type="button" class="tab" data-t="offmarket">Off-Market</button>
+          </div>
+          <div class="f2">
+            <label>Vorname<input required name="vn" autocomplete="given-name"></label>
+            <label>Nachname<input required name="nn" autocomplete="family-name"></label>
+          </div>
+          <div class="f2">
+            <label>E-Mail<input required type="email" name="em" autocomplete="email"></label>
+            <label>Telefon<input type="tel" name="tel" autocomplete="tel"></label>
+          </div>
+          <div class="f2">
+            <label>Objekt / Region<select id="objSel" name="obj"></select></label>
+            <label id="budgetL">Budget<select name="budget">
+              <option>bis 5 Mio. €</option><option>5 – 10 Mio. €</option><option>10 – 25 Mio. €</option><option>über 25 Mio. €</option><option>keine Angabe</option>
+            </select></label>
+          </div>
+          <label>Ihre Nachricht<textarea name="msg" id="msg" placeholder="Was suchen Sie – oder was möchten Sie verkaufen?"></textarea></label>
+          <label class="chk"><input type="checkbox" name="exp" checked>Exposé und weitere Fotos zusenden (nur nach Verifizierung)</label>
+          <label class="chk"><input type="checkbox" name="nda">Ich wünsche eine NDA vor jeglichem Informationsaustausch</label>
+          <button class="btn btn-light" type="submit">Vertraulich anfragen</button>
+          <p style="font-size:11px;color:#6e6e73;text-align:center">Demo-Website eines fiktiven Unternehmens – es werden keine Daten gesendet.</p>
+        </div>
+        <div class="ok" id="ok">
+          <div class="ring"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d9c39a" stroke-width="1.8"><path d="M5 12l5 5 9-10"/></svg></div>
+          <h4 id="okH">Vielen Dank.</h4>
+          <p>Ein Partner meldet sich innerhalb von 24 Stunden persönlich bei Ihnen.<br><span style="font-size:12px;color:#6e6e73">(Demo – es wurde keine Nachricht versendet.)</span></p>
+          <button type="button" class="btn btn-ghost" style="margin-top:24px;color:#fff" onclick="resetForm()">Neue Anfrage</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 VÉSTIER Private Estates GmbH · Fiktives Unternehmen zu Demonstrationszwecken</span>
+    <span>Impressum · Datenschutz · Widerrufsbelehrung</span>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="bg" onclick="closeProp()"></div>
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script>
+const P=[
+ {id:'finca-sa-pedra',name:'Finca Sa Pedra',loc:"Port d'Andratx",reg:'Mallorca',img:'finca-sa-pedra',price:'14.900.000 €',wfl:620,plot:'4.200',beds:6,baths:7,big:true,badge:['Signature','gold'],feat:['Meerblick','Infinity-Pool','Mallorquinischer Naturstein','Gästehaus','Weinkeller','Helipad-Genehmigung'],desc:'Eine über 200 Jahre alte Finca, vollständig neu interpretiert: rohe Natursteinmauern treffen auf weiße, schwebende Kuben. Der Pool scheint direkt in den Hafen von Andratx zu fließen. Sechs Suiten, Gästehaus und ein Garten aus alten Palmen und Olivenbäumen.'},
+ {id:'villa-verde',name:'Villa Verde',loc:'Son Vida, Palma',reg:'Mallorca',img:'villa-verde',price:null,wfl:540,plot:'3.100',beds:5,baths:6,badge:['Preis auf Anfrage','dark'],feat:['Golfplatz-Lage','24h-Security','Spa mit Sauna','Kino'],desc:'In der begehrtesten Wohnlage Palmas, mit Blick auf Kathedrale und Bucht. Klare Architektur, großzügige Rasenflächen und vollständige Privatsphäre in einer bewachten Gemeinde.'},
+ {id:'casa-lumen',name:'Casa Lumen',loc:'Santa Eulària',reg:'Ibiza',img:'casa-lumen',price:'8.750.000 €',wfl:410,plot:'1.850',beds:5,baths:5,badge:['Weitere Fotos auf Anfrage',''],feat:['Salzwasser-Pool','Outdoor-Küche','Pergola','5 Min. zum Strand'],desc:'Mediterrane Leichtigkeit mit warmen Sandtönen, Rattan und raumhohen Glasfronten. Die Pergola mit Sommerküche ist das Herz des Hauses – für lange Abende unter Ibizas Himmel.'},
+ {id:'villa-sierra',name:'Villa Sierra',loc:'Golden Mile',reg:'Marbella',img:'villa-sierra',price:'11.400.000 €',wfl:780,plot:'3.600',beds:7,baths:8,badge:['Neu im Bestand',''],feat:['Whirlpool','Sommerlounge','Personalwohnung','Fußläufig zum Strand'],desc:'Andalusische Eleganz an der Goldenen Meile. Terrassierte Gärten, mehrere Lounges und ein Pool, der abends zur Bühne wird. Ideal für Familien und Gastgeber.'},
+ {id:'villa-blanca',name:'Villa Blanca',loc:'Es Cubells',reg:'Ibiza',img:'villa-blanca',price:'6.950.000 €',wfl:360,plot:'2.400',beds:4,baths:4,badge:null,feat:['Sonnenuntergang','Dachterrasse','Smart Home','Touristische Lizenz'],desc:'Reine weiße Linien über den Klippen im Südwesten Ibizas. Großzügige Dachterrasse, Bergpanorama und eine der seltenen touristischen Vermietungslizenzen.'},
+ {id:'villa-nuit',name:'Villa Nuit',loc:"Cap d'Antibes",reg:"Côte d'Azur",img:'villa-nuit',price:null,off:true,wfl:690,plot:'5.000',beds:6,baths:7,badge:['Diskrete Vermarktung','dark'],feat:['Beleuchteter Pool','Architektenhaus','Garage für 6 Fahrzeuge'],desc:'Ein Architektenhaus, das nachts zu leuchten beginnt. Adresse, Preis und vollständiges Exposé erhalten ausschließlich verifizierte Interessenten nach NDA.'},
+ {id:'haus-achtzehn',name:'Haus Achtzehn',loc:'Grünwald',reg:'München',img:'haus-achtzehn',price:'5.450.000 €',wfl:395,plot:'1.120',beds:5,baths:4,badge:['Neubau 2026',''],feat:['KfW 40','Wärmepumpe','Doppelgarage','Isartal-Nähe'],desc:'Zeitgenössische Villa in Grünwald: heller Putz, Lärchenholz und raumhohe Verglasung. Bezugsfertig, energetisch auf höchstem Niveau und nur Minuten von der Münchner Innenstadt.'}
+];
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+/* grid */
+$('#grid').innerHTML=P.map((p,i)=>`
+ <article class="card rv ${p.big?'big':''} d${i%3}" data-r="${p.reg}" onclick="openProp('${p.id}')">
+  <div class="ph"><img loading="lazy" src="img/${p.img}.jpg" alt="${p.name}">${p.badge?`<span class="badge ${p.badge[1]}">${p.badge[0]}</span>`:''}</div>
+  <div class="bd"><div class="loc">${p.loc} · ${p.reg}</div><h3>${p.name}</h3>
+   <div class="specs"><span>${p.wfl} m² Wfl.</span><span>${p.plot} m² Grund</span><span>${p.beds} Schlafzimmer</span></div>
+   <div class="price">${p.off?'Off-Market':(p.price||'Preis auf Anfrage')}<i>Details →</i></div></div>
+ </article>`).join('');
+
+$$('#chips .chip').forEach(c=>c.onclick=()=>{
+  $$('#chips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');
+  const f=c.dataset.f;
+  $$('#grid .card').forEach(k=>{k.classList.toggle('hide',f!=='all'&&k.dataset.r!==f);k.classList.toggle('big',f==='all'&&k.dataset.r==='Mallorca'&&k.querySelector('h3').textContent==='Finca Sa Pedra')});
+});
+
+/* modal */
+function openProp(id){
+  const p=P.find(x=>x.id===id);
+  $('#sheet').innerHTML=`
+   <div class="mimg"><img src="img/${p.img}.jpg" alt="${p.name}"><button class="x" onclick="closeProp()" aria-label="Schließen">×</button></div>
+   <div class="mbody">
+    <div class="eyebrow">${p.loc} · ${p.reg}</div>
+    <h3>${p.name}</h3>
+    <p class="desc">${p.desc}</p>
+    <div class="mspecs"><div><b>${p.wfl} m²</b><span>Wohnfläche</span></div><div><b>${p.plot} m²</b><span>Grundstück</span></div><div><b>${p.beds}</b><span>Schlafzimmer</span></div><div><b>${p.baths}</b><span>Bäder</span></div></div>
+    <div class="feat">${p.feat.map(f=>`<span>${f}</span>`).join('')}</div>
+    <div class="locked-note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Weitere ${12+p.wfl%17} Fotos, Grundrisse & Drohnenfilm auf Anfrage nach Verifizierung.</div>
+    <div class="mfoot"><div class="p">${p.off?'Off-Market':(p.price||'Preis auf Anfrage')}<small>${p.price?'zzgl. Erwerbsnebenkosten':'Preis wird persönlich kommuniziert'}</small></div>
+    <a href="#kontakt" class="btn btn-dark" onclick="inquire('${p.id}')">Exposé anfragen →</a></div>
+   </div>`;
+  $('#modal').classList.add('open');document.body.style.overflow='hidden';
+}
+function closeProp(){$('#modal').classList.remove('open');document.body.style.overflow=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProp()});
+function inquire(id){closeProp();setTopic('kauf');$('#objSel').value=id;const p=P.find(x=>x.id===id);$('#msg').value=`Ich interessiere mich für ${p.name} (${p.loc}, ${p.reg}) und bitte um das vollständige Exposé.`}
+
+/* form */
+$('#objSel').innerHTML='<option value="">Allgemeine Anfrage</option>'+P.map(p=>`<option value="${p.id}">${p.name} – ${p.reg}</option>`).join('')+'<option value="om">Off-Market-Portfolio</option>';
+function setTopic(t){$$('#tabs .tab').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
+  $('#msg').placeholder=t==='verkauf'?'Lage, Art und Größe Ihrer Immobilie – wir bewerten vertraulich.':t==='offmarket'?'Region, Budget, Zeitrahmen – wir stellen Ihnen ein persönliches Dossier zusammen.':'Was suchen Sie – Lage, Größe, Zeitrahmen?';
+  $('#budgetL').firstChild.textContent=t==='verkauf'?'Erwarteter Wert':'Budget';
+  if(t==='offmarket'){$('#objSel').value='om';document.querySelector('[name=nda]').checked=true}}
+$$('#tabs .tab').forEach(t=>t.onclick=()=>setTopic(t.dataset.t));
+$('#form').addEventListener('submit',e=>{e.preventDefault();const f=e.target;
+  for(const n of ['vn','nn','em']){const el=f.elements[n];if(!el.value.trim()||(n==='em'&&!/\S+@\S+\.\S+/.test(el.value))){el.style.borderColor='#ff6b5e';el.focus();return}else el.style.borderColor=''}
+  $('#okH').textContent='Vielen Dank, '+f.elements.vn.value.trim()+'.';
+  $('#formInner').style.display='none';$('#ok').classList.add('show')});
+function resetForm(){$('#form').reset();$('#formInner').style.display='grid';$('#ok').classList.remove('show')}
+
+/* marquee */
+const places=['Mallorca','Ibiza','Côte d\'Azur','Marbella','München','Saint-Tropez','Kitzbühel','Lago di Como'];
+$('#marq').innerHTML=[...places,...places].map(x=>`<span>${x}</span>`).join('');
+
+/* team */
+const T=[
+ ['Constantin Wehrhahn','Gründer & Managing Partner','DE · EN · FR','#2b2b2e','#8a7650'],
+ ['Valentina Roig','Partnerin · Mallorca','ES · CA · DE · EN','#5a4632','#c9a87a'],
+ ['Elena Varga','Off-Market & Ibiza','DE · EN · HU · ES','#1f3b3a','#86a8a0'],
+ ['Julien Marchetti','Côte d\'Azur & Monaco','FR · IT · EN','#20263a','#7f8db8'],
+ ['Sofía Ortega','Marbella','ES · EN · AR','#4a2b2b','#c08b7a'],
+ ['Maximilian Brandt','München & Alpen','DE · EN','#2e3328','#9aa78a'],
+ ['Leonie Hartwig','Private Office','DE · EN · RU','#3a2f3f','#b49cc0'],
+ ['Henrik Aalto','Investment & Family Offices','FI · SV · DE · EN','#263238','#90a4ae']
+];
+$('#tgrid').innerHTML=T.map((m,i)=>`<div class="tm rv d${i%4}"><div class="av" style="background:linear-gradient(150deg,${m[4]},${m[3]})">${m[0].split(' ').map(w=>w[0]).join('')}</div><h4>${m[0]}</h4><p>${m[1]}</p><div class="lang">${m[2]}</div></div>`).join('');
+
+/* accordions */
+const J=[
+ ['Senior Private Broker (m/w/d)','Palma de Mallorca · Vollzeit','<p>Sie betreuen ein eigenes Portfolio im Südwesten Mallorcas und begleiten internationale Käufer vom Erstgespräch bis zum Notartermin.</p><ul><li>5+ Jahre Erfahrung im Luxussegment</li><li>Deutsch, Englisch, Spanisch verhandlungssicher</li><li>Eigenes Netzwerk von Vorteil</li></ul>'],
+ ['Junior Associate (m/w/d)','München · Vollzeit','<p>Ihr Einstieg in die Welt der Premium-Immobilien: Research, Exposé-Erstellung, Besichtigungen an der Seite unserer Partner.</p><ul><li>Abgeschlossenes Studium (BWL, Immobilienwirtschaft o. ä.)</li><li>Stilsicheres Auftreten, absolute Diskretion</li></ul>'],
+ ['Client Relations Manager (m/w/d)','Ibiza · Saison oder ganzjährig','<p>Sie sind das Gesicht von VÉSTIER auf der Insel: Concierge, Transfers, Events und Betreuung unserer Kunden vor Ort.</p>'],
+ ['Werkstudent Marketing & Content (m/w/d)','München / Remote · 20 Std.','<p>Fotografie, Film, Social Media und Exposés – Sie helfen, unsere Objekte so zu inszenieren, wie sie es verdienen.</p>']
+];
+$('#jobs').innerHTML=J.map(j=>`<div class="acc-i"><button class="acc-h"><h4>${j[0]}<small>${j[1]}</small></h4><span class="pl"></span></button><div class="acc-b"><div>${j[2]}<a href="#kontakt" class="btn btn-dark" onclick="$('#msg').value='Bewerbung: ${j[0]}'">Jetzt bewerben</a></div></div></div>`).join('');
+const F=[
+ ['Was bedeutet „diskrete Vermarktung“?','Die Immobilie wird nicht auf Portalen, Social Media oder mit Schildern angeboten. Wir stellen sie ausschließlich ausgewählten, vorab verifizierten Interessenten aus unserem Netzwerk vor – meist erst nach einer Vertraulichkeitsvereinbarung (NDA).'],
+ ['Warum steht bei manchen Objekten „Preis auf Anfrage“?','Viele Eigentümer möchten nicht, dass der Preis öffentlich wird – sei es aus Gründen der Privatsphäre oder der Verhandlungsposition. Den Preis nennen wir Ihnen gerne persönlich nach einem kurzen Gespräch.'],
+ ['Wie erhalte ich das vollständige Exposé und weitere Fotos?','Über das Kontaktformular oder direkt im Objekt. Nach einem kurzen Gespräch und einem Finanzierungs- bzw. Kapitalnachweis senden wir Ihnen Exposé, Grundrisse, alle Fotos und den Drohnenfilm.'],
+ ['Wer zahlt die Provision?','Das hängt vom Land ab. In Deutschland wird die Maklerprovision beim Kauf von Einfamilienhäusern in der Regel zwischen Käufer und Verkäufer geteilt. In Spanien und Frankreich trägt sie häufig der Verkäufer. Die genauen Konditionen stehen in jedem Exposé.'],
+ ['Begleiten Sie auch internationale Käufer?','Ja – das ist unser Alltag. Wir koordinieren NIE-Nummer, Notar, Anwälte, Steuerberatung und Finanzierung mit unserem Partnernetzwerk in Spanien, Frankreich und Deutschland.'],
+ ['Kann ich meine Immobilie von Ihnen bewerten lassen?','Gerne, kostenfrei und vertraulich. Ein Partner besichtigt Ihre Immobilie persönlich und erstellt eine fundierte Marktwertanalyse.'],
+ ['Sind Besichtigungen auch virtuell möglich?','Ja. Für Kunden im Ausland bieten wir private Live-Video-Touren an – auf Wunsch gemeinsam mit Architekt oder Gutachter.']
+];
+$('#faqs').innerHTML=F.map(f=>`<div class="acc-i"><button class="acc-h"><h4>${f[0]}</h4><span class="pl"></span></button><div class="acc-b"><div><p>${f[1]}</p></div></div></div>`).join('');
+$$('.acc-h').forEach(h=>h.onclick=()=>h.parentElement.classList.toggle('open'));
+
+/* reveal + counters */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);const b=e.target.querySelector('[data-count]');if(b)count(b)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+$$('.rv').forEach(el=>io.observe(el));
+function count(b){const to=+b.dataset.count,dec=+(b.dataset.dec||0),suf=b.dataset.suf||'',t0=performance.now();
+  (function f(t){const k=Math.min(1,(t-t0)/1800),v=to*(1-Math.pow(1-k,4));b.textContent=v.toFixed(dec).replace('.',',')+suf;if(k<1)requestAnimationFrame(f)})(t0)}
+
+/* word reveal */
+const wEl=$('#words');wEl.innerHTML=wEl.textContent.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ');
+const words=$$('#words .w');
+
+/* nav + menu */
+$('#burger').onclick=()=>document.body.classList.toggle('menu-open');
+$$('#mmenu a').forEach(a=>a.onclick=()=>document.body.classList.remove('menu-open'));
+
+/* scroll engine */
+const nav=$('#nav'),hero=$('#heroImg'),show=$('#show'),frame=$('#showFrame'),simg=$('#showImg'),stxt=$('#showTxt'),spre=$('#showPre');
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+function onScroll(){
+  const y=scrollY,vh=innerHeight,mob=innerWidth<640;
+  nav.classList.toggle('solid',y>vh*.85);
+  if(y<vh) hero.style.transform=`translateY(${y*.3}px) scale(${1+y/vh*.08})`;
+  // words
+  const r=wEl.getBoundingClientRect(),p=clamp((vh*.85-r.top)/(r.height+vh*.35));
+  words.forEach((w,i)=>w.style.opacity=(i/words.length<p)?1:.12);
+  // showcase
+  const sr=show.getBoundingClientRect(),sp=clamp(-sr.top/(sr.height-vh));
+  const g=clamp(sp/.55),e=1-Math.pow(1-g,3);
+  const w0=mob?84:62,h0=mob?56:62;
+  frame.style.width=(w0+(100-w0)*e)+'vw';frame.style.height=(h0+(100-h0)*e)+'vh';
+  frame.style.borderRadius=((mob?24:32)*(1-e))+'px';
+  simg.style.transform=`scale(${1.25-.25*e})`;
+  spre.style.opacity=1-e*2;
+  const tp=clamp((sp-.5)/.25);stxt.style.opacity=tp;stxt.style.transform=`translateY(${30*(1-tp)}px)`;
+}
+let tick=false;addEventListener('scroll',()=>{if(!tick){requestAnimationFrame(()=>{onScroll();tick=false});tick=true}},{passive:true});
+addEventListener('resize',onScroll);onScroll();
+</script>
+</body>
+</html>
