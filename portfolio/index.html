@@ -13,7 +13,7 @@
 <link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
 <link rel="preload" href="fonts/InterDisplay-Black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20261118a">
+<link rel="stylesheet" href="styles.css?v=20261118b">
 </head>
 <body data-page="start">
 <main>
@@ -48,6 +48,36 @@
       <a class="btn btn-ghost" href="arbeiten.html">Alle Arbeiten →</a>
     </div>
     <div class="pgrid" id="featured"></div>
+  </section>
+
+  <!-- ───────── VORHER / NACHHER ───────── -->
+  <section class="sec" id="vorher-nachher">
+    <div class="sec-head reveal"><p class="kicker">Vorher · Nachher</p><h2>Von <mark>2009</mark> auf heute.</h2>
+      <p class="lead">Zieh den Regler. Links eine typische alte Firmen-Website, rechts das, was ich daraus mache – schnell, mobil und gemacht für Anfragen.</p></div>
+    <div class="ba reveal" id="ba" style="--p:50%">
+      <img class="ba-after" src="img/beschte-1.webp" alt="Nachher: moderne Website Elektrotechnik Beschte" width="1440" height="900" loading="lazy">
+      <div class="ba-before"><img src="img/vorher-2009.webp" alt="Vorher: veraltete Website im Stil von 2009" width="1440" height="900" loading="lazy"></div>
+      <span class="ba-tag l">Vorher</span><span class="ba-tag r">Nachher</span>
+      <div class="ba-handle" aria-hidden="true"><i>‹ ›</i></div>
+      <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Vorher-Nachher-Regler">
+    </div>
+  </section>
+
+  <!-- ───────── EIGENER SPOT ───────── -->
+  <section class="sec" id="spot">
+    <div class="spotcase">
+      <div class="reveal">
+        <p class="kicker">Werbespot · 9:16</p>
+        <h2>So wirbt FLUXE <mark>für sich selbst</mark>.</h2>
+        <p class="lead">Mein eigener TikTok- und Reels-Spot: echte Aufnahmen meiner Projekte, auf den Beat geschnitten, mit eigenem Sound. So etwas baue ich auch für dein Produkt oder deinen Betrieb.</p>
+        <ul class="spot-facts"><li><b>22 s</b><span>Länge</span></li><li><b>128</b><span>BPM, eigener Beat</span></li><li><b>9:16</b><span>TikTok · Reels · Shorts</span></li></ul>
+        <div class="hero-cta" style="justify-content:flex-start"><a class="btn" href="kontakt.html?leistung=Werbespot#anfrage">Spot anfragen</a><a class="btn btn-ghost" href="arbeiten.html#spots">Alle Spots</a></div>
+      </div>
+      <div class="spot-phone reveal">
+        <video src="video/fluxe-spot.mp4" poster="img/spots/fluxe-spot.webp" muted loop playsinline preload="none" id="selfSpot"></video>
+        <button class="spot-sound" type="button" id="selfSpotSnd" aria-label="Ton einschalten">🔇 Ton an</button>
+      </div>
+    </div>
   </section>
 
   <!-- ───────── USPs ───────── -->
@@ -123,10 +153,10 @@
   </section>
 </main>
 
-<script src="config.js?v=20261118a"></script>
-<script src="data.js?v=20261118a"></script>
-<script src="site.js?v=20261118a"></script>
-<script src="carousel.js?v=20261118a"></script>
+<script src="config.js?v=20261118b"></script>
+<script src="data.js?v=20261118b"></script>
+<script src="site.js?v=20261118b"></script>
+<script src="carousel.js?v=20261118b"></script>
 <script>
 (() => {
   const { esc, projectCard } = window.SITE;
@@ -134,6 +164,18 @@
   document.getElementById('btiles').innerHTML = BRANCHEN.map(b => `
     <a class="btile reveal" style="--c:${b.color}" href="arbeiten.html#${b.id}"><i>${b.icon}</i>
       <span><b>${esc(b.name)}</b>${count(b.id) ? `<small>${count(b.id)} Projekt${count(b.id) > 1 ? 'e' : ''}</small>` : '<small class="soon">Demnächst verfügbar</small>'}</span></a>`).join('');
+  // Vorher/Nachher-Regler
+  const ba = document.getElementById('ba'), rng = ba.querySelector('.ba-range');
+  const setP = v => ba.style.setProperty('--p', v + '%');
+  rng.addEventListener('input', () => setP(rng.value));
+  // kleiner „Wink“ beim ersten Sichtbarwerden, damit man sieht, dass man ziehen kann
+  new IntersectionObserver(([e], o) => { if (!e.isIntersecting || matchMedia('(prefers-reduced-motion: reduce)').matches) return; o.disconnect();
+    const t0 = performance.now(); const f = now => { const t = Math.min(1, (now - t0) / 1600); const v = 50 + Math.sin(t * Math.PI * 2) * 18 * (1 - t); setP(v); rng.value = v; if (t < 1) requestAnimationFrame(f); }; requestAnimationFrame(f);
+  }, { threshold: .6 }).observe(ba);
+  // eigener Spot: spielt stumm, sobald sichtbar; Ton per Button
+  const sv = document.getElementById('selfSpot'), snd = document.getElementById('selfSpotSnd');
+  new IntersectionObserver(([e]) => { if (e.isIntersecting && !document.documentElement.classList.contains('still')) sv.play().catch(() => {}); else sv.pause(); }, { threshold: .2 }).observe(sv);
+  snd.addEventListener('click', () => { sv.muted = !sv.muted; if (!sv.muted) sv.play().catch(() => {}); snd.textContent = sv.muted ? '🔇 Ton an' : '🔊 Ton aus'; snd.setAttribute('aria-label', sv.muted ? 'Ton einschalten' : 'Ton ausschalten'); });
   document.getElementById('featured').innerHTML = PROJECTS.filter(p => p.featured).slice(0, 3).map(projectCard).join('');
   const q = document.getElementById('quotes');
   q.innerHTML = TESTIMONIALS.length ? TESTIMONIALS.map(t => `<figure class="quote reveal"><span class="rating" role="img" aria-label="5 von 5 Sternen">★★★★★</span><blockquote>${esc(t.quote)}</blockquote><figcaption><b>${esc(t.name)}</b><span>${esc(t.company)}</span></figcaption></figure>`).join('')
