@@ -192,15 +192,15 @@ Für AURÈNE (Konzept) habe ich einen Online-Shop gebaut: 3D-Flakon, Duftfinder,
 Wisch durch für mehr Screens 👉
 
 #onlineshop #webdesign #parfum #luxus #ecommerce #shopdesign #3dwebsite {TAGS_LOCAL}"""))
-POSTS.append(('05-kater-kit', project(5, 'katerkit', 'ONLINE-SHOP', 'Kater Kit', 'Shop mit Warenkorb & Konfigurator',
-    [('Eigene Marke', 'Logo, Farben und Look – frech und klar.'), ('Konfigurator', 'Hochzeits-Kits mit Gästeanzahl und Mengenrabatt.'), ('Warenkorb & Filter', 'Kategorien, Vergleich, schneller Checkout.')]),
-f"""Ein Shop für den Morgen danach 😅
+POSTS.append(('05-la-mome-plage', project(5, 'lamome', 'RESTAURANT · CANNES', 'La Môme Plage', 'Strandrestaurant an der Croisette',
+    [('Golden Hour', 'Creme, Terrakotta, Gold – die Seite fühlt sich nach Abendsonne an.'), ('Ganze Karte online', 'Alle Gerichte mit Preisen, sortiert nach Kategorie.'), ('Reservierung · FR/EN', 'Tisch oder Transat anfragen, zweisprachig auf Knopfdruck.')]),
+f"""Neue Website für ein Strandrestaurant in Cannes 🌅
 
-Kater Kit: frecher Online-Shop mit eigenem Markenauftritt, Warenkorb und Hochzeits-Konfigurator mit Mengenrabatt.
+Für La Môme Plage an der Croisette habe ich die Website komplett neu gestaltet: Golden-Hour-Look, ein Tag zum Durchwischen vom ersten Café bis zum Feuerwerk über der Bucht, die ganze Karte online und Reservierung auf Französisch und Englisch.
 
-Zeigt: Auch ein ungewöhnliches Produkt verkauft online richtig gut – wenn der Auftritt stimmt.
+Wisch durch für mehr Screens 👉
 
-#onlineshop #startup #branding #webdesign #ecommerce #gründer #website {TAGS_LOCAL}"""))
+#restaurantwebsite #webdesign #gastronomie #cannes #cotedazur #frenchriviera #website {TAGS_LOCAL}"""))
 chat = P['assistent']
 POSTS.append(('06-chatbot', [
     shot_slide('Dein Betrieb\nantwortet um\n3 Uhr nachts.', None, mobile=chat['mobile'], kicker='CHATBOT'),

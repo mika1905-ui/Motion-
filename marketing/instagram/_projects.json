@@ -104,5 +104,21 @@
   ],
   "mobile": "img/chatbot-v2-mobile.webp",
   "note": "Eigenes Projekt – direkt hier live testen."
+ },
+ "lamome": {
+  "title": "La Môme Plage",
+  "sub": "Strandrestaurant · Cannes, La Croisette",
+  "text": "Neue Website für das Strandrestaurant an der Croisette.",
+  "tags": [
+   "Gastronomie",
+   "Zweisprachig",
+   "Reservierung"
+  ],
+  "images": [
+   "img/lamome-1.webp",
+   "img/lamome-2.webp",
+   "img/lamome-3.webp"
+  ],
+  "mobile": "img/lamome-mobile.webp"
  }
 }

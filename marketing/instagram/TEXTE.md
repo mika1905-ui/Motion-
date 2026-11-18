@@ -128,90 +128,16 @@ Wischen für mehr Screens 👉
 #onlineshop #webdesign #parfum #luxus #ecommerce #shopdesign #3dwebsite #bielefeld #webdesigner
 ```
 
-### 05 – Kater Kit
+### 05 – La Môme Plage
 ```
-Ein Shop für den Morgen danach 😅
+Neue Website für ein Strandrestaurant in Cannes 🌅
 
-Kater Kit: frecher Online-Shop mit Warenkorb, Hochzeits-Konfigurator mit Mengenrabatt und eigenem Markenauftritt.
+Für La Môme Plage an der Croisette habe ich die Website komplett neu gestaltet: Golden-Hour-Look, ein Tag zum Durchwischen vom ersten Café bis zum Feuerwerk über der Bucht, die ganze Karte online und Reservierung auf Französisch und Englisch.
 
-Zeigt: Auch ein ungewöhnliches Produkt kann online richtig gut verkaufen – wenn der Auftritt stimmt.
+Wisch durch für mehr Screens 👉
 
-#onlineshop #startup #branding #webdesign #ecommerce #gründer #website #bielefeld
+#restaurantwebsite #webdesign #gastronomie #cannes #cotedazur #frenchriviera #website #bielefeld #scrollwerk
 ```
-
-### 06 – Chatbot
-```
-Dein Betrieb antwortet um 3 Uhr nachts 🤖🌙
-
-Ein Chatbot auf deiner Website beantwortet Fragen zu Preisen, Leistungen und Terminen – und schickt Interessenten direkt zur Anfrage. Weniger Telefon-Hin-und-her, mehr Kunden.
-
-Ab 390 € – ohne monatliche Pflicht.
-
-👉 Teste ihn live auf meiner Website (Link in Bio).
-
-#chatbot #ki #digitalisierung #kundenservice #website #handwerk #praxis #bielefeld #automatisierung
-```
-
-### 07 – Red Bull in 3D
-```
-Was wäre, wenn die Red-Bull-Website so aussieht? 🥫
-
-3D-Dose, die sich beim Scrollen dreht, die Lasche öffnet und Tropfen versprüht. Dazu ein 24er Tray, das sich Dose für Dose füllt – in allen 9 Sorten.
-
-Unbeauftragte Spec-Arbeit, keine Verbindung zu Red Bull. Gemacht, um zu zeigen, was mit 3D-Produktseiten möglich ist.
-
-Soll ich so etwas für dein Produkt bauen? Schreib mir 👇
-
-#3dwebsite #threejs #webdesign #produktdesign #creativecoding #redbull #specwork #webdevelopment #motiondesign
-```
-(Bei Spec-Arbeiten mit echten Marken den Hinweis „Spec-Arbeit, keine Verbindung zu …“ immer im Text lassen und die Marke **nicht** markieren.)
-
-### 08 – Elektrotechnik Beschte
-```
-Website für einen Elektro-Meisterbetrieb ⚡
-
-24/7-Notdienst ganz oben, neun Leistungen von Photovoltaik bis Wallbox, Karriere-Bereich und ein Chatbot, der Anfragen auch nach Feierabend annimmt.
-
-Handwerk braucht keine Spielerei – sondern eine Seite, die schnell lädt, gefunden wird und Anfragen bringt.
-
-#handwerk #elektriker #website #webdesign #handwerker #meisterbetrieb #photovoltaik #bielefeld #owl
-```
-
-### 09 – VÉSTIER
-```
-Adressen, die man nicht sucht. 🏛️
-
-VÉSTIER Private Estates – Website für Luxus-Immobilien: großformatige Bilder, ruhige Typografie, Objektsuche und Exposés, die man gern weiterleitet.
-
-Wenn ein Haus 8 Millionen kostet, darf die Website nicht nach 2009 aussehen.
-
-#immobilien #luxusimmobilien #makler #webdesign #realestate #website #immobilienmakler #bielefeld
-```
-
----
-
-## 3. Reel / TikTok (der Werbespot)
-
-**Datei:** `spots/final/scrollwerk-tiktok-dein-sound.mp4` · **Cover:** `reel-cover.png`
-
-**Caption:**
-```
-Deine Website sieht aus wie 2009? 💀 Lass mich das kurz fixen.
-
-Websites, 3D-Produktseiten, Shops und Chatbots – aus Bielefeld, zu fairen Preisen.
-👉 Link in Bio
-
-#webdesign #website #glowup #vorhernachher #selbstständig #smallbusiness #bielefeld #3dwebsite #fyp #fürdich
-```
-
-**Damit es Reichweite bekommt:**
-- In den **ersten 3 Stunden** auf jeden Kommentar antworten (am besten mit Gegenfrage).
-- Auf TikTok und Instagram mit **Trend-Sound** posten: Den eigenen Sound leise (ca. 10–20 %) und einen gerade beliebten Sound darüber legen – oder den Original-Sound behalten, wenn du den Spot als „Original-Audio“ etablieren willst.
-- Beste Zeiten zum Testen: **Di–Do 18–20 Uhr** und **So 11–13 Uhr**.
-- Auch als **Story** teilen mit Umfrage: „Wie alt ist deine Website?“ (< 2 Jahre / 2–5 / älter 😬)
-- Lokale Hashtags (#bielefeld #owl) bringen die Kunden, die du wirklich willst.
-
----
 
 ## 4. Die ersten 2 Wochen
 
@@ -220,7 +146,7 @@ Websites, 3D-Produktseiten, Shops und Chatbots – aus Bielefeld, zu fairen Prei
 | 1 | 01, 02, 03 posten | „Neu hier“ + Umfrage |
 | 2 | Reel (TikTok-Spot) | Spot teilen + Link-Sticker |
 | 4 | 04 AURÈNE | Behind the Scenes vom Shop |
-| 6 | 05 Kater Kit | Frage-Sticker: „Was soll ich als Nächstes bauen?“ |
+| 6 | 05 La Môme Plage | Bildschirmaufnahme: durch den Tagesverlauf wischen |
 | 8 | 06 Chatbot | Bildschirmaufnahme Chatbot |
 | 10 | 07 Red Bull | 3D-Dose in Aktion (Bildschirmaufnahme) |
 | 12 | 08 Beschte | „So findet dich der Kunde bei Google“ |
