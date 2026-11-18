@@ -1,4 +1,4 @@
-# FLUXE Studio – Instagram-Setup
+# Scrollwerk – Instagram-Setup
 
 Alle Bilder liegen in diesem Ordner:
 - `profilbild.png` – Profilbild (nur das Zeichen, damit es auch im kleinen Kreis gut lesbar ist)
@@ -15,14 +15,14 @@ Alle Bilder liegen in diesem Ordner:
 (Dann bekommst du Statistiken, Kontakt-Buttons und kannst Beiträge bewerben.)
 
 **Benutzername** (Verfügbarkeit bitte in der App prüfen, in dieser Reihenfolge):
-1. `@fluxe.studio`
-2. `@fluxestudio`
-3. `@fluxe.studio.bielefeld`
-4. `@fluxe.design`
+1. `@scrollwerk`
+2. `@scrollwerk.studio`
+3. `@scrollwerk.de`
+4. `@scrollwerk.bielefeld`
 
 **Name** (wird in der Suche mitgefunden – deshalb die Stichwörter mit rein, max. 64 Zeichen):
 ```
-FLUXE Studio | Webdesign & Werbespots
+Scrollwerk | Webdesign & Werbespots
 ```
 
 **Kategorie:** `Webdesigner` (Alternative: `Werbeagentur`)
@@ -43,7 +43,7 @@ Websites & Werbespots, die verkaufen.
 ```
 
 **Link:** `https://mika1905-ui.github.io/Motion-/portfolio/`
-(Sobald du eine eigene Domain hast, z. B. `fluxe-studio.de`, die hier eintragen – wirkt seriöser.)
+(Sobald du eine eigene Domain hast, z. B. `scrollwerk.de`, die hier eintragen – wirkt seriöser.)
 
 **Kontakt-Buttons:** E-Mail + „Termin buchen“ (Cal.com-Link, sobald vorhanden). Adresse nur anzeigen, wenn du Kunden vor Ort empfängst.
 
@@ -192,7 +192,7 @@ Wenn ein Haus 8 Millionen kostet, darf die Website nicht nach 2009 aussehen.
 
 ## 3. Reel / TikTok (der Werbespot)
 
-**Datei:** `spots/final/fluxe-tiktok.mp4` · **Cover:** `reel-cover.png`
+**Datei:** `spots/final/scrollwerk-tiktok-dein-sound.mp4` · **Cover:** `reel-cover.png`
 
 **Caption:**
 ```

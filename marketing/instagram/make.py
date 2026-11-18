@@ -1,4 +1,4 @@
-"""FLUXE Studio – Instagram starter kit: profile picture, highlight covers, 9 launch posts (4:5), reel cover, profile preview."""
+"""Scrollwerk – Instagram starter kit: profile picture, highlight covers, 9 launch posts (4:5), reel cover, profile preview."""
 import os
 from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageChops
 
@@ -8,13 +8,13 @@ IMG = os.path.join(ROOT, 'portfolio', 'img')
 BRAND = os.path.join(ROOT, 'portfolio', 'brand')
 FONTS = os.path.join(ROOT, 'spots', 'fonts')
 OUT = HERE
-LIME = (212, 255, 58); BG = (8, 8, 10); INK = (244, 244, 240); MUTED = (150, 150, 158)
+LIME = (255, 212, 59); VIOLET = (106, 59, 255); BG = (14, 14, 22); INK = (244, 244, 240); MUTED = (150, 150, 158)
 
 def F(w, s): return ImageFont.truetype(os.path.join(FONTS, {'black': 'Inter-Black.ttf', 'bold': 'Inter-Bold.ttf', 'semi': 'Inter-SemiBold.ttf', 'reg': 'Inter-Regular.ttf'}[w]), s)
-MARK = Image.open(os.path.join(BRAND, 'fluxe-mark-1024.png')).convert('RGBA')
-LOGO = Image.open(os.path.join(BRAND, 'fluxe-logo-hell.png')).convert('RGBA')
+MARK = Image.open(os.path.join(BRAND, 'scrollwerk-mark-1024.png')).convert('RGBA')
+LOGO = Image.open(os.path.join(BRAND, 'scrollwerk-logo-hell.png')).convert('RGBA')
 
-def canvas(w, h, glow=(0.5, 0.3), gc=LIME, ga=70):
+def canvas(w, h, glow=(0.5, 0.3), gc=VIOLET, ga=80):
     im = Image.new('RGBA', (w, h), BG + (255,))
     g = Image.new('RGBA', (w, h), (0, 0, 0, 0)); d = ImageDraw.Draw(g)
     cx, cy = w * glow[0], h * glow[1]; r = w * 0.55
@@ -132,7 +132,7 @@ def highlights():
     for slug, kind, label in HIGHLIGHTS:
         im = canvas(1080, 1920, (0.5, 0.5), ga=60)
         d = ImageDraw.Draw(im)
-        d.ellipse((540 - 300, 960 - 300, 540 + 300, 960 + 300), fill=(18, 20, 14, 255), outline=LIME + (255,), width=6)
+        d.ellipse((540 - 300, 960 - 300, 540 + 300, 960 + 300), fill=(24, 18, 44, 255), outline=LIME + (255,), width=6)
         icon(kind, d, 540, 960 if kind != 'person' else 990, 230, LIME + (255,))
         save(im, f'highlights/{slug}.png')
         covers.append((im, label))
@@ -150,7 +150,7 @@ def post_project(n, slug, kicker, title, sub, color, spec=None):
     laptop(im, os.path.join(IMG, f'{slug}-1.webp'), 110, 420, 760)
     phone(im, os.path.join(IMG, f'{slug}-mobile.webp'), 760, 560, 230)
     if spec: text(im, (64, H - 165), spec, 24, 'semi', (120, 120, 128))
-    footer(im, 'Website · FLUXE Studio')
+    footer(im, 'Website · Scrollwerk')
     save(im, f'posts/{n:02d}-{slug}.jpg'); return im
 
 def post_intro():
@@ -174,7 +174,7 @@ def post_chatbot():
     phone(im, os.path.join(IMG, 'chatbot-ring.webp') if os.path.exists(os.path.join(IMG, 'chatbot-ring.webp')) else shot, 600, 540, 300)
     text(im, (64, 600), 'Beantwortet Fragen\nzu Preisen, Leistungen\nund Terminen – und\nführt direkt zur Anfrage.', 36, 'semi', (210, 210, 214), spacing=10)
     text(im, (64, 900), 'ab 390 €', 70, 'black', LIME)
-    footer(im, 'Chatbots · FLUXE Studio')
+    footer(im, 'Chatbots · Scrollwerk')
     save(im, 'posts/06-chatbot.jpg'); return im
 
 def post_prices():
@@ -227,7 +227,7 @@ def preview(profile_img, posts, covers):
         x = 420 + k * 220
         d.text((x, 130), num, font=F('black', 46), fill='white', anchor='mm'); d.text((x, 185), lab, font=F('semi', 28), fill=(200, 200, 200), anchor='mm')
     y = 310
-    d.text((48, y), 'FLUXE Studio | Webdesign & Werbespots', font=F('bold', 32), fill='white'); y += 46
+    d.text((48, y), 'Scrollwerk | Webdesign & Werbespots', font=F('bold', 32), fill='white'); y += 46
     d.text((48, y), 'Webdesigner', font=F('reg', 28), fill=(150, 150, 150)); y += 44
     emo = ImageFont.truetype('/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf', 109)
     for line in BIO.split('\n'):

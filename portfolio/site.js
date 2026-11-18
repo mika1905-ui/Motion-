@@ -31,7 +31,7 @@ const header = document.createElement('header');
 header.className = 'gnav'; header.id = 'nav';
 header.innerHTML = `
   <div class="gnav-bar">
-    <a class="logo" href="index.html" aria-label="${esc(C.brand)} – Startseite"><img class="logo-mark" src="brand/fluxe-icon.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
+    <a class="logo" href="index.html" aria-label="${esc(C.brand)} – Startseite"><img class="logo-mark" src="brand/scrollwerk-icon.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
     <nav class="gnav-links" aria-label="Hauptnavigation">
       ${NAV.map((n, i) => `<a href="${n.href}" class="${page === n.key ? 'active' : ''}" ${n.flyout ? `data-fly="${i}" aria-haspopup="true"` : ''}>${n.label}</a>`).join('')}
     </nav>
@@ -136,7 +136,7 @@ footer.innerHTML = `
     <div class="foot-cta-btns"><a class="btn btn-big" href="kontakt.html">Projekt anfragen</a><a class="btn btn-ghost" href="kontakt.html#termin">Kostenloses Erstgespräch</a></div>
   </div>
   <div class="foot-grid">
-    <div><a class="logo" href="index.html"><img class="logo-mark" src="brand/fluxe-icon.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
+    <div><a class="logo" href="index.html"><img class="logo-mark" src="brand/scrollwerk-icon.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
       <p class="foot-claim">Werbespots, Webseiten & Chatbots aus ${esc(C.city)}.<br>${esc(C.region)}.</p>
       ${C.email ? `<a class="foot-mail" href="mailto:${esc(C.email)}">${esc(C.email)}</a>` : ''}<p class="foot-claim">Antwort innerhalb von ${esc(C.responseTime || '24 Stunden')}.</p></div>
     <div><p class="fh">Arbeiten</p>${B.slice(0, 6).map(b => `<a href="arbeiten.html#${b.id}">${esc(b.name)}</a>`).join('')}</div>
@@ -285,7 +285,7 @@ window.SITE.form = (form, { subject, onDone } = {}) => {
 window.SITE.booking = el => {
   if (!el) return;
   if (!C.calLink) {
-    el.innerHTML = `<div class="soon-card static" style="--c:#d4ff3a"><span class="soon-ico">◷</span><span class="soon-badge">Demnächst verfügbar</span>
+    el.innerHTML = `<div class="soon-card static" style="--c:#6A3BFF"><span class="soon-ico">◷</span><span class="soon-badge">Demnächst verfügbar</span>
       <b>Online-Terminbuchung</b><span>Bald kannst du hier direkt einen freien Termin für dein kostenloses Erstgespräch wählen. Bis dahin: schick einfach eine Anfrage – ich melde mich mit Terminvorschlägen.</span>
       <a class="soon-link" href="#anfrage">Zur Anfrage →</a></div>`;
     return;

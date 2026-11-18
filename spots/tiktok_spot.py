@@ -1,17 +1,18 @@
-"""FLUXE Studio – TikTok/Reels ad (1080x1920, 30 fps, ~22.5 s), cut on a 128 BPM grid.
+"""Scrollwerk – TikTok/Reels ad (1080x1920, 30 fps, ~22.5 s), cut on a 128 BPM grid.
 Input: frame sequences recorded frame-exactly from the live sites (see README), brand assets.
-Output: spots/final/fluxe-tiktok.mp4"""
+Output: spots/final/scrollwerk-tiktok.mp4"""
 import glob, json, os, subprocess, sys
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 FR = sys.argv[1]                                  # frames root
-OUT = os.path.join(os.path.dirname(__file__), 'final', 'fluxe-tiktok.mp4')
+OUT = os.path.join(os.path.dirname(__file__), 'final', 'scrollwerk-tiktok.mp4')
 HERE = os.path.dirname(os.path.abspath(__file__))
 BRAND = os.path.join(HERE, '..', 'portfolio', 'brand')
 W, H, FPS = 1080, 1920, 30
 BEAT = 60 / 128
-LIME = (212, 255, 58)
+LIME = (255, 212, 59)            # Sonne – Akzent im Scrollwerk-Branding
+VIOLET = (106, 59, 255); CORAL = (255, 107, 44)
 BLACK = Image.new('RGB', (W, H), (8, 8, 10))
 
 FONT = os.path.join(HERE, 'fonts', 'Inter-Black.ttf')
@@ -160,8 +161,8 @@ def clip_frame(name, local_t, speed=1.0, skip=0):
     i = skip + int(local_t * FPS * speed)
     return load(fs[min(len(fs) - 1, max(0, i))])
 
-LOGO = Image.open(os.path.join(BRAND, 'fluxe-logo-hell.png')).convert('RGBA')
-MARK = Image.open(os.path.join(BRAND, 'fluxe-mark-1024.png')).convert('RGBA')
+LOGO = Image.open(os.path.join(BRAND, 'scrollwerk-logo-hell.png')).convert('RGBA')
+MARK = Image.open(os.path.join(BRAND, 'scrollwerk-mark-1024.png')).convert('RGBA')
 
 # ── render one frame ───────────────────────────────────────────────────────────
 def render(t):
@@ -193,7 +194,7 @@ def render(t):
         # glow
         g = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(g)
         r = 380 + 260 * x
-        d.ellipse((W / 2 - r, H / 2 - 120 - r, W / 2 + r, H / 2 - 120 + r), fill=LIME + (int(70 * x),))
+        d.ellipse((W / 2 - r, H / 2 - 120 - r, W / 2 + r, H / 2 - 120 + r), fill=VIOLET + (int(110 * x),))
         img.alpha_composite(g.filter(ImageFilter.GaussianBlur(140)))
         lay = cached_text('fix', [('Lass mich das', None), ('kurz fixen.', LIME)], size=124)
         paste_scaled(img, lay, W / 2, H / 2 - 120, 0.85 + 0.25 * x)
@@ -211,7 +212,7 @@ def render(t):
                 bgc = _tc.get('insetbg')
                 if bgc is None:
                     bgc = Image.new('RGBA', (W, H), (8, 8, 10, 255)); gg = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-                    ImageDraw.Draw(gg).ellipse((W / 2 - 600, 1150 - 600, W / 2 + 600, 1150 + 600), fill=(232, 160, 200, 60))
+                    ImageDraw.Draw(gg).ellipse((W / 2 - 600, 1150 - 600, W / 2 + 600, 1150 + 600), fill=(106, 59, 255, 70))
                     bgc.alpha_composite(gg.filter(ImageFilter.GaussianBlur(170)))
                     sh = Image.new('RGBA', (W, H), (0, 0, 0, 0)); cw, chh = int(W * 0.74), int(H * 0.74)
                     ImageDraw.Draw(sh).rounded_rectangle(((W - cw) / 2, 690 + 30, (W + cw) / 2, 690 + chh + 30), 60, fill=(0, 0, 0, 200))
@@ -267,8 +268,8 @@ def render(t):
     lt = t - END
     img = Image.new('RGBA', (W, H), (8, 8, 10, 255))
     g = Image.new('RGBA', (W, H), (0, 0, 0, 0)); dd = ImageDraw.Draw(g)
-    dd.ellipse((W / 2 - 520, 380 - 420, W / 2 + 520, 380 + 420), fill=LIME + (60,))
-    dd.ellipse((-200, H - 700, 700, H + 100), fill=(74, 168, 255, 40))
+    dd.ellipse((W / 2 - 520, 380 - 420, W / 2 + 520, 380 + 420), fill=VIOLET + (90,))
+    dd.ellipse((-200, H - 700, 700, H + 100), fill=CORAL + (60,))
     img.alpha_composite(g.filter(ImageFilter.GaussianBlur(160)))
     lg = LOGO.resize((860, int(860 * LOGO.height / LOGO.width)), Image.LANCZOS)
     p = min(1, lt / 0.35)

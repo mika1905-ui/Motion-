@@ -49,7 +49,7 @@ def md2html(text):
 
 posts = sorted(os.listdir(os.path.join(HERE, 'posts')))
 hls = ['projekte', 'spots', 'preise', 'ablauf', 'kunden', 'chatbot', 'ueber-mich']
-page = f"""<!doctype html><html lang="de"><head><meta charset="utf-8"><title>FLUXE Studio – Instagram-Setup</title><style>
+page = f"""<!doctype html><html lang="de"><head><meta charset="utf-8"><title>Scrollwerk – Instagram-Setup</title><style>
 @page {{ size: A4; margin: 16mm 14mm; }}
 body {{ font-family: Inter, 'Helvetica Neue', Arial, sans-serif; color: #141416; font-size: 11pt; line-height: 1.5; }}
 h1 {{ font-size: 26pt; margin: 0 0 6pt; letter-spacing: -.02em; }} h2 {{ font-size: 17pt; margin: 22pt 0 8pt; border-bottom: 3px solid #d4ff3a; padding-bottom: 4pt; }}
@@ -64,7 +64,7 @@ hr {{ border: 0; }}
 .grid figure {{ margin: 0; break-inside: avoid; }} .grid img {{ width: 100%; border-radius: 8px; display: block; }} figcaption {{ font-size: 9pt; color: #666; margin-top: 3pt; }}
 .pb {{ break-before: page; }} .note {{ color: #555; font-size: 10pt; }}
 </style></head><body>
-<div class="cover"><img src="vorschau/profil-vorschau.png" style="width:60%;border-radius:10px"><h1 style="margin-top:16pt">Instagram-Setup</h1><p>FLUXE Studio · Profilbild, Highlights, 9 Start-Posts, Reel-Cover und alle Texte</p></div>
+<div class="cover"><img src="vorschau/profil-vorschau.png" style="width:60%;border-radius:10px"><h1 style="margin-top:16pt">Instagram-Setup</h1><p>Scrollwerk · Profilbild, Highlights, 9 Start-Posts, Reel-Cover und alle Texte</p></div>
 <p class="note">Bilder speichern: Die Bilder in voller Auflösung bekommst du zusätzlich einzeln (PNG/JPG) – die in dieser PDF sind zum Anschauen.</p>
 
 <h2 class="pb">Profilbild &amp; Reel-Cover</h2>

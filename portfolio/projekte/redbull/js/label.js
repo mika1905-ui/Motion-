@@ -119,7 +119,7 @@ function backPanels(ctx, W, H, X, f, dark) {
     f.zero ? 'Vitamine (Niacin, B5, B6, B12),' : '(Niacin, Pantothensäure, B6, B12),',
     'Aromen' + (f.kind === 'edition' ? ' (' + f.sub + ')' : '') + ', Farbstoffe.', '',
     'Erhöhter Koffeingehalt.', 'Für Kinder und schwangere oder', 'stillende Frauen nicht empfohlen', '(32 mg/100 ml).', '',
-    'Konzept-Darstellung · FLUXE Studio.', 'Verbindlich sind die Angaben', 'auf der Originaldose.'];
+    'Konzept-Darstellung · Scrollwerk.', 'Verbindlich sind die Angaben', 'auf der Originaldose.'];
   lines.forEach((l, i) => ctx.fillText(l, px, py + 0.04 * H + i * 0.0235 * H));
   ctx.restore();
 
