@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#f6f5f0">
 <link rel="icon" href="brand/scrollwerk-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=20261118m">
+<link rel="stylesheet" href="styles.css?v=20261118p">
 </head>
 <body data-page="kontakt">
 <main>
@@ -112,9 +112,9 @@
     </div>
   </section>
 </main>
-<script src="config.js?v=20261118m"></script>
-<script src="data.js?v=20261118m"></script>
-<script src="site.js?v=20261118m"></script>
+<script src="config.js?v=20261118p"></script>
+<script src="data.js?v=20261118p"></script>
+<script src="site.js?v=20261118p"></script>
 <script>
 (() => {
   const C = window.CONFIG, { esc } = window.SITE;
@@ -139,6 +139,7 @@
   const pre = [];
   if (q.get('projekt')) pre.push(`Gesehen: ${q.get('projekt')} – so etwas in der Art wünsche ich mir.`);
   if (q.get('rechner')) pre.push(`Aus dem Preisrechner: ${q.get('rechner')}`);
+  if (q.get('paket')) pre.push(q.get('paket'));
   if (q.get('check')) pre.push(q.get('check'));
   if (q.get('frage')) pre.push(`Meine Frage: ${q.get('frage')}`);
   if (pre.length) $('#msg').value = pre.join('\n') + '\n\n';

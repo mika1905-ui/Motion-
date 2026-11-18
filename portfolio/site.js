@@ -20,7 +20,9 @@ const NAV = [
   { href: 'leistungen.html', label: 'Leistungen', key: 'leistungen', flyout: {
       head: 'Leistungen', big: [['leistungen.html#web', 'Web', 'Website · Online-Shop · 3D'], ['leistungen.html#spots', 'Video & Motion', 'Werbespots · Erklär- & Produktvideo'], ['leistungen.html#branding', 'Marke & Social', 'Logo · Branding · Social Media'], ['leistungen.html#chatbots', 'Tools', 'Chatbot · Speisekarte mit QR · Betreuung']],
       small: [['leistungen.html#ablauf', 'So läuft ein Projekt'], ['preise.html', 'Preise ansehen'], ['faq.html', 'Häufige Fragen']] } },
-  { href: 'preise.html', label: 'Preise', key: 'preise' },
+  { href: 'preise.html', label: 'Preise', key: 'preise', flyout: {
+      head: 'Preise', big: [['pakete.html', 'Branchen-Pakete', 'Fertig geschnürt & konfigurierbar'], ['preise.html', 'Alle Preise', 'Startpreise für jede Leistung'], ['preise.html#rechner', 'Preisrechner', 'Was kostet mein Projekt?']],
+      small: (window.BUNDLES || []).map(b => [`pakete.html#${b.id}`, `Paket ${b.name}`]) } },
   { href: 'check.html', label: 'Gratis-Check', key: 'check' },
   { href: 'ueber-mich.html', label: 'Über mich', key: 'ueber' },
   { href: 'karriere.html', label: 'Karriere', key: 'karriere' },
@@ -49,7 +51,7 @@ header.innerHTML = `
 `;
 document.body.prepend(header);
 // mobile menu lives outside the header: the header's backdrop-filter would otherwise clip it to 60 px
-const SUBTXT = { arbeiten: 'Projekte nach Branche', leistungen: 'Spots, Webseiten, Chatbots', preise: 'Pakete & Katalog', check: 'Kostenlos & unverbindlich', ueber: 'Wer dahinter steckt', karriere: 'Jobs & Initiativbewerbung', faq: 'Häufige Fragen', kontakt: 'Anfrage & Termin' };
+const SUBTXT = { arbeiten: 'Projekte nach Branche', leistungen: 'Spots, Webseiten, Chatbots', preise: 'Pakete & Katalog', pakete: 'Fertig für deine Branche', check: 'Kostenlos & unverbindlich', ueber: 'Wer dahinter steckt', karriere: 'Jobs & Initiativbewerbung', faq: 'Häufige Fragen', kontakt: 'Anfrage & Termin' };
 const mnav = document.createElement('div');
 mnav.className = 'mnav'; mnav.hidden = true; mnav.id = 'mnav';
 mnav.setAttribute('role', 'dialog'); mnav.setAttribute('aria-label', 'Menü');
