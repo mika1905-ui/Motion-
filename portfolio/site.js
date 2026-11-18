@@ -18,7 +18,7 @@ const NAV = [
       head: 'Arbeiten nach Branche', big: B.slice(0, 5).map(b => [`arbeiten.html#${b.id}`, b.name, count(b.id) ? `${count(b.id)} Projekt${count(b.id) > 1 ? 'e' : ''}` : 'Demnächst']),
       small: [['arbeiten.html', 'Alle Projekte'], ['arbeiten.html#spots', 'Nur Werbespots'], ['arbeiten.html#web', 'Nur Webseiten'], ['arbeiten.html#bots', 'Nur Chatbots'], ...B.slice(5).map(b => [`arbeiten.html#${b.id}`, b.name])] } },
   { href: 'leistungen.html', label: 'Leistungen', key: 'leistungen', flyout: {
-      head: 'Leistungen', big: [['leistungen.html#spots', 'Werbespots', 'TikTok · Reels · Ads'], ['leistungen.html#web', 'Webseiten', 'Onepager · Firmen-Website · 3D'], ['leistungen.html#chatbots', 'Chatbots', 'FAQ- & KI-Assistenten'], ['leistungen.html#shop', 'Online-Shops', 'Stripe · Shopify'], ['leistungen.html#betreuung', 'Betreuung', 'Hosting · Updates · Content']],
+      head: 'Leistungen', big: [['leistungen.html#web', 'Web', 'Website · Online-Shop · 3D'], ['leistungen.html#spots', 'Video & Motion', 'Werbespots · Erklär- & Produktvideo'], ['leistungen.html#branding', 'Marke & Social', 'Logo · Branding · Social Media'], ['leistungen.html#chatbots', 'Tools', 'Chatbot · Speisekarte mit QR · Betreuung']],
       small: [['leistungen.html#ablauf', 'So läuft ein Projekt'], ['preise.html', 'Preise ansehen'], ['faq.html', 'Häufige Fragen']] } },
   { href: 'preise.html', label: 'Preise', key: 'preise' },
   { href: 'check.html', label: 'Gratis-Check', key: 'check' },

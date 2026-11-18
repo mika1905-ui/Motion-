@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#f6f5f0">
 <link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=20261118b">
+<link rel="stylesheet" href="styles.css?v=20261118c">
 </head>
 <body data-page="preise">
 <main>
@@ -53,9 +53,9 @@
     <p class="price-hint" style="padding:0" data-cfg="vatNote"></p>
   </section>
 </main>
-<script src="config.js?v=20261118b"></script>
-<script src="data.js?v=20261118b"></script>
-<script src="site.js?v=20261118b"></script>
+<script src="config.js?v=20261118c"></script>
+<script src="data.js?v=20261118c"></script>
+<script src="site.js?v=20261118c"></script>
 <script>
 (() => {
   const { esc, euro } = window.SITE;
@@ -82,7 +82,7 @@
 
   // Preisrechner
   const opts = (id, name, list, type = 'radio') => document.getElementById(id).innerHTML = list.map((o, i) => `<label><input type="${type}" name="${name}" value="${i}" ${type === 'radio' && i === 0 ? 'checked' : ''}><span>${esc(o[0])}</span></label>`).join('');
-  const TYPES = [['Werbespots', 249, 449, true], ['Onepager', 690, 1090], ['Website', 1290, 2190], ['3D-Website', 1990, 3490], ['Online-Shop', 2490, 4490], ['Chatbot', 390, 1290], ['Website + Spots', 1990, 2990, true]];
+  const TYPES = [['Werbespots', 249, 449, true], ['Onepager', 690, 1090], ['Website', 1290, 2190], ['3D-Website', 1990, 3490], ['Online-Shop', 2490, 4490], ['Chatbot', 390, 1290], ['Erklärvideo', 690, 1290], ['Produktvideo', 890, 1690], ['Logo', 290, 490], ['Branding-Paket', 690, 1290], ['Social Media', 390, 790, false, 'monat'], ['Speisekarte mit QR', 290, 490], ['Website + Spots', 1990, 2990, true]];
   const SPOTS = [['1', 1], ['3', 3], ['5', 5], ['Monatlich (Abo)', 0]];
   const EXTRAS = [['Chatbot dazu', 290, 590], ['Untertitel', 29, 29], ['Mehr Formate', 39, 78], ['Texte', 99, 290], ['Terminbuchung', 79, 79], ['WhatsApp-Button', 29, 29], ['SEO', 199, 390], ['Mehrsprachig', 290, 590]];
   const TIME = [['Normal', 1], ['Express', 1.3]];
@@ -91,7 +91,7 @@
   const calc = () => {
     const f = new FormData(form), t = TYPES[f.get('t')], s = SPOTS[f.get('s')], z = TIME[f.get('z')];
     const spotsOn = !!t[3]; document.getElementById('cSpots').closest('fieldset').hidden = !spotsOn;
-    let lo = t[1], hi = t[2], abo = false;
+    let lo = t[1], hi = t[2], abo = t[4] === 'monat';
     if (spotsOn) {
       if (s[1] === 0) { abo = true; lo = 690; hi = 990; if (t[0] !== 'Werbespots') { lo += 1290; hi += 2190; } }
       else if (t[0] === 'Werbespots') { lo = t[1] * s[1] * (s[1] >= 5 ? .82 : s[1] >= 3 ? .9 : 1); hi = t[2] * s[1] * (s[1] >= 5 ? .82 : s[1] >= 3 ? .9 : 1); }
