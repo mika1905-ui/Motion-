@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Môme Plage · Cannes · La Croisette</title>
+<meta name="description" content="La Môme Plage – restaurant et plage privée sur la Croisette à Cannes. Cuisine festive et solaire, sushi Midô, transats face à la mer.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f3ece2">
+<link rel="stylesheet" href="../fonts.css">
+<style>
+:root { --cream: #f3ece2; --paper: #faf6f0; --ink: #1c1612; --ink-2: #2a221c; --muted: #75685c; --terra: #d4633e; --terra-d: #b44e2c; --gold: #c19a5b; --line: rgba(28,22,18,.12); --r: 18px; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; }
+body { margin: 0; background: var(--cream); color: var(--ink); font: 400 17px/1.6 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; margin: 0; line-height: .98; letter-spacing: -.015em; }
+.wrap { width: min(1240px, 100% - 40px); margin: 0 auto; }
+.lbl { font-family: 'Bricolage Grotesque', Inter, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--terra); margin: 0 0 16px; }
+.num { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--gold); }
+.btn { display: inline-flex; align-items: center; gap: 10px; border: 0; cursor: pointer; text-decoration: none; padding: 15px 28px; border-radius: 4px; font: 600 13px 'Bricolage Grotesque', Inter, sans-serif; letter-spacing: .16em; text-transform: uppercase; background: var(--ink); color: var(--cream); transition: background .3s, transform .3s; }
+.btn:hover { background: var(--terra); transform: translateY(-2px); }
+.btn.line { background: none; color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.btn.line:hover { background: var(--ink); color: var(--cream); }
+.btn.terra { background: var(--terra); color: #fff; } .btn.terra:hover { background: var(--gold); }
+.arrow { display: inline-block; transition: transform .3s; } .btn:hover .arrow { transform: translateX(4px); }
+
+/* nav */
+.nav { position: fixed; inset: 0 0 auto; z-index: 40; transition: background .4s, box-shadow .4s; }
+.nav.solid { background: rgba(243,236,226,.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+.nav-in { display: flex; align-items: center; gap: 30px; height: 76px; width: min(1320px, 100% - 40px); margin: 0 auto; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand svg { width: 34px; height: 34px; color: var(--terra); }
+.brand b { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 26px; line-height: 1; letter-spacing: .01em; }
+.brand small { display: block; font: 600 9px 'Bricolage Grotesque', sans-serif; letter-spacing: .32em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+.links { display: flex; gap: 28px; margin-left: auto; font: 500 13px 'Bricolage Grotesque', Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+.links a { text-decoration: none; position: relative; } .links a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: var(--terra); transform: scaleX(0); transition: transform .3s; }
+.links a:hover::after { transform: scaleX(1); }
+.lang { border: 0; background: none; color: inherit; font: 600 12px 'Bricolage Grotesque', sans-serif; letter-spacing: .14em; cursor: pointer; padding: 6px; }
+.lang::before { content: '◐ '; color: var(--terra); }
+.burger { display: none; margin-left: auto; width: 44px; height: 44px; border: 0; background: none; cursor: pointer; }
+.burger span { display: block; width: 24px; height: 1.5px; background: var(--ink); margin: 6px auto; }
+
+/* hero: split editorial */
+.hero { min-height: 100vh; min-height: 100svh; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: clamp(30px, 5vw, 80px); width: min(1320px, 100% - 40px); margin: 0 auto; padding: 110px 0 60px; }
+.hero h1 { font-size: clamp(64px, 9.4vw, 158px); }
+.hero h1 span { display: block; }
+.hero h1 em { font-style: italic; color: var(--terra); }
+.hero .lead { font-size: clamp(17px, 1.5vw, 20px); color: var(--muted); max-width: 470px; margin: 26px 0 34px; }
+.hero .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.facts { display: flex; gap: 34px; margin-top: 46px; padding-top: 24px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.facts div { font-size: 13px; color: var(--muted); } .facts b { display: block; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 24px; color: var(--ink); }
+.arch { position: relative; aspect-ratio: 4 / 5.2; border-radius: 999px 999px 10px 10px; overflow: hidden; box-shadow: 0 50px 90px -50px rgba(28,22,18,.6); }
+.arch img { position: absolute; inset: -6% 0 0; width: 100%; height: 112%; object-fit: cover; will-change: translate; }
+.seal { position: absolute; left: -46px; bottom: 70px; width: 132px; height: 132px; color: var(--ink); animation: spin 22s linear infinite; z-index: 2; }
+.seal-wrap { position: relative; }
+@keyframes spin { to { rotate: 360deg; } }
+.ticker { overflow: hidden; border-block: 1px solid var(--line); padding: 16px 0; background: var(--paper); }
+.ticker-in { display: flex; gap: 48px; width: max-content; animation: tick 40s linear infinite; font-family: 'Instrument Serif', serif; font-size: clamp(24px, 3vw, 38px); font-style: italic; white-space: nowrap; }
+.ticker-in span::after { content: '✦'; margin-left: 48px; font-style: normal; font-size: .6em; color: var(--terra); vertical-align: middle; }
+@keyframes tick { to { transform: translateX(-50%); } }
+
+section { scroll-margin-top: 76px; }
+.sec { padding: clamp(80px, 11vw, 150px) 0; }
+
+/* story */
+.story { text-align: center; max-width: 960px; margin: 0 auto; }
+.story h2 { font-size: clamp(40px, 5.2vw, 76px); }
+.story h2 i { color: var(--terra); }
+.story .quote { font-family: 'Instrument Serif', serif; font-style: italic; font-size: clamp(22px, 2.4vw, 32px); line-height: 1.35; margin: 28px auto 20px; max-width: 760px; }
+.story p { color: var(--muted); max-width: 680px; margin: 0 auto; }
+.trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 60px; border-top: 1px solid var(--line); }
+.trio div { padding: 28px 20px 0; border-right: 1px solid var(--line); text-align: left; }
+.trio div:last-child { border-right: 0; }
+.trio b { display: block; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 28px; margin: 6px 0; }
+.trio span { color: var(--muted); font-size: 15px; }
+
+/* day rail */
+.day { background: var(--ink); color: var(--cream); overflow: hidden; }
+.day .lbl { color: var(--gold); }
+.day-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+.day-head h2 { font-size: clamp(40px, 5.2vw, 76px); max-width: 720px; }
+.rail-nav { display: flex; gap: 10px; }
+.rail-nav button { width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(243,236,226,.3); background: none; color: var(--cream); font-size: 20px; cursor: pointer; transition: background .3s; }
+.rail-nav button:hover { background: var(--terra); border-color: var(--terra); }
+.rail { display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-top: 46px; padding: 0 max(20px, calc((100% - 1240px) / 2)) 8px; }
+.rail::-webkit-scrollbar { display: none; }
+.stop { flex: none; width: min(420px, 78vw); scroll-snap-align: start; text-decoration: none; color: inherit; }
+.stop .ph { aspect-ratio: 4 / 5; border-radius: var(--r); overflow: hidden; }
+.stop img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.16,1,.3,1); }
+.stop:hover img { transform: scale(1.05); }
+.stop .meta { display: flex; gap: 14px; align-items: baseline; margin-top: 16px; }
+.stop .meta .num { font-size: 40px; line-height: 1; }
+.stop b { display: block; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 30px; }
+.stop span { color: rgba(243,236,226,.7); font-size: 15px; }
+
+/* menu with sticky side index */
+.carte-top { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end; }
+.carte-top h2 { font-size: clamp(44px, 5.6vw, 84px); }
+.carte-top p { color: var(--muted); margin: 0; }
+.carte-wrap { display: grid; grid-template-columns: 260px 1fr; gap: clamp(30px, 5vw, 70px); margin-top: 50px; align-items: start; }
+.idx { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 2px; }
+.idx button { text-align: left; border: 0; background: none; cursor: pointer; padding: 10px 0 10px 18px; font: 400 22px 'Instrument Serif', serif; color: var(--muted); border-left: 1px solid var(--line); transition: color .25s, border-color .25s, padding .25s; }
+.idx button:hover { color: var(--ink); }
+.idx button.on { color: var(--ink); border-left: 2px solid var(--terra); padding-left: 24px; }
+.panel { background: var(--paper); border-radius: 24px; padding: clamp(24px, 4vw, 50px); min-height: 520px; }
+.panel h3 { font-size: clamp(40px, 4vw, 58px); display: flex; align-items: baseline; gap: 14px; }
+.panel h3 .num { font-size: .5em; }
+.panel .note { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+.dish { display: grid; grid-template-columns: 1fr auto; gap: 2px 18px; padding: 18px 0; border-bottom: 1px solid var(--line); animation: fadeUp .55s both; }
+.dish:last-child { border-bottom: 0; }
+.dish b { font-weight: 600; font-size: 16.5px; }
+.dish .pr { font: 500 15px 'Bricolage Grotesque', Inter, sans-serif; letter-spacing: .04em; color: var(--terra-d); white-space: nowrap; }
+.dish .d { grid-column: 1 / -1; color: var(--muted); font-size: 14.5px; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } }
+.carte-foot { margin-top: 22px; color: var(--muted); font-size: 13px; }
+.chefs { display: flex; gap: 36px; margin-top: 30px; }
+.chefs b { display: block; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 24px; }
+.chefs span { font-size: 13px; color: var(--muted); }
+
+/* midô full-bleed */
+.mido { position: relative; min-height: 80vh; display: flex; align-items: flex-end; color: #fff; overflow: hidden; }
+.mido > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mido::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,14,10,.78), rgba(20,14,10,.1) 70%); }
+.mido-card { position: relative; z-index: 2; max-width: 520px; padding: clamp(40px, 8vw, 100px) 0; }
+.mido h2 { font-size: clamp(48px, 6vw, 92px); }
+.mido p { color: rgba(255,255,255,.82); margin: 18px 0 28px; }
+.mido .lbl { color: var(--gold); }
+
+/* gallery mosaic */
+.mosaic { columns: 3 260px; column-gap: 16px; margin-top: 40px; }
+.mosaic img { width: 100%; margin-bottom: 16px; border-radius: var(--r); break-inside: avoid; }
+
+/* reservation – dark */
+.book { background: var(--ink-2); color: var(--cream); }
+.book .lbl { color: var(--gold); }
+.book-in { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(30px, 6vw, 90px); }
+.book h2 { font-size: clamp(44px, 5.4vw, 80px); }
+.book p { color: rgba(243,236,226,.7); }
+.info { margin-top: 34px; display: grid; gap: 22px; }
+.info div { border-top: 1px solid rgba(243,236,226,.16); padding-top: 14px; }
+.info small { display: block; font: 600 11px 'Bricolage Grotesque', sans-serif; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.info a, .info span { color: var(--cream); text-decoration: none; font-size: 18px; } .info a:hover { color: var(--terra); }
+form.res { display: grid; gap: 18px; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chips label { cursor: pointer; } .chips input { position: absolute; opacity: 0; }
+.chips span { display: inline-block; padding: 11px 18px; border-radius: 4px; border: 1px solid rgba(243,236,226,.3); font: 500 13px 'Bricolage Grotesque', sans-serif; letter-spacing: .1em; text-transform: uppercase; transition: all .2s; }
+.chips input:checked + span { background: var(--terra); border-color: var(--terra); color: #fff; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+label.f { display: flex; flex-direction: column; gap: 6px; font: 600 11px 'Bricolage Grotesque', sans-serif; letter-spacing: .2em; text-transform: uppercase; color: rgba(243,236,226,.7); }
+label.f input, label.f select, label.f textarea { font: 400 17px Inter, sans-serif; letter-spacing: 0; text-transform: none; color: var(--cream); background: transparent; border: 0; border-bottom: 1px solid rgba(243,236,226,.3); border-radius: 0; padding: 10px 0; outline: none; transition: border-color .2s; color-scheme: dark; }
+label.f select option { color: #000; }
+label.f input:focus, label.f select:focus, label.f textarea:focus { border-color: var(--terra); }
+.res .ok { display: none; color: var(--gold); }
+.res.sent .ok { display: block; }
+.small { font-size: 12px; color: rgba(243,236,226,.5); }
+
+footer { background: var(--ink); color: rgba(243,236,226,.7); padding: 60px 0 30px; }
+.f-in { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; }
+footer .brand b { color: var(--cream); font-size: 34px; }
+footer h4 { color: var(--cream); font: 600 11px 'Bricolage Grotesque', sans-serif; letter-spacing: .22em; text-transform: uppercase; margin: 0 0 12px; }
+footer a { text-decoration: none; } footer a:hover { color: var(--terra); }
+.group { margin-top: 44px; padding-top: 22px; border-top: 1px solid rgba(243,236,226,.12); display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font: 500 11px 'Bricolage Grotesque', sans-serif; letter-spacing: .18em; text-transform: uppercase; }
+.made { font-size: 12px; margin-top: 16px; } .made a { color: var(--gold); }
+
+.rv { opacity: 0; transform: translateY(26px); transition: opacity 1s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1); }
+.rv.in { opacity: 1; transform: none; }
+.mnav { position: fixed; inset: 0; z-index: 39; background: var(--cream); display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 90px 28px 40px; opacity: 0; pointer-events: none; transition: opacity .35s; }
+.mnav a { font-family: 'Instrument Serif', serif; font-size: 44px; text-decoration: none; }
+.mnav.open { opacity: 1; pointer-events: auto; }
+
+@media (max-width: 960px) {
+  .links, .nav .btn, .nav .lang { display: none; } .burger { display: block; }
+  .hero { grid-template-columns: 1fr; padding-top: 100px; } .arch { max-width: 520px; } .seal { left: auto; right: -10px; bottom: -30px; width: 104px; height: 104px; }
+  .trio { grid-template-columns: 1fr; } .trio div { border-right: 0; border-bottom: 1px solid var(--line); padding: 20px 0; }
+  .carte-top, .book-in { grid-template-columns: 1fr; }
+  .carte-wrap { grid-template-columns: 1fr; }
+  .idx { position: sticky; top: 76px; z-index: 5; flex-direction: row; overflow-x: auto; scrollbar-width: none; background: var(--cream); padding: 8px 0; gap: 6px; }
+  .idx::-webkit-scrollbar { display: none; }
+  .idx button { flex: none; border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font: 500 14px Inter, sans-serif; }
+  .idx button.on { border: 1px solid var(--ink); background: var(--ink); color: var(--cream); padding-left: 16px; }
+  .f-in { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) { .row { grid-template-columns: 1fr; } .facts { gap: 22px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .rv { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="sun" viewBox="0 0 40 40"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <path d="M8 24a12 12 0 0 1 24 0"/><path d="M20 6v3M9 11l2 2M31 11l-2 2M4 24h3M33 24h3"/>
+    <path d="M4 30c3-2.5 6-2.5 8 0s5 2.5 8 0 5-2.5 8 0 5 2.5 8 0"/><path d="M8 35c3-2 5-2 7 0s5 2 7 0 5-2 7 0"/></g></symbol>
+</defs></svg>
+
+<header class="nav" id="nav"><div class="nav-in">
+  <a class="brand" href="#top" aria-label="La Môme Plage"><svg><use href="#sun"/></svg><span><b>La Môme Plage</b><small>Cannes · Croisette</small></span></a>
+  <nav class="links"><a href="#histoire" data-i18n="nav1">L'histoire</a><a href="#journee" data-i18n="nav2">La plage</a><a href="#carte" data-i18n="nav3">La carte</a><a href="#mido">Midô</a><a href="#reserver" data-i18n="nav5">Infos</a></nav>
+  <button class="lang" id="lang" type="button" aria-label="Langue / Language">EN</button>
+  <a class="btn" href="#reserver"><span data-i18n="book">Réserver</span> <span class="arrow">→</span></a>
+  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span></button>
+</div></header>
+<nav class="mnav" id="mnav"><a href="#histoire" data-i18n="nav1">L'histoire</a><a href="#journee" data-i18n="nav2">La plage</a><a href="#carte" data-i18n="nav3">La carte</a><a href="#mido">Midô</a><a href="#reserver" data-i18n="book">Réserver</a><button class="lang" id="lang2" type="button" style="align-self:flex-start;margin-top:18px">EN</button></nav>
+
+<section class="hero" id="top">
+  <div>
+    <p class="lbl" data-i18n="heroLbl">Restaurant & plage · Cannes</p>
+    <h1><span>La Môme</span><span><em>Plage</em></span></h1>
+    <p class="lead" data-i18n="heroSub">L'âge d'or de la French Riviera, les pieds dans le sable. Une cuisine festive et solaire, face à la Méditerranée.</p>
+    <div class="cta"><a class="btn terra" href="#reserver"><span data-i18n="bookTable">Réserver une table</span> <span class="arrow">→</span></a><a class="btn line" href="#carte" data-i18n="seeMenu">Voir la carte</a></div>
+    <div class="facts"><div><b>Croisette</b><span data-i18n="f1">Face aux îles de Lérins</span></div><div><b data-i18n="f2t">Midi</b><span data-i18n="f2">Tous les jours</span></div><div><b data-i18n="f3t">Soir</b><span data-i18n="f3">En saison</span></div></div>
+  </div>
+  <div class="seal-wrap">
+    <div class="arch"><img id="heroBg" src="img/soir.webp" alt="Le restaurant au coucher du soleil, banquettes rondes sous les parasols"></div>
+    <svg class="seal" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="circ" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><circle cx="60" cy="60" r="58" fill="#f3ece2"/><text font-family="Bricolage Grotesque, Inter, sans-serif" font-size="10.5" font-weight="600" letter-spacing="3.2" fill="currentColor"><textPath href="#circ">LA MÔME PLAGE · CANNES · CROISETTE · </textPath></text><use href="#sun" x="40" y="40" width="40" height="40" style="color:#d4633e"/></svg>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-in"><span>Cuisine festive et solaire</span><span>Les pieds dans le sable</span><span>Sushi Midô</span><span>Coucher de soleil sur la Croisette</span><span>Cuisine festive et solaire</span><span>Les pieds dans le sable</span><span>Sushi Midô</span><span>Coucher de soleil sur la Croisette</span></div></div>
+
+<section class="sec" id="histoire"><div class="wrap">
+  <div class="story rv">
+    <p class="lbl" data-i18n="k1">Notre histoire</p>
+    <h2 data-i18n-html="h1">Inspirée par <i>La Môme Moineau</i>.</h2>
+    <p class="quote" data-i18n="story1">Vendeuse de fleurs dans les nuits parisiennes, chanteuse à l'esprit vif, puis reine des fêtes cannoises : une femme aux mille vies.</p>
+    <p data-i18n="story2">Ses réceptions à la villa Bagatelle étaient légendaires – on y dansait, on y riait, on y vivait. La Môme Plage fait revivre cet esprit : le faste et l'élégance de la Riviera, une cuisine généreuse et un service attentif.</p>
+  </div>
+  <div class="trio rv">
+    <div><span class="num">01</span><b data-i18n="t1">La plage</b><span data-i18n="t1s">Transats, parasols et service les pieds dans le sable.</span></div>
+    <div><span class="num">02</span><b data-i18n="t2">La table</b><span data-i18n="t2s">Mer, grill, pâtes à la truffe et desserts à partager.</span></div>
+    <div><span class="num">03</span><b data-i18n="t3">La soirée</b><span data-i18n="t3s">En saison, dîner face au soleil couchant.</span></div>
+  </div>
+</div></section>
+
+<section class="sec day" id="journee">
+  <div class="wrap day-head"><div><p class="lbl" data-i18n="k2">Une journée à La Môme</p><h2 data-i18n="h2">Du premier café au dernier rosé.</h2></div>
+    <div class="rail-nav"><button type="button" id="prev" aria-label="Précédent">←</button><button type="button" id="next" aria-label="Suivant">→</button></div></div>
+  <div class="rail" id="rail">
+    <a class="stop" href="#reserver"><div class="ph"><img src="img/plage.webp" alt="Transats et parasols sur le sable, mer turquoise" loading="lazy"></div><div class="meta"><span class="num">I</span><div><b data-i18n="m1t">Le sable</b><span data-i18n="m1s">Un transat face aux îles, la mer à deux pas.</span></div></div></a>
+    <a class="stop" href="#carte"><div class="ph"><img src="img/terrasse.webp" alt="Grande table dressée sur la terrasse" loading="lazy"></div><div class="meta"><span class="num">II</span><div><b data-i18n="m2t">Le déjeuner</b><span data-i18n="m2s">Sous les voiles, tous les jours à midi.</span></div></div></a>
+    <a class="stop" href="#mido"><div class="ph"><img src="img/sushi.webp" alt="Rolls et sashimis Midô" loading="lazy"></div><div class="meta"><span class="num">III</span><div><b data-i18n="m3t">Midô</b><span data-i18n="m3s">Sushi et rolls signature au bord de l'eau.</span></div></div></a>
+    <a class="stop" href="#carte"><div class="ph"><img src="img/table.webp" alt="Tagliata de bœuf, frites et tartare sur la table" loading="lazy"></div><div class="meta"><span class="num">IV</span><div><b data-i18n="m5t">Le grill</b><span data-i18n="m5s">Tagliata, tartare au couteau, poisson du jour.</span></div></div></a>
+    <a class="stop" href="#reserver"><div class="ph"><img src="img/soir.webp" alt="Le restaurant le soir" loading="lazy"></div><div class="meta"><span class="num">V</span><div><b data-i18n="m4t">Le coucher du soleil</b><span data-i18n="m4s">En saison, quand la Croisette s'illumine.</span></div></div></a>
+  </div>
+</section>
+
+<section class="sec" id="carte"><div class="wrap">
+  <div class="carte-top rv"><div><p class="lbl" data-i18n="k3">La carte</p><h2 data-i18n="h3">Festive et solaire.</h2></div><div><p data-i18n="carteIntro">Produits de la mer, viandes d'exception, pâtes à la truffe et desserts à partager – la carte de la saison.</p>
+    <div class="chefs"><div><b>Julian Cazalas</b><span data-i18n="chef1">Chef exécutif</span></div><div><b>Anthony Seknazi</b><span data-i18n="chef2">Chef de cuisine</span></div></div></div></div>
+  <div class="carte-wrap">
+    <nav class="idx" id="tabs" aria-label="Catégories"></nav>
+    <div><div class="panel" id="carteList"></div><p class="carte-foot" data-i18n="carteFoot">Prix nets · Service compris · La Môme Plage n'accepte pas les chèques. Carte susceptible d'évoluer selon la saison.</p></div>
+  </div>
+</div></section>
+
+<section class="mido" id="mido"><img src="img/sushi.webp" alt="Assortiment de rolls Midô" loading="lazy">
+  <div class="wrap"><div class="mido-card rv"><p class="lbl">Midô · Cannes</p><h2 data-i18n="midoH">Midô, au bord de l'eau.</h2>
+    <p data-i18n="midoP">L'esprit de la rue Florian s'invite à la plage : nigiris, sashimis et rolls signature – du saumon-avocat au Royal truffe.</p>
+    <a class="btn terra" href="#carte" data-cat="sushi"><span data-i18n="midoBtn">Voir les sushi</span> <span class="arrow">→</span></a></div></div>
+</section>
+
+<section class="sec"><div class="wrap">
+  <p class="lbl" data-i18n="k4">Galerie</p>
+  <div class="mosaic">
+    <img class="rv" src="img/plage.webp" alt="Parasols et transats sur la plage" loading="lazy">
+    <img class="rv" src="img/terrasse-sm.webp" alt="La terrasse" loading="lazy">
+    <img class="rv" src="img/table.webp" alt="Plats sur la table" loading="lazy">
+    <img class="rv" src="img/soir-sm.webp" alt="Le soir" loading="lazy">
+    <img class="rv" src="img/sushi-sm.webp" alt="Sushi Midô" loading="lazy">
+  </div>
+</div></section>
+
+<section class="sec book" id="reserver"><div class="wrap book-in">
+  <div class="rv">
+    <p class="lbl" data-i18n="k5">Réserver</p>
+    <h2 data-i18n="h5">Votre table vous attend.</h2>
+    <p data-i18n="bookP">La Môme Plage accueille sur réservation. Envoyez-nous votre demande, nous vous confirmons rapidement.</p>
+    <div class="info">
+      <div><small data-i18n="adr">Adresse</small><a href="https://www.google.com/maps/search/?api=1&query=La+M%C3%B4me+Plage+Boulevard+de+la+Croisette+Cannes" target="_blank" rel="noopener">Boulevard de la Croisette, 06400 Cannes</a></div>
+      <div><small data-i18n="tel">Téléphone</small><a href="tel:+33493382200">04 93 38 22 00</a></div>
+      <div><small>E-mail</small><a href="mailto:lamomeplage@lamomegroupe.com">lamomeplage@lamomegroupe.com</a></div>
+      <div><small data-i18n="hours">Horaires</small><span data-i18n="hoursTxt">Déjeuner tous les jours · Dîner en saison</span></div>
+    </div>
+  </div>
+  <form class="res rv" id="res" novalidate>
+    <div class="chips" role="radiogroup" aria-label="Service">
+      <label><input type="radio" name="service" value="Déjeuner" checked><span data-i18n="lunch">Déjeuner</span></label>
+      <label><input type="radio" name="service" value="Dîner"><span data-i18n="dinner">Dîner</span></label>
+      <label><input type="radio" name="service" value="Plage"><span data-i18n="beach">Transat plage</span></label>
+    </div>
+    <div class="row"><label class="f"><span data-i18n="date">Date</span><input type="date" name="date" required></label><label class="f"><span data-i18n="time">Heure</span><input type="time" name="heure" value="13:00" required></label></div>
+    <div class="row"><label class="f"><span data-i18n="guests">Personnes</span><select name="personnes"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option value="9+">9+</option></select></label><label class="f"><span data-i18n="name">Nom</span><input name="nom" autocomplete="name" required></label></div>
+    <div class="row"><label class="f"><span data-i18n="tel">Téléphone</span><input name="tel" type="tel" autocomplete="tel" required></label><label class="f"><span>E-mail</span><input name="email" type="email" autocomplete="email" required></label></div>
+    <label class="f"><span data-i18n="msg">Message (allergies, occasion…)</span><textarea name="message" rows="2"></textarea></label>
+    <button class="btn terra" type="submit" style="justify-self:start"><span data-i18n="send">Envoyer la demande</span> <span class="arrow">→</span></button>
+    <p class="ok" data-i18n="ok">Merci ! Votre messagerie s'ouvre avec la demande pré-remplie – il ne reste qu'à l'envoyer.</p>
+    <p class="small" data-i18n="resNote">La réservation est confirmée par l'équipe de La Môme Plage.</p>
+  </form>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="f-in">
+    <div><a class="brand" href="#top"><svg style="color:var(--terra)"><use href="#sun"/></svg><span><b>La Môme Plage</b><small style="color:var(--gold)">Cannes · Croisette</small></span></a><p style="margin-top:16px;max-width:360px" data-i18n="footP">Restaurant et plage privée sur la Croisette, à deux pas du Palais des Festivals.</p></div>
+    <div><h4 data-i18n="contact">Contact</h4>Boulevard de la Croisette<br>06400 Cannes<br><a href="tel:+33493382200">04 93 38 22 00</a><br><a href="mailto:lamomeplage@lamomegroupe.com">lamomeplage@lamomegroupe.com</a></div>
+    <div><h4 data-i18n="explore">Découvrir</h4><a href="#carte" data-i18n="nav3">La carte</a><br><a href="#mido">Midô</a><br><a href="#journee" data-i18n="nav2">La plage</a><br><a href="#reserver" data-i18n="book">Réserver</a></div>
+  </div>
+  <div class="group"><span>La Môme · La Môme Plage · Midô · Môka · La Môme Riviera</span><span>Cannes · Monte Carlo · London · Roquebrune-Cap-Martin</span></div>
+  <p class="made">Website : <a href="../../index.html">Scrollwerk</a></p>
+</div></footer>
+
+<script>
+
+// ─── La carte (saison) – Inhalt aus der Karte „Mi-Octobre“ ─────────────────────
+const MENU = [
+ { id: 'partager', fr: 'À partager', en: 'To share', items: [
+   ['Mini tacos', 27, 'Guacamole, tartare de thon, sésame, pickles de piment, coriandre', 'Guacamole, tuna tartar, sesame, chilli pickles, coriander'],
+   ['La pita à la truffe noire Melanosporum', 26, 'Pain pita grillé, crème de truffe, truffe de saison, copeaux de parmesan', 'Grilled pita, truffle cream, seasonal truffle, Parmesan shavings'],
+   ['Guacamole', 24, 'Avocats, piment d’Espelette, huile d’olive citron vert, coriandre', 'Avocado, Espelette pepper, lime olive oil, coriander'] ] },
+ { id: 'entrees', fr: 'Entrées', en: 'Starters', items: [
+   ['Salade niçoise', 29, 'Romaine, thon, œufs, poivron rouge, olives Taggiasche, fèves, tomates cerises, anchois, oignons', 'Romaine, tuna, eggs, red pepper, Taggiasca olives, broad beans, cherry tomatoes, anchovies, onions'],
+   ['Burrata concassé Méditerranéen', 28, 'Tomate, oignons, coriandre, persil, ail, piment d’Espelette', 'Tomato, onions, coriander, parsley, garlic, Espelette pepper'],
+   ['Artichaut Breton farci aux haricots verts et truffe', 32, 'Roquette, vinaigrette truffe et noisette, truffe noire Melanosporum', 'Rocket, truffle and hazelnut vinaigrette, Melanosporum truffle'],
+   ['Salade César au poulet pané ou aux gambas', '29 / 34', 'Salade, œuf, croûtons, parmesan, sauce césar', 'Salad, egg, croutons, Parmesan, Caesar sauce'],
+   ['Tartare de thon', 34, 'Grenade, pickles de piment, coriandre, lait de coco, feuille de citron, paprika fumé, yuzu, cébette', 'Pomegranate, chilli pickles, coriander, coconut milk, lemon leaf, smoked paprika, yuzu, spring onion'],
+   ['La daurade en ceviche', 31, 'Marinade passion épicée, oignons rouges, avocat, coriandre', 'Spicy passion fruit marinade, red onions, avocado, coriander'],
+   ['Terrine de foie gras de canard aux 4 épices', 32, 'Confiture de figues, brioche toastée', 'Fig jam, toasted brioche'],
+   ['½ douzaine d’huîtres « Gillardeau spéciale n°3 »', 33, '', ''],
+   ['Douzaine d’huîtres « Gillardeau spéciale n°3 »', 66, '', ''] ] },
+ { id: 'poissons', fr: 'Poissons', en: 'Fish', items: [
+   ['Le poulpe fumé', 39, 'Crémeux de pomme de terre à l’ail', 'Creamy garlic potatoes'],
+   ['Thon mi-cuit au sésame', 39, 'En croûte de sésame, sauce secrète', 'Sesame crust, secret sauce'],
+   ['Le calamar encornet snacké à la plancha', 34, 'Pesto rosso, gelée de citron vert', 'Pesto rosso, lime jelly'],
+   ['Sole meunière – env. 550 g', 89, 'Beurre noisette, citron, persil', 'Hazelnut butter, lemon, parsley'],
+   ['Poisson du jour 500 g / 800 g', '18 / 100 g', '', 'Catch of the day'],
+   ['Grosses pièces de poisson d’élevage, 1 kg et plus', '20 / 100 g', 'À partager', 'Farmed fish to share'],
+   ['Grosses pièces de poisson sauvage, 1 kg et plus', '22 / 100 g', 'À partager', 'Wild fish to share'] ] },
+ { id: 'caviar', fr: 'Caviar', en: 'Caviar', note: { fr: 'Caviar « Petrossian » – blinis, œufs mimosa et crème', en: '“Petrossian” caviar – blinis, devilled egg, cream' }, items: [
+   ['Caviar Petrossian 12 g', 60, '', ''], ['Caviar Petrossian 30 g', 150, '', ''], ['Caviar Petrossian 50 g', 250, '', ''], ['Caviar Petrossian 125 g', 650, '', ''] ] },
+ { id: 'viandes', fr: 'Viandes', en: 'Meat', items: [
+   ['Filet de bœuf Simmental au poivre', 45, '', 'Simmental beef fillet, peppercorn sauce'],
+   ['La brochette de filet de bœuf – Allemagne', 45, 'Marinade à la diable, noix de cajou, épices cajun, sauce yaourt à la grecque', 'Devil’s marinade, cashews, cajun spices, Greek yogurt sauce'],
+   ['Filet de veau, sauce morilles crémée – France', 46, '', 'Veal fillet, creamy morel sauce'],
+   ['La Milanaise de poulet, mayonnaise aux herbes', 42, '', 'Chicken Milanese, herb mayonnaise'],
+   ['Carré d’agneau en côtelettes – Irlande/Espagne', 45, 'Croûte de pignons, noisettes et noix', 'Pine nut, hazelnut and walnut crust'],
+   ['Carré d’agneau à partager – Irlande/Espagne', 89, 'Croûte de pignons, noisettes et noix', 'To share'],
+   ['Tagliata de bœuf Black Angus – USA', 45, 'Parmesan, roquette, jus de viande, olives Taggiasche, pignons', 'Parmesan, rocket, gravy, Taggiasca olives, pine nuts'],
+   ['Le tartare de bœuf au couteau à l’italienne', 36, 'Tomates confites, olives, parmesan, pignons, roquette, pesto', 'Confit tomatoes, olives, Parmesan, pine nuts, rocket, pesto'] ],
+   note: { fr: 'Sauces : vierge · jus de viande · morilles · béarnaise · harissa · poivre', en: 'Sauces: vierge · gravy · morel · béarnaise · harissa · pepper' } },
+ { id: 'pates', fr: 'Pâtes & risotto', en: 'Pasta & risotto', items: [
+   ['Rigatoni à la truffe noire Melanosporum', 44, '', 'Melanosporum truffle rigatoni'],
+   ['Risotto aux morilles, foie gras poêlé et figues rôties', 45, '', 'Morel risotto, pan-seared foie gras, roasted figs'],
+   ['Linguine bisque crémée au homard poché', 75, '', 'Creamy bisque, poached lobster'],
+   ['Ravioles aubergines', 39, 'Sauce tomate, stracciatella, citron vert', 'Tomato sauce, stracciatella, lime'],
+   ['Linguine aux fruits de mer', 42, 'Encornets, moules, palourdes, gambas, persillade, sauce tomate', 'Squid, mussels, clams, king prawns, garlic-parsley, tomato sauce'] ] },
+ { id: 'garnitures', fr: 'Garnitures', en: 'Side dishes', items: [
+   ['Riz jasmin au lait de coco et citronnelle', 12, '', ''], ['Pommes allumettes', 12, '', 'French fries'], ['Légumes du jour', 12, '', 'Vegetables of the day'],
+   ['Purée de pommes de terre', 12, '', 'Mashed potato'], ['Salade de sucrine croquante', 12, 'Moutarde à l’ancienne, truffe, noisettes', 'Wholegrain mustard, truffle, hazelnuts'],
+   ['Rigatoni à la truffe noire Melanosporum', 14, '', ''] ] },
+ { id: 'sushi', fr: 'Sushi Midô', en: 'Midô sushi', note: { fr: 'Nigiris & sashimis – 2 pièces · Rolls signature – 8 pièces', en: 'Nigiri & sashimi – 2 pcs · Signature rolls – 8 pcs' }, items: [
+   ['Nigiri / sashimi saumon', 12, '', 'Salmon'], ['Nigiri / sashimi thon', 13, '', 'Tuna'], ['Nigiri / sashimi sériole', 16, '', 'Yellowtail'],
+   ['Roll saumon & avocat', 27, 'Saumon, avocat', 'Salmon, avocado'],
+   ['Roll thon épicé', 31, 'Thon, concombre, shiso, avocat, aïoli épicé, shichimi', 'Tuna, cucumber, shiso, avocado, spicy aioli, shichimi'],
+   ['Roll sériole goma amarillo', 32, 'Sériole, sauce goma amarillo, concombre, shiso, avocat, ciboulette', 'Yellowtail, goma amarillo sauce, cucumber, shiso, avocado, chives'],
+   ['Roll Royal truffe', 32, 'Concombre, épinard, vinaigrette yuzu, avocat, truffe, citron caviar', 'Cucumber, spinach, yuzu vinaigrette, avocado, truffle, finger lime'],
+   ['Roll Royal dragon', 28, 'Crevette tempura, avocat, saumon, aïoli épicé', 'Shrimp tempura, avocado, salmon, spicy aioli'],
+   ['Salade d’épinards · fleur d’avocat nikkei · salade de wakame · riz vinaigré', '10', 'Accompagnements, au choix', 'Sides, each'] ] },
+ { id: 'desserts', fr: 'Desserts', en: 'Desserts', items: [
+   ['Le Sundae', 33, 'Glace fleur de lait, noix de pécan caramélisées, chocolat, caramel au beurre salé', 'Fior di latte ice cream, caramelised pecans, chocolate, salted caramel'],
+   ['Le cookie à partager', 33, 'Cookie pécan-chocolat, glace vanille, caramel au beurre salé', 'Pecan-chocolate cookie, vanilla ice cream, salted caramel'],
+   ['La gaufre', 22, 'Gaufre maison, chantilly vanille, Nutella, caramel salé', 'Homemade waffle, vanilla cream, Nutella, salted caramel'],
+   ['Le moelleux chocolat', 22, 'Cœur coulant, chocolat lacté, glace vanille', 'Molten chocolate, milk chocolate, vanilla ice cream'],
+   ['La tarte mangue', 22, 'Biscuit amande, crème diplomate vanille, fruits exotiques, mangue fraîche', 'Almond biscuit, vanilla diplomat cream, exotic fruits, fresh mango'],
+   ['Les mini beignets à partager', 33, 'Pâte à tartiner, compote de pomme vanillée, confit framboise, caramel salé', 'Chocolate spread, vanilla apple compote, raspberry confit, salted caramel'],
+   ['Assiette de fruits frais', 35, '', 'Fresh fruit plate'],
+   ['Glaces et sorbets – 3 boules', 14, 'Vanille, pistache, fraise, coco, citron, chocolat, mangue, café', 'Vanilla, pistachio, strawberry, coconut, lemon, chocolate, mango, coffee'],
+   ['L’affogato', 12, 'Café, glace vanille ou café', 'Coffee, vanilla or coffee ice cream'],
+   ['Grands fruits givrés à partager', 36, '', 'Seasonal frozen fruit to share'], ['Petits fruits givrés', 22, '', 'Seasonal frozen fruit'],
+   ['Sélection de fromages Mons – Affineur MOF', 28, '', 'Cheese selection, Mons cheese cellar'] ] },
+];
+
+// ─── Übersetzungen ─────────────────────────────────────────────────────────────
+const T = {
+ en: { nav1: 'Our story', nav2: 'The beach', nav3: 'Menu', nav5: 'Info', book: 'Book', bookTable: 'Book a table', seeMenu: 'See the menu',
+   heroSub: 'The golden age of the French Riviera, feet in the sand. Festive, sun-drenched cuisine facing the Mediterranean.',
+   heroInfo: 'Lunch every day · Dinner in season', k1: 'Our story', h1: 'La Môme, <i>a Riviera icon</i>.',
+   story1: 'Flower seller in Parisian nightlife, quick-witted singer, then queen of Cannes parties: La Môme Moineau lived a thousand lives.',
+   story2: 'Her receptions at Villa Bagatelle were legendary – people danced, laughed and lived. La Môme Plage brings that spirit back today: the glamour and elegance of the French Riviera, festive and sunny cuisine, attentive service and the simple feeling of being well.',
+   chef1: 'Executive chef', chef2: 'Head chef', k2: 'A day at La Môme', h2: 'From the first coffee to the last rosé, facing the sea.',
+   m1k: 'The beach', m1t: 'Sunbeds on the sand', m1s: 'Mattresses, parasols and beach service, facing the Lérins islands.',
+   m2k: 'Lunch', m2t: 'The terrace', m2s: 'Set tables under white sails, every day at noon.', m3t: 'Sushi by the sea', m3s: 'Nigiri, sashimi and signature rolls.',
+   m4k: 'Evening', m4t: 'Sunset dinner', m4s: 'In season, when the Croisette lights up.', k3: 'Menu', h3: 'Festive and sunny.',
+   carteIntro: 'Seafood, exceptional meat, truffle pasta and desserts to share – this season’s menu.',
+   carteFoot: 'Net prices · Service included · La Môme Plage does not accept cheques. Menu may change with the season.',
+   midoH: 'Midô, by the water.', midoP: 'The spirit of rue Florian comes to the beach: nigiri, sashimi and signature rolls – from salmon-avocado to Royal truffle.', midoBtn: 'See the sushi',
+   k4: 'Gallery', k5: 'Book', h5: 'Your table is waiting.', bookP: 'La Môme Plage welcomes guests by reservation. Send us your request and we will confirm quickly.',
+   adr: 'Address', tel: 'Phone', hours: 'Opening hours', hoursTxt: 'Lunch every day · Dinner in season', lunch: 'Lunch', dinner: 'Dinner', beach: 'Beach sunbed',
+   date: 'Date', time: 'Time', guests: 'Guests', name: 'Name', msg: 'Message (allergies, occasion…)', send: 'Send request',
+   ok: 'Thank you! Your mail app opens with the request pre-filled – just press send.', resNote: 'Reservations are confirmed by the La Môme Plage team.',
+   footP: 'Restaurant and private beach on the Croisette, steps from the Palais des Festivals.', contact: 'Contact', explore: 'Explore',
+   heroLbl: 'Restaurant & beach · Cannes', f1: 'Facing the Lérins islands', f2t: 'Lunch', f2: 'Every day', f3t: 'Evening', f3: 'In season',
+   t1: 'The beach', t1s: 'Sunbeds, parasols and service with your feet in the sand.', t2: 'The table', t2s: 'Seafood, grill, truffle pasta and desserts to share.',
+   t3: 'The evening', t3s: 'In season, dinner facing the sunset.', m5t: 'The grill', m5s: 'Tagliata, hand-cut tartare, catch of the day.' } };
+Object.assign(T.en, { h1: 'Inspired by <i>La Môme Moineau</i>.', story1: 'Flower seller in Parisian nightlife, quick-witted singer, then queen of Cannes parties: a woman of a thousand lives.',
+  story2: 'Her receptions at Villa Bagatelle were legendary – people danced, laughed and lived. La Môme Plage brings that spirit back: Riviera glamour and elegance, generous cuisine and attentive service.',
+  h2: 'From the first coffee to the last rosé.', m1t: 'The sand', m1s: 'A sunbed facing the islands, the sea a few steps away.', m2t: 'Lunch', m2s: 'Under the sails, every day at noon.',
+  m3t: 'Midô', m3s: 'Sushi and signature rolls by the water.', m4t: 'Sunset', m4s: 'In season, when the Croisette lights up.' });
+const FR = {};
+let lang = 'fr', cat = 'partager';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+$$('[data-i18n]').forEach(e => FR[e.dataset.i18n] = e.textContent);
+$$('[data-i18n-html]').forEach(e => FR[e.dataset.i18nHtml] = e.innerHTML);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const price = p => typeof p === 'number' ? p + ' €' : p + ' €';
+
+function renderMenu() {
+  $('#tabs').innerHTML = MENU.map(c => `<button type="button" data-c="${c.id}" class="${c.id === cat ? 'on' : ''}">${esc(c[lang])}</button>`).join('');
+  const ci = MENU.findIndex(x => x.id === cat), c = MENU[ci];
+  $('#carteList').innerHTML = `<h3>${esc(c[lang])} <span class="num">${String(ci + 1).padStart(2, '0')}</span></h3>` + (c.note ? `<p class="note">${esc(c.note[lang])}</p>` : '') +
+    c.items.map(([n, p, dfr, den], i) => `<div class="dish" style="animation-delay:${i * 35}ms"><b>${esc(n)}</b><span class="pr">${esc(price(p))}</span>${(lang === 'en' ? den : dfr) ? `<span class="d">${esc(lang === 'en' ? den : dfr)}</span>` : ''}</div>`).join('');
+}
+function setLang(l) {
+  lang = l; document.documentElement.lang = l;
+  $$('[data-i18n]').forEach(e => { const k = e.dataset.i18n; e.textContent = l === 'fr' ? FR[k] : (T.en[k] || FR[k]); });
+  $$('[data-i18n-html]').forEach(e => { const k = e.dataset.i18nHtml; e.innerHTML = l === 'fr' ? FR[k] : (T.en[k] || FR[k]); });
+  ['#lang', '#lang2'].forEach(s => $(s).textContent = l === 'fr' ? 'EN' : 'FR');
+  renderMenu();
+}
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; cat = b.dataset.c; renderMenu();
+  if (innerWidth < 960) { const t = $('#carteList').getBoundingClientRect().top + scrollY - 140; if (scrollY > t) scrollTo({ top: t, behavior: 'smooth' }); } });
+$$('[data-cat]').forEach(a => a.addEventListener('click', () => { cat = a.dataset.cat; renderMenu(); }));
+['#lang', '#lang2'].forEach(s => $(s).addEventListener('click', () => setLang(lang === 'fr' ? 'en' : 'fr')));
+renderMenu();
+
+// nav, mobile menu, reveal, hero parallax
+const nav = $('#nav'), bg = $('#heroBg');
+const rail = $('#rail'); const stepR = d => rail.scrollBy({ left: d * (rail.querySelector('.stop').offsetWidth + 22), behavior: 'smooth' });
+$('#prev').addEventListener('click', () => stepR(-1)); $('#next').addEventListener('click', () => stepR(1));
+let tick = false;
+addEventListener('scroll', () => { if (tick) return; tick = true; requestAnimationFrame(() => { tick = false; nav.classList.toggle('solid', scrollY > 40); if (scrollY < innerHeight) bg.style.translate = `0 ${scrollY * 0.08}px`; }); }, { passive: true });
+$('#burger').addEventListener('click', () => { const o = !$('#mnav').classList.contains('open'); $('#mnav').classList.toggle('open', o); document.body.classList.toggle('menu-open', o); });
+$('#mnav').addEventListener('click', e => { if (e.target.closest('a')) { $('#mnav').classList.remove('open'); document.body.classList.remove('menu-open'); } });
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+$$('.rv').forEach(el => io.observe(el));
+
+// reservation request → pre-filled e-mail
+const form = $('#res');
+form.date.min = new Date().toISOString().slice(0, 10);
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!form.reportValidity()) return;
+  const d = Object.fromEntries(new FormData(form));
+  const body = `Demande de réservation – La Môme Plage\n\nService : ${d.service}\nDate : ${d.date}\nHeure : ${d.heure}\nPersonnes : ${d.personnes}\nNom : ${d.nom}\nTéléphone : ${d.tel}\nE-mail : ${d.email}\n\n${d.message || ''}`;
+  location.href = `mailto:lamomeplage@lamomegroupe.com?subject=${encodeURIComponent(`Réservation ${d.date} · ${d.personnes} pers. · ${d.service}`)}&body=${encodeURIComponent(body)}`;
+  form.classList.add('sent');
+});
+
+</script>
+</body>
+</html>
