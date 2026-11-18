@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Café Weidenhof · Speisekarte (Demo)</title>
+<meta name="description" content="Demo einer digitalen Speisekarte mit QR-Code – gebaut von FLUXE Studio. Fiktives Café.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f4efe6">
+<link rel="stylesheet" href="../fonts.css">
+<style>
+:root { --bg: #f4efe6; --card: #fffdf8; --ink: #23201b; --muted: #7a7166; --line: rgba(35,32,27,.1); --acc: #b4532a; --acc-2: #2f5d50; --r: 18px; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.5 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+.demo { background: #23201b; color: #f4efe6; font-size: 12px; text-align: center; padding: 7px 12px; }
+.demo a { color: #f4c9a8; font-weight: 600; }
+header.top { padding: 30px 20px 10px; text-align: center; max-width: 720px; margin: 0 auto; }
+.logo { font: 400 46px/1 'Instrument Serif', serif; letter-spacing: -.01em; }
+.logo i { color: var(--acc); }
+.tag { color: var(--muted); font-size: 14px; margin: 8px 0 0; }
+.info { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.info span { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: 13px; }
+.open { color: var(--acc-2); font-weight: 600; }
+.bar { position: sticky; top: 0; z-index: 5; background: rgba(244,239,230,.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.bar-in { max-width: 720px; margin: 0 auto; padding: 10px 16px 8px; }
+.row { display: flex; gap: 8px; align-items: center; }
+.search { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; }
+.search input { border: 0; background: none; font: inherit; flex: 1; min-width: 0; outline: none; color: var(--ink); }
+.lang { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 9px 12px; font: 600 13px Inter, sans-serif; cursor: pointer; color: var(--ink); }
+.cats { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin-top: 10px; padding-bottom: 2px; }
+.cats::-webkit-scrollbar { display: none; }
+.cats a, .filters button { flex: none; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 7px 13px; font-size: 14px; white-space: nowrap; color: var(--ink); text-decoration: none; cursor: pointer; font-family: inherit; }
+.cats a.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.filters { display: flex; gap: 6px; margin-top: 8px; overflow-x: auto; scrollbar-width: none; }
+.filters button.on { background: var(--acc-2); color: #fff; border-color: var(--acc-2); }
+main { max-width: 720px; margin: 0 auto; padding: 8px 16px 60px; }
+.hl { margin: 18px 0 6px; padding: 18px; border-radius: var(--r); background: linear-gradient(135deg, #b4532a, #d98a4e); color: #fff8f0; display: flex; gap: 14px; align-items: center; }
+.hl b { font: 400 26px/1.05 'Instrument Serif', serif; display: block; }
+.hl small { opacity: .9; }
+.hl .p { margin-left: auto; font-weight: 700; font-size: 18px; white-space: nowrap; }
+section { scroll-margin-top: 150px; }
+h2 { font: 400 34px/1 'Instrument Serif', serif; margin: 30px 0 4px; }
+h2 + p { color: var(--muted); font-size: 14px; margin: 0 0 10px; }
+.item { display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); }
+.item b { font-weight: 600; }
+.item .d { grid-column: 1; color: var(--muted); font-size: 14px; }
+.item .pr { font-weight: 700; white-space: nowrap; }
+.badges { display: inline-flex; gap: 4px; margin-left: 6px; vertical-align: 1px; }
+.badges i { font-style: normal; font-size: 11px; font-weight: 700; border-radius: 6px; padding: 1px 6px; }
+.v { background: #e3efe2; color: #2f5d50; } .vg { background: #2f5d50; color: #fff; } .new { background: #f7dfcf; color: #b4532a; }
+.al { grid-column: 1 / -1; font-size: 12px; color: #a0968a; }
+.empty { color: var(--muted); text-align: center; padding: 40px 0; }
+footer { max-width: 720px; margin: 0 auto; padding: 24px 16px 50px; color: var(--muted); font-size: 13px; }
+footer h3 { font: 400 24px 'Instrument Serif', serif; color: var(--ink); margin: 0 0 6px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 10px 0 16px; }
+.made { margin-top: 20px; padding: 14px 16px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); color: var(--ink); }
+.made a { color: var(--acc); font-weight: 700; }
+mark { background: #f7dfcf; color: inherit; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="demo">Demo-Speisekarte von <a href="../../leistungen.html#speisekarte">FLUXE Studio</a> · fiktives Café, keine echten Preise</div>
+
+<header class="top">
+  <div class="logo">Café <i>Weidenhof</i></div>
+  <p class="tag" data-de="Frühstück · Kuchen · Kaffee aus der eigenen Rösterei" data-en="Breakfast · Cakes · Coffee from our own roastery">Frühstück · Kuchen · Kaffee aus der eigenen Rösterei</p>
+  <div class="info"><span class="open" id="open">● Heute geöffnet</span><span data-de="Mo–Sa 8–18 · So 9–17" data-en="Mon–Sat 8–6 · Sun 9–5">Mo–Sa 8–18 · So 9–17</span><span>WLAN: Weidenhof-Gast</span></div>
+</header>
+
+<div class="bar"><div class="bar-in">
+  <div class="row">
+    <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Suchen, z. B. Latte, vegan …" aria-label="Speisekarte durchsuchen"></label>
+    <button class="lang" id="lang" type="button" aria-label="Sprache wechseln">EN</button>
+  </div>
+  <nav class="cats" id="cats" aria-label="Kategorien"></nav>
+  <div class="filters" id="filters"></div>
+</div></div>
+
+<main id="menu"></main>
+
+<footer>
+  <h3 data-de="Allergene &amp; Hinweise" data-en="Allergens &amp; notes">Allergene &amp; Hinweise</h3>
+  <div class="legend"><span><span class="badges"><i class="v">V</i></span> <span data-de="vegetarisch" data-en="vegetarian">vegetarisch</span></span><span><span class="badges"><i class="vg">VG</i></span> <span data-de="vegan" data-en="vegan">vegan</span></span><span><span class="badges"><i class="new">NEU</i></span> <span data-de="neu auf der Karte" data-en="new on the menu">neu auf der Karte</span></span></div>
+  <p data-de="A Gluten · C Eier · F Soja · G Milch · H Schalenfrüchte · L Sellerie · N Sesam. Alle Preise in Euro inkl. MwSt. Bei Fragen zu Allergenen sprich uns gern an." data-en="A gluten · C eggs · F soy · G milk · H nuts · L celery · N sesame. All prices in euros incl. VAT. Please ask us about allergens.">A Gluten · C Eier · F Soja · G Milch · H Schalenfrüchte · L Sellerie · N Sesam. Alle Preise in Euro inkl. MwSt. Bei Fragen zu Allergenen sprich uns gern an.</p>
+  <div class="made" data-de="Diese Speisekarte ist eine Demo von &lt;a href=&quot;../../leistungen.html#speisekarte&quot;&gt;FLUXE Studio&lt;/a&gt; – QR-Code auf den Tisch, Gäste scannen, fertig. Preise und Gerichte ändern ohne Neudruck." data-en="This menu is a demo by &lt;a href=&quot;../../leistungen.html#speisekarte&quot;&gt;FLUXE Studio&lt;/a&gt; – QR code on the table, guests scan, done. Change dishes and prices without reprinting.">Diese Speisekarte ist eine Demo von <a href="../../leistungen.html#speisekarte">FLUXE Studio</a> – QR-Code auf den Tisch, Gäste scannen, fertig. Preise und Gerichte ändern ohne Neudruck.</div>
+</footer>
+
+<script>
+// Inhalte: in einer einfachen Liste gepflegt – neue Gerichte oder Preise hier ändern, fertig.
+const MENU = [
+  { id: 'kaffee', de: 'Kaffee', en: 'Coffee', note: { de: 'Bohnen aus der eigenen Rösterei · Hafermilch +0,40 €', en: 'Beans from our own roastery · oat milk +0.40 €' }, items: [
+    ['Espresso', 'Espresso', 'Kräftig, nussig, kleine Crema', 'Bold, nutty, small crema', 2.4, 'vg', ''],
+    ['Cappuccino', 'Cappuccino', 'Espresso, Milchschaum', 'Espresso, milk foam', 3.6, 'v', 'G'],
+    ['Flat White', 'Flat White', 'Doppelter Espresso, wenig samtige Milch', 'Double espresso, a little velvety milk', 3.9, 'v', 'G'],
+    ['Latte Macchiato', 'Latte Macchiato', 'Viel Milch, ein Schuss Espresso', 'Lots of milk, a shot of espresso', 3.9, 'v', 'G'],
+    ['Iced Oat Latte', 'Iced Oat Latte', 'Espresso auf Eis mit Hafermilch', 'Espresso on ice with oat milk', 4.5, 'vg', 'A', true],
+  ] },
+  { id: 'fruehstueck', de: 'Frühstück', en: 'Breakfast', note: { de: 'Bis 14 Uhr, sonntags bis 15 Uhr', en: 'Until 2 pm, Sundays until 3 pm' }, items: [
+    ['Weidenhof-Frühstück', 'Weidenhof breakfast', 'Zwei Brötchen, Butter, Käse, Schinken, Ei, Marmelade', 'Two rolls, butter, cheese, ham, egg, jam', 12.9, '', 'A,C,G'],
+    ['Avocado-Toast', 'Avocado toast', 'Sauerteigbrot, Avocado, Chili, pochiertes Ei', 'Sourdough, avocado, chili, poached egg', 10.5, 'v', 'A,C'],
+    ['Overnight Oats', 'Overnight oats', 'Hafer, Mandeldrink, Beeren, Granola', 'Oats, almond drink, berries, granola', 7.9, 'vg', 'A,H'],
+    ['Shakshuka', 'Shakshuka', 'Tomaten-Paprika-Sugo, zwei Eier, Feta, Brot', 'Tomato pepper sauce, two eggs, feta, bread', 11.9, 'v', 'A,C,G', true],
+  ] },
+  { id: 'kuchen', de: 'Kuchen', en: 'Cakes', note: { de: 'Täglich frisch aus unserer Backstube', en: 'Fresh from our bakery every day' }, items: [
+    ['Käsekuchen', 'Cheesecake', 'Nach Omas Rezept, mit Mürbeteig', 'Grandma’s recipe, shortcrust base', 4.2, 'v', 'A,C,G'],
+    ['Zimtschnecke', 'Cinnamon roll', 'Hefeteig, Zimt, Frischkäse-Glasur', 'Yeast dough, cinnamon, cream cheese glaze', 3.8, 'v', 'A,C,G'],
+    ['Schoko-Tarte', 'Chocolate tart', 'Zartbitter, Meersalz, vegan', 'Dark chocolate, sea salt, vegan', 4.6, 'vg', 'A,F,H'],
+  ] },
+  { id: 'mittag', de: 'Mittag', en: 'Lunch', note: { de: 'Mo–Fr 11:30–15 Uhr', en: 'Mon–Fri 11:30 am – 3 pm' }, items: [
+    ['Tagessuppe', 'Soup of the day', 'Frag uns nach der Suppe des Tages – mit Brot', 'Ask for today’s soup – with bread', 6.9, 'vg', 'A,L'],
+    ['Bowl „Weidenhof“', '“Weidenhof” bowl', 'Quinoa, Ofengemüse, Hummus, Sesam', 'Quinoa, roasted vegetables, hummus, sesame', 12.5, 'vg', 'N'],
+    ['Club Sandwich', 'Club sandwich', 'Hähnchen, Bacon, Salat, Tomate, Aioli', 'Chicken, bacon, lettuce, tomato, aioli', 11.5, '', 'A,C'],
+  ] },
+  { id: 'kalt', de: 'Kalte Getränke', en: 'Cold drinks', note: { de: '', en: '' }, items: [
+    ['Hausgemachte Limonade', 'Homemade lemonade', 'Zitrone-Minze oder Holunder', 'Lemon-mint or elderflower', 4.2, 'vg', ''],
+    ['Apfelschorle', 'Apple spritzer', 'Aus regionalem Apfelsaft · 0,4 l', 'Regional apple juice · 0.4 l', 3.6, 'vg', ''],
+    ['Iced Matcha', 'Iced matcha', 'Matcha, Hafermilch, Eis', 'Matcha, oat milk, ice', 4.9, 'vg', 'A'],
+  ] },
+];
+const SPECIAL = { de: ['Empfehlung heute', 'Shakshuka mit Feta', 'Mit frischem Brot aus dem Ofen'], en: ['Today’s pick', 'Shakshuka with feta', 'With bread fresh from the oven'], price: 11.9 };
+
+let lang = 'de', filter = 'all', q = '';
+const $ = s => document.querySelector(s);
+const eur = n => n.toFixed(2).replace('.', lang === 'de' ? ',' : '.') + ' €';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const FIL = [['all', 'Alle', 'All'], ['v', 'Vegetarisch', 'Vegetarian'], ['vg', 'Vegan', 'Vegan']];
+
+function render() {
+  const t = (de, en) => lang === 'de' ? de : en;
+  $('#filters').innerHTML = FIL.map(([k, de, en]) => `<button type="button" data-f="${k}" class="${filter === k ? 'on' : ''}">${t(de, en)}</button>`).join('');
+  const qq = q.trim().toLowerCase();
+  const hit = it => {
+    if (filter === 'vg' && it[5] !== 'vg') return false;
+    if (filter === 'v' && !['v', 'vg'].includes(it[5])) return false;
+    return !qq || [it[0], it[1], it[2], it[3]].join(' ').toLowerCase().includes(qq);
+  };
+  const mark = s => qq ? esc(s).replace(new RegExp('(' + qq.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'), '<mark>$1</mark>') : esc(s);
+  const secs = MENU.map(c => ({ c, items: c.items.filter(hit) })).filter(x => x.items.length);
+  $('#cats').innerHTML = secs.map(({ c }) => `<a href="#${c.id}" data-c="${c.id}">${t(c.de, c.en)}</a>`).join('');
+  const sp = SPECIAL[lang];
+  $('#menu').innerHTML = (!qq && filter === 'all' ? `<div class="hl"><div><small>${esc(sp[0])}</small><b>${esc(sp[1])}</b><small>${esc(sp[2])}</small></div><span class="p">${eur(SPECIAL.price)}</span></div>` : '') +
+    (secs.length ? secs.map(({ c, items }) => `<section id="${c.id}"><h2>${t(c.de, c.en)}</h2>${c.note[lang] ? `<p>${esc(c.note[lang])}</p>` : ''}
+      ${items.map(it => `<div class="item"><b>${mark(t(it[0], it[1]))}<span class="badges">${it[5] === 'vg' ? '<i class="vg">VG</i>' : it[5] === 'v' ? '<i class="v">V</i>' : ''}${it[7] ? `<i class="new">${t('NEU', 'NEW')}</i>` : ''}</span></b>
+        <span class="pr">${eur(it[4])}</span><span class="d">${mark(t(it[2], it[3]))}</span>${it[6] ? `<span class="al">${t('Allergene', 'Allergens')}: ${esc(it[6])}</span>` : ''}</div>`).join('')}</section>`).join('')
+      : `<p class="empty">${t('Nichts gefunden – probier ein anderes Wort.', 'Nothing found – try another word.')}</p>`);
+  document.querySelectorAll('[data-de]').forEach(el => { const v = el.dataset[lang]; if (v.includes('<a ')) el.innerHTML = v; else el.textContent = v; });
+  $('#q').placeholder = t('Suchen, z. B. Latte, vegan …', 'Search, e.g. latte, vegan …');
+  $('#lang').textContent = lang === 'de' ? 'EN' : 'DE';
+  document.documentElement.lang = lang;
+  spy();
+}
+// aktive Kategorie beim Scrollen hervorheben
+let io;
+function spy() {
+  io && io.disconnect();
+  io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.querySelectorAll('#cats a').forEach(a => a.classList.toggle('on', a.dataset.c === e.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
+  document.querySelectorAll('#menu section').forEach(s => io.observe(s));
+  const first = document.querySelector('#cats a'); first && first.classList.add('on');
+}
+// geöffnet / geschlossen nach Uhrzeit
+(() => { const d = new Date(), h = d.getHours() + d.getMinutes() / 60, sun = d.getDay() === 0; const op = sun ? h >= 9 && h < 17 : h >= 8 && h < 18;
+  const el = $('#open'); el.dataset.de = op ? '● Jetzt geöffnet' : '● Gerade geschlossen'; el.dataset.en = op ? '● Open now' : '● Closed right now'; if (!op) el.style.color = '#b4532a'; })();
+$('#q').addEventListener('input', e => { q = e.target.value; render(); });
+$('#filters').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { filter = b.dataset.f; render(); } });
+$('#lang').addEventListener('click', () => { lang = lang === 'de' ? 'en' : 'de'; render(); });
+render();
+</script>
+</body>
+</html>

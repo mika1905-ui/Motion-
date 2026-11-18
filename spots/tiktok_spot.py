@@ -36,13 +36,25 @@ def load(p):
 
 # ── timeline (beats) ───────────────────────────────────────────────────────────
 B = BEAT
-HOOK_END = 4 * B            # 1.875
-DROP = 6 * B                # 2.8125
+# Beat grid: own 128-BPM beat by default, or an external sound (FLUXE_GRID = json with beats/audio/plan)
+GRID = json.load(open(os.environ['FLUXE_GRID'])) if os.environ.get('FLUXE_GRID') else None
+if GRID:
+    BEATS = GRID['beats']; B = float(np.median(np.diff(BEATS)))
+    PLAN = GRID['plan']
+else:
+    BEATS = [i * B for i in range(400)]
+    PLAN = {'hook': 4, 'trans': 2, 'hook_steps': [0, 2, 3], 'shots': [5, 5, 4, 3, 6, 1, 1, 1, 1, 1, 1, 6], 'end': 7}
+bt = lambda i: BEATS[min(i, len(BEATS) - 1)] if i < len(BEATS) else BEATS[-1] + (i - len(BEATS) + 1) * B
+HOOK_I = PLAN['hook']; DROP_I = HOOK_I + PLAN['trans']
+HOOK_END = bt(HOOK_I)
+DROP = bt(DROP_I)
+HOOK_STEPS = [bt(i) if i else 0.0 for i in PLAN['hook_steps']]
 shots = []                  # (start, end, kind, data)
-t = DROP
-def shot(nbeats, kind, **d):
-    global t
-    shots.append((t, t + nbeats * B, kind, d)); t += nbeats * B
+_bi = DROP_I
+_plan = iter(PLAN['shots'])
+def shot(_unused, kind, **d):
+    global _bi
+    n = next(_plan); shots.append((bt(_bi), bt(_bi + n), kind, d)); _bi += n
 shot(5, 'clip', name='vestier', tag='IMMOBILIEN', cap=[('Luxus-Makler', None), ('Website', LIME)], speed=1.0)
 shot(5, 'clip', name='beschte', tag='HANDWERK', cap=[('Elektro-Meister', None), ('mit Chatbot', LIME)], speed=1.0)
 shot(4, 'clip', name='redbull', tag='3D-PRODUKTSEITE', cap=[('Echte Dose.', None), ('In 3D.', LIME)], spec=True, speed=1.0)
@@ -51,8 +63,9 @@ shot(6, 'clip', name='redtray', tag='3D-PRODUKTSEITE', cap=[('24 Dosen.', None),
 for nm, label in [('katerkit', 'ONLINE-SHOP'), ('aurene', 'PARFUM-SHOP'), ('schwarzstich', 'TATTOO-STUDIO'), ('lumyx', 'SAAS · PRAXIS'), ('kryo', '3D-SHOP'), ('pablo', 'REBRAND')]:
     shot(1, 'clip', name=nm, tag=label, cap=[('Shops. Marken.', None), ('Studios.', LIME)], speed=1.0, montage=True)
 shot(6, 'clip', name='chat', tag='CHATBOT', cap=[('Antwortet', None), ('um 3 Uhr nachts.', LIME)], speed=0.72, skip=0, inset=True)
-END = t
-TOTAL = END + 7 * B
+END = shots[-1][1]
+END_I = _bi
+TOTAL = GRID['dur'] if GRID else END + PLAN['end'] * B
 CUTS = [s[0] for s in shots] + [END]
 
 # ── helpers ────────────────────────────────────────────────────────────────────
@@ -160,7 +173,7 @@ def render(t):
         # desaturate/darken a bit so the caption pops
         img = Image.blend(img, Image.new('RGB', img.size, (20, 20, 24)), 0.35).convert('RGBA')
         sh = 0
-        steps = [(0.0, ('Deine Website', None)), (2 * B, ('sieht aus wie', None)), (3 * B, ('2009?', (255, 80, 80)))]
+        steps = [(HOOK_STEPS[0], ('Deine Website', None)), (HOOK_STEPS[1], ('sieht aus wie', None)), (HOOK_STEPS[2], ('2009?', (255, 80, 80)))]
         lines = [l for (st, l) in steps if t >= st]
         lay = cached_text(('hook', len(lines)), lines, size=128)
         last = max(st for st, _ in steps if t >= st)
@@ -168,8 +181,8 @@ def render(t):
         sc = 0.8 + 0.2 * ease_back(p)
         if t - last < 0.12: sh = int(14 * (1 - (t - last) / 0.12))
         paste_scaled(img, lay, W / 2 + (np.sin(t * 90) * sh), 700, sc)
-        if t > 3 * B:
-            e = emoji('💀', 150); q = min(1, (t - 3 * B) / 0.2)
+        if t > HOOK_STEPS[2]:
+            e = emoji('💀', 150); q = min(1, (t - HOOK_STEPS[2]) / 0.2)
             paste_scaled(img, e, W / 2, 1040, 0.6 + 0.4 * ease_back(q), q)
         return img.convert('RGB')
 
@@ -262,7 +275,7 @@ def render(t):
     paste_scaled(img, lg, W / 2, 470, 0.85 + 0.15 * ease_back(p), p)
     rows = [('Websites', 'ab 690 €'), ('Werbespots', 'ab 249 €'), ('Chatbots', 'ab 390 €')]
     for k, (a, b2) in enumerate(rows):
-        st = 0.5 + k * B
+        st = bt(END_I + 1 + k) - END
         if lt < st: continue
         q = min(1, (lt - st) / 0.2)
         key = ('row', a)
@@ -274,7 +287,7 @@ def render(t):
             d.text((856, 55), b2, font=fb, fill=LIME + (255,), anchor='rm')
             _tc[key] = im
         paste_scaled(img, _tc[key], W / 2 + 60 * (1 - ease_out(q)), 800 + k * 140, 1.0, q)
-    st = 0.5 + 3 * B
+    st = bt(END_I + 4) - END
     if lt >= st:
         q = min(1, (lt - st) / 0.25)
         pulse = 1 + 0.035 * np.sin((lt - st) * 2 * np.pi / (2 * B))
@@ -289,9 +302,13 @@ def render(t):
 
 if __name__ == '__main__':
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    wav = os.path.join(FR, 'tiktok.wav')
-    subprocess.run([sys.executable, os.path.join(HERE, 'tiktok_music.py'), json.dumps(
-        {'dur': TOTAL, 'drop': DROP, 'cuts': CUTS[1:], 'end': END, 'out': wav})], check=True)
+    if GRID:
+        wav = GRID['audio']
+        OUT = GRID.get('out', OUT)
+    else:
+        wav = os.path.join(FR, 'tiktok.wav')
+        subprocess.run([sys.executable, os.path.join(HERE, 'tiktok_music.py'), json.dumps(
+            {'dur': TOTAL, 'drop': DROP, 'cuts': CUTS[1:], 'end': END, 'out': wav})], check=True)
     n = int(round(TOTAL * FPS))
     ff = subprocess.Popen(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS), '-i', '-',
                            '-i', wav, '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p', '-profile:v', 'high',

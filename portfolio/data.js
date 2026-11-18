@@ -24,6 +24,10 @@ window.PROJECTS = [
     live: 'projekte/beschte/', images: ['img/beschte-1.webp', 'img/beschte-2.webp', 'img/beschte-3.webp'], mobile: 'img/beschte-mobile.webp',
     text: 'Website für einen Elektro-Meisterbetrieb: 24/7-Notdienst prominent, neun Leistungsbereiche von Photovoltaik bis Wallbox, Karriere mit Stellen und 2-Minuten-Bewerbung, FAQ, Anfrageformular und Chat-Assistent „Volti“, der Anfragen Schritt für Schritt aufnimmt.',
     tags: ['Handwerk', 'Chatbot', 'Karriere & Bewerbung', 'Anfrageformular'], note: 'Kontaktdaten in dieser Vorschau durch Platzhalter ersetzt.' },
+  { id: 'speisekarte', kind: 'web', branche: 'gastro', title: 'Café Weidenhof', sub: 'Digitale Speisekarte mit QR-Code', color: '#b4532a',
+    live: 'projekte/speisekarte/', images: ['img/speisekarte-2.webp', 'img/speisekarte-1.webp', 'img/speisekarte-3.webp'], mobile: 'img/speisekarte-mobile.webp',
+    text: 'QR-Code auf den Tisch, Gäste scannen – fertig. Kategorien zum Wischen, Suche, Vegan- und Vegetarisch-Filter, Allergene, „Jetzt geöffnet“ nach Uhrzeit und Deutsch/Englisch auf Knopfdruck. Preise ändern ohne Neudruck.',
+    tags: ['QR-Code', 'Mobil zuerst', 'Zweisprachig'], note: 'Demo mit fiktivem Café.' },
   { id: 'redbull', kind: 'web', branche: 'food', title: 'Red Bull', sub: '3D-Produktseite · Spec-Arbeit', color: '#3d6bff', featured: true,
     live: 'projekte/redbull/', images: ['img/redbull-3.webp', 'img/redbull-2.webp', 'img/redbull-1.webp'], mobile: 'img/redbull-mobile.webp',
     text: 'Eine Dose, die man anfassen will: originale Slim-Can-Form in 3D, neun Sorten von Original über Zero bis zu den sieben Editions. Die Dose dreht sich beim Scrollen, öffnet die Lasche und versprüht Tropfen – und ein 24er Tray füllt sich Dose für Dose, in jeder Sorte.',
@@ -87,9 +91,11 @@ window.PROJECTS = [
 ];
 
 window.PRICES = {
-  spots: { label: 'Werbespots', items: [
+  spots: { label: 'Video & Spots', items: [
     { name: 'Social Spot', price: 249, unit: '', text: 'Ein Spot für TikTok, Reels oder Ads – Animation, Texte und eigener Sound.', list: ['10–20 Sekunden', '9:16', '2 Korrekturrunden'] },
     { name: 'Produkt-Spot', price: 449, unit: '', badge: 'Beliebt', text: 'Dein Produkt im Studio-Look: freigestellt, inszeniert, mit Kamerafahrt.', list: ['Bis 20 Sekunden', '9:16 + 16:9', 'Freisteller & Retusche', '2 Korrekturrunden'] },
+    { name: 'Erklärvideo', price: 690, unit: '', text: 'Animiertes Video, das dein Angebot in 60 Sekunden verständlich macht – für Website, Social Media und Präsentationen.', list: ['Bis 60 Sekunden', 'Skript & Storyboard', 'Animation & Sound', 'Sprecher optional'] },
+    { name: 'Produktvideo', price: 890, unit: '', text: 'Dein Produkt in 3D oder im Studio-Look: drehen, zoomen, Details zeigen – für Shop, Ads und Messe.', list: ['20–40 Sekunden', '3D oder Foto-Studio', 'Quer- und Hochformat', '2 Korrekturrunden'] },
     { name: 'Reel-Abo', price: 690, unit: '/ Monat', text: 'Jeden Monat vier frische Spots im gleichen Look – einer pro Woche. Ideal für Gastro, Clubs und lokale Betriebe.', list: ['4 Spots pro Monat', 'Planung inklusive', 'Monatlich kündbar'] },
     { name: 'Kampagne', price: 990, unit: '', text: 'Fünf Spots aus einem Guss für einen Launch oder eine Aktion.', list: ['5 Spots', 'Alle Formate', 'Untertitel', 'Thumbnail-Set'] },
   ]},
@@ -99,9 +105,20 @@ window.PRICES = {
     { name: '3D-Website', price: 1990, unit: '', text: 'Produkt- oder Markenseite mit echter 3D-Szene und Scroll-Animation – für den Wow-Effekt.', list: ['Bis 5 Bereiche', '3D-Szene', 'Kontaktformular', 'SEO-Basics'] },
     { name: 'Online-Shop', price: 2490, unit: '', text: 'Shop mit sicherer Zahlung (Karte, PayPal, Apple Pay) über Stripe oder Shopify.', list: ['Produktseiten', 'Warenkorb & Checkout', 'Rechtstexte-Einbindung', 'Einweisung'] },
   ]},
-  chatbots: { label: 'Chatbots', items: [
+  marke: { label: 'Logo & Branding', items: [
+    { name: 'Logo', price: 290, unit: '', text: 'Ein eigenständiges Logo, das klein und groß funktioniert – auf Schild, Website und Instagram.', list: ['3 Entwürfe', '2 Korrekturrunden', 'Hell- & Dunkel-Version', 'SVG, PNG, PDF'] },
+    { name: 'Branding-Paket', price: 690, unit: '', badge: 'Beliebt', text: 'Der komplette Look: Logo, Farben, Schriften und Vorlagen – damit alles nach dir aussieht.', list: ['Logo + Bildzeichen', 'Farben & Schriften', 'Visitenkarte & Briefpapier', 'Brand-Guide als PDF'] },
+    { name: 'Social-Media-Kit', price: 190, unit: '', text: 'Profilbild, Highlight-Cover und Post-Vorlagen im eigenen Look – startklar für Instagram & TikTok.', list: ['Profilbild & Bio-Text', '7 Highlight-Cover', '9 Post-Vorlagen', 'Reel-Cover'] },
+  ]},
+  social: { label: 'Social Media', items: [
+    { name: 'Social Starter', price: 390, unit: '/ Monat', text: 'Regelmäßig sichtbar, ohne selbst zu posten: Beiträge und Reels, geplant und veröffentlicht.', list: ['8 Beiträge / Monat', '2 Reels / Monat', 'Redaktionsplan', 'Texte & Hashtags'] },
+    { name: 'Social Pro', price: 790, unit: '/ Monat', badge: 'Empfohlen', text: 'Volle Betreuung für Instagram & TikTok – mit Stories, Community und Auswertung.', list: ['12 Beiträge / Monat', '4 Reels / Monat', 'Stories & Kommentare', 'Monatliche Auswertung'] },
+    { name: 'Profil-Setup', price: 149, unit: '', text: 'Einmalig: Profil einrichten oder aufräumen – Bio, Highlights, Link und Kontakt-Buttons.', list: ['Profil & Bio', 'Highlights', 'Link & Buttons', 'Posting-Plan für 2 Wochen'] },
+  ]},
+  chatbots: { label: 'Chatbots & Tools', items: [
     { name: 'FAQ-Chatbot', price: 390, unit: '', badge: 'Einstieg', text: 'Ein Assistent für deine Website, der Fragen zu Leistungen, Preisen und Öffnungszeiten beantwortet und Besucher weiterleitet.', list: ['Bis 50 Fragen & Antworten', 'In deinem Design', 'Leitet zu Seiten & Formular', 'Keine laufenden Kosten'] },
     { name: 'KI-Chatbot', price: 890, unit: '', text: 'Antwortet frei in ganzen Sätzen auf Basis deiner Inhalte – rund um die Uhr.', list: ['Trainiert auf deine Inhalte', 'Anfragen per E-Mail weiterleiten', 'Datenschutz-Hinweis', 'KI-Kosten nach Nutzung (meist wenige €/Monat)'] },
+    { name: 'Digitale Speisekarte', price: 290, unit: '', text: 'Speisekarte fürs Handy mit QR-Code für jeden Tisch – Preise ändern ohne Neudruck, auf Wunsch zweisprachig.', list: ['QR-Aufsteller druckfertig', 'Vegan-/Allergen-Filter', 'Deutsch & Englisch', '3 Monate Änderungen inklusive'] },
     { name: 'Chatbot-Betreuung', price: 29, unit: '/ Monat', text: 'Antworten aktuell halten, neue Fragen ergänzen, Auswertung, welche Fragen gestellt werden.', list: ['Monatliche Anpassungen', 'Neue Fragen ergänzen', 'Monatlich kündbar'] },
   ]},
   pakete: { label: 'Pakete', items: [
@@ -184,4 +201,9 @@ window.FAQ = [
   { cat: 'Preise & Zahlung', q: 'Warum bist du günstiger als eine Agentur?', a: 'Kein Büro, kein Vertriebsteam, kein Projektmanager dazwischen – du arbeitest direkt mit mir. Agenturen liegen für vergleichbare Leistungen oft beim Doppelten.' },
   { cat: 'Rechtliches', q: 'Wem gehören die Rechte am Ende?', a: 'Nach vollständiger Bezahlung darfst du Spots und Website zeitlich unbegrenzt für deine Marke nutzen. Musik und Bilder sind lizenziert oder selbst erstellt.' },
   { cat: 'Rechtliches', q: 'Schreibst du auch Impressum und Datenschutzerklärung?', a: 'Nein, Rechtstexte schreibe ich nicht. Ich binde aber Texte von Anbietern wie eRecht24 oder IT-Recht-Kanzlei sauber ein (49 €).' },
+  { cat: 'Branding & Social Media', q: 'Was bekomme ich beim Logo genau?', a: 'Drei Entwürfe, zwei Korrekturrunden und am Ende alle Dateien: SVG, PNG und PDF, jeweils in Hell- und Dunkel-Version – fertig für Schild, Website, Instagram und Druck. Die Nutzungsrechte gehen vollständig an dich.' },
+  { cat: 'Branding & Social Media', q: 'Was ist der Unterschied zwischen Logo und Branding-Paket?', a: 'Das Logo ist das Zeichen. Das Branding-Paket legt zusätzlich Farben, Schriften, Visitenkarte, Briefpapier und Social-Media-Vorlagen fest und fasst alles in einem Brand-Guide zusammen – damit dein Auftritt überall gleich aussieht.' },
+  { cat: 'Branding & Social Media', q: 'Postest du auch für mich?', a: 'Ja. Bei der Social-Media-Betreuung plane, gestalte und veröffentliche ich Beiträge und Reels für dich – inklusive Texten und Hashtags. Du gibst nur kurz frei. Monatlich kündbar.' },
+  { cat: 'Branding & Social Media', q: 'Wie funktioniert die digitale Speisekarte?', a: 'Du bekommst eine Speisekarte fürs Handy und druckfertige QR-Aufsteller für die Tische. Gäste scannen und sehen die Karte – mit Suche, Vegan-Filter, Allergenen und auf Wunsch auf Englisch. Preise ändern sich ohne Neudruck.' },
+  { cat: 'Werbespots', q: 'Was ist ein Erklärvideo?', a: 'Ein kurzes animiertes Video (meist bis 60 Sekunden), das dein Angebot einfach erklärt – ideal für die Startseite, Social Media oder Präsentationen. Skript, Storyboard, Animation und Sound kommen von mir, ein Sprecher ist optional.' },
 ];

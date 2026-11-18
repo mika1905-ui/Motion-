@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#f6f5f0">
 <link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=20261118b">
+<link rel="stylesheet" href="styles.css?v=20261118c">
 </head>
 <body data-page="kontakt">
 <main>
@@ -39,6 +39,10 @@
                   <label><input type="checkbox" name="Leistung" value="Chatbot"><span><b>Chatbot</b><small>FAQ- oder KI-Bot</small></span></label>
                   <label><input type="checkbox" name="Leistung" value="Online-Shop"><span><b>Online-Shop</b><small>Mit Zahlung</small></span></label>
                   <label><input type="checkbox" name="Leistung" value="Reel-Abo"><span><b>Reel-Abo</b><small>Monatlicher Content</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Erklär- / Produktvideo"><span><b>Erklär- / Produktvideo</b><small>Animiert oder 3D</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Logo &amp; Branding"><span><b>Logo &amp; Branding</b><small>Logo, Farben, Vorlagen</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Social Media"><span><b>Social Media</b><small>Posts &amp; Reels für dich</small></span></label>
+                  <label><input type="checkbox" name="Leistung" value="Speisekarte"><span><b>Speisekarte</b><small>Digital mit QR-Code</small></span></label>
                   <label><input type="checkbox" name="Leistung" value="Betreuung"><span><b>Betreuung</b><small>Hosting &amp; Updates</small></span></label>
                   <label><input type="checkbox" name="Leistung" value="Noch unsicher"><span><b>Noch unsicher</b><small>Lass uns reden</small></span></label>
                 </div>
@@ -108,9 +112,9 @@
     </div>
   </section>
 </main>
-<script src="config.js?v=20261118b"></script>
-<script src="data.js?v=20261118b"></script>
-<script src="site.js?v=20261118b"></script>
+<script src="config.js?v=20261118c"></script>
+<script src="data.js?v=20261118c"></script>
+<script src="site.js?v=20261118c"></script>
 <script>
 (() => {
   const C = window.CONFIG, { esc } = window.SITE;
@@ -138,7 +142,7 @@
   if (q.get('check')) pre.push(q.get('check'));
   if (q.get('frage')) pre.push(`Meine Frage: ${q.get('frage')}`);
   if (pre.length) $('#msg').value = pre.join('\n') + '\n\n';
-  const lmap = { 'Online-Shop': 'Online-Shop', 'Werbespot': 'Werbespot', 'Website': 'Website', 'Chatbot': 'Chatbot', 'FAQ-Chatbot': 'Chatbot', 'KI-Chatbot': 'Chatbot', 'Reel-Abo': 'Reel-Abo', 'Onepager': 'Website', '3D-Website': 'Website', 'Social Spot': 'Werbespot', 'Produkt-Spot': 'Werbespot', 'Kampagne': 'Werbespot' };
+  const lmap = { 'Online-Shop': 'Online-Shop', 'Werbespot': 'Werbespot', 'Website': 'Website', 'Chatbot': 'Chatbot', 'FAQ-Chatbot': 'Chatbot', 'KI-Chatbot': 'Chatbot', 'Reel-Abo': 'Reel-Abo', 'Onepager': 'Website', '3D-Website': 'Website', 'Social Spot': 'Werbespot', 'Produkt-Spot': 'Werbespot', 'Kampagne': 'Werbespot', 'Erklärvideo': 'Erklär- / Produktvideo', 'Produktvideo': 'Erklär- / Produktvideo', 'Logo': 'Logo & Branding', 'Branding-Paket': 'Logo & Branding', 'Logo & Branding': 'Logo & Branding', 'Social-Media-Kit': 'Logo & Branding', 'Social Media': 'Social Media', 'Social Starter': 'Social Media', 'Social Pro': 'Social Media', 'Profil-Setup': 'Social Media', 'Speisekarte': 'Speisekarte', 'Digitale Speisekarte': 'Speisekarte' };
   if (q.get('leistung') && lmap[q.get('leistung')]) document.querySelector(`input[name=Leistung][value="${lmap[q.get('leistung')]}"]`).checked = true;
   $('#herkunft').value = document.referrer ? new URL(document.referrer).pathname.split('/').pop() || 'Start' : 'direkt';
 
