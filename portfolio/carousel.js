@@ -1,143 +1,138 @@
-/* 3D-Projektkarussell im Hero: Swipen/Ziehen dreht den Ring, Pfeile & Tastatur ebenso,
-   Tippen auf die vordere Karte öffnet das Projekt. */
+/* Projekt-Reise unter dem Hero: Beim normalen Scrollen fahren die Projekte seitlich durch (Scroll → Wischen),
+   der Hintergrund färbt sich in der Farbe des aktuellen Projekts, Branchen-Chips springen direkt zur Branche.
+   Ohne Bewegung (prefers-reduced-motion) wird daraus ein normaler Wisch-Slider. */
 (() => {
-  const host = document.getElementById('ring');
+  const host = document.getElementById('pj');
   if (!host) return;
   const P = window.PROJECTS || [], B = window.BRANCHEN || [];
   const { esc } = window.SITE;
-  const bName = id => (B.find(b => b.id === id) || {}).name || '';
+  const bOf = id => B.find(b => b.id === id) || { name: '', id };
   const kindName = { spot: 'Werbespot', web: 'Website', bot: 'Chatbot' };
-  const items = P.map(p => ({ id: p.id, title: p.title, sub: p.sub, color: p.color, kicker: `${bName(p.branche)} · ${kindName[p.kind] || ''}`,
-      video: p.kind === 'spot' ? p.video : null, poster: p.ring || (p.kind === 'spot' ? p.poster : (p.mobile || p.images[0])), wide: !!p.wide }));
-  const N = items.length, STEP = 360 / N;
+  const short = { 'Gastronomie & Nightlife': 'Gastro', 'Tech & Elektronik': 'Tech', 'Food & Getränke': 'Food', 'Lifestyle & Konsumgüter': 'Lifestyle',
+    'Gesundheit & Praxen': 'Gesundheit', 'Mode & Beauty': 'Mode & Beauty', 'Handwerk & Lokales': 'Handwerk', 'Sport & Fitness': 'Sport' };
+  const pad = n => String(n).padStart(2, '0');
+  const N = P.length;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Branchen in der Reihenfolge, in der sie im Slider zum ersten Mal auftauchen
+  const order = [];
+  P.forEach((p, i) => { if (!order.some(o => o.id === p.branche)) order.push({ id: p.branche, first: i, n: 0 }); order.find(o => o.id === p.branche).n++; });
+
+  const media = p => {
+    if (p.kind === 'spot') return `<img class="pj-cover" src="${esc(p.poster)}" alt="" loading="lazy" decoding="async" draggable="false">
+        <video class="pj-cover" muted loop playsinline preload="none" data-src="${esc(p.video)}"></video>`;
+    return `<img class="pj-cover pj-d" src="${esc(p.images[0])}" alt="" loading="lazy" decoding="async" draggable="false">
+        <img class="pj-cover pj-m" src="${esc(p.mobile || p.images[0])}" alt="" loading="lazy" decoding="async" draggable="false">
+        ${p.mobile ? `<span class="pj-phone pj-d"><img src="${esc(p.mobile)}" alt="" loading="lazy" decoding="async" draggable="false"></span>` : ''}`;
+  };
+
   host.innerHTML = `
-    <div class="ring-stage"><div class="ring-track">
-      ${items.map((it, i) => `<button class="ring-card${it.wide ? ' wide' : ''}" style="--c:${it.color}" data-i="${i}" tabindex="-1" aria-label="${esc(it.title)} – Projekt öffnen">
-        <img src="${esc(it.poster)}" alt="" loading="eager" decoding="async" draggable="false">
-        ${it.video ? `<video muted loop playsinline preload="none" data-src="${esc(it.video)}"></video>` : ''}
-        <span class="shade" aria-hidden="true"></span>
-      </button>`).join('')}
-    </div></div>
-    <div class="ring-ui">
-      <button class="ring-arrow" data-dir="-1" aria-label="Vorheriges Projekt">‹</button>
-      <div class="ring-label" aria-live="polite"><small></small><b></b><span></span></div>
-      <button class="ring-arrow" data-dir="1" aria-label="Nächstes Projekt">›</button>
-    </div>
-    <p class="ring-hint">← Wischen zum Drehen · Tippen zum Öffnen →</p>`;
+    <div class="pj-pin">
+      <div class="pj-head">
+        <div class="pj-title"><p class="kicker">Projekte</p><h2>Scroll dich <mark>durch</mark>.</h2></div>
+        <div class="pj-count" aria-hidden="true"><b>01</b><span>/ ${pad(N)}</span></div>
+      </div>
+      <div class="pj-chips" role="tablist" aria-label="Nach Branche springen">
+        <button class="pj-chip on" type="button" data-to="0" data-all>Alle <i>${N}</i></button>
+        ${order.map(o => `<button class="pj-chip" type="button" data-b="${o.id}" data-to="${o.first}" style="--cc:${bOf(o.id).color || '#6A3BFF'}">${esc(short[bOf(o.id).name] || bOf(o.id).name)} <i>${o.n}</i></button>`).join('')}
+      </div>
+      <div class="pj-view">
+        <div class="pj-track">
+          ${P.map((p, i) => `<article class="pj-item${p.kind === 'spot' ? (p.wide ? ' is-wide' : ' is-tall') : ''}" style="--c:${p.color}" data-i="${i}">
+            <button class="pj-card" type="button" data-project="${p.id}" aria-label="${esc(p.title)} ansehen">${media(p)}<span class="pj-open" aria-hidden="true">Ansehen →</span></button>
+            <div class="pj-meta"><span class="pj-num">${pad(i + 1)}</span><div><small>${esc(short[bOf(p.branche).name] || bOf(p.branche).name)} · ${kindName[p.kind] || ''}</small><b>${esc(p.title)}</b><span>${esc(p.sub)}</span></div></div>
+          </article>`).join('')}
+          <article class="pj-item pj-end" style="--c:#6A3BFF">
+            <div class="pj-card pj-endcard"><p>Das war ein Ausschnitt.<br><b>Dein Projekt kommt als Nächstes?</b></p>
+              <div><a class="btn" href="kontakt.html">Projekt anfragen</a><a class="btn btn-ghost" href="arbeiten.html">Alle Arbeiten →</a></div></div>
+          </article>
+        </div>
+      </div>
+      <div class="pj-bar" aria-hidden="true"><i></i></div>
+      <p class="pj-hint" aria-hidden="true">Einfach weiterscrollen ↓</p>
+    </div>`;
 
-  const stage = host.querySelector('.ring-stage'), track = host.querySelector('.ring-track');
-  const cards = [...host.querySelectorAll('.ring-card')];
-  const lab = host.querySelector('.ring-label');
-  let rot = 0, vel = 0, target = 0, dragging = false, moved = 0, lastX = 0, lastT = 0, front = -1, idle = 0, radius = 0;
+  const pin = host.querySelector('.pj-pin'), view = host.querySelector('.pj-view'), track = host.querySelector('.pj-track');
+  const items = [...host.querySelectorAll('.pj-item')], chips = [...host.querySelectorAll('.pj-chip')], chipBox = host.querySelector('.pj-chips');
+  const countEl = host.querySelector('.pj-count b'), bar = host.querySelector('.pj-bar i');
+  const pinned = !reduce;
+  host.classList.add(pinned ? 'pj-pinned' : 'pj-free');
 
-  const layout = () => {
-    const w = cards[0].offsetWidth;
-    radius = Math.round((w / 2) / Math.tan(Math.PI / N) * 1.08);
-    cards.forEach((c, i) => { c.style.transform = `rotateY(${i * STEP}deg) translateZ(${radius}px)`; });
-    track.style.setProperty('--r', radius + 'px');
+  const RATIO = matchMedia('(max-width: 700px)').matches ? 0.75 : 0.55; // vertikale Scroll-Pixel pro seitlichem Pixel
+  let maxX = 0, dist = 0, x = 0, cur = -1;
+  const measure = () => {
+    maxX = Math.max(0, track.scrollWidth - view.clientWidth);
+    dist = Math.round(maxX * RATIO);
+    if (pinned) host.style.height = `calc(100svh + ${dist}px)`;
+    update(true);
   };
-  const norm = a => ((a % 360) + 540) % 360 - 180;
-  // only touch the DOM when the ring actually moved; darkening via a composited overlay (no CSS filter → no repaints)
-  const shades = cards.map(c => c.querySelector('.shade'));
-  const prev = cards.map(() => ({ o: -1, d: -1, pe: null }));
-  let lastRot = NaN;
-  const apply = () => {
-    if (Math.abs(rot - lastRot) < 0.01) return;
-    lastRot = rot;
-    track.style.transform = `translateZ(${-radius}px) rotateY(${rot.toFixed(3)}deg)`;
-    let best = 0, bd = 999;
-    cards.forEach((c, i) => {
-      const a = Math.abs(norm(i * STEP + rot));
-      const o = a > 120 ? 0 : +(1 - Math.max(0, a - 30) / 110).toFixed(2);
-      const d = +(Math.min(a, 90) / 160).toFixed(2);
-      const pe = a > 100 ? 'none' : '';
-      const p = prev[i];
-      if (p.o !== o) { c.style.opacity = o; c.style.visibility = o ? '' : 'hidden'; p.o = o; }
-      if (p.d !== d) { shades[i].style.opacity = d; p.d = d; }
-      if (p.pe !== pe) { c.style.pointerEvents = pe; p.pe = pe; }
-      if (a < bd) { bd = a; best = i; }
-    });
-    if (best !== front) setFront(best);
-  };
-  const setFront = i => {
-    if (front >= 0) { const v = cards[front].querySelector('video'); if (v) v.pause(); cards[front].classList.remove('front'); cards[front].tabIndex = -1; }
-    front = i; const c = cards[i], it = items[i];
-    c.classList.add('front'); c.tabIndex = 0;
-    lab.querySelector('small').textContent = it.kicker; lab.querySelector('b').textContent = it.title; lab.querySelector('span').textContent = it.sub;
-    lab.style.setProperty('--c', it.color);
-    const v = c.querySelector('video');
-    if (v && !reduce && !document.documentElement.classList.contains('still')) {
+  const top = () => host.getBoundingClientRect().top + scrollY;
+  const posX = () => pinned ? Math.min(maxX, Math.max(0, (scrollY - top()) / (dist || 1) * maxX)) : view.scrollLeft;
+
+  const play = (i, on) => {
+    const v = items[i] && items[i].querySelector('video'); if (!v) return;
+    if (on && !document.documentElement.classList.contains('still') && !reduce) {
       if (!v.src) v.src = v.dataset.src;
-      v.play().then(() => c.classList.add('playing')).catch(() => {});
-    }
+      v.play().then(() => items[i].classList.add('playing')).catch(() => {});
+    } else { v.pause(); }
   };
-  const goTo = i => { target = -i * STEP; const d = norm(target - rot); target = rot + d; vel = 0; idle = performance.now(); };
-  const step = dir => goTo(((front + dir) % N + N) % N);
-
-  // animation loop: inertia while free, spring to snap target
-  let last = performance.now();
-  const tick = now => {
-    const dt = Math.min(48, now - last) / 16.67; last = now;
-    if (!dragging) {
-      if (Math.abs(vel) > 0.05) { rot += vel * dt; vel *= Math.pow(0.93, dt); target = Math.round(rot / STEP) * STEP; }
-      else { vel = 0; rot += (target - rot) * Math.min(1, 0.12 * dt); }
-      // autoplay when idle
-      if (!reduce && !document.documentElement.classList.contains('still') && now - idle > 5000 && visible && !document.hidden) {
-        idle = now; step(1);
-      }
-    }
-    apply();
-    // sleep when the ring is off-screen or the tab is hidden; wake on interaction / visibility
-    if (visible && !document.hidden) requestAnimationFrame(tick); else running = false;
+  const setCur = i => {
+    if (i === cur) return;
+    if (cur >= 0) { items[cur].classList.remove('cur'); play(cur, false); }
+    cur = i; const it = items[i]; it.classList.add('cur');
+    const p = P[i];
+    host.style.setProperty('--hc', p ? p.color : '#6A3BFF');
+    countEl.textContent = pad(Math.min(N, i + 1));
+    chips.forEach(c => c.classList.toggle('on', p ? c.dataset.b === p.branche : c.hasAttribute('data-all')));
+    const on = chips.find(c => c.classList.contains('on'));
+    if (on) chipBox.scrollTo({ left: on.offsetLeft - chipBox.clientWidth / 2 + on.offsetWidth / 2, behavior: 'smooth' });
+    if (visible) play(i, true);
   };
-  let running = false;
-  const wake = () => { if (!running) { running = true; last = performance.now(); requestAnimationFrame(tick); } };
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && visible) wake(); });
-
-  // pointer / touch
-  stage.addEventListener('pointerdown', e => {
-    dragging = true; moved = 0; lastX = e.clientX; lastT = performance.now(); vel = 0; idle = lastT;
-    stage.setPointerCapture(e.pointerId);
-  });
-  stage.addEventListener('pointermove', e => {
-    if (!dragging) return;
-    const dx = e.clientX - lastX, now = performance.now();
-    moved += Math.abs(dx);
-    const k = 360 / (radius * 2 * Math.PI) * 1.1;
-    rot += dx * k; vel = dx * k / Math.max(1, (now - lastT) / 16.67) * 0.9;
-    lastX = e.clientX; lastT = now;
-  });
-  const end = e => {
-    if (!dragging) return; dragging = false; idle = performance.now();
-    if (moved < 8) {
-      const el = document.elementFromPoint(e.clientX, e.clientY), c = el && el.closest('.ring-card');
-      if (c) activate(+c.dataset.i);
-      vel = 0; target = Math.round(rot / STEP) * STEP;
-    } else { target = Math.round((rot + vel * 12) / STEP) * STEP; }
+  const update = force => {
+    x = posX();
+    if (pinned) track.style.transform = `translate3d(${-x.toFixed(1)}px,0,0)`;
+    bar.style.transform = `scaleX(${maxX ? (x / maxX).toFixed(4) : 0})`;
+    const mid = x + view.clientWidth * 0.42;
+    let best = 0, bd = 1e9;
+    items.forEach((it, i) => { const c = it.offsetLeft + it.offsetWidth / 2, d = Math.abs(c - mid); if (d < bd) { bd = d; best = i; } });
+    if (x >= maxX - 2) best = items.length - 1;
+    if (x <= 2) best = 0;
+    if (force) cur = -1;
+    setCur(best);
   };
-  stage.addEventListener('pointerup', end);
-  stage.addEventListener('pointercancel', () => { dragging = false; target = Math.round(rot / STEP) * STEP; });
 
-  const activate = i => {
-    if (i !== front) { goTo(i); return; }
-    const it = items[i];
-    const v = cards[i].querySelector('video'); if (v) v.pause();
-    const fake = document.createElement('button'); fake.dataset.project = it.id; fake.hidden = true;
-    document.body.appendChild(fake); fake.click(); fake.remove();
+  let raf = 0;
+  const onScroll = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; update(); }); };
+  if (pinned) addEventListener('scroll', onScroll, { passive: true }); else view.addEventListener('scroll', onScroll, { passive: true });
+
+  // zu einem Projekt springen (Chips)
+  const goTo = i => {
+    const it = items[i]; if (!it) return;
+    const tx = i === 0 ? 0 : Math.min(maxX, Math.max(0, it.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft)));
+    if (pinned) scrollTo({ top: top() + tx / (maxX || 1) * dist + 1, behavior: 'smooth' });
+    else view.scrollTo({ left: tx, behavior: 'smooth' });
   };
-  stage.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') { e.preventDefault(); step(1); cards[front].focus(); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); cards[front].focus(); }
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(front); }
-  });
-  host.querySelectorAll('.ring-arrow').forEach(b => b.addEventListener('click', () => step(+b.dataset.dir)));
-  // keep wheel/trackpad horizontal swipes
-  stage.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) { e.preventDefault(); rot -= e.deltaX * 0.15; target = Math.round(rot / STEP) * STEP; idle = performance.now(); } }, { passive: false });
+  chips.forEach(c => c.addEventListener('click', () => goTo(+c.dataset.to)));
 
-  let visible = true;
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake(); const v = cards[front] && cards[front].querySelector('video'); if (v) { if (visible && !reduce) v.play().catch(() => {}); else v.pause(); } }, { threshold: .2 }).observe(host);
-  addEventListener('resize', () => { layout(); lastRot = NaN; apply(); });
-  layout(); apply(); idle = performance.now(); wake();
+  // seitliches Wischen / Ziehen / Trackpad bewegt trotzdem mit (übersetzt in Scrollen)
+  if (pinned) {
+    let sx = 0, moved = 0, down = false;
+    view.addEventListener('pointerdown', e => { if (e.button) return; down = true; sx = e.clientX; moved = 0; });
+    view.addEventListener('pointermove', e => {
+      if (!down) return; const dx = e.clientX - sx; sx = e.clientX; moved += Math.abs(dx);
+      if (moved > 4) scrollBy(0, -dx * RATIO * (e.pointerType === 'mouse' ? 1 : 1.6));
+    });
+    const up = () => { down = false; };
+    view.addEventListener('pointerup', up); view.addEventListener('pointercancel', up); view.addEventListener('pointerleave', up);
+    view.addEventListener('click', e => { if (moved > 8) { e.preventDefault(); e.stopPropagation(); moved = 0; } }, true);
+    view.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.2) { e.preventDefault(); scrollBy(0, e.deltaX * RATIO); } }, { passive: false });
+    view.addEventListener('dragstart', e => e.preventDefault());
+  }
+
+  let visible = false;
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (cur >= 0) play(cur, visible); }, { threshold: 0.15 }).observe(pin);
+  addEventListener('resize', measure);
+  addEventListener('load', measure);
+  if (document.fonts) document.fonts.ready.then(measure);
+  measure();
 })();
