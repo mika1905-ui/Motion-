@@ -20,6 +20,15 @@ FONT_B = os.path.join(HERE, 'fonts', 'Inter-Bold.ttf')
 FONT_S = os.path.join(HERE, 'fonts', 'Inter-SemiBold.ttf')
 EMOJI = '/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'
 _fc = {}
+G = 'G'   # Logo-Verlauf Ultraviolett → Pink → Koralle
+def grad(w, h):
+    x = np.linspace(0, 1, w)[None, :, None]; y = np.linspace(0, 1, h)[:, None, None]
+    t = np.clip(x * 0.82 + y * 0.18, 0, 1)
+    c1, c2, c3 = np.array([106, 59, 255.]), np.array([255, 61, 139.]), np.array([255, 107, 44.])
+    a = np.where(t < 0.55, c1 + (c2 - c1) * (t / 0.55), c2 + (c3 - c2) * ((t - 0.55) / 0.45))
+    return Image.fromarray(np.broadcast_to(a, (h, w, 3)).astype(np.uint8), 'RGB').convert('RGBA')
+def gfill(mask):
+    g = grad(*mask.size); g.putalpha(mask); return g
 def font(path, size):
     k = (path, size)
     if k not in _fc: _fc[k] = ImageFont.truetype(path, size)
@@ -56,14 +65,14 @@ _plan = iter(PLAN['shots'])
 def shot(_unused, kind, **d):
     global _bi
     n = next(_plan); shots.append((bt(_bi), bt(_bi + n), kind, d)); _bi += n
-shot(5, 'clip', name='vestier', tag='IMMOBILIEN', cap=[('Luxus-Makler', None), ('Website', LIME)], speed=1.0)
-shot(5, 'clip', name='beschte', tag='HANDWERK', cap=[('Elektro-Meister', None), ('mit Chatbot', LIME)], speed=1.0)
-shot(4, 'clip', name='redbull', tag='3D-PRODUKTSEITE', cap=[('Echte Dose.', None), ('In 3D.', LIME)], spec=True, speed=1.0)
-shot(3, 'clip', name='redflav', tag='3D-PRODUKTSEITE', cap=[('1 Tap –', None), ('neue Sorte.', LIME)], spec=True, speed=1.0, skip=4)
-shot(6, 'clip', name='redtray', tag='3D-PRODUKTSEITE', cap=[('24 Dosen.', None), ('1 Scroll.', LIME)], spec=True, speed=1.15, skip=4)
+shot(5, 'clip', name='vestier', tag='IMMOBILIEN', cap=[('Luxus-Makler', None), ('Website', G)], speed=1.0)
+shot(5, 'clip', name='beschte', tag='HANDWERK', cap=[('Elektro-Meister', None), ('mit Chatbot', G)], speed=1.0)
+shot(4, 'clip', name='redbull', tag='3D-PRODUKTSEITE', cap=[('Echte Dose.', None), ('In 3D.', G)], spec=True, speed=1.0)
+shot(3, 'clip', name='redflav', tag='3D-PRODUKTSEITE', cap=[('1 Tap –', None), ('neue Sorte.', G)], spec=True, speed=1.0, skip=4)
+shot(6, 'clip', name='redtray', tag='3D-PRODUKTSEITE', cap=[('24 Dosen.', None), ('1 Scroll.', G)], spec=True, speed=1.15, skip=4)
 for nm, label in [('katerkit', 'ONLINE-SHOP'), ('aurene', 'PARFUM-SHOP'), ('schwarzstich', 'TATTOO-STUDIO'), ('lumyx', 'SAAS · PRAXIS'), ('kryo', '3D-SHOP'), ('pablo', 'REBRAND')]:
-    shot(1, 'clip', name=nm, tag=label, cap=[('Shops. Marken.', None), ('Studios.', LIME)], speed=1.0, montage=True)
-shot(6, 'clip', name='chat', tag='CHATBOT', cap=[('Antwortet', None), ('um 3 Uhr nachts.', LIME)], speed=0.72, skip=0, inset=True)
+    shot(1, 'clip', name=nm, tag=label, cap=[('Shops. Marken.', None), ('Studios.', G)], speed=1.0, montage=True)
+shot(6, 'clip', name='chat', tag='CHATBOT', cap=[('Antwortet', None), ('um 3 Uhr nachts.', G)], speed=0.72, skip=0, inset=True)
 END = shots[-1][1]
 END_I = _bi
 TOTAL = GRID['dur'] if GRID else END + PLAN['end'] * B
@@ -88,11 +97,19 @@ def text_layer(lines, size=118, fnt=FONT, gap=0.08, shadow=True, maxw=960, box=F
             px, py = int(s * 0.28), int(s * 0.16)
             cap_h = bb[3] - bb[1]
             im = Image.new('RGBA', (w + 2 * px, cap_h + 2 * py + int(s * 0.12)), (0, 0, 0, 0)); dd = ImageDraw.Draw(im)
-            dd.rounded_rectangle((0, 0, im.width - 1, im.height - 1), int(s * 0.22), fill=(col or (255, 255, 255)) + (255,))
-            dd.text((px - bb[0], py - bb[1] + int(s * 0.06)), txt, font=f, fill=(8, 8, 10, 255))
+            if col == G:   # Verlaufs-Box mit weißer Schrift
+                m = Image.new('L', im.size, 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, im.width - 1, im.height - 1), int(s * 0.22), fill=255)
+                im = gfill(m); dd = ImageDraw.Draw(im)
+                dd.text((px - bb[0], py - bb[1] + int(s * 0.06)), txt, font=f, fill=(255, 255, 255, 255))
+            else:
+                dd.rounded_rectangle((0, 0, im.width - 1, im.height - 1), int(s * 0.22), fill=(col or (255, 255, 255)) + (255,))
+                dd.text((px - bb[0], py - bb[1] + int(s * 0.06)), txt, font=f, fill=(8, 8, 10, 255))
         else:
             im = Image.new('RGBA', (w + 40, h + 30), (0, 0, 0, 0))
-            ImageDraw.Draw(im).text((20 - bb[0], 10), txt, font=f, fill=(col or (255, 255, 255)) + (255,))
+            if col == G:   # Verlaufs-Schrift
+                m = Image.new('L', im.size, 0); ImageDraw.Draw(m).text((20 - bb[0], 10), txt, font=f, fill=255); im = gfill(m)
+            else:
+                ImageDraw.Draw(im).text((20 - bb[0], 10), txt, font=f, fill=(col or (255, 255, 255)) + (255,))
         imgs.append(im)
     tw = max(i.width for i in imgs); th = sum(int(i.height * (1 - gap)) if not box else i.height for i in imgs) + 20
     lay = Image.new('RGBA', (tw + 80, th + 80), (0, 0, 0, 0))
@@ -119,13 +136,16 @@ def paste_scaled(canvas, lay, cx, cy, scale=1.0, alpha=1.0):
         l = l.copy(); l.putalpha(l.split()[3].point(lambda v: int(v * alpha)))
     canvas.alpha_composite(l, (int(cx - l.width / 2), int(cy - l.height / 2)))
 
-def pill(txt, bg=LIME, fg=(8, 8, 10), size=34):
+def pill(txt, bg=G, fg=(255, 255, 255), size=34):
     key = ('pill', txt, bg, size)
     if key in _tc: return _tc[key]
     f = font(FONT, size); bb = f.getbbox(txt)
     w, h = bb[2] - bb[0] + 44, int(size * 1.7)
     im = Image.new('RGBA', (w, h), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    d.rounded_rectangle((0, 0, w - 1, h - 1), radius=h // 2, fill=bg + (255,))
+    if bg == G:
+        m = Image.new('L', (w, h), 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, w - 1, h - 1), radius=h // 2, fill=255); im = gfill(m); d = ImageDraw.Draw(im)
+    else:
+        d.rounded_rectangle((0, 0, w - 1, h - 1), radius=h // 2, fill=bg + (255,))
     d.text((22 - bb[0], (h - (bb[3] - bb[1])) / 2 - bb[1]), txt, font=f, fill=fg + (255,))
     _tc[key] = im
     return im
@@ -196,7 +216,7 @@ def render(t):
         r = 380 + 260 * x
         d.ellipse((W / 2 - r, H / 2 - 120 - r, W / 2 + r, H / 2 - 120 + r), fill=VIOLET + (int(110 * x),))
         img.alpha_composite(g.filter(ImageFilter.GaussianBlur(140)))
-        lay = cached_text('fix', [('Lass mich das', None), ('kurz fixen.', LIME)], size=124)
+        lay = cached_text('fix', [('Lass mich das', None), ('kurz fixen.', G)], size=124)
         paste_scaled(img, lay, W / 2, H / 2 - 120, 0.85 + 0.25 * x)
         m = MARK.resize((150, 150), Image.LANCZOS)
         paste_scaled(img, m, W / 2, H / 2 + 230, 0.6 + 0.4 * ease_out(min(1, x * 1.6)), min(1, x * 2))
@@ -285,7 +305,9 @@ def render(t):
             im = Image.new('RGBA', (900, 110), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
             d.rounded_rectangle((0, 0, 899, 109), radius=30, fill=(255, 255, 255, 18), outline=(255, 255, 255, 40), width=2)
             d.text((44, 55), a, font=fa, fill=(240, 240, 242, 255), anchor='lm')
-            d.text((856, 55), b2, font=fb, fill=LIME + (255,), anchor='rm')
+            pm = Image.new('L', im.size, 0); ImageDraw.Draw(pm).text((856, 55), b2, font=fb, fill=255, anchor='rm')
+            bx = pm.getbbox(); sub = pm.crop(bx)          # Verlauf nur über die Preis-Schrift spannen
+            gl = gfill(sub); im.alpha_composite(gl, (bx[0], bx[1]))
             _tc[key] = im
         paste_scaled(img, _tc[key], W / 2 + 60 * (1 - ease_out(q)), 800 + k * 140, 1.0, q)
     st = bt(END_I + 4) - END

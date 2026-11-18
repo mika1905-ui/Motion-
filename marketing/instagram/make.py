@@ -8,7 +8,7 @@ IMG = os.path.join(ROOT, 'portfolio', 'img')
 BRAND = os.path.join(ROOT, 'portfolio', 'brand')
 FONTS = os.path.join(ROOT, 'spots', 'fonts')
 OUT = HERE
-LIME = (255, 212, 59); VIOLET = (106, 59, 255); BG = (14, 14, 22); INK = (244, 244, 240); MUTED = (150, 150, 158)
+LIME = (190, 168, 255); VIOLET = (106, 59, 255); BG = (14, 14, 22); INK = (244, 244, 240); MUTED = (150, 150, 158)
 
 def F(w, s): return ImageFont.truetype(os.path.join(FONTS, {'black': 'Inter-Black.ttf', 'bold': 'Inter-Bold.ttf', 'semi': 'Inter-SemiBold.ttf', 'reg': 'Inter-Regular.ttf'}[w]), s)
 MARK = Image.open(os.path.join(BRAND, 'scrollwerk-mark-1024.png')).convert('RGBA')
@@ -56,10 +56,20 @@ def phone(im, shot, x, y, w):
     im.paste(sc, (x, y), round_mask(w, h, 44))
     d.rounded_rectangle((x + w / 2 - 50, y + 12, x + w / 2 + 50, y + 40), 14, fill=(0, 0, 0, 255))
 
-def pill(im, txt, x, y, bg=LIME, fg=BG, size=30, anchor='l'):
+def brand_grad(w, h):
+    import numpy as np
+    t = np.clip(np.linspace(0, 1, w)[None, :] * np.ones((h, 1)), 0, 1)[..., None]
+    c1, c2, c3 = np.array([106, 59, 255.]), np.array([255, 61, 139.]), np.array([255, 107, 44.])
+    a = np.where(t < 0.55, c1 + (c2 - c1) * (t / 0.55), c2 + (c3 - c2) * ((t - 0.55) / 0.45))
+    return Image.fromarray(a.astype('uint8'), 'RGB')
+
+def pill(im, txt, x, y, bg=None, fg=(255, 255, 255), size=30, anchor='l'):
+    # Labels immer im Logo-Verlauf (kein Gelb)
     f = F('black', size); bb = f.getbbox(txt); w = bb[2] - bb[0] + 44; h = int(size * 1.75)
     if anchor == 'c': x -= w // 2
-    d = ImageDraw.Draw(im); d.rounded_rectangle((x, y, x + w, y + h), h // 2, fill=bg + (255,))
+    m = Image.new('L', (w, h), 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, w - 1, h - 1), h // 2, fill=255)
+    im.paste(brand_grad(w, h), (int(x), int(y)), m)
+    d = ImageDraw.Draw(im)
     d.text((x + 22 - bb[0], y + (h - (bb[3] - bb[1])) / 2 - bb[1]), txt, font=f, fill=fg)
     return w
 
@@ -141,8 +151,8 @@ def highlights():
 # ── posts (1080x1350) ────────────────────────────────────────────────────────────
 W, H = 1080, 1350
 def post_project(n, slug, kicker, title, sub, color, spec=None):
-    im = canvas(W, H, (0.5, 0.55), gc=color, ga=60)
-    pill(im, kicker, 64, 70, bg=color if sum(color) > 300 else LIME)
+    im = canvas(W, H, (0.5, 0.55), gc=VIOLET, ga=70)
+    pill(im, kicker, 64, 70)
     ts = 92
     while F('black', ts).getlength(title) > W - 128: ts -= 2
     text(im, (64, 150 + (92 - ts) // 2), title, ts, 'black')
@@ -166,8 +176,8 @@ def post_intro():
     save(im, 'posts/01-intro.jpg'); return im
 
 def post_chatbot():
-    im = canvas(W, H, (0.5, 0.65), gc=(232, 160, 200), ga=55)
-    pill(im, 'CHATBOT', 64, 70, bg=(232, 160, 200))
+    im = canvas(W, H, (0.5, 0.65), gc=(255, 61, 139), ga=55)
+    pill(im, 'CHATBOT', 64, 70)
     text(im, (64, 150), 'Dein Betrieb\nantwortet um\n3 Uhr nachts.', 92, 'black', spacing=-4)
     shot = os.path.join(IMG, 'chatbot-v2-1.webp')
     if not os.path.exists(shot): shot = os.path.join(IMG, 'chatbot-ring.webp')
@@ -197,15 +207,15 @@ def post_prices():
     save(im, 'posts/02-preise.jpg'); return im
 
 def post_process():
-    im = canvas(W, H, (0.2, 0.8), gc=(74, 168, 255), ga=55)
-    pill(im, 'SO LÄUFT’S', 64, 70, bg=(74, 168, 255), fg=BG)
+    im = canvas(W, H, (0.2, 0.8), gc=(255, 107, 44), ga=50)
+    pill(im, 'SO LÄUFT’S', 64, 70)
     text(im, (64, 150), 'Von der Idee\nzum Launch.', 92, 'black', spacing=-4)
     steps = [('01', 'Erstgespräch', '15–30 Min., kostenlos'), ('02', 'Festes Angebot', 'schriftlich, ohne Überraschungen'),
              ('03', 'Umsetzung', 'Zwischenstände zum Klicken'), ('04', 'Launch', 'und danach bin ich weiter da')]
     d = ImageDraw.Draw(im)
     for k, (nr, a, b) in enumerate(steps):
         y = 450 + k * 180
-        d.text((64, y), nr, font=F('black', 84), fill=(74, 168, 255))
+        d.text((64, y), nr, font=F('black', 84), fill=LIME)
         d.text((230, y + 4), a, font=F('black', 48), fill=INK)
         d.text((230, y + 70), b, font=F('semi', 32), fill=MUTED)
     footer(im, 'Antwort in 24 h')
