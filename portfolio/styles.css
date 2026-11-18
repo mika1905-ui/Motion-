@@ -605,6 +605,8 @@ html.still .track, html.still .blob, html.still .grain { animation: none !import
 @media (max-width: 600px) { .cat { grid-template-columns: 1fr; } .sel-bar { font-size: 13px; } }
 .sec, .phero ~ section[id], section[id] { scroll-margin-top: 120px; }
 .legal-wrap ul { padding-left: 20px; }
+.legal-wrap ol { padding-left: 22px; }
+.legal-wrap ol li { margin-bottom: 8px; }
 .feature-media.pcard { padding: 0; display: block; }
 .pick label, .opt label { position: relative; } .pick input, .opt input { left: 0; top: 0; width: 1px; height: 1px; }
 [hidden] { display: none !important; }
