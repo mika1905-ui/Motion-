@@ -31,7 +31,7 @@ const header = document.createElement('header');
 header.className = 'gnav'; header.id = 'nav';
 header.innerHTML = `
   <div class="gnav-bar">
-    <a class="logo" href="index.html" aria-label="${esc(C.brand)} – Startseite"><img class="logo-mark" src="brand/fluxe-mark.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
+    <a class="logo" href="index.html" aria-label="${esc(C.brand)} – Startseite"><img class="logo-mark" src="brand/fluxe-icon.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
     <nav class="gnav-links" aria-label="Hauptnavigation">
       ${NAV.map((n, i) => `<a href="${n.href}" class="${page === n.key ? 'active' : ''}" ${n.flyout ? `data-fly="${i}" aria-haspopup="true"` : ''}>${n.label}</a>`).join('')}
     </nav>
@@ -102,8 +102,29 @@ $$('.mnav-toggle', mnav).forEach(b => b.addEventListener('click', () => {
 }));
 mnav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
 addEventListener('keydown', e => { if (e.key === 'Escape' && !mnav.hidden) setMenu(false); });
-const onScroll = () => header.classList.toggle('solid', scrollY > 10);
+/* scroll progress bar + solid header – one rAF-throttled handler */
+const prog = document.createElement('div'); prog.className = 'scroll-prog'; prog.setAttribute('aria-hidden', 'true'); document.body.appendChild(prog);
+let scrollTick = false;
+const onScroll = () => {
+  if (scrollTick) return; scrollTick = true;
+  requestAnimationFrame(() => {
+    scrollTick = false;
+    header.classList.toggle('solid', scrollY > 10);
+    const max = document.documentElement.scrollHeight - innerHeight;
+    prog.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max).toFixed(4) : 0})`;
+  });
+};
 addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+/* light spot that follows the cursor over cards (desktop only) */
+if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.addEventListener('pointermove', e => {
+    const c = e.target.closest && e.target.closest('.pcard, .svc');
+    if (!c) return;
+    const r = c.getBoundingClientRect();
+    c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }, { passive: true });
+}
 
 /* ───────── footer ───────── */
 const social = [['instagram', 'Instagram'], ['tiktok', 'TikTok'], ['linkedin', 'LinkedIn']].filter(([k]) => C[k]);
@@ -115,7 +136,7 @@ footer.innerHTML = `
     <div class="foot-cta-btns"><a class="btn btn-big" href="kontakt.html">Projekt anfragen</a><a class="btn btn-ghost" href="kontakt.html#termin">Kostenloses Erstgespräch</a></div>
   </div>
   <div class="foot-grid">
-    <div><a class="logo" href="index.html"><img class="logo-mark" src="brand/fluxe-mark.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
+    <div><a class="logo" href="index.html"><img class="logo-mark" src="brand/fluxe-icon.svg" alt="" width="30" height="30"><span>${esc(C.brand)}</span></a>
       <p class="foot-claim">Werbespots, Webseiten & Chatbots aus ${esc(C.city)}.<br>${esc(C.region)}.</p>
       ${C.email ? `<a class="foot-mail" href="mailto:${esc(C.email)}">${esc(C.email)}</a>` : ''}<p class="foot-claim">Antwort innerhalb von ${esc(C.responseTime || '24 Stunden')}.</p></div>
     <div><p class="fh">Arbeiten</p>${B.slice(0, 6).map(b => `<a href="arbeiten.html#${b.id}">${esc(b.name)}</a>`).join('')}</div>

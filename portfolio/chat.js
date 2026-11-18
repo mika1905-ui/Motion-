@@ -240,7 +240,7 @@ root.innerHTML = `
   </button>
   <section class="bot-panel" id="bot-panel" role="dialog" aria-label="Chat mit dem ${esc(C.brand)}-Assistenten" hidden>
     <header class="bot-head">
-      <span class="bot-ava" aria-hidden="true"><img src="brand/fluxe-mark.svg" alt="" width="30" height="30"></span>
+      <span class="bot-ava" aria-hidden="true"><img src="brand/fluxe-icon.svg" alt="" width="30" height="30"></span>
       <span><b>${esc(C.brand)} Assistent</b><small><i></i>Antwortet sofort · automatisch</small></span>
       <button class="bot-reset" aria-label="Chat neu starten" title="Neu starten">↺</button>
       <button class="bot-x" aria-label="Chat schließen">✕</button>
