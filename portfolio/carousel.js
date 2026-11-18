@@ -55,7 +55,8 @@
   const pin = host.querySelector('.pj-pin'), view = host.querySelector('.pj-view'), track = host.querySelector('.pj-track');
   const items = [...host.querySelectorAll('.pj-item')], chips = [...host.querySelectorAll('.pj-chip')], chipBox = host.querySelector('.pj-chips');
   const countEl = host.querySelector('.pj-count b'), bar = host.querySelector('.pj-bar i');
-  const pinned = !reduce;
+  // Maus/Trackpad: Scrollen fährt seitlich. Touch: echtes natives Wischen mit Schwung und Einrasten.
+  const pinned = !reduce && matchMedia('(hover: hover) and (pointer: fine)').matches;
   host.classList.add(pinned ? 'pj-pinned' : 'pj-free');
 
   const RATIO = matchMedia('(max-width: 700px)').matches ? 0.75 : 0.55; // vertikale Scroll-Pixel pro seitlichem Pixel
