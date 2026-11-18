@@ -4,13 +4,13 @@
    oder als "Demnächst verfügbar" angezeigt.
    ══════════════════════════════════════════════════════════════════ */
 window.CONFIG = {
-  brand: 'FLUXE Studio',                 // Studio-Name (Arbeitstitel)
+  brand: 'Scrollwerk',                  // Studio-Name
   owner: 'Mika Wittenborn',
   role: 'Gründer · Motion & Web',
   city: 'Bielefeld',
   region: 'Bielefeld, OWL & remote',
 
-  email: '',                             // z. B. 'hallo@fluxe.studio'  ← sobald du die Mail-Adresse hast
+  email: '',                             // z. B. 'hallo@scrollwerk.de'  ← sobald du die Mail-Adresse hast
   phone: '',                             // z. B. '+49 170 1234567'
   whatsapp: '',                          // nur Ziffern mit Ländervorwahl, z. B. '491701234567'
 

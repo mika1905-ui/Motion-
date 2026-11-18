@@ -1,14 +1,25 @@
-# FLUXE Studio – Logo
+# Scrollwerk – Logo & Marke
 
-Bildmarke: drei fließende Balken – abstraktes „F“, Bewegungsspur und Equalizer in einem (Motion · Sound · Flow).
-Farbe: Lime `#d4ff3a` mit Verlauf, Hintergrund `#08080a`. Schrift: Inter Display Black / SemiBold.
+**Bildmarke:** ein „S“ aus einer durchgehenden, abgerundeten Bahn – wie eine Seite, die scrollt. Der sonnengelbe Punkt ist die Scroll-Position.
+**Wortmarke:** `scroll` in Ink, `werk` im Markenverlauf · Schrift: Inter Display Black.
+
+| Farbe | Hex |
+|---|---|
+| Ultraviolett | `#6A3BFF` |
+| Pink | `#FF3D8B` |
+| Koralle | `#FF6B2C` |
+| Sonne (Akzent, Markierungen) | `#FFD43B` |
+| Ink (Schrift, dunkle Flächen) | `#0E0E16` |
+| Paper (Hintergrund) | `#F7F6F2` |
+
+Markenverlauf: `linear-gradient(100deg, #6A3BFF, #FF3D8B 55%, #FF6B2C)`
 
 | Datei | Wofür |
 |---|---|
-| `fluxe-logo.svg` / `fluxe-logo-hell.png` | Logo für dunkle Hintergründe (Website, Videos) |
-| `fluxe-logo-dark.svg` / `fluxe-logo-dunkel.png` | Logo für helle Hintergründe (Rechnungen, Briefpapier) |
-| `fluxe-mark.svg`, `fluxe-mark-512/1024.png` | Nur die Bildmarke (transparent) |
-| `fluxe-icon.svg`, `fluxe-app-icon-1024.png`, `apple-touch-icon.png` | App-/Browser-Icon auf dunklem Quadrat |
-| `fluxe-instagram-profil.png` | Profilbild für Instagram/TikTok/LinkedIn (1080 × 1080) |
+| `scrollwerk-logo-dunkel.png` | Logo für helle Hintergründe (Website, Rechnung, Briefpapier) |
+| `scrollwerk-logo-hell.png` | Logo für dunkle Hintergründe (Videos, Präsentationen) |
+| `scrollwerk-mark.svg`, `scrollwerk-mark-1024.png` | Nur die Bildmarke (transparent) |
+| `scrollwerk-icon.svg`, `scrollwerk-app-icon-1024.png`, `apple-touch-icon.png` | App-/Browser-Icon auf dunklem Quadrat |
+| `scrollwerk-instagram-profil.png` | Profilbild Instagram/TikTok/LinkedIn (1080 × 1080) |
 
-Hinweis: Vor geschäftlicher Nutzung Name und Logo beim DPMA auf bestehende Marken prüfen.
+Hinweis: Vor geschäftlicher Nutzung Name und Logo im DPMAregister / TMview auf bestehende Marken prüfen.

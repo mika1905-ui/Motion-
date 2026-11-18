@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Karriere · FLUXE Studio</title>
-<meta name="description" content="Arbeite mit FLUXE Studio in Bielefeld: Freelance, Nebenjob oder Praktikum in Motion Design, 3D, Webentwicklung und Content.">
+<title>Karriere · Scrollwerk</title>
+<meta name="description" content="Arbeite mit Scrollwerk in Bielefeld: Freelance, Nebenjob oder Praktikum in Motion Design, 3D, Webentwicklung und Content.">
 <meta name="theme-color" content="#f6f5f0">
-<link rel="icon" href="brand/fluxe-icon.svg" type="image/svg+xml">
+<link rel="icon" href="brand/scrollwerk-icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=20261118d">
+<link rel="stylesheet" href="styles.css?v=20261118e">
 </head>
 <body data-page="karriere">
 <main>
   <section class="phero">
     <p class="kicker reveal">Karriere</p>
-    <h1 class="reveal">Arbeite mit<br><span data-cfg="brand">FLUXE Studio</span>.</h1>
+    <h1 class="reveal">Arbeite mit<br><span data-cfg="brand">Scrollwerk</span>.</h1>
     <p class="lead reveal">Hier entstehen Spots und Webseiten für echte Betriebe aus Bielefeld und OWL. Ich stelle nicht nach Plan ein, sondern wenn die richtige Person kommt – als Freelancer, im Nebenjob oder Praktikum.</p>
   </section>
 
@@ -63,9 +63,9 @@
     </div>
   </section>
 </main>
-<script src="config.js?v=20261118d"></script>
-<script src="data.js?v=20261118d"></script>
-<script src="site.js?v=20261118d"></script>
+<script src="config.js?v=20261118e"></script>
+<script src="data.js?v=20261118e"></script>
+<script src="site.js?v=20261118e"></script>
 <script>
 (() => {
   const { esc } = window.SITE;
@@ -80,7 +80,7 @@
         <a class="btn" href="#bewerbung" data-job="${esc(j.title)}" style="margin-top:14px">Jetzt bewerben</a></div></details>`).join('');
   } else {
     document.getElementById('jobsHead').textContent = 'Gerade keine Ausschreibung.';
-    jobs.innerHTML = `<div class="soon-card static reveal" style="--c:#d4ff3a"><span class="soon-ico">✦</span><span class="soon-badge">Demnächst verfügbar</span>
+    jobs.innerHTML = `<div class="soon-card static reveal" style="--c:#6A3BFF"><span class="soon-ico">✦</span><span class="soon-badge">Demnächst verfügbar</span>
       <b>Die ersten Stellen kommen bald</b><span>Sobald das Studio wächst, findest du hier Freelance-Jobs, Nebenjobs und Praktika. Du willst nicht warten? Dann bewirb dich initiativ – gute Leute suche ich immer.</span>
       <a class="soon-link" href="#bewerbung">Initiativbewerbung →</a></div>`;
   }

@@ -48,7 +48,7 @@ img { display: block; max-width: 100%; }
 .logo { font-family: var(--head); font-weight: 800; letter-spacing: -.01em; font-size: 19px; gap: 8px; }
 .logo img { height: 20px; width: auto; }
 .spec-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 51; height: var(--spec-h); line-height: var(--spec-h); display: block; padding: 0 12px;
-  background: #d4ff3a; color: #08080a; font-size: 12px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  background: #FFD43B; color: #08080a; font-size: 12px; font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .spec-bar a { text-decoration: underline; font-weight: 800; }
 .links { display: flex; gap: 26px; margin-left: auto; font-size: 13px; color: #d2d2d7; }
 .links a { transition: color .2s; }

@@ -1,4 +1,4 @@
-# FLUXE Studio – Website
+# Scrollwerk – Website
 
 Mehrseitige Website mit Apple-artiger Navigation (Flyout-Menüs, Tabs), Branchenfilter, Preisen mit Katalog,
 Gratis-Check, Karriere, Team, FAQ, Kontaktformular und Terminbuchung.
