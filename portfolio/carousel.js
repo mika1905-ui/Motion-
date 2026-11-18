@@ -22,7 +22,11 @@
     if (p.kind === 'spot') return `<img class="pj-cover" src="${esc(p.poster)}" alt="" loading="lazy" decoding="async" draggable="false">
         <video class="pj-cover" muted loop playsinline preload="none" data-src="${esc(p.video)}"></video>`;
     return `<img class="pj-cover pj-d" src="${esc(p.images[0])}" alt="" loading="lazy" decoding="async" draggable="false">
-        <img class="pj-cover pj-m" src="${esc(p.mobile || p.images[0])}" alt="" loading="lazy" decoding="async" draggable="false">
+        <span class="pj-show pj-m">
+          <span class="pj-browser"><i></i><img src="${esc(p.images[0])}" alt="" loading="lazy" decoding="async" draggable="false"></span>
+          ${p.mobile ? `<span class="pj-mphone"><img src="${esc(p.mobile)}" alt="" loading="lazy" decoding="async" draggable="false"></span>` : ''}
+          <span class="pj-tags">${(p.tags || []).slice(0, 3).map(t => `<em>${esc(t)}</em>`).join('')}</span>
+        </span>
         ${p.mobile ? `<span class="pj-phone pj-d"><img src="${esc(p.mobile)}" alt="" loading="lazy" decoding="async" draggable="false"></span>` : ''}`;
   };
 
