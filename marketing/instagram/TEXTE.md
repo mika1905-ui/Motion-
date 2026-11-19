@@ -2,7 +2,8 @@
 
 Alle Bilder liegen in diesem Ordner:
 - `profilbild.png` – Profilbild (nur das Zeichen, damit es auch im kleinen Kreis gut lesbar ist)
-- `highlights/` – 7 Highlight-Cover (Projekte, Spots, Preise, Ablauf, Kunden, Chatbot, Über mich)
+- `highlights/` – 8 Highlight-Cover (Projekte, Spots, Preise, Ablauf, Kunden, Chatbot, Über mich, Karriere)
+- `stories-karriere/` – 5 Stories für das Highlight „Karriere“ (`python3 make_karriere.py` erzeugt sie neu aus den Stellen auf der Website)
 - `posts/01 … 09` – die ersten 9 Beiträge im Format 4:5, **in dieser Reihenfolge posten** (01 zuerst). Dann stehen oben im Profil VÉSTIER, Beschte und Red Bull.
 - `reel-cover.png` – Titelbild für den TikTok-/Reel-Spot
 - `vorschau/profil-vorschau.png` – so sieht das Profil am Ende ungefähr aus
@@ -58,6 +59,7 @@ Websites & Werbespots, die verkaufen.
 | Kunden | kunden.png | echte Bewertungen (Screenshots, mit Einverständnis) |
 | Chatbot | chatbot.png | Bildschirmaufnahme vom Chatbot |
 | Über mich | ueber-mich.png | Foto, Studium, warum du das machst |
+| Karriere | karriere.png | `stories-karriere/story-1…5.jpg` – auf Story 5 einen Link-Sticker zur Karriere-Seite setzen |
 
 ---
 
@@ -162,3 +164,15 @@ Wisch durch für mehr Screens 👉
 - Spec-Arbeiten mit echten Marken (Red Bull, BMW …) immer als solche kennzeichnen, Marken nicht markieren, keine Werbung *für* die Marke behaupten.
 - Kundenbewertungen nur mit Einverständnis und echt.
 - Musik: Nur Sounds aus der App-Bibliothek oder den eigenen Sound aus dem Spot verwenden (der ist selbst erzeugt und lizenzfrei).
+
+
+## Highlight „Karriere“
+
+1. Die 5 Bilder aus `stories-karriere/` nacheinander als Story posten.
+2. Auf **Story 5** einen **Link-Sticker** in den markierten Rahmen setzen: Link zur Karriere-Seite (`…/portfolio/karriere.html`), Sticker-Text „Jetzt bewerben“.
+3. Optional auf Story 1 eine **Umfrage** („Kennst du jemanden?“ – Ja / Ich bin's) für mehr Reichweite.
+4. Alle 5 Stories als Highlight **„Karriere“** speichern, Cover: `highlights/karriere.png`.
+5. Neue oder geänderte Stellen? In `portfolio/data.js` (JOBS) ändern, `python3 make_karriere.py` ausführen – Website und Stories sind wieder gleich.
+
+**Story-Text zum Teilen (optional):**
+Scrollwerk wächst 🚀 Ich suche Leute für Vertrieb, Foto/Video und Social Media – freiberuflich, flexibel, perfekt neben dem Studium. Alle Infos im Highlight „Karriere“ 💼
