@@ -1,0 +1,181 @@
+# Scrollwerk – Instagram-Setup
+
+Alle Bilder liegen in diesem Ordner:
+- `profilbild.png` – Profilbild (nur das Zeichen, damit es auch im kleinen Kreis gut lesbar ist)
+- `highlights/` – 8 Highlight-Cover (Projekte, Spots, Preise, Ablauf, Kunden, Chatbot, Über mich, Karriere)
+- `stories-karriere/` – 5 Stories für das Highlight „Karriere“ (`python3 make_karriere.py` erzeugt sie neu aus den Stellen auf der Website)
+- `posts-fertig/01 … 09` – die ersten 9 Beiträge als **Karussell** (mehrere Bilder + `caption.txt`), **in dieser Reihenfolge posten** (01 zuerst). Dann stehen oben im Profil VÉSTIER, Beschte und Red Bull.
+- `stories/` – fertige Stories für **alle 8 Highlights** (Bilder + Spot-Videos), `python3 make_stories.py` erzeugt sie neu
+- `reel-cover.png` – Titelbild für den TikTok-/Reel-Spot
+- `vorschau/profil-vorschau.png` – so sieht das Profil am Ende ungefähr aus
+
+---
+
+## 1. Profil einrichten
+
+**Kontotyp:** Einstellungen → Kontotyp und Tools → **Professionelles Konto** → **Unternehmen**
+(Dann bekommst du Statistiken, Kontakt-Buttons und kannst Beiträge bewerben.)
+
+**Benutzername** (Verfügbarkeit bitte in der App prüfen, in dieser Reihenfolge):
+1. `@scrollwerk`
+2. `@scrollwerk.studio`
+3. `@scrollwerk.de`
+4. `@scrollwerk.bielefeld`
+
+**Name** (wird in der Suche mitgefunden – deshalb die Stichwörter mit rein, max. 64 Zeichen):
+```
+Scrollwerk | Webdesign & Werbespots
+```
+
+**Kategorie:** `Webdesigner` (Alternative: `Werbeagentur`)
+
+**Bio** (max. 150 Zeichen – diese hat 129):
+```
+🎬 Werbespots · 💻 Websites · 🤖 Chatbots
+📍 Bielefeld, OWL & remote
+💸 Websites ab 690 € · Antwort in 24 h
+👇 Kostenloses Erstgespräch
+```
+
+Kürzere Alternative:
+```
+Websites & Werbespots, die verkaufen.
+📍 Bielefeld · OWL · remote
+👇 Kostenloses Erstgespräch
+```
+
+**Link:** `https://mika1905-ui.github.io/Motion-/portfolio/`
+(Sobald du eine eigene Domain hast, z. B. `scrollwerk.de`, die hier eintragen – wirkt seriöser.)
+
+**Kontakt-Buttons:** E-Mail + „Termin buchen“ (Cal.com-Link, sobald vorhanden). Adresse nur anzeigen, wenn du Kunden vor Ort empfängst.
+
+**Highlights** (Story posten → als Highlight speichern → Cover = Bild aus `highlights/`):
+
+| Highlight | Cover | Stories (Ordner `stories/…`) | Link-Sticker |
+|---|---|---|---|
+| Projekte | projekte.png | `projekte/` – VÉSTIER, Beschte, La Môme, AURÈNE, Red Bull | jeweils Live-Seite des Projekts |
+| Spots | spots.png | `spots/` – 7 Videos (Scrollwerk, BMW, iPhone, Ferrari, Porsche, Claude, GPT) | – |
+| Preise | preise.png | `preise/` – Preisliste + Branchen-Pakete | Story 2 → `…/portfolio/pakete.html` |
+| Ablauf | ablauf.png | `ablauf/` – 4 Schritte | → `…/portfolio/kontakt.html#termin` |
+| Kunden | kunden.png | `kunden/` – 5 Kundenstimmen | – |
+| Chatbot | chatbot.png | `chatbot/` – Chatbot + „Frag meinen Assistenten“ | Story 2 → Startseite (Chat unten rechts) |
+| Über mich | ueber-mich.png | `ueber-mich/` – Foto + Warum | Story 2 → `…/portfolio/kontakt.html#termin` |
+| Karriere | karriere.png | `karriere/` – 3 Stellen + Bewerbung | Story 5 → `…/portfolio/karriere.html` |
+
+`…` = `https://mika1905-ui.github.io/Motion-` (später deine Domain).
+
+---
+
+## 2. Die ersten 9 Beiträge – Captions
+
+Tipp: Am besten 3 Beiträge am ersten Tag (damit das Profil nicht leer wirkt), danach 3–4 pro Woche.
+Der TikTok-Spot geht zusätzlich als **Reel** raus (Cover: `reel-cover.png`).
+
+### 01 – Hi, ich bin Mika
+```
+Hi, ich bin Mika 👋
+
+20, BWL-Student an der FHM Bielefeld – und ich baue Websites, Werbespots und Chatbots für Betriebe, die online endlich so gut aussehen wollen, wie sie wirklich sind.
+
+Keine Agentur mit zwölf Ansprechpartnern. Einer, der zuhört, schnell antwortet und faire Festpreise macht.
+
+Hier zeige ich dir ab jetzt meine Projekte, Tipps für deinen Auftritt und wie viel eine gute Website wirklich kostet.
+
+👉 Folgen, wenn du ein Unternehmen hast oder gründen willst.
+
+#webdesign #bielefeld #owl #selbstständig #gründer #website #werbespot #webdesigner #kleinunternehmen #marketing
+```
+
+### 02 – Preise
+```
+Was kostet eine Website? 💸
+
+Hier sind meine Startpreise – ohne Kleingedrucktes:
+• Social-Spot ab 249 €
+• Onepager ab 690 €
+• Website (bis 5 Seiten) ab 1.290 €
+• 3D-Website ab 1.990 €
+• Online-Shop ab 2.490 €
+• Chatbot ab 390 €
+• Betreuung ab 29 € / Monat
+
+Nach einem kostenlosen Erstgespräch bekommst du ein festes Angebot. Kein Stundenzettel, keine Überraschung.
+
+💬 Schreib „PREIS“ in die Kommentare und ich sag dir, was dein Projekt ungefähr kostet.
+
+#websitekosten #webdesign #website #preise #selbstständig #handwerk #bielefeld #owl #kleinunternehmer #onlinemarketing
+```
+
+### 03 – Ablauf
+```
+So läuft ein Projekt bei mir ab 👇
+
+01 Erstgespräch – 15–30 Minuten, kostenlos
+02 Festes Angebot – schriftlich, ohne Überraschungen
+03 Umsetzung – mit Zwischenständen zum Anklicken
+04 Launch – und danach bin ich weiter für dich da
+
+Antwort auf jede Anfrage innerhalb von 24 Stunden.
+
+Speicher dir den Beitrag, wenn du bald eine Website brauchst 📌
+
+#webdesign #website #ablauf #freelancer #bielefeld #owl #unternehmer #digitalisierung #webentwicklung
+```
+
+### 04 – AURÈNE
+```
+Parfum-Shop, der sich nach Luxus anfühlt ✨
+
+Für AURÈNE (Konzept) habe ich einen Online-Shop gebaut: 3D-Flakon, Duftfinder, Warenkorb – und eine Seite, auf der man einfach länger bleiben will.
+
+Wischen für mehr Screens 👉
+
+#onlineshop #webdesign #parfum #luxus #ecommerce #shopdesign #3dwebsite #bielefeld #webdesigner
+```
+
+### 05 – La Môme Plage
+```
+Neue Website für ein Strandrestaurant in Cannes 🌅
+
+Für La Môme Plage an der Croisette habe ich die Website komplett neu gestaltet: Golden-Hour-Look, ein Tag zum Durchwischen vom ersten Café bis zum Feuerwerk über der Bucht, die ganze Karte online und Reservierung auf Französisch und Englisch.
+
+Wisch durch für mehr Screens 👉
+
+#restaurantwebsite #webdesign #gastronomie #cannes #cotedazur #frenchriviera #website #bielefeld #scrollwerk
+```
+
+## 4. Die ersten 2 Wochen
+
+| Tag | Feed | Story |
+|---|---|---|
+| 1 | 01, 02, 03 posten | „Neu hier“ + Umfrage |
+| 2 | Reel (TikTok-Spot) | Spot teilen + Link-Sticker |
+| 4 | 04 AURÈNE | Behind the Scenes vom Shop |
+| 6 | 05 La Môme Plage | Bildschirmaufnahme: durch den Tagesverlauf wischen |
+| 8 | 06 Chatbot | Bildschirmaufnahme Chatbot |
+| 10 | 07 Red Bull | 3D-Dose in Aktion (Bildschirmaufnahme) |
+| 12 | 08 Beschte | „So findet dich der Kunde bei Google“ |
+| 14 | 09 VÉSTIER | Erstgespräch-Aktion: „3 Plätze zum Startpreis“ |
+
+**Content-Ideen für danach:** Vorher/Nachher von echten Webseiten (mit Erlaubnis), „Website in 60 Sekunden bewerten“, Preis-Mythen, Tipps für Google-Profil, Zeitraffer beim Bauen, Kundenstimmen.
+
+---
+
+## 5. Rechtliches (wichtig in Deutschland)
+
+- **Impressum** muss vom Profil aus mit 2 Klicks erreichbar sein → im Link-Ziel (Portfolio-Footer) ist das Impressum verlinkt. ✅ Es braucht aber noch deine **echten Daten** (Name, Anschrift, E-Mail).
+- Spec-Arbeiten mit echten Marken (Red Bull, BMW …) immer als solche kennzeichnen, Marken nicht markieren, keine Werbung *für* die Marke behaupten.
+- Kundenbewertungen nur mit Einverständnis und echt.
+- Musik: Nur Sounds aus der App-Bibliothek oder den eigenen Sound aus dem Spot verwenden (der ist selbst erzeugt und lizenzfrei).
+
+
+## Highlight „Karriere“
+
+1. Die 5 Bilder aus `stories-karriere/` nacheinander als Story posten.
+2. Auf **Story 5** einen **Link-Sticker** in den markierten Rahmen setzen: Link zur Karriere-Seite (`…/portfolio/karriere.html`), Sticker-Text „Jetzt bewerben“.
+3. Optional auf Story 1 eine **Umfrage** („Kennst du jemanden?“ – Ja / Ich bin's) für mehr Reichweite.
+4. Alle 5 Stories als Highlight **„Karriere“** speichern, Cover: `highlights/karriere.png`.
+5. Neue oder geänderte Stellen? In `portfolio/data.js` (JOBS) ändern, `python3 make_karriere.py` ausführen – Website und Stories sind wieder gleich.
+
+**Story-Text zum Teilen (optional):**
+Scrollwerk wächst 🚀 Ich suche Leute für Vertrieb, Foto/Video und Social Media – freiberuflich, flexibel, perfekt neben dem Studium. Alle Infos im Highlight „Karriere“ 💼

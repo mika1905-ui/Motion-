@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kater Kit – Der Morgen danach. Gelöst.</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../fonts.css">
+
+<style>
+body{margin:0;background:#FAFAF5}
+h1,h2,h3,.brand{font-family:"Bricolage Grotesque",Inter,system-ui,sans-serif}
+a{color:#6a28ff;text-decoration:none}a:hover{color:#4b12d6;text-decoration:underline}
+*{box-sizing:border-box}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-18px) rotate(2deg)}}
+@keyframes float2{0%,100%{transform:translateY(0) rotate(6deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+@keyframes glow{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.9;transform:scale(1.08)}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(60px) scale(.97)}to{opacity:1;transform:none}}
+.fu{animation:fadeUp .9s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.12s}.d2{animation-delay:.24s}.d3{animation-delay:.36s}.d4{animation-delay:.5s}
+.float{animation:float 6s ease-in-out infinite}
+.float2{animation:float2 7s ease-in-out infinite}
+.glow{animation:glow 5s ease-in-out infinite}
+.track{display:flex;gap:56px;width:max-content;animation:marquee 34s linear infinite}
+.pop{animation:pop .4s ease}
+@supports (animation-timeline: view()){
+.reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 28%}
+}
+.box{position:relative;border-radius:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 40px 70px -28px rgba(0,0,0,.5),inset 0 -12px 0 rgba(0,0,0,.14),inset 0 2px 0 rgba(255,255,255,.25)}
+.notch{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:54px;height:10px;border-radius:6px;background:rgba(0,0,0,.28)}
+.label{background:#fff;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:2px;width:72%}
+.lb{font-size:10px;letter-spacing:.2em;font-weight:800;color:#1d1d1f}
+.ln{font-size:18px;font-weight:700;color:#1d1d1f;letter-spacing:-.01em}
+.tile{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.tile:hover{transform:scale(1.012)}
+.tile:hover .box{transform:translateY(-8px) rotate(-2deg)}
+.box{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+img.shot{display:block;width:100%;height:auto;border-radius:20px;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.tile:hover img.shot{transform:scale(1.04)}
+.shotwrap{overflow:hidden;border-radius:20px;width:100%}
+.fade{-webkit-mask-image:radial-gradient(ellipse 85% 85% at 50% 50%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 85% 85% at 50% 50%,#000 70%,transparent 100%)}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.hfloat{animation:heroFloat 6s ease-in-out infinite}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.feat{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.cmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.navlinks{display:flex;gap:28px;flex-wrap:wrap}
+.chip{transition:background .25s,color .25s}
+.cta{transition:transform .2s,background .2s}
+.cta:hover{transform:scale(1.04)}
+input[type=range]{accent-color:#6a28ff;width:100%;height:28px}
+@media (max-width:980px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.feat{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.tiles,.cards,.cmp{grid-template-columns:1fr}.navlinks{display:none}.hero-h{font-size:52px !important}.sec-h{font-size:38px !important}}
+@media (prefers-reduced-motion:reduce){.fu,.float,.float2,.glow,.track,.reveal{animation:none !important}}
+</style>
+
+</head>
+<body>
+<div id="dc-root"></div>
+<template id="dc-template">
+
+<div style="font-family: Inter, system-ui, sans-serif; color: #1d1d1f; width: 100%; overflow-x: hidden">
+
+<!-- NAV -->
+<nav style="position: sticky; top: 0; z-index: 20; background: rgba(250,250,245,0.82); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,0.08)">
+<div style="max-width: 1100px; margin: 0 auto; padding: 0 22px; height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 24px">
+<a href="#top" aria-label="Kater Kit Startseite" style="display: flex; align-items: center; gap: 8px; color: #111; text-decoration: none; min-height: 44px"><svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="18" fill="#111"/><path d="M14 28 L14 12 L25 21 Q32 18.5 39 21 L50 12 L50 28 Q54 36 50 44 Q45 53 32 53 Q19 53 14 44 Q10 36 14 28 Z" fill="#D7FF3D"/><path d="M20 36 Q24 40 28 36 M36 36 Q40 40 44 36" stroke="#111" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M30 42.5 L34 42.5 L32 45 Z" fill="#111"/></svg><span class="brand" style="font-weight: 800; font-size: 20px; letter-spacing: -0.03em">kater kit</span></a>
+<div class="navlinks" style="font-size: 13px">
+<a href="#shop" style="color: #1d1d1f">Kits</a>
+<a href="#hochzeit" style="color: #1d1d1f">Hochzeit</a>
+<a href="#shop" style="color: #1d1d1f">Party &amp; JGA</a>
+<a href="#firmen" style="color: #1d1d1f">Firmen</a>
+<a href="#vergleich" style="color: #1d1d1f">Vergleichen</a>
+</div>
+<button onClick="{{ openCart }}" aria-label="Einkaufstasche" style="display: flex; align-items: center; gap: 8px; background: none; border: 0; cursor: pointer; font: inherit; font-size: 13px; color: #1d1d1f; min-height: 44px; padding: 0 4px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+<span class="{{ bumpClass }}" style="background: #D7FF3D; color: #111; border-radius: 999px; min-width: 20px; height: 20px; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700">{{ cartCount }}</span>
+</button>
+</div>
+</nav>
+
+<!-- HERO -->
+<section id="top" style="background: #000; color: #f5f5f7; position: relative; overflow: hidden">
+<div style="max-width: 1100px; margin: 0 auto; padding: 88px 22px 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px">
+<p class="fu" style="margin: 0; font-size: 17px; font-weight: 600; color: #D7FF3D">Neu · Winter-Kollektion 2026</p>
+<h1 class="fu d1 hero-h" style="margin: 0; font-size: 88px; line-height: 1.02; font-weight: 800; letter-spacing: -0.045em">Der Morgen danach.<br><span style="color: #D7FF3D">Gelöst.</span></h1>
+<p class="fu d2" style="margin: 6px 0 0; font-size: 22px; line-height: 1.4; color: #a1a1a6; max-width: 620px">Elektrolyte, Vitamine, Snacks und Ruhe – alles in einer Box. Für dich, deine Hochzeit oder die nächste Party.</p>
+<div class="fu d3" style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap; justify-content: center; margin-top: 18px">
+<a class="cta" href="#shop" style="background: #D7FF3D; color: #111; padding: 13px 26px; border-radius: 999px; font-size: 16px; font-weight: 600; text-decoration: none">Jetzt kaufen</a>
+<a href="#inhalt" style="color: #D7FF3D; font-size: 16px; font-weight: 500; padding: 12px 6px">Was drin ist ›</a>
+</div>
+<p class="fu d3" style="margin: 8px 0 0; font-size: 14px; color: #86868b">Ab 9,90 € · Kostenloser Versand ab 39 €</p>
+<div class="fu d4" style="width: 100%; max-width: 1040px; margin-top: 24px">
+<img class="hfloat fade" src="img/eea80ea28c8cf55a366bf3bdc75a44ed.jpg" alt="Kater Kit Mini, Classic und Max als Boxen in Gelb, Violett und Schwarz" style="display: block; width: 100%; height: auto">
+</div>
+</div>
+</section>
+
+<!-- MARQUEE -->
+<div style="background: #D7FF3D; color: #111; overflow: hidden; padding: 22px 0; border-top: 0" aria-hidden="true">
+<div class="track" style="font-size: 20px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">
+<span>Hochzeit</span><span style="color: #6a28ff">✦</span><span>Junggesellenabschied</span><span style="color: #6a28ff">✦</span><span>Festival</span><span style="color: #6a28ff">✦</span><span>Silvester</span><span style="color: #6a28ff">✦</span><span>Weihnachtsfeier</span><span style="color: #6a28ff">✦</span><span>Geburtstag</span><span style="color: #6a28ff">✦</span><span>Abi-Party</span><span style="color: #6a28ff">✦</span><span>Oktoberfest</span><span style="color: #6a28ff">✦</span>
+<span>Hochzeit</span><span style="color: #6a28ff">✦</span><span>Junggesellenabschied</span><span style="color: #6a28ff">✦</span><span>Festival</span><span style="color: #6a28ff">✦</span><span>Silvester</span><span style="color: #6a28ff">✦</span><span>Weihnachtsfeier</span><span style="color: #6a28ff">✦</span><span>Geburtstag</span><span style="color: #6a28ff">✦</span><span>Abi-Party</span><span style="color: #6a28ff">✦</span><span>Oktoberfest</span><span style="color: #6a28ff">✦</span>
+</div>
+</div>
+
+<!-- TILES -->
+<section style="background: #FAFAF5; padding: 12px">
+<div class="tile reveal" style="background: #E9E2FF; border-radius: 28px; padding: 64px 24px 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; overflow: hidden; margin-bottom: 12px">
+<h2 class="sec-h" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.04em">Kater Kit Classic</h2>
+<p style="margin: 0; font-size: 24px; color: #424245">Neun Helfer. Eine Box. Null Reue.</p>
+<p style="margin: 0; font-size: 15px; color: #6e6e73">19,90 €</p>
+<div style="display: flex; gap: 22px; margin-top: 8px; flex-wrap: wrap; justify-content: center">
+<button class="cta" onClick="{{ addClassic }}" style="background: #D7FF3D; color: #111; border: 0; padding: 11px 22px; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; min-height: 44px">In die Tasche</button>
+<a href="#inhalt" style="font-size: 16px; padding: 12px 0">Mehr erfahren ›</a>
+</div>
+<div class="shotwrap" style="max-width: 980px; margin-top: 28px; border-radius: 20px 20px 0 0"><img class="shot" src="img/1a90233075a21bd7bcd887f0382d5c05.jpg" alt="Geöffnete Kater Kit Classic Box mit Elektrolyt-Sticks, Wasser, Schlafmaske, Kaffee, Brezeln und Ohrstöpseln" style="border-radius: 20px 20px 0 0"></div>
+</div>
+
+<div id="hochzeit-tile" class="tile reveal" style="background: #f3ece1; border-radius: 28px; padding: 64px 24px 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; overflow: hidden; margin-bottom: 12px">
+<p style="margin: 0; font-size: 15px; font-weight: 700; letter-spacing: .14em; color: #7a5a2c">GASTGESCHENK</p>
+<h2 class="sec-h" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.04em; color: #2b2116">Hochzeits-Set</h2>
+<p style="margin: 0; font-size: 24px; color: #5a4a36">Ja, ich will. Und morgen ein Wasser.</p>
+<p style="margin: 0; font-size: 15px; color: #6b5a44">Mit euren Namen &amp; Datum · ab 5,50 € pro Gast</p>
+<div style="display: flex; gap: 22px; margin-top: 8px; flex-wrap: wrap; justify-content: center">
+<a class="cta" href="#hochzeit" style="background: #2b2116; color: #fff; padding: 11px 22px; border-radius: 999px; font-size: 15px; font-weight: 600; text-decoration: none">Set konfigurieren</a>
+</div>
+<div class="shotwrap" style="max-width: 980px; margin-top: 28px; border-radius: 20px 20px 0 0"><img class="shot" src="img/80ce374f4b35aadc0dfe1212774a20ae.jpg" alt="Cremefarbenes Kater Kit mit „Lena &amp; Tom · 12.06.2027“ auf einer Hochzeitstafel" style="border-radius: 20px 20px 0 0"></div></div>
+
+<div class="tiles">
+<div class="tile reveal" style="background: #000; color: #f5f5f7; border-radius: 28px; padding: 56px 24px 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; overflow: hidden; min-height: 560px">
+<h3 style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.035em">Party-Box</h3>
+<p style="margin: 0; font-size: 19px; color: #a1a1a6">10 Kits für die ganze Crew.</p>
+<p style="margin: 0; font-size: 14px; color: #86868b">79,00 € · 7,90 € pro Kit</p>
+<button class="cta" onClick="{{ addParty }}" style="margin-top: 10px; background: #00c389; color: #002a1d; border: 0; padding: 11px 22px; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 44px">In die Tasche</button>
+<div class="shotwrap" style="margin-top: 26px; flex: 1; display: flex; align-items: flex-end; border-radius: 20px 20px 0 0"><img class="shot" src="img/1d1b55cc72aacdc27c2f47b72b137037.jpg" alt="Pyramide aus zehn grünen Party-Kits mit Konfetti" style="border-radius: 20px 20px 0 0"></div>
+</div>
+
+<div class="tile reveal" style="background: #ffe3ef; border-radius: 28px; padding: 56px 24px 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; overflow: hidden; min-height: 560px">
+<h3 style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.035em; color: #3d0a22">JGA-Set</h3>
+<p style="margin: 0; font-size: 19px; color: #6b2847">Letzte Nacht in Freiheit. Erster Morgen mit Plan.</p>
+<p style="margin: 0; font-size: 14px; color: #7a3a58">14,90 € pro Person · Mit Sticker &amp; Shot-Glas</p>
+<button class="cta" onClick="{{ addJga }}" style="margin-top: 10px; background: #c2185b; color: #fff; border: 0; padding: 11px 22px; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; min-height: 44px">In die Tasche</button>
+<div class="shotwrap" style="margin-top: 26px; flex: 1; display: flex; align-items: flex-end; border-radius: 20px 20px 0 0"><img class="shot" src="img/fabd0c75fa37271f1f27fafa05972961.jpg" alt="Pinkes JGA-Kit mit Konfetti" style="border-radius: 20px 20px 0 0"></div>
+</div>
+
+<div class="tile reveal" style="background: #fff1e5; border-radius: 28px; padding: 56px 24px 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; overflow: hidden; min-height: 560px">
+<h3 style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.035em; color: #3a1a00">Festival-Kit</h3>
+<p style="margin: 0; font-size: 19px; color: #6b3a10">Drei Tage. Ein Zelt. Ein Kit.</p>
+<p style="margin: 0; font-size: 14px; color: #7a4a20">24,90 € · Mit Poncho &amp; Powerbank-Tasche</p>
+<button class="cta" onClick="{{ addFestival }}" style="margin-top: 10px; background: #c75300; color: #fff; border: 0; padding: 11px 22px; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; min-height: 44px">In die Tasche</button>
+<div class="shotwrap" style="margin-top: 26px; flex: 1; display: flex; align-items: flex-end; border-radius: 20px 20px 0 0"><img class="shot" src="img/b5d80b440ea7ea313aef527a41f4a9a6.jpg" alt="Oranges Festival-Kit auf einer Wiese vor Wimpelkette" style="border-radius: 20px 20px 0 0"></div>
+</div>
+
+<div class="tile reveal" style="background: #0d0d0f; color: #f5f5f7; border-radius: 28px; padding: 56px 24px 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; overflow: hidden; min-height: 560px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .16em; color: #e0c062">LIMITIERT</p>
+<h3 style="margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.035em">Silvester-Edition</h3>
+<p style="margin: 0; font-size: 19px; color: #a1a1a6">Neues Jahr. Alter Trick.</p>
+<p style="margin: 0; font-size: 14px; color: #86868b">22,90 € · Nur bis 31.12.</p>
+<button class="cta" onClick="{{ addNye }}" style="margin-top: 10px; background: #e0c062; color: #1d1600; border: 0; padding: 11px 22px; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 44px">In die Tasche</button>
+<div class="shotwrap" style="margin-top: 26px; flex: 1; display: flex; align-items: flex-end; border-radius: 20px 20px 0 0"><img class="shot" src="img/bd762202ea387f9ef65179609463e470.jpg" alt="Schwarzes Kater Kit Silvester 2027 mit Sekt, Wunderkerze und Feuerwerk" style="border-radius: 20px 20px 0 0"></div>
+</div>
+</div>
+</section>
+
+<!-- SHOP -->
+<section id="shop" style="background: #F1EEFF; padding: 110px 22px">
+<div style="max-width: 1100px; margin: 0 auto">
+<div class="reveal" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px">
+<h2 class="sec-h" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.04em">Finde dein Kit.</h2>
+<p style="margin: 0; font-size: 21px; color: #6e6e73">Für jede Nacht das passende Danach.</p>
+</div>
+<div role="tablist" aria-label="Anlass" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+<button class="chip" role="tab" aria-selected="{{ c.sel }}" onClick="{{ c.pick }}" style="{{ c.style }}">{{ c.label }}</button>
+</sc-for>
+</div>
+<div class="cards">
+<sc-for list="{{ shown }}" as="p" hint-placeholder-count="6">
+<div style="background: #fff; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04)">
+<div style="height: 210px; border-radius: 18px; background: #F2F0E9; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 10px">
+<sc-if value="{{ p.img }}" hint-placeholder-val="{{ false }}"><img src="{{ p.img }}" alt="{{ p.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 18px"></sc-if><sc-if value="{{ p.noImg }}" hint-placeholder-val="{{ true }}"><div class="box" style="{{ p.boxStyle }}"><div class="notch"></div><div class="label" style="padding: 10px 12px"><span class="lb" style="font-size: 8px">KATER KIT</span><span class="ln" style="font-size: 14px">{{ p.short }}</span></div></div></sc-if>
+</div>
+<sc-if value="{{ p.tag }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; font-weight: 700; color: #D61F73; letter-spacing: .04em">{{ p.tag }}</span></sc-if>
+<h3 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.02em">{{ p.name }}</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.45; color: #6e6e73; flex: 1">{{ p.desc }}</p>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px">
+<span style="font-size: 17px; font-weight: 600">{{ p.priceLabel }}</span>
+<button class="cta" onClick="{{ p.add }}" style="background: #D7FF3D; color: #111; border: 0; padding: 10px 18px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px">{{ p.btn }}</button>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- LIFESTYLE -->
+<section style="background: #FAFAF5; padding: 110px 22px 0">
+<div style="max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
+<div class="reveal" style="flex: 1 1 420px; min-width: 0; border-radius: 28px; overflow: hidden">
+<img class="shot" src="img/94056fa445ba489e987dbe52b2283f6c.jpg" alt="Hände öffnen im Bett eine violette Kater Kit Recovery Box mit Elektrolyt-Drink, Brezeln und Schlafmaske" style="border-radius: 28px">
+</div>
+<div class="reveal" style="flex: 1 1 340px; display: flex; flex-direction: column; gap: 14px">
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #6a28ff">Sonntag, 10:30 Uhr</p>
+<h2 class="sec-h" style="margin: 0; font-size: 52px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05">Aufmachen.<br>Durchatmen.<br>Weiterleben.</h2>
+<p style="margin: 0; font-size: 19px; line-height: 1.5; color: #6e6e73">Stell das Kit vor der Party ans Bett. Am nächsten Morgen ist alles griffbereit: Wasser, Elektrolyte, Kaffee und Ruhe.</p>
+<a href="#shop" style="font-size: 17px; padding: 10px 0">Kit finden ›</a>
+</div>
+</div>
+</section>
+
+<!-- INHALT -->
+<section id="inhalt" style="background: #FAFAF5; padding: 110px 22px">
+<div style="max-width: 1100px; margin: 0 auto">
+<div class="reveal" style="text-align: center; display: flex; flex-direction: column; gap: 10px; margin-bottom: 56px">
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #6a28ff">Im Kater Kit Classic</p>
+<h2 class="sec-h" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.04em">Alles, was der Morgen braucht.</h2>
+</div>
+<div class="feat">
+<div class="reveal" style="background: #F2F0E9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6a28ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
+<h3 style="margin: 0; font-size: 19px; font-weight: 700">Elektrolyte</h3>
+<p style="margin: 0; font-size: 15px; color: #6e6e73; line-height: 1.45">2 Sticks Brausepulver zum Auffüllen.</p>
+</div>
+<div class="reveal" style="background: #F2F0E9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6a28ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="9" width="16" height="6" rx="3"/><path d="M12 9v6"/></svg>
+<h3 style="margin: 0; font-size: 19px; font-weight: 700">Vitamin B &amp; Magnesium</h3>
+<p style="margin: 0; font-size: 15px; color: #6e6e73; line-height: 1.45">Nahrungsergänzung als Kautabletten.</p>
+</div>
+<div class="reveal" style="background: #F2F0E9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6a28ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12c3-4 15-4 18 0-3 4-15 4-18 0z"/><path d="M4 9l2 1M20 9l-2 1"/></svg>
+<h3 style="margin: 0; font-size: 19px; font-weight: 700">Schlafmaske &amp; Ohrstöpsel</h3>
+<p style="margin: 0; font-size: 15px; color: #6e6e73; line-height: 1.45">Für die zwei Extrastunden.</p>
+</div>
+<div class="reveal" style="background: #F2F0E9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6a28ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 10h12v5a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5v-5z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M9 3v3M13 3v3"/></svg>
+<h3 style="margin: 0; font-size: 19px; font-weight: 700">Instant-Kaffee</h3>
+<p style="margin: 0; font-size: 15px; color: #6e6e73; line-height: 1.45">Ein Stick Koffein für den Neustart.</p>
+</div>
+<div class="reveal" style="background: #F2F0E9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6a28ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8c0-2 2-3 6-3s6 1 6 3-2 3-6 3-6-1-6-3z"/><path d="M6 8v8c0 2 2 3 6 3s6-1 6-3V8"/></svg>
+<h3 style="margin: 0; font-size: 19px; font-weight: 700">Salzbrezeln</h3>
+<p style="margin: 0; font-size: 15px; color: #6e6e73; line-height: 1.45">Weil Salz einfach hilft.</p>
+</div>
+<div class="reveal" style="background: #F2F0E9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6a28ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="3"/><path d="M7 8h10"/></svg>
+<h3 style="margin: 0; font-size: 19px; font-weight: 700">Mundspülung</h3>
+<p style="margin: 0; font-size: 15px; color: #6e6e73; line-height: 1.45">Reisegröße, für frischen Atem.</p>
+</div>
+<div class="reveal" style="background: #F2F0E9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6a28ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="7" width="12" height="14" rx="2"/><path d="M9 7V4h6v3"/></svg>
+<h3 style="margin: 0; font-size: 19px; font-weight: 700">Kaugummi</h3>
+<p style="margin: 0; font-size: 15px; color: #6e6e73; line-height: 1.45">Minze. Für alle Fälle.</p>
+</div>
+<div class="reveal" style="background: #F2F0E9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6a28ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+<h3 style="margin: 0; font-size: 19px; font-weight: 700">Der Morgen-Plan</h3>
+<p style="margin: 0; font-size: 15px; color: #6e6e73; line-height: 1.45">Karte mit Tipps für den Tag danach.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- HOCHZEIT KONFIGURATOR -->
+<section id="hochzeit" style="background: #f3ece1; padding: 110px 22px">
+<div style="max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+<div class="reveal" style="flex: 1 1 380px; display: flex; flex-direction: column; gap: 14px">
+<p style="margin: 0; font-size: 15px; font-weight: 700; letter-spacing: .14em; color: #7a5a2c">HOCHZEITS-SET</p>
+<h2 class="sec-h" style="margin: 0; font-size: 52px; font-weight: 800; letter-spacing: -0.04em; color: #2b2116">Rechne dein Gastgeschenk aus.</h2>
+<p style="margin: 0; font-size: 19px; line-height: 1.45; color: #5a4a36">Je mehr Gäste, desto günstiger pro Kit. Mit Namen und Datum bedruckt, in eurer Farbe.</p>
+<p style="margin: 0; font-size: 14px; color: #6b5a44">20–49 Gäste: 6,90 € · ab 50: 6,40 € · ab 100: 5,90 € · ab 150: 5,50 €</p>
+</div>
+<div class="reveal" style="flex: 1 1 380px; background: #fff; border-radius: 28px; padding: 36px; display: flex; flex-direction: column; gap: 22px; box-shadow: 0 30px 60px -30px rgba(80,50,10,.3)">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="gaeste" style="font-size: 15px; font-weight: 600; display: flex; justify-content: space-between"><span>Anzahl Gäste</span><span style="color: #6a28ff">{{ guests }}</span></label>
+<input id="gaeste" type="range" min="20" max="250" step="5" value="{{ guests }}" onChange="{{ setGuests }}">
+</div>
+<label style="display: flex; align-items: center; gap: 12px; font-size: 15px; min-height: 44px; cursor: pointer">
+<input type="checkbox" checked="{{ personal }}" onChange="{{ togglePersonal }}" style="width: 22px; height: 22px; accent-color: #6a28ff">
+<span>Personalisiert mit Namen &amp; Datum <span style="color: #6e6e73">(+0,80 € pro Kit)</span></span>
+</label>
+<div style="border-top: 1px solid #ece7df; padding-top: 20px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-size: 15px; color: #6e6e73"><span>Pro Kit</span><span>{{ perKit }}</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 17px; font-weight: 600">Gesamt</span><span style="font-size: 40px; font-weight: 800; letter-spacing: -0.03em">{{ total }}</span></div>
+<sc-if value="{{ saving }}" hint-placeholder-val="{{ true }}"><p style="margin: 0; font-size: 14px; color: #00754f; font-weight: 600">{{ saving }}</p></sc-if>
+</div>
+<button class="cta" onClick="{{ addWedding }}" style="background: #2b2116; color: #fff; border: 0; padding: 15px 22px; border-radius: 999px; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; min-height: 48px">Set in die Tasche</button>
+</div>
+</div>
+</section>
+
+<!-- FIRMEN -->
+<section id="firmen" style="background: #000; color: #f5f5f7; padding: 110px 22px">
+<div class="reveal" style="max-width: 900px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center">
+<p style="margin: 0; font-size: 17px; font-weight: 600; color: #D7FF3D">Kater Kit for Business</p>
+<h2 class="sec-h" style="margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.04em">Die Weihnachtsfeier.<br>Und der Freitag danach.</h2>
+<p style="margin: 0; font-size: 21px; color: #a1a1a6; max-width: 640px; line-height: 1.4">Kits mit eurem Logo für Teamevents, Messen und Kunden. Ab 25 Stück, ab 8,90 € pro Kit.</p>
+<a class="cta" href="#shop" style="margin-top: 10px; background: #F2F0E9; color: #000; padding: 13px 26px; border-radius: 999px; font-size: 16px; font-weight: 600; text-decoration: none">Angebot anfragen</a>
+</div>
+<div class="reveal" style="max-width: 900px; margin: 48px auto 0"><img class="hfloat" src="img/c989340002aadd4281faff42434d18c4.jpg" alt="Blaues Kater Kit Business für Firmenevents" style="display: block; width: 100%; height: auto; border-radius: 28px"></div>
+</section>
+
+<!-- VERGLEICH -->
+<section id="vergleich" style="background: #FAFAF5; padding: 110px 22px">
+<div style="max-width: 1000px; margin: 0 auto">
+<h2 class="reveal sec-h" style="margin: 0 0 56px; text-align: center; font-size: 56px; font-weight: 800; letter-spacing: -0.04em">Welches Kit passt zu dir?</h2>
+<div class="cmp">
+<div class="reveal" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 8px">
+<img src="img/c30be518f9abbedb23fe43859b24bbf7.jpg" alt="Kater Kit Mini Box" style="width: 100%; max-width: 300px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 22px; margin-bottom: 14px">
+<h3 style="margin: 0; font-size: 26px; font-weight: 800">Mini</h3>
+<p style="margin: 0; font-size: 17px; font-weight: 600">9,90 €</p>
+<div style="width: 100%; border-top: 1px solid #e8e8ed; padding-top: 14px; display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #424245">
+<span>4 Teile</span><span>1 Elektrolyt-Stick</span><span>Passt in die Jackentasche</span><span style="color: #86868b">Keine Schlafmaske</span>
+</div>
+<button class="cta" onClick="{{ addMini }}" style="margin-top: 10px; background: #D7FF3D; color: #111; border: 0; padding: 10px 20px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px">Kaufen</button>
+</div>
+<div class="reveal" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 8px">
+<img src="img/cf5b2ce2963f2283e14ca465ccc8b4f3.jpg" alt="Kater Kit Classic Box" style="width: 100%; max-width: 300px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 22px; margin-bottom: 14px">
+<h3 style="margin: 0; font-size: 26px; font-weight: 800">Classic</h3>
+<p style="margin: 0; font-size: 17px; font-weight: 600">19,90 €</p>
+<div style="width: 100%; border-top: 1px solid #e8e8ed; padding-top: 14px; display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #424245">
+<span>9 Teile</span><span>2 Elektrolyt-Sticks</span><span>Schlafmaske &amp; Ohrstöpsel</span><span>Morgen-Plan-Karte</span>
+</div>
+<button class="cta" onClick="{{ addClassic }}" style="margin-top: 10px; background: #D7FF3D; color: #111; border: 0; padding: 10px 20px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px">Kaufen</button>
+</div>
+<div class="reveal" style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 8px">
+<img src="img/4a374279111d35dda113ccbe4fce82f7.jpg" alt="Kater Kit Max Box" style="width: 100%; max-width: 300px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 22px; margin-bottom: 14px">
+<h3 style="margin: 0; font-size: 26px; font-weight: 800">Max</h3>
+<p style="margin: 0; font-size: 17px; font-weight: 600">29,90 €</p>
+<div style="width: 100%; border-top: 1px solid #e8e8ed; padding-top: 14px; display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #424245">
+<span>14 Teile</span><span>4 Elektrolyt-Sticks</span><span>Schlafmaske &amp; Ohrstöpsel</span><span>Für ein ganzes Wochenende</span>
+</div>
+<button class="cta" onClick="{{ addMax }}" style="margin-top: 10px; background: #D7FF3D; color: #111; border: 0; padding: 10px 20px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px">Kaufen</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CART DRAWER -->
+<sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position: fixed; top: 64px; right: 16px; z-index: 30; width: 340px; max-width: calc(100% - 32px); background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); border-radius: 22px; box-shadow: 0 30px 80px -20px rgba(0,0,0,.35); padding: 22px; display: flex; flex-direction: column; gap: 12px" class="fu">
+<div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 20px; font-weight: 800">Deine Tasche</h2><button onClick="{{ openCart }}" aria-label="Schließen" style="background: #F2F0E9; border: 0; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font: inherit; font-size: 18px">×</button></div>
+<sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ true }}"><p style="margin: 0; font-size: 15px; color: #6e6e73">Noch leer. Zeit, das zu ändern.</p></sc-if>
+<sc-for list="{{ cart }}" as="ci" hint-placeholder-count="2">
+<div style="display: flex; justify-content: space-between; gap: 12px; font-size: 15px"><span>{{ ci.qtyLabel }}</span><span style="font-weight: 600">{{ ci.sum }}</span></div>
+</sc-for>
+<div style="border-top: 1px solid #e8e8ed; padding-top: 12px; display: flex; justify-content: space-between; font-size: 17px; font-weight: 700"><span>Summe</span><span>{{ cartTotal }}</span></div>
+<button class="cta" style="background: #D7FF3D; color: #111; border: 0; padding: 13px; border-radius: 999px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; min-height: 44px">Zur Kasse</button>
+</div>
+</sc-if>
+
+<!-- FOOTER -->
+<footer style="background: #111; padding: 56px 22px 48px; font-size: 12px; color: #a1a1a6">
+<div style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; line-height: 1.5">
+<a href="#top" aria-label="Kater Kit Startseite" style="display: flex; align-items: center; gap: 10px; color: #FAFAF5; text-decoration: none; margin-bottom: 12px"><svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="18" fill="#D7FF3D"/><path d="M14 28 L14 12 L25 21 Q32 18.5 39 21 L50 12 L50 28 Q54 36 50 44 Q45 53 32 53 Q19 53 14 44 Q10 36 14 28 Z" fill="#111"/><path d="M20 36 Q24 40 28 36 M36 36 Q40 40 44 36" stroke="#D7FF3D" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M30 42.5 L34 42.5 L32 45 Z" fill="#D7FF3D"/></svg><span class="brand" style="font-weight: 800; font-size: 26px; letter-spacing: -0.03em">kater kit</span></a>
+<p style="margin: 0">Kater Kit enthält keine Arzneimittel. Nahrungsergänzungsmittel sind kein Ersatz für eine ausgewogene Ernährung. Bitte trink verantwortungsvoll – Abgabe nur an Personen ab 18 Jahren.</p>
+<p style="margin: 0">Alle Preise inkl. MwSt., zzgl. Versand. Kostenloser Versand ab 39 €.</p>
+<div style="border-top: 1px solid #2c2c2e; padding-top: 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px">
+<span>Copyright © 2026 Kater Kit. Alle Rechte vorbehalten.</span>
+<span style="display: flex; gap: 18px"><a href="#top" style="color: #e8e8ed">Impressum</a><a href="#top" style="color: #e8e8ed">Datenschutz</a><a href="#top" style="color: #e8e8ed">AGB</a></span>
+</div>
+</div>
+</footer>
+</div>
+</template>
+<script src="../dc-mini.js"></script>
+<script>
+
+const IMGS = {"classic": "img/cf5b2ce2963f2283e14ca465ccc8b4f3.jpg", "hochzeit": "img/80ce374f4b35aadc0dfe1212774a20ae.jpg", "jga": "img/fabd0c75fa37271f1f27fafa05972961.jpg", "party": "img/1d1b55cc72aacdc27c2f47b72b137037.jpg", "festival": "img/b5d80b440ea7ea313aef527a41f4a9a6.jpg", "nye": "img/bd762202ea387f9ef65179609463e470.jpg", "mini": "img/c30be518f9abbedb23fe43859b24bbf7.jpg", "max": "img/4a374279111d35dda113ccbe4fce82f7.jpg", "firma": "img/c989340002aadd4281faff42434d18c4.jpg"};
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { cat: 'alle', guests: 80, personal: true, cart: {}, cartOpen: false, bump: 0 };
+    this.products = [
+      { id: 'mini', name: 'Kater Kit Mini', short: 'Mini', cat: 'solo', desc: 'Das Notfall-Kit für die Jackentasche. 4 Teile.', price: 9.90, color: '#ffd60a', unit: '' },
+      { id: 'classic', name: 'Kater Kit Classic', short: 'Classic', cat: 'solo', desc: 'Unser Bestseller. 9 Teile für den Morgen danach.', price: 19.90, color: '#5b3df5', unit: '', tag: 'Bestseller' },
+      { id: 'max', name: 'Kater Kit Max', short: 'Max', cat: 'solo', desc: 'Für das ganz große Wochenende. 14 Teile.', price: 29.90, color: '#1f1f22', unit: '' },
+      { id: 'hochzeit', name: 'Hochzeits-Set', short: 'Wedding', cat: 'hochzeit', desc: 'Gastgeschenk mit euren Namen und Datum. Ab 20 Stück.', price: 6.90, color: '#e9dcc9', unit: 'ab ', per: ' / Gast', link: true },
+      { id: 'jga', name: 'JGA-Set', short: 'JGA', cat: 'party', desc: 'Mit Sticker und Shot-Glas für die ganze Truppe.', price: 14.90, color: '#ff5fa2', unit: '', per: ' / Person' },
+      { id: 'party', name: 'Party-Box 10er', short: 'Party', cat: 'party', desc: '10 Kits für Geburtstag, Abi oder WG-Party.', price: 79.00, color: '#00c389', unit: '' },
+      { id: 'festival', name: 'Festival-Kit', short: 'Festival', cat: 'party', desc: 'Mit Poncho, Elektrolyten und Powerbank-Tasche.', price: 24.90, color: '#ff7a00', unit: '' },
+      { id: 'nye', name: 'Silvester-Edition', short: '2027', cat: 'party', desc: 'Limitiert bis 31.12. In Schwarz und Gold.', price: 22.90, color: '#1c1a14', unit: '', tag: 'Limitiert' },
+      { id: 'firma', name: 'Weihnachtsfeier-Set', short: 'Business', cat: 'firma', desc: 'Mit eurem Logo bedruckt. Ab 25 Stück.', price: 8.90, color: '#0a84ff', unit: 'ab ', per: ' / Stück' }
+    ];
+  }
+  eur(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
+  weddingUnit() {
+    const g = this.state.guests;
+    let u = g >= 150 ? 5.50 : g >= 100 ? 5.90 : g >= 50 ? 6.40 : 6.90;
+    if (this.state.personal) u += 0.80;
+    return u;
+  }
+  add(id, qty, price, label) {
+    const cart = Object.assign({}, this.state.cart);
+    const cur = cart[id] || { qty: 0, price: price, label: label };
+    cart[id] = { qty: cur.qty + qty, price: price, label: label };
+    this.setState({ cart: cart, bump: this.state.bump + 1 });
+  }
+  addById(id) {
+    const p = this.products.find((x) => x.id === id);
+    this.add(p.id, 1, p.price, p.name);
+  }
+  renderVals() {
+    const s = this.state;
+    const cats = [['alle', 'Alle'], ['solo', 'Für dich'], ['hochzeit', 'Hochzeit'], ['party', 'Party & JGA'], ['firma', 'Firmen']].map(([id, label]) => {
+      const sel = s.cat === id;
+      return {
+        label: label, sel: sel ? 'true' : 'false',
+        pick: () => this.setState({ cat: id }),
+        style: 'border: 0; cursor: pointer; font: inherit; font-size: 15px; font-weight: 600; padding: 10px 20px; min-height: 44px; border-radius: 999px; ' + (sel ? 'background: #1d1d1f; color: #fff' : 'background: #fff; color: #1d1d1f')
+      };
+    });
+    const shown = this.products.filter((p) => s.cat === 'alle' || p.cat === s.cat).map((p) => ({
+      name: p.name, short: p.short, img: IMGS[p.id] || '', noImg: !IMGS[p.id], desc: p.desc, tag: p.tag || '',
+      priceLabel: (p.unit || '') + this.eur(p.price) + (p.per || ''),
+      btn: p.id === 'hochzeit' ? 'Konfigurieren' : 'Kaufen',
+      boxStyle: 'width: 120px; height: 150px; background: ' + p.color,
+      add: p.id === 'hochzeit' ? () => { const el = document.getElementById('hochzeit'); if (el) el.scrollIntoView({ behavior: 'smooth' }); } : () => this.addById(p.id)
+    }));
+    const unit = this.weddingUnit();
+    const baseFull = 6.90 + (s.personal ? 0.80 : 0);
+    const save = (baseFull - unit) * s.guests;
+    const cartItems = Object.keys(s.cart).map((k) => {
+      const c = s.cart[k];
+      return { qtyLabel: c.qty + ' × ' + c.label, sum: this.eur(c.qty * c.price), total: c.qty * c.price, qty: c.qty };
+    });
+    const cartCount = cartItems.reduce((a, c) => a + (c.qty > 20 ? 1 : c.qty), 0);
+    return {
+      cats: cats, shown: shown,
+      guests: s.guests,
+      personal: s.personal,
+      setGuests: (e) => this.setState({ guests: Number(e.target.value) }),
+      togglePersonal: () => this.setState({ personal: !s.personal }),
+      perKit: this.eur(unit),
+      total: this.eur(unit * s.guests),
+      saving: save > 0.01 ? 'Du sparst ' + this.eur(save) + ' durch den Mengenrabatt.' : '',
+      addWedding: () => this.add('wedding-' + s.guests + (s.personal ? 'p' : ''), s.guests, unit, 'Hochzeits-Set' + (s.personal ? ' (personalisiert)' : '')),
+      addClassic: () => this.addById('classic'),
+      addMini: () => this.addById('mini'),
+      addMax: () => this.addById('max'),
+      addParty: () => this.addById('party'),
+      addJga: () => this.addById('jga'),
+      addFestival: () => this.addById('festival'),
+      addNye: () => this.addById('nye'),
+      cart: cartItems,
+      cartEmpty: cartItems.length === 0,
+      cartCount: cartCount,
+      cartTotal: this.eur(cartItems.reduce((a, c) => a + c.total, 0)),
+      cartOpen: s.cartOpen,
+      openCart: () => this.setState({ cartOpen: !s.cartOpen }),
+      bumpClass: s.bump % 2 ? 'pop' : 'pop-b'
+    };
+  }
+}
+
+window.Component = Component;
+</script>
+</body>
+</html>

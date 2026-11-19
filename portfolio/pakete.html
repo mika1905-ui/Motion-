@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Branchen-Pakete · Scrollwerk</title>
+<meta name="description" content="Fertige Pakete für Gastro, Handwerk, Praxen, Beauty, Immobilien und Shops – zum Festpreis und selbst konfigurierbar.">
+<meta name="theme-color" content="#f6f5f0">
+<link rel="icon" href="brand/scrollwerk-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css?v=20261119a">
+</head>
+<body data-page="preise">
+<main>
+<main>
+  <section class="phero">
+    <p class="kicker reveal">Branchen-Pakete</p>
+    <h1 class="reveal">Dein Paket.<br>Für deine Branche.</h1>
+    <p class="lead reveal">Alles, was dein Betrieb online braucht – fertig geschnürt und günstiger als einzeln. Wähl deine Branche, nimm dazu, was du willst, und sieh sofort, was es kostet.</p>
+  </section>
+
+  <section class="pk-wrap">
+    <div class="pk-tiles reveal" id="pkTiles" role="tablist" aria-label="Branche wählen"></div>
+    <div class="pk-conf" id="pkConf"></div>
+  </section>
+
+  <section class="sec">
+    <div class="pk-more reveal">
+      <div><h3>Deine Branche ist nicht dabei?</h3><p>Kein Problem – jedes Paket lässt sich anpassen. Oder stell dir im Preisrechner selbst etwas zusammen.</p></div>
+      <div class="pk-more-btns"><a class="btn" href="kontakt.html#termin">Kostenloses Erstgespräch</a><a class="btn btn-ghost" href="preise.html#rechner">Zum Preisrechner</a></div>
+    </div>
+    <p class="price-hint" style="padding:0;margin-top:26px">Startpreise. Das feste Angebot bekommst du nach dem Erstgespräch – ohne Überraschungen. „Einzeln gebucht“ ist die Summe der Einzelpreise aus meiner Preisliste.</p>
+    <p class="price-hint" style="padding:0" data-cfg="vatNote"></p>
+  </section>
+</main>
+<div class="pk-mbar" id="pkMbar" hidden><div><small>Einmalig</small><b></b><span></span></div><a class="btn" href="#">Anfragen</a></div>
+<script src="config.js?v=20261119a"></script>
+<script src="data.js?v=20261119a"></script>
+<script src="site.js?v=20261119a"></script>
+<script>
+(() => {
+  const { esc } = window.SITE;
+  const eur = n => n.toLocaleString('de-DE') + ' €';
+  const BN = window.BUNDLES, P = window.PROJECTS || [], BR = window.BRANCHEN || [];
+  const tiles = document.getElementById('pkTiles'), conf = document.getElementById('pkConf'), mbar = document.getElementById('pkMbar');
+  const state = {};
+  BN.forEach(b => state[b.id] = { choice: (b.choices || []).map(() => 0), extras: new Set() });
+  let cur = BN.some(b => '#' + b.id === location.hash) ? location.hash.slice(1) : BN[0].id;
+
+  tiles.innerHTML = BN.map(b => `<button class="pk-tile" type="button" role="tab" data-b="${b.id}" style="--c:${b.color}">
+      <i>${b.icon}</i><b>${esc(b.name)}</b><span>${esc(b.title)}</span><small>ab ${eur(b.base)}</small></button>`).join('');
+
+  const calc = b => {
+    const s = state[b.id];
+    let once = b.base, mon = 0;
+    (b.choices || []).forEach((c, ci) => { once += c.opts[s.choice[ci]][1]; });
+    b.extras.forEach((e, ei) => { if (s.extras.has(ei)) { if (e[2] === 'monat') mon += e[1]; else once += e[1]; } });
+    return { once, mon };
+  };
+  const summaryText = b => {
+    const s = state[b.id], t = calc(b);
+    const lines = [`Branchen-Paket ${b.name} „${b.title}“ (ab ${eur(b.base)})`];
+    (b.choices || []).forEach((c, ci) => lines.push(`${c.label}: ${c.opts[s.choice[ci]][0]}`));
+    const ex = b.extras.filter((e, ei) => s.extras.has(ei)).map(e => `${e[0]} (${eur(e[1])}${e[2] === 'monat' ? '/Monat' : ''})`);
+    if (ex.length) lines.push('Dazu: ' + ex.join(', '));
+    lines.push(`Summe: ${eur(t.once)} einmalig${t.mon ? ` + ${eur(t.mon)}/Monat` : ''}`);
+    return lines.join('\n');
+  };
+  const link = b => {
+    const br = BR.find(x => x.id === b.branche);
+    return `kontakt.html?${new URLSearchParams({ ...(br ? { branche: br.name } : {}), paket: summaryText(b) })}#anfrage`;
+  };
+
+  const render = () => {
+    const b = BN.find(x => x.id === cur), s = state[b.id], ref = P.find(p => p.id === b.ref);
+    tiles.querySelectorAll('.pk-tile').forEach(t => { const on = t.dataset.b === cur; t.classList.toggle('on', on); t.setAttribute('aria-selected', on); });
+    conf.style.setProperty('--c', b.color);
+    conf.innerHTML = `
+      <div class="pk-main">
+        <div class="pk-head">
+          <p class="pk-kick"><i>${b.icon}</i> Paket ${esc(b.name)}</p>
+          <h2>${esc(b.title)}.</h2>
+          <p class="pk-tag">${esc(b.tagline)}</p>
+          <p class="pk-fits">Passt für: ${esc(b.fits)}</p>
+          ${ref ? `<button class="pk-ref" type="button" data-project="${ref.id}">${ref.mobile ? `<img src="${esc(ref.mobile)}" alt="" loading="lazy">` : ''}<span><small>So kann es aussehen</small><b>${esc(ref.title)}</b></span><em>Ansehen →</em></button>` : ''}
+        </div>
+        <div class="pk-block"><h3>Das ist drin</h3><ul class="pk-incl">${b.incl.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>
+        ${(b.choices || []).map((c, ci) => `<div class="pk-block"><h3>${esc(c.label)}</h3><div class="pk-choice" role="radiogroup" aria-label="${esc(c.label)}">
+          ${c.opts.map((o, oi) => `<button type="button" role="radio" aria-checked="${s.choice[ci] === oi}" class="${s.choice[ci] === oi ? 'on' : ''}" data-ci="${ci}" data-oi="${oi}">
+            <b>${esc(o[0])}</b><small>${esc(o[2])}</small><em>${o[1] ? '+ ' + eur(o[1]) : 'inklusive'}</em></button>`).join('')}</div></div>`).join('')}
+        <div class="pk-block"><h3>Dazunehmen</h3><div class="pk-extras">
+          ${b.extras.map((e, ei) => `<button type="button" role="checkbox" aria-checked="${s.extras.has(ei)}" class="pk-x ${s.extras.has(ei) ? 'on' : ''}" data-ei="${ei}">
+            <span class="pk-check" aria-hidden="true"></span><span class="pk-xt"><b>${esc(e[0])}</b><small>${esc(e[3])}</small></span><em>+ ${eur(e[1])}${e[2] === 'monat' ? '<small> / Monat</small>' : ''}</em></button>`).join('')}
+        </div></div>
+      </div>
+      <aside class="pk-sum" aria-live="polite"></aside>`;
+    renderSum();
+  };
+  const renderSum = () => {
+    const b = BN.find(x => x.id === cur), s = state[b.id], t = calc(b);
+    const rows = [[`Paket ${b.name}`, eur(b.base)]];
+    (b.choices || []).forEach((c, ci) => { const o = c.opts[s.choice[ci]]; if (o[1]) rows.push([o[0], '+ ' + eur(o[1])]); });
+    b.extras.forEach((e, ei) => { if (s.extras.has(ei)) rows.push([e[0], '+ ' + eur(e[1]) + (e[2] === 'monat' ? ' / Mon.' : '')]); });
+    const sum = conf.querySelector('.pk-sum');
+    sum.innerHTML = `<p class="pk-sk">Dein Paket</p>
+      <ul class="pk-rows">${rows.map(r => `<li><span>${esc(r[0])}</span><b>${esc(r[1])}</b></li>`).join('')}</ul>
+      <div class="pk-total"><small>Einmalig ab</small><b>${eur(t.once)}</b>${t.mon ? `<span>+ ${eur(t.mon)} / Monat</span>` : ''}</div>
+      <p class="pk-save">Einzeln gebucht <s>${eur(b.worth)}</s> · du sparst <b>${eur(b.worth - b.base)}</b></p>
+      <p class="pk-time">⏱ Fertig in ca. ${esc(b.weeks)} Wochen</p>
+      <a class="btn pk-go" href="${link(b)}">Paket anfragen →</a>
+      <p class="pk-fine">Unverbindlich · Antwort in 24 h · festes Angebot nach dem Erstgespräch</p>`;
+    mbar.querySelector('b').textContent = eur(t.once);
+    mbar.querySelector('span').textContent = t.mon ? `+ ${eur(t.mon)} / Monat` : `Paket ${b.name}`;
+    mbar.querySelector('a').href = link(b);
+  };
+
+  tiles.addEventListener('click', e => { const t = e.target.closest('.pk-tile'); if (!t || t.dataset.b === cur) return; cur = t.dataset.b; history.replaceState(null, '', '#' + cur); render(); });
+  conf.addEventListener('click', e => {
+    const b = BN.find(x => x.id === cur), s = state[b.id];
+    const c = e.target.closest('[data-ci]');
+    if (c) { s.choice[+c.dataset.ci] = +c.dataset.oi; c.parentElement.querySelectorAll('button').forEach(x => { const on = x === c; x.classList.toggle('on', on); x.setAttribute('aria-checked', on); }); renderSum(); return; }
+    const x = e.target.closest('[data-ei]');
+    if (x) { const i = +x.dataset.ei; s.extras.has(i) ? s.extras.delete(i) : s.extras.add(i); const on = s.extras.has(i); x.classList.toggle('on', on); x.setAttribute('aria-checked', on); renderSum(); }
+  });
+  render();
+
+  // Handy: kompakte Leiste unten, solange der Konfigurator sichtbar und die Summe nicht im Bild ist
+  const mq = matchMedia('(max-width: 900px)');
+  let confIn = false, sumIn = false;
+  const upd = () => { mbar.hidden = !(mq.matches && confIn && !sumIn); };
+  new IntersectionObserver(([e]) => { confIn = e.isIntersecting; upd(); }).observe(conf);
+  const watchSum = () => { const s = conf.querySelector('.pk-sum'); so.disconnect(); so.observe(s); };
+  const so = new IntersectionObserver(([e]) => { sumIn = e.isIntersecting; upd(); });
+  watchSum(); new MutationObserver(watchSum).observe(conf, { childList: true });
+  mq.addEventListener('change', upd);
+  window.SITE.refresh();
+})();
+</script>
+</body>
+</html>

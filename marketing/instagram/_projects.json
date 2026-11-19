@@ -1,0 +1,124 @@
+{
+ "vestier": {
+  "title": "VÉSTIER",
+  "sub": "Private Estates · Luxus-Immobilien",
+  "text": "Edle Makler-Website im Apple-Stil: Hero mit Parallax, Objekt des Monats mit Scroll-Zoom, filterbarer Bestand mit Exposé-Ansicht, verschlüsseltes Off-Market-Portfolio, Team, Karriere, FAQ und Anfrageformular mit Kaufen/Verkaufen/Off-Market.",
+  "tags": [
+   "Immobilien",
+   "Scroll-Animation",
+   "Objektfilter",
+   "Exposé-Ansicht"
+  ],
+  "images": [
+   "img/vestier-1.webp",
+   "img/vestier-2.webp",
+   "img/vestier-3.webp"
+  ],
+  "mobile": "img/vestier-mobile.webp",
+  "note": "Konzeptprojekt mit fiktiver Marke."
+ },
+ "beschte": {
+  "title": "Elektrotechnik Beschte",
+  "sub": "Elektro-Meisterbetrieb · Website & Chatbot",
+  "text": "Website für einen Elektro-Meisterbetrieb: 24/7-Notdienst prominent, neun Leistungsbereiche von Photovoltaik bis Wallbox, Karriere mit Stellen und 2-Minuten-Bewerbung, FAQ, Anfrageformular und Chat-Assistent „Volti“, der Anfragen Schritt für Schritt aufnimmt.",
+  "tags": [
+   "Handwerk",
+   "Chatbot",
+   "Karriere & Bewerbung",
+   "Anfrageformular"
+  ],
+  "images": [
+   "img/beschte-1.webp",
+   "img/beschte-2.webp",
+   "img/beschte-3.webp"
+  ],
+  "mobile": "img/beschte-mobile.webp",
+  "note": "Kontaktdaten in dieser Vorschau durch Platzhalter ersetzt."
+ },
+ "redbull": {
+  "title": "Red Bull",
+  "sub": "3D-Produktseite · Spec-Arbeit",
+  "text": "Eine Dose, die man anfassen will: originale Slim-Can-Form in 3D, neun Sorten von Original über Zero bis zu den sieben Editions. Die Dose dreht sich beim Scrollen, öffnet die Lasche und versprüht Tropfen – und ein 24er Tray füllt sich Dose für Dose, in jeder Sorte.",
+  "tags": [
+   "Three.js",
+   "3D-Tray",
+   "Markenwechsel"
+  ],
+  "images": [
+   "img/redbull-3.webp",
+   "img/redbull-2.webp",
+   "img/redbull-1.webp"
+  ],
+  "mobile": "img/redbull-mobile.webp",
+  "note": "Unbeauftragte Spec-Arbeit, keine Verbindung zu Red Bull. Marken und Produktabbildungen gehören der Red Bull GmbH."
+ },
+ "katerkit": {
+  "title": "Kater Kit",
+  "sub": "Online-Shop · Hangover-Kits",
+  "text": "Frecher Shop für „den Morgen danach“: Kategorien-Filter, Warenkorb, Hochzeits-Konfigurator mit Gästeanzahl und Mengenrabatt, Produktvergleich, eigenes Logo und Markenauftritt. Produktfotos im einheitlichen Studio-Look.",
+  "tags": [
+   "Online-Shop",
+   "Warenkorb",
+   "Konfigurator",
+   "Branding"
+  ],
+  "images": [
+   "img/katerkit-1.webp",
+   "img/katerkit-2.webp",
+   "img/katerkit-3.webp"
+  ],
+  "mobile": "img/katerkit-mobile.webp",
+  "note": "Konzeptprojekt mit fiktiver Marke."
+ },
+ "aurene": {
+  "title": "AURÈNE",
+  "sub": "Maison de Parfum · Online-Shop",
+  "text": "Luxuriöser Parfum-Shop mit 3D-Flakon, der sich beim Scrollen dreht und die Duftnoten (Kopf, Herz, Basis) entfaltet. Farbwechsel je Duft, Duftfinder, Discovery-Set, Warenkorb und Cookie-Einwilligung.",
+  "tags": [
+   "3D-Flakon",
+   "Online-Shop",
+   "Duftfinder",
+   "Scroll-Animation"
+  ],
+  "images": [
+   "img/aurene-1.webp",
+   "img/aurene-2.webp",
+   "img/aurene-3.webp"
+  ],
+  "mobile": "img/aurene-mobile.webp",
+  "note": "Konzeptprojekt mit fiktiver Marke."
+ },
+ "assistent": {
+  "title": "Website-Assistent",
+  "sub": "FAQ-Chatbot · Live auf dieser Seite",
+  "text": "Der Chat unten rechts: kennt alle Leistungen, Preise, Projekte und Abläufe dieser Website, gibt Schritt-für-Schritt-Anleitungen und leitet Besucher direkt zur richtigen Seite oder ins Formular. Läuft komplett im Browser – ohne laufende Kosten. So etwas baue ich auch für deine Website.",
+  "tags": [
+   "FAQ-Chatbot",
+   "Navigation",
+   "Anleitungen",
+   "Datenschutzfreundlich"
+  ],
+  "images": [
+   "img/chatbot-v2-1.webp",
+   "img/chatbot-v2-2.webp"
+  ],
+  "mobile": "img/chatbot-v2-mobile.webp",
+  "note": "Eigenes Projekt – direkt hier live testen."
+ },
+ "lamome": {
+  "title": "La Môme Plage",
+  "sub": "Strandrestaurant · Cannes, La Croisette",
+  "text": "Neue Website für das Strandrestaurant an der Croisette.",
+  "tags": [
+   "Gastronomie",
+   "Zweisprachig",
+   "Reservierung"
+  ],
+  "images": [
+   "img/lamome-1.webp",
+   "img/lamome-2.webp",
+   "img/lamome-3.webp"
+  ],
+  "mobile": "img/lamome-mobile.webp"
+ }
+}

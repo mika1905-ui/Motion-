@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elektrotechnik Beschte – Ihr Meisterbetrieb für Elektrik</title>
+<meta name="description" content="Elektrotechnik Beschte: Elektroinstallation, Smart Home, Photovoltaik, Wallboxen, E-Check und 24/7-Notdienst. Meisterbetrieb – jetzt Angebot anfragen.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{
+  --navy:#0E1726; --navy-2:#16223A; --navy-3:#1F2E4C;
+  --volt:#FFC93C; --volt-2:#FFB400; --ink:#1A2233; --muted:#5B6578;
+  --bg:#F6F7FA; --card:#FFFFFF; --line:#E3E7EF; --ok:#1E9E63;
+  --radius:16px; --shadow:0 10px 30px rgba(14,23,38,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.display{font-family:"Barlow Condensed",Inter,sans-serif;letter-spacing:.2px;line-height:1.05}
+a{color:inherit}
+img,svg{display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:600;text-decoration:none;border:0;cursor:pointer;font-size:15px;transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-volt{background:var(--volt);color:var(--navy);box-shadow:0 8px 24px rgba(255,201,60,.35)}
+.btn-volt:hover{background:var(--volt-2)}
+.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35)}
+.btn-ghost:hover{border-color:#fff}
+.btn-dark{background:var(--navy);color:#fff}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--volt-2)}
+.eyebrow::before{content:"";width:22px;height:2px;background:currentColor}
+section{padding:96px 0}
+.sec-head{max-width:680px;margin-bottom:48px}
+.sec-head h2{font-size:clamp(36px,5vw,54px);margin:10px 0 14px;color:var(--navy)}
+.sec-head p{color:var(--muted);font-size:17px}
+.topbar{background:var(--navy);color:#C9D2E3;font-size:13px}
+.topbar .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+.topbar b{color:var(--volt)}
+.topbar a{text-decoration:none}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(14,23,38,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}
+.logo-mark{width:40px;height:40px;border-radius:10px;background:var(--volt);display:grid;place-items:center}
+.logo-text{font-family:"Barlow Condensed";font-weight:800;font-size:26px;line-height:1}
+.logo-text small{display:block;font-family:Inter;font-weight:500;font-size:11px;letter-spacing:2px;color:#9AA6BD;text-transform:uppercase;margin-top:3px}
+.nav ul{display:flex;gap:28px;list-style:none}
+.nav ul a{color:#D5DCEA;text-decoration:none;font-size:15px;font-weight:500}
+.nav ul a:hover{color:var(--volt)}
+.nav .btn{padding:11px 18px}
+.burger{display:none;background:none;border:0;color:#fff;cursor:pointer}
+@media(max-width:940px){
+  .nav ul{position:absolute;top:72px;left:0;right:0;flex-direction:column;gap:0;background:var(--navy);padding:8px 22px 20px;display:none}
+  .nav ul.open{display:flex}
+  .nav ul li a{display:block;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+  .burger{display:block}
+  .nav .cta-desktop{display:none}
+}
+.hero{position:relative;background:radial-gradient(1200px 600px at 85% 10%,#24365C 0%,transparent 60%),linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 100%);color:#fff;overflow:hidden;padding:110px 0 130px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center}
+.hero h1{font-size:clamp(46px,7vw,86px);font-weight:800;text-transform:uppercase}
+.hero h1 span{color:var(--volt)}
+.hero p.lead{font-size:19px;color:#C3CCDD;max-width:560px;margin:22px 0 34px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.badges{display:flex;gap:22px;margin-top:40px;flex-wrap:wrap}
+.badge{display:flex;align-items:center;gap:10px;font-size:14px;color:#D5DCEA}
+.badge svg{color:var(--volt)}
+.hero-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:30px;backdrop-filter:blur(6px)}
+.hero-card h3{font-size:30px;margin-bottom:6px}
+.hero-card .pulse{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#7CF0B2;margin-bottom:14px}
+.pulse i{width:9px;height:9px;border-radius:50%;background:#2EE08A;box-shadow:0 0 0 0 rgba(46,224,138,.7);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(46,224,138,0)}100%{box-shadow:0 0 0 0 rgba(46,224,138,0)}}
+.hero-card .phone{display:block;font-family:"Barlow Condensed";font-weight:800;font-size:40px;color:var(--volt);text-decoration:none;margin:10px 0 6px}
+.hero-card p{color:#AEB9CE;font-size:14px}
+.hero-card hr{border:0;border-top:1px solid rgba(255,255,255,.1);margin:22px 0}
+.hero-card ul{list-style:none;display:grid;gap:10px;font-size:15px;color:#D5DCEA}
+.hero-card li{display:flex;gap:10px;align-items:center}
+.hero-card li svg{color:var(--volt);flex:none}
+.bolt-bg{position:absolute;right:-120px;bottom:-140px;width:520px;opacity:.05;color:var(--volt);pointer-events:none}
+@media(max-width:940px){.hero-grid{grid-template-columns:1fr}.hero{padding:70px 0 90px}}
+.stats{margin-top:-60px;position:relative;z-index:2;padding:0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.stat{padding:30px 26px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-family:"Barlow Condensed";font-size:46px;color:var(--navy);line-height:1}
+.stat b em{font-style:normal;color:var(--volt-2)}
+.stat span{color:var(--muted);font-size:14px}
+@media(max-width:760px){.stats-grid{grid-template-columns:1fr 1fr}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.svc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:30px;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden}
+.svc:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:transparent}
+.svc::after{content:"";position:absolute;left:0;top:0;height:4px;width:0;background:var(--volt);transition:width .3s}
+.svc:hover::after{width:100%}
+.svc .ico{width:54px;height:54px;border-radius:14px;background:#FFF5D6;color:#B07A00;display:grid;place-items:center;margin-bottom:20px}
+.svc h3{font-size:26px;color:var(--navy);margin-bottom:8px}
+.svc p{color:var(--muted);font-size:15px}
+.svc ul{list-style:none;margin-top:14px;display:grid;gap:6px;font-size:14px}
+.svc li::before{content:"✓";color:var(--ok);font-weight:700;margin-right:8px}
+.svc.feature{background:var(--navy);color:#fff;border-color:var(--navy)}
+.svc.feature h3{color:var(--volt)}
+.svc.feature p,.svc.feature li{color:#C3CCDD}
+.svc.feature .ico{background:rgba(255,201,60,.15);color:var(--volt)}
+@media(max-width:940px){.services-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.services-grid{grid-template-columns:1fr}}
+.process{background:var(--card)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:s}
+.step{position:relative;padding-top:20px}
+.step::before{counter-increment:s;content:"0" counter(s);font-family:"Barlow Condensed";font-weight:800;font-size:64px;color:#EEF1F6;line-height:1;display:block}
+.step h3{font-size:24px;color:var(--navy);margin:-18px 0 8px;position:relative}
+.step p{color:var(--muted);font-size:15px}
+@media(max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.about-visual{position:relative;border-radius:24px;background:linear-gradient(150deg,var(--navy-3),var(--navy));aspect-ratio:4/5;overflow:hidden;display:grid;place-items:center}
+.about-visual svg.circuit{position:absolute;inset:0;width:100%;height:100%;opacity:.35}
+.about-visual .seal{position:relative;background:var(--volt);color:var(--navy);border-radius:50%;width:190px;height:190px;display:grid;place-items:center;text-align:center;font-family:"Barlow Condensed";font-weight:800;font-size:22px;line-height:1.05;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.about-visual .seal b{font-size:54px;display:block}
+.about-visual .tag{position:absolute;left:22px;bottom:22px;right:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:14px;padding:16px 18px;font-size:14px;backdrop-filter:blur(6px)}
+.about p{color:var(--muted);margin-bottom:16px;font-size:16px}
+.values{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+.value{display:flex;gap:14px;align-items:flex-start}
+.value .dot{flex:none;width:40px;height:40px;border-radius:12px;background:var(--navy);color:var(--volt);display:grid;place-items:center}
+.value b{display:block;color:var(--navy)}
+.value span{font-size:14px;color:var(--muted)}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr}.about-visual{aspect-ratio:16/11}}
+.career{background:var(--navy);color:#fff}
+.career .sec-head h2{color:#fff}
+.career .sec-head p{color:#AEB9CE}
+.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:46px}
+.benefit{background:var(--navy-2);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:20px}
+.benefit svg{color:var(--volt);margin-bottom:10px}
+.benefit b{display:block;font-size:16px}
+.benefit span{font-size:14px;color:#AEB9CE}
+.jobs{display:grid;gap:14px}
+.job{background:#fff;color:var(--ink);border-radius:16px;overflow:hidden}
+.job summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 26px;cursor:pointer}
+.job summary::-webkit-details-marker{display:none}
+.job h3{font-size:26px;color:var(--navy)}
+.job .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:12px;font-weight:600;background:#EEF1F6;color:var(--navy);padding:5px 10px;border-radius:999px}
+.chip.hot{background:#FFF0C2;color:#8A5E00}
+.job .plus{flex:none;width:38px;height:38px;border-radius:50%;background:var(--bg);display:grid;place-items:center;transition:transform .2s}
+.job[open] .plus{transform:rotate(45deg);background:var(--volt)}
+.job .body{padding:0 26px 26px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.job .body h4{font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
+.job .body ul{padding-left:18px;font-size:15px;display:grid;gap:4px}
+.job .body .actions{grid-column:1/-1}
+@media(max-width:760px){.benefits{grid-template-columns:1fr 1fr}.job .body{grid-template-columns:1fr}}
+.apply{margin-top:46px;background:var(--navy-2);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:34px;display:grid;grid-template-columns:.8fr 1.2fr;gap:36px}
+.apply h3{font-size:34px;color:var(--volt);margin-bottom:10px}
+.apply p{color:#AEB9CE}
+@media(max-width:860px){.apply{grid-template-columns:1fr}}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form .full{grid-column:1/-1}
+.form label{font-size:13px;font-weight:600;display:block;margin-bottom:6px}
+.form input,.form select,.form textarea{width:100%;font:inherit;font-size:15px;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink);outline:none;transition:border-color .15s}
+.form input:focus,.form select:focus,.form textarea:focus{border-color:var(--volt-2)}
+.form textarea{min-height:120px;resize:vertical}
+.dark-form label{color:#D5DCEA}
+.dark-form input,.dark-form select,.dark-form textarea{background:var(--navy);border-color:rgba(255,255,255,.12);color:#fff}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted)}
+.dark-form .check{color:#AEB9CE}
+.check input{width:auto;margin-top:3px}
+.form-note{grid-column:1/-1;display:none;padding:14px 16px;border-radius:12px;background:#E9F8F0;color:#11643F;font-size:14px}
+.form-note.show{display:block}
+.form-note a{font-weight:700}
+@media(max-width:560px){.form{grid-template-columns:1fr}}
+.faq-list{display:grid;gap:12px;max-width:860px}
+.faq-list details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px}
+.faq-list summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:"+";font-size:22px;line-height:1;color:var(--volt-2)}
+.faq-list details[open] summary::after{content:"–"}
+.faq-list p{color:var(--muted);margin-top:10px;font-size:15px}
+.contact{background:var(--card)}
+.contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px}
+.c-cards{display:grid;gap:14px}
+.c-card{display:flex;gap:16px;align-items:flex-start;padding:20px;border:1px solid var(--line);border-radius:16px;text-decoration:none;transition:border-color .15s}
+a.c-card:hover{border-color:var(--volt-2)}
+.c-card .ico{flex:none;width:46px;height:46px;border-radius:12px;background:var(--navy);color:var(--volt);display:grid;place-items:center}
+.c-card b{display:block;color:var(--navy)}
+.c-card span{font-size:14px;color:var(--muted)}
+.c-card.emergency{background:#FFF7DD;border-color:#FFE08A}
+.hours{width:100%;font-size:14px;border-collapse:collapse}
+.hours td{padding:4px 0;color:var(--muted)}
+.hours td:last-child{text-align:right;color:var(--ink);font-weight:500}
+.form-box{background:var(--bg);border-radius:20px;padding:32px}
+.form-box h3{font-size:32px;color:var(--navy);margin-bottom:6px}
+.form-box > p{color:var(--muted);margin-bottom:22px}
+.map{margin-top:14px;border-radius:16px;height:180px;background:
+  linear-gradient(90deg,rgba(14,23,38,.05) 1px,transparent 1px) 0 0/28px 28px,
+  linear-gradient(rgba(14,23,38,.05) 1px,transparent 1px) 0 0/28px 28px,#EEF1F6;
+  position:relative;display:grid;place-items:center;text-decoration:none}
+.map .pin{background:var(--navy);color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600;display:flex;gap:8px;align-items:center;box-shadow:var(--shadow)}
+.map .pin svg{color:var(--volt)}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}}
+.band{background:var(--volt);padding:56px 0}
+.band .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.band h2{font-size:clamp(32px,4.5vw,48px);color:var(--navy);text-transform:uppercase}
+.band p{color:#4A3A00}
+footer{background:#0A111D;color:#9AA6BD;padding:64px 0 28px;font-size:14px}
+.f-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:36px;margin-bottom:40px}
+footer h4{color:#fff;font-family:Inter;font-size:14px;margin-bottom:14px;letter-spacing:.5px}
+footer ul{list-style:none;display:grid;gap:8px}
+footer a{text-decoration:none}
+footer a:hover{color:var(--volt)}
+.f-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+@media(max-width:860px){.f-grid{grid-template-columns:1fr 1fr}}
+.modal{position:fixed;inset:0;background:rgba(10,17,29,.6);display:none;place-items:center;z-index:200;padding:20px}
+.modal.show{display:grid}
+.modal-box{background:#fff;border-radius:18px;max-width:620px;width:100%;max-height:80vh;overflow:auto;padding:30px;position:relative}
+.modal-box h3{font-size:32px;color:var(--navy);margin-bottom:12px}
+.modal-box p{color:var(--muted);margin-bottom:10px;font-size:15px}
+.modal-close{position:absolute;top:14px;right:14px;border:0;background:var(--bg);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px}
+.chat-fab{position:fixed;right:22px;bottom:22px;z-index:120;width:64px;height:64px;border-radius:50%;border:0;background:var(--volt);color:var(--navy);cursor:pointer;display:grid;place-items:center;box-shadow:0 12px 30px rgba(0,0,0,.25);transition:transform .2s}
+.chat-fab:hover{transform:scale(1.06)}
+.chat-fab .dot{position:absolute;top:6px;right:6px;width:14px;height:14px;border-radius:50%;background:#E5484D;border:2px solid #fff}
+.chat-teaser{position:fixed;right:96px;bottom:34px;z-index:119;background:#fff;padding:12px 16px;border-radius:14px 14px 4px 14px;box-shadow:var(--shadow);font-size:14px;max-width:230px;cursor:pointer;animation:pop .4s ease}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.chat{position:fixed;right:22px;bottom:100px;z-index:130;width:380px;max-width:calc(100vw - 24px);height:560px;max-height:calc(100vh - 130px);background:#fff;border-radius:22px;box-shadow:0 24px 60px rgba(14,23,38,.3);display:none;flex-direction:column;overflow:hidden}
+.chat.open{display:flex;animation:pop .25s ease}
+.chat-head{background:var(--navy);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px}
+.chat-head .av{width:42px;height:42px;border-radius:50%;background:var(--volt);color:var(--navy);display:grid;place-items:center;flex:none}
+.chat-head b{display:block;font-size:15px}
+.chat-head small{font-size:12px;color:#7CF0B2;display:flex;align-items:center;gap:6px}
+.chat-head small i{width:7px;height:7px;border-radius:50%;background:#2EE08A}
+.chat-head button{margin-left:auto;background:rgba(255,255,255,.1);border:0;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px}
+.chat-body{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.msg{max-width:85%;padding:11px 14px;border-radius:16px;font-size:14px;line-height:1.5;white-space:pre-line;animation:pop .2s ease}
+.msg.bot{background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.user{background:var(--navy);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.msg a{color:#B07A00;font-weight:600}
+.typing{display:flex;gap:4px;padding:14px}
+.typing span{width:7px;height:7px;border-radius:50%;background:#B8C0CE;animation:blink 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
+.quick{display:flex;flex-wrap:wrap;gap:6px;padding:0 18px 10px;background:var(--bg)}
+.quick button{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.quick button:hover{background:var(--navy);color:#fff}
+.chat-input{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:#fff}
+.chat-input input{flex:1;border:1.5px solid var(--line);border-radius:999px;padding:11px 16px;font:inherit;font-size:14px;outline:none}
+.chat-input input:focus{border-color:var(--volt-2)}
+.chat-input button{width:44px;height:44px;border-radius:50%;border:0;background:var(--volt);color:var(--navy);cursor:pointer;display:grid;place-items:center;flex:none}
+@media(max-width:520px){.chat{right:12px;bottom:92px;height:calc(100vh - 120px)}.chat-teaser{display:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span><b>⚡ 24/7 Notdienst:</b> <a href="tel:+491234567890" data-cfg="emergencyLink"><span data-cfg="emergency">0123 456 78 90</span></a></span>
+    <span>Mo–Fr 7:00–17:00 · <a href="mailto:info@elektro-beschte.de" data-cfg="mailLink"><span data-cfg="email">info@elektro-beschte.de</span></a></span>
+  </div>
+</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#start" class="logo" aria-label="Startseite">
+      <span class="logo-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="#0E1726"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>
+      <span class="logo-text">BESCHTE<small>Elektrotechnik</small></span>
+    </a>
+    <ul id="menu">
+      <li><a href="#leistungen">Leistungen</a></li>
+      <li><a href="#ueber-uns">Über uns</a></li>
+      <li><a href="#karriere">Karriere</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <a href="#kontakt" class="btn btn-volt cta-desktop">Angebot anfragen</a>
+    <button class="burger" aria-label="Menü öffnen" onclick="document.getElementById('menu').classList.toggle('open')">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero" id="start">
+  <svg class="bolt-bg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Ihr Elektro-Meisterbetrieb</span>
+      <h1 style="margin-top:16px">Strom, der<br><span>einfach läuft.</span></h1>
+      <p class="lead">Von der Steckdose bis zur Photovoltaik-Anlage: Elektrotechnik Beschte plant, installiert und wartet Ihre Elektrik – sauber, termintreu und zum fairen Festpreis.</p>
+      <div class="hero-ctas">
+        <a href="#kontakt" class="btn btn-volt">Kostenloses Angebot
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="#leistungen" class="btn btn-ghost">Unsere Leistungen</a>
+      </div>
+      <div class="badges">
+        <div class="badge"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 .9-4.5 4.3 1 6.3L12 16.6 6.5 19.5l1-6.3L3 8.9 9 8z"/></svg>Meisterbetrieb</div>
+        <div class="badge"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Eingetragen in der Handwerksrolle</div>
+        <div class="badge"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Termine in 48 h</div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <span class="pulse"><i></i> Notdienst jetzt erreichbar</span>
+      <h3>Stromausfall? Wir sind da.</h3>
+      <p>Rund um die Uhr, auch an Wochenenden und Feiertagen.</p>
+      <a class="phone" href="tel:+491234567890" data-cfg="emergencyLink"><span data-cfg="emergency">0123 456 78 90</span></a>
+      <hr>
+      <ul>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>Schnell vor Ort im ganzen Einzugsgebiet</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>Transparente Preise vor Arbeitsbeginn</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>Ausgebildete Elektroniker/innen</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat"><b>25<em>+</em></b><span>Jahre Erfahrung</span></div>
+      <div class="stat"><b>12</b><span>Fachkräfte im Team</span></div>
+      <div class="stat"><b>3.000<em>+</em></b><span>abgeschlossene Projekte</span></div>
+      <div class="stat"><b>24/7</b><span>Notdienst erreichbar</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="leistungen">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Leistungen</span>
+      <h2>Alles rund um Elektrik – aus einer Hand.</h2>
+      <p>Für Privatkunden, Hausverwaltungen und Gewerbe. Wir beraten ehrlich, arbeiten normgerecht nach VDE und hinterlassen die Baustelle so, wie wir sie vorgefunden haben.</p>
+    </div>
+    <div class="services-grid">
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="9.5" cy="11" r="1"/><circle cx="14.5" cy="11" r="1"/></svg></div>
+        <h3>Elektroinstallation</h3>
+        <p>Neubau, Umbau und Altbausanierung – fachgerecht geplant und sauber ausgeführt.</p>
+        <ul><li>Neubau & Sanierung</li><li>Zählerschrank & Unterverteilung</li><li>Beleuchtungskonzepte</li></ul>
+      </article>
+      <article class="svc feature">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div>
+        <h3>Photovoltaik & Speicher</h3>
+        <p>Eigener Strom vom Dach – inklusive Planung, Anmeldung beim Netzbetreiber und Batteriespeicher.</p>
+        <ul><li>PV-Anlagen & Balkonkraftwerke</li><li>Stromspeicher</li><li>Energiemanagement</li></ul>
+      </article>
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17h14l-1.5-6h-11z"/><circle cx="8" cy="18" r="1.6"/><circle cx="16" cy="18" r="1.6"/><path d="M13 3l-2 4h3l-2 4"/></svg></div>
+        <h3>Wallbox & E-Mobilität</h3>
+        <p>Laden Sie Ihr E-Auto bequem zu Hause oder am Firmenparkplatz.</p>
+        <ul><li>Beratung & Installation</li><li>Anmeldung beim Netzbetreiber</li><li>Lastmanagement für mehrere Ladepunkte</li></ul>
+      </article>
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 14a4 4 0 0 1 6 0M10.5 16.5a1.5 1.5 0 0 1 3 0"/></svg></div>
+        <h3>Smart Home</h3>
+        <p>Licht, Heizung, Rollläden und Sicherheit intelligent vernetzt – per App oder Sprache.</p>
+        <ul><li>KNX & Funk-Systeme</li><li>Smarte Beleuchtung</li><li>Nachrüstung im Bestand</li></ul>
+      </article>
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></div>
+        <h3>E-Check & Prüfungen</h3>
+        <p>Sicherheit mit Brief und Siegel – für Vermieter, Gewerbe und Versicherung.</p>
+        <ul><li>E-Check für Wohnungen & Häuser</li><li>DGUV V3 Prüfung für Betriebe</li><li>Prüfprotokoll & Plakette</li></ul>
+      </article>
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div>
+        <h3>Netzwerk & Kommunikation</h3>
+        <p>Stabiles Internet in jedem Raum und moderne Kommunikationstechnik.</p>
+        <ul><li>LAN-Verkabelung & WLAN</li><li>Sat- & Antennentechnik</li><li>Video-Türsprechanlagen</li></ul>
+      </article>
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Sicherheitstechnik</h3>
+        <p>Schützen Sie, was Ihnen wichtig ist – mit durchdachter Technik.</p>
+        <ul><li>Alarmanlagen</li><li>Videoüberwachung</li><li>Rauchwarnmelder</li></ul>
+      </article>
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+        <h3>Gewerbe & Industrie</h3>
+        <p>Zuverlässige Elektrotechnik für Büros, Praxen, Läden und Hallen.</p>
+        <ul><li>Gewerbe-Installation</li><li>Wartungsverträge</li><li>Hallen- & LED-Beleuchtung</li></ul>
+      </article>
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+        <h3>24/7 Notdienst</h3>
+        <p>Stromausfall, Kurzschluss oder FI fliegt raus? Wir helfen schnell – Tag und Nacht.</p>
+        <ul><li>Störungssuche</li><li>Sofortreparatur</li><li>Auch an Feiertagen</li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">So arbeiten wir</span>
+      <h2>In 4 Schritten zum fertigen Projekt.</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Anfrage</h3><p>Per Telefon, Formular oder Chat – wir melden uns innerhalb von 24 Stunden.</p></div>
+      <div class="step"><h3>Beratung vor Ort</h3><p>Wir schauen uns alles an und besprechen mit Ihnen die beste Lösung.</p></div>
+      <div class="step"><h3>Festpreis-Angebot</h3><p>Sie erhalten ein klares, verständliches Angebot – ohne versteckte Kosten.</p></div>
+      <div class="step"><h3>Umsetzung</h3><p>Termintreu, sauber und mit Abnahmeprotokoll. Danach sind wir weiter für Sie da.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="ueber-uns" class="about">
+  <div class="wrap about-grid">
+    <div class="about-visual">
+      <svg class="circuit" viewBox="0 0 400 500" fill="none" stroke="#FFC93C" stroke-width="1.5">
+        <path d="M0 80h120v80h100V40h180M0 260h60v-60h140v120h200M40 500V380h120v-60h120v180M300 0v120h-60v60"/>
+        <circle cx="120" cy="80" r="5"/><circle cx="220" cy="160" r="5"/><circle cx="200" cy="320" r="5"/><circle cx="160" cy="380" r="5"/><circle cx="240" cy="180" r="5"/>
+      </svg>
+      <div class="seal"><div><b>25+</b>Jahre<br>Meisterqualität</div></div>
+      <div class="tag">Familiengeführt in zweiter Generation – mit Herz, Hand und Prüfprotokoll.</div>
+    </div>
+    <div>
+      <span class="eyebrow">Über uns</span>
+      <h2 style="font-size:clamp(36px,5vw,54px);margin:10px 0 18px;color:var(--navy)">Ein Familienbetrieb mit Spannung.</h2>
+      <p>Elektrotechnik Beschte steht seit über 25 Jahren für zuverlässige Elektrotechnik in der Region. Was als Ein-Mann-Betrieb begann, ist heute ein eingespieltes Team aus Meistern, Gesellen und Auszubildenden.</p>
+      <p>Wir verbinden traditionelles Handwerk mit moderner Technik – von der klassischen Hausinstallation bis zu Photovoltaik, Wallbox und Smart Home. Dabei gilt: Wir sagen, was wir tun, und tun, was wir sagen.</p>
+      <div class="values">
+        <div class="value"><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg></div><div><b>Qualität</b><span>Normgerecht nach VDE, mit Prüfprotokoll</span></div></div>
+        <div class="value"><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><b>Pünktlichkeit</b><span>Termine, auf die Sie sich verlassen können</span></div></div>
+        <div class="value"><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div><b>Fairness</b><span>Transparente Festpreise</span></div></div>
+        <div class="value"><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M21 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></div><div><b>Regional</b><span>Kurze Wege, persönliche Ansprechpartner</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="karriere" class="career">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Karriere</span>
+      <h2>Werde Teil unseres Teams.</h2>
+      <p>Wir suchen Menschen, die anpacken, mitdenken und Spaß an moderner Technik haben. Bei uns bist du keine Nummer – sondern Kollege oder Kollegin.</p>
+    </div>
+    <div class="benefits">
+      <div class="benefit"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><b>Faire Bezahlung</b><span>Übertariflich + Notdienst-Zulage</span></div>
+      <div class="benefit"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17h14l-1.5-6h-11z"/><circle cx="8" cy="18" r="1.6"/><circle cx="16" cy="18" r="1.6"/></svg><b>Firmenwagen</b><span>Moderner, voll ausgestatteter Servicewagen</span></div>
+      <div class="benefit"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg><b>Weiterbildung</b><span>Wir fördern deinen Weg bis zum Meister</span></div>
+      <div class="benefit"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg><b>30 Tage Urlaub</b><span>Plus planbare Arbeitszeiten</span></div>
+      <div class="benefit"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/></svg><b>Top-Werkzeug</b><span>Hochwertige Ausrüstung & Arbeitskleidung</span></div>
+      <div class="benefit"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg><b>Teamgeist</b><span>Grillabende, Teamevents & flache Hierarchien</span></div>
+      <div class="benefit"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><b>Sicherer Job</b><span>Unbefristet in einer Zukunftsbranche</span></div>
+      <div class="benefit"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg><b>Zukunftsthemen</b><span>PV, Wallbox, Smart Home statt Routine</span></div>
+    </div>
+
+    <div class="jobs">
+      <details class="job" open>
+        <summary>
+          <div><h3>Elektroniker/in für Energie- & Gebäudetechnik</h3>
+            <div class="meta"><span class="chip hot">Sofort</span><span class="chip">Vollzeit</span><span class="chip">m/w/d</span></div></div>
+          <span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <div class="body">
+          <div><h4>Deine Aufgaben</h4><ul><li>Elektroinstallationen in Neubau & Bestand</li><li>Montage von PV-Anlagen und Wallboxen</li><li>Fehlersuche, Wartung & Kundendienst</li><li>Prüfungen nach VDE / DGUV V3</li></ul></div>
+          <div><h4>Das bringst du mit</h4><ul><li>Abgeschlossene Ausbildung als Elektroniker/in o. ä.</li><li>Führerschein Klasse B</li><li>Zuverlässigkeit & Freude am Kundenkontakt</li></ul></div>
+          <div class="actions"><a href="#bewerben" class="btn btn-volt" onclick="setJob('Elektroniker/in für Energie- & Gebäudetechnik')">Jetzt bewerben</a></div>
+        </div>
+      </details>
+      <details class="job">
+        <summary>
+          <div><h3>Ausbildung Elektroniker/in (2027)</h3>
+            <div class="meta"><span class="chip hot">Ausbildungsstart 1. August</span><span class="chip">3,5 Jahre</span><span class="chip">m/w/d</span></div></div>
+          <span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <div class="body">
+          <div><h4>Was dich erwartet</h4><ul><li>Abwechslungsreiche Ausbildung auf echten Baustellen</li><li>Fester Ausbildungspate an deiner Seite</li><li>Übernahmegarantie bei guten Leistungen</li></ul></div>
+          <div><h4>Das bringst du mit</h4><ul><li>Guter Haupt- oder Realschulabschluss</li><li>Interesse an Technik, Mathe & Physik</li><li>Handwerkliches Geschick</li></ul></div>
+          <div class="actions"><a href="#bewerben" class="btn btn-volt" onclick="setJob('Ausbildung Elektroniker/in')">Jetzt bewerben</a></div>
+        </div>
+      </details>
+      <details class="job">
+        <summary>
+          <div><h3>Elektromeister/in oder Techniker/in – Projektleitung</h3>
+            <div class="meta"><span class="chip">Vollzeit</span><span class="chip">m/w/d</span></div></div>
+          <span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <div class="body">
+          <div><h4>Deine Aufgaben</h4><ul><li>Planung, Kalkulation & Angebotserstellung</li><li>Leitung von Baustellen und Teams</li><li>Kundenberatung & Abnahmen</li></ul></div>
+          <div><h4>Das bringst du mit</h4><ul><li>Meister- oder Technikerabschluss</li><li>Erfahrung in Projektleitung</li><li>Organisationstalent & Kommunikationsstärke</li></ul></div>
+          <div class="actions"><a href="#bewerben" class="btn btn-volt" onclick="setJob('Elektromeister/in – Projektleitung')">Jetzt bewerben</a></div>
+        </div>
+      </details>
+      <details class="job">
+        <summary>
+          <div><h3>Initiativbewerbung</h3>
+            <div class="meta"><span class="chip">Alle Bereiche</span><span class="chip">auch Quereinstieg & Praktikum</span></div></div>
+          <span class="plus"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></span>
+        </summary>
+        <div class="body">
+          <div><h4>Nichts Passendes dabei?</h4><ul><li>Schick uns einfach eine Kurzbewerbung</li><li>Auch Schülerpraktika sind möglich</li></ul></div>
+          <div><h4>Wir melden uns</h4><ul><li>Rückmeldung innerhalb einer Woche</li><li>Kennenlernen gern auch direkt im Betrieb</li></ul></div>
+          <div class="actions"><a href="#bewerben" class="btn btn-volt" onclick="setJob('Initiativbewerbung')">Jetzt bewerben</a></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="apply" id="bewerben">
+      <div>
+        <h3>Bewerbung in 2 Minuten</h3>
+        <p>Kein Anschreiben nötig. Lass uns deine Kontaktdaten da – wir rufen dich an und lernen uns ganz entspannt kennen. Lebenslauf und Zeugnisse kannst du einfach per E-Mail nachreichen.</p>
+      </div>
+      <form class="form dark-form" id="jobForm">
+        <div><label for="j-name">Name*</label><input id="j-name" required placeholder="Vor- und Nachname"></div>
+        <div><label for="j-phone">Telefon*</label><input id="j-phone" type="tel" required placeholder="Für den Rückruf"></div>
+        <div><label for="j-mail">E-Mail</label><input id="j-mail" type="email" placeholder="optional"></div>
+        <div><label for="j-job">Stelle</label>
+          <select id="j-job"><option>Elektroniker/in für Energie- & Gebäudetechnik</option><option>Ausbildung Elektroniker/in</option><option>Elektromeister/in – Projektleitung</option><option>Initiativbewerbung</option></select></div>
+        <div class="full"><label for="j-msg">Kurz über dich</label><textarea id="j-msg" placeholder="Erfahrung, frühester Starttermin, …"></textarea></div>
+        <label class="check full"><input type="checkbox" required> Ich bin mit der Verarbeitung meiner Daten zur Bearbeitung meiner Bewerbung einverstanden.</label>
+        <div class="full"><button class="btn btn-volt" type="submit">Bewerbung absenden</button></div>
+        <div class="form-note" id="jobNote"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Häufige Fragen</span>
+      <h2>Gut zu wissen.</h2>
+    </div>
+    <div class="faq-list">
+      <details><summary>Wie schnell bekomme ich einen Termin?</summary><p>Für Beratungstermine in der Regel innerhalb von 48 Stunden. Im Notfall sind wir rund um die Uhr erreichbar und schnellstmöglich vor Ort.</p></details>
+      <details><summary>Ist das Angebot kostenlos?</summary><p>Ja. Beratung und Angebot sind für Sie kostenlos und unverbindlich. Sie erhalten einen transparenten Festpreis, bevor wir mit der Arbeit beginnen.</p></details>
+      <details><summary>Kümmern Sie sich auch um die Anmeldung beim Netzbetreiber?</summary><p>Ja – bei Photovoltaik-Anlagen, Speichern und Wallboxen übernehmen wir die komplette Anmeldung beim Netzbetreiber und im Marktstammdatenregister.</p></details>
+      <details><summary>Gibt es Förderungen für Wallbox oder Photovoltaik?</summary><p>Je nach Bundesland, Kommune und Zeitpunkt gibt es unterschiedliche Förderprogramme. Wir prüfen bei der Beratung, welche aktuellen Programme für Sie in Frage kommen.</p></details>
+      <details><summary>Wie oft sollte ein E-Check gemacht werden?</summary><p>Für Privathaushalte empfehlen wir alle 4 Jahre einen E-Check, für Mietwohnungen bei jedem Mieterwechsel. Gewerbliche Betriebsmittel müssen nach DGUV V3 regelmäßig geprüft werden – die Intervalle legen wir gemeinsam fest.</p></details>
+      <details><summary>Arbeiten Sie auch für Hausverwaltungen und Gewerbe?</summary><p>Sehr gerne. Wir betreuen Hausverwaltungen, Vermieter, Praxen, Büros und Gewerbebetriebe – auch mit festen Wartungsverträgen.</p></details>
+    </div>
+  </div>
+</section>
+
+<div class="band">
+  <div class="wrap">
+    <div><h2>Projekt geplant?</h2><p>Kostenlose Beratung, Festpreis-Angebot, Ausführung vom Meisterbetrieb.</p></div>
+    <a href="#kontakt" class="btn btn-dark">Jetzt Angebot anfragen
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+</div>
+
+<section id="kontakt" class="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Kontakt</span>
+      <h2>Sprechen Sie mit uns.</h2>
+      <p>Rufen Sie an, schreiben Sie uns oder nutzen Sie den Chat unten rechts – wir melden uns innerhalb von 24 Stunden.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="c-cards">
+        <a class="c-card emergency" href="tel:+491234567890" data-cfg="emergencyLink">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+          <div><b>24/7 Notdienst</b><span data-cfg="emergency">0123 456 78 90</span></div>
+        </a>
+        <a class="c-card" href="tel:+491234567800" data-cfg="phoneLink">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></div>
+          <div><b>Telefon Büro</b><span data-cfg="phone">0123 456 78 00</span></div>
+        </a>
+        <a class="c-card" href="mailto:info@elektro-beschte.de" data-cfg="mailLink">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></div>
+          <div><b>E-Mail</b><span data-cfg="email">info@elektro-beschte.de</span></div>
+        </a>
+        <a class="c-card" href="https://wa.me/491234567800" data-cfg="waLink">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20.5l1.8-5.2A8.4 8.4 0 1 1 21 11.5z"/></svg></div>
+          <div><b>WhatsApp</b><span>Fotos vom Problem einfach schicken</span></div>
+        </a>
+        <div class="c-card" style="display:block">
+          <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px">
+            <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+            <div><b>Elektrotechnik Beschte</b><span data-cfg="address">Musterstraße 12, 12345 Musterstadt</span></div>
+          </div>
+          <table class="hours">
+            <tr><td>Montag – Donnerstag</td><td>7:00 – 17:00</td></tr>
+            <tr><td>Freitag</td><td>7:00 – 14:00</td></tr>
+            <tr><td>Samstag & Sonntag</td><td>Notdienst</td></tr>
+          </table>
+          <a class="map" href="https://www.google.com/maps/search/?api=1&query=Musterstra%C3%9Fe+12+12345+Musterstadt" data-cfg="mapLink">
+            <span class="pin"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/></svg>Route in Google Maps öffnen</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="form-box">
+        <h3>Anfrage & Angebot</h3>
+        <p>Beschreiben Sie kurz Ihr Anliegen – Sie erhalten ein kostenloses, unverbindliches Angebot.</p>
+        <form class="form" id="contactForm">
+          <div><label for="c-name">Name*</label><input id="c-name" required></div>
+          <div><label for="c-phone">Telefon*</label><input id="c-phone" type="tel" required></div>
+          <div><label for="c-mail">E-Mail</label><input id="c-mail" type="email"></div>
+          <div><label for="c-zip">PLZ / Ort</label><input id="c-zip"></div>
+          <div class="full"><label for="c-topic">Worum geht es?</label>
+            <select id="c-topic">
+              <option>Elektroinstallation</option><option>Photovoltaik & Speicher</option><option>Wallbox & E-Mobilität</option>
+              <option>Smart Home</option><option>E-Check / DGUV V3 Prüfung</option><option>Netzwerk & Kommunikation</option>
+              <option>Sicherheitstechnik</option><option>Gewerbe / Wartungsvertrag</option><option>Störung / Reparatur</option><option>Sonstiges</option>
+            </select></div>
+          <div class="full"><label for="c-msg">Ihre Nachricht*</label><textarea id="c-msg" required placeholder="z. B. Wallbox für Einfamilienhaus, Garage ca. 10 m vom Zählerschrank…"></textarea></div>
+          <div class="full"><label for="c-when">Wann sind Sie am besten erreichbar?</label>
+            <select id="c-when"><option>Egal</option><option>Vormittags</option><option>Nachmittags</option><option>Abends</option></select></div>
+          <label class="check full"><input type="checkbox" required> Ich habe die <a href="#" onclick="openModal('datenschutz');return false">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Daten einverstanden.</label>
+          <div class="full"><button class="btn btn-volt" type="submit">Anfrage senden
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>
+          <div class="form-note" id="contactNote"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a href="#start" class="logo" style="margin-bottom:14px">
+          <span class="logo-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="#0E1726"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></span>
+          <span class="logo-text">BESCHTE<small>Elektrotechnik</small></span>
+        </a>
+        <p>Ihr Meisterbetrieb für Elektroinstallation, Photovoltaik, E-Mobilität und Smart Home.</p>
+      </div>
+      <div><h4>Leistungen</h4><ul><li><a href="#leistungen">Elektroinstallation</a></li><li><a href="#leistungen">Photovoltaik</a></li><li><a href="#leistungen">Wallbox</a></li><li><a href="#leistungen">Smart Home</a></li><li><a href="#leistungen">E-Check</a></li></ul></div>
+      <div><h4>Unternehmen</h4><ul><li><a href="#ueber-uns">Über uns</a></li><li><a href="#karriere">Karriere</a></li><li><a href="#faq">FAQ</a></li><li><a href="#kontakt">Kontakt</a></li></ul></div>
+      <div><h4>Kontakt</h4><ul><li data-cfg="address">Musterstraße 12, 12345 Musterstadt</li><li><a href="tel:+491234567800" data-cfg="phoneLink"><span data-cfg="phone">0123 456 78 00</span></a></li><li><a href="mailto:info@elektro-beschte.de" data-cfg="mailLink"><span data-cfg="email">info@elektro-beschte.de</span></a></li></ul></div>
+    </div>
+    <div class="f-bottom">
+      <span>© <span id="year"></span> Elektrotechnik Beschte. Alle Rechte vorbehalten.</span>
+      <span><a href="#" onclick="openModal('impressum');return false">Impressum</a> · <a href="#" onclick="openModal('datenschutz');return false">Datenschutz</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box"><button class="modal-close" onclick="closeModal()" aria-label="Schließen">✕</button><div id="modalContent"></div></div>
+</div>
+
+<div class="chat-teaser" id="teaser" style="display:none">👋 Hallo! Haben Sie eine Frage? Ich helfe gern.</div>
+<button class="chat-fab" id="chatFab" aria-label="Chat öffnen">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 20.5l1.8-5.2A8.4 8.4 0 1 1 21 11.5z"/></svg>
+  <span class="dot" id="fabDot"></span>
+</button>
+<div class="chat" id="chat" role="dialog" aria-label="Chat mit Elektrotechnik Beschte">
+  <div class="chat-head">
+    <div class="av"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+    <div><b>Volti · Beschte-Assistent</b><small><i></i>Online – antwortet sofort</small></div>
+    <button id="chatClose" aria-label="Chat schließen">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="quick" id="quick"></div>
+  <form class="chat-input" id="chatForm">
+    <input id="chatInput" placeholder="Ihre Frage eingeben…" autocomplete="off">
+    <button type="submit" aria-label="Senden"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+  </form>
+</div>
+
+<script>
+const CONFIG = {
+  firma:      "Elektrotechnik Beschte",
+  telefon:    "0123 456 78 00",
+  telefonTel: "+491234567800",
+  notdienst:  "0123 456 78 90",
+  notdienstTel:"+491234567890",
+  email:      "info@elektro-beschte.de",
+  whatsapp:   "491234567800",
+  adresse:    "Musterstraße 12, 12345 Musterstadt",
+  oeffnungszeiten: "Mo–Do 7:00–17:00 Uhr, Fr 7:00–14:00 Uhr. Am Wochenende ist unser Notdienst erreichbar."
+};
+
+document.querySelectorAll('[data-cfg]').forEach(el=>{
+  const k=el.dataset.cfg;
+  if(k==='emergency') el.textContent=CONFIG.notdienst;
+  if(k==='phone') el.textContent=CONFIG.telefon;
+  if(k==='email') el.textContent=CONFIG.email;
+  if(k==='address') el.textContent=CONFIG.adresse;
+  if(k==='emergencyLink') el.href='tel:'+CONFIG.notdienstTel;
+  if(k==='phoneLink') el.href='tel:'+CONFIG.telefonTel;
+  if(k==='mailLink') el.href='mailto:'+CONFIG.email;
+  if(k==='waLink') el.href='https://wa.me/'+CONFIG.whatsapp;
+  if(k==='mapLink') el.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(CONFIG.adresse);
+});
+document.getElementById('year').textContent=new Date().getFullYear();
+document.querySelectorAll('#menu a').forEach(a=>a.addEventListener('click',()=>document.getElementById('menu').classList.remove('open')));
+
+function mailto(subject, body){
+  return 'mailto:'+CONFIG.email+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+}
+function showNote(id, link){
+  const n=document.getElementById(id);
+  n.innerHTML='Fast geschafft! Ihre Nachricht ist vorbereitet. <a href="'+link+'">Hier tippen, um sie per E-Mail abzusenden</a> – oder rufen Sie uns direkt an: '+CONFIG.telefon+'.';
+  n.classList.add('show');
+  try{ window.location.href=link; }catch(e){}
+}
+document.getElementById('contactForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=id=>document.getElementById(id).value;
+  const body=`Name: ${v('c-name')}\nTelefon: ${v('c-phone')}\nE-Mail: ${v('c-mail')}\nPLZ/Ort: ${v('c-zip')}\nThema: ${v('c-topic')}\nErreichbar: ${v('c-when')}\n\nNachricht:\n${v('c-msg')}`;
+  showNote('contactNote', mailto('Anfrage: '+v('c-topic'), body));
+});
+function setJob(j){ document.getElementById('j-job').value=j; }
+document.getElementById('jobForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=id=>document.getElementById(id).value;
+  const body=`Name: ${v('j-name')}\nTelefon: ${v('j-phone')}\nE-Mail: ${v('j-mail')}\nStelle: ${v('j-job')}\n\nÜber mich:\n${v('j-msg')}`;
+  showNote('jobNote', mailto('Bewerbung: '+v('j-job'), body));
+});
+
+const LEGAL={
+  impressum:`<h3>Impressum</h3><p><b>${CONFIG.firma}</b><br>Inhaber: [Name eintragen]<br>${CONFIG.adresse}</p><p>Telefon: ${CONFIG.telefon}<br>E-Mail: ${CONFIG.email}</p><p>Eingetragen in der Handwerksrolle der Handwerkskammer [Ort].<br>Berufsbezeichnung: Elektrotechnikermeister (verliehen in Deutschland)<br>USt-IdNr.: [eintragen]</p><p><i>Platzhalter – bitte vor Veröffentlichung vollständig ausfüllen bzw. rechtlich prüfen lassen.</i></p>`,
+  datenschutz:`<h3>Datenschutz</h3><p>Verantwortlich: ${CONFIG.firma}, ${CONFIG.adresse}.</p><p>Wenn Sie uns über das Kontakt- oder Bewerbungsformular schreiben, werden Ihre Angaben ausschließlich zur Bearbeitung Ihrer Anfrage verwendet und nicht an Dritte weitergegeben.</p><p>Der Chat-Assistent auf dieser Seite läuft vollständig in Ihrem Browser; Eingaben werden nicht gespeichert oder übertragen.</p><p><i>Platzhalter – bitte durch eine vollständige Datenschutzerklärung ersetzen (z. B. per Datenschutz-Generator).</i></p>`
+};
+function openModal(k){document.getElementById('modalContent').innerHTML=LEGAL[k];document.getElementById('modal').classList.add('show');}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+
+const chat=document.getElementById('chat'), body=document.getElementById('chatBody'),
+      quick=document.getElementById('quick'), input=document.getElementById('chatInput');
+let started=false, flow=null, lead={};
+
+const MAIN_CHIPS=['⚡ Notdienst','🛠 Leistungen','📅 Termin anfragen','💶 Preise','💼 Karriere','📞 Kontakt'];
+
+const INTENTS=[
+  {keys:['notdienst','notfall','stromausfall','kein strom','sicherung','fi ','fi-','fi schalter','kurzschluss','brennt','funken','dringend','sofort','störung'],
+   reply:()=>`⚡ Bei einem Notfall erreichen Sie unseren 24/7-Notdienst sofort unter:\n<a href="tel:${CONFIG.notdienstTel}">${CONFIG.notdienst}</a>\n\nWichtig: Riecht es verbrannt oder sehen Sie Funken? Dann bitte – wenn gefahrlos möglich – die Hauptsicherung ausschalten und Abstand halten. Bei Feuer immer zuerst die 112 rufen.`,
+   chips:['📅 Termin anfragen','📞 Kontakt']},
+  {keys:['photovoltaik','pv','solar','speicher','balkonkraftwerk','dach'],
+   reply:()=>`☀️ Photovoltaik ist eines unserer Spezialgebiete: Planung, Montage, Batteriespeicher, Energiemanagement – und die komplette Anmeldung beim Netzbetreiber übernehmen wir auch.\n\nMöchten Sie eine kostenlose PV-Beratung?`,
+   chips:['📅 Termin anfragen','💶 Preise','🔌 Wallbox']},
+  {keys:['wallbox','laden','ladestation','e-auto','eauto','elektroauto','e-mobil'],
+   reply:()=>`🔌 Wir installieren Wallboxen für Zuhause und Gewerbe – inkl. Beratung zur passenden Ladeleistung, Anmeldung beim Netzbetreiber und auf Wunsch Kopplung mit Ihrer PV-Anlage.`,
+   chips:['📅 Termin anfragen','💶 Preise','☀️ Photovoltaik']},
+  {keys:['smart','knx','app','alexa','automatis','rollladen','rolladen'],
+   reply:()=>`🏠 Smart Home: Licht, Heizung, Rollläden und Sicherheit intelligent steuern – per App oder Sprache. Wir setzen auf KNX und zuverlässige Funk-Systeme, auch zum Nachrüsten im Bestand.`,
+   chips:['📅 Termin anfragen','🛠 Leistungen']},
+  {keys:['e-check','echeck','prüf','pruef','dguv','vde','protokoll','vermiet'],
+   reply:()=>`✅ Wir führen den E-Check für Wohnungen und Häuser sowie DGUV-V3-Prüfungen für Betriebe durch – mit Prüfprotokoll und Plakette. Für Vermieter empfehlen wir den E-Check bei jedem Mieterwechsel.`,
+   chips:['📅 Termin anfragen','💶 Preise']},
+  {keys:['netzwerk','wlan','lan','internet','sat','antenne','klingel','türsprech','tuersprech'],
+   reply:()=>`🌐 Netzwerk & Kommunikation: LAN-Verkabelung, stabiles WLAN im ganzen Haus, Sat-Anlagen und Video-Türsprechanlagen.`,
+   chips:['📅 Termin anfragen','🛠 Leistungen']},
+  {keys:['alarm','kamera','video','überwach','ueberwach','rauchmelder','sicherheit','einbruch'],
+   reply:()=>`🛡 Sicherheitstechnik: Alarmanlagen, Videoüberwachung und Rauchwarnmelder – individuell geplant für Ihr Zuhause oder Ihren Betrieb.`,
+   chips:['📅 Termin anfragen','🛠 Leistungen']},
+  {keys:['installation','steckdose','lampe','licht','leitung','kabel','zählerschrank','zaehlerschrank','verteiler','sanierung','altbau','neubau','umbau','herd'],
+   reply:()=>`🔧 Elektroinstallation ist unser Kerngeschäft: von der neuen Steckdose über Beleuchtung bis zum kompletten Zählerschrank in Neubau, Umbau und Altbausanierung.`,
+   chips:['📅 Termin anfragen','💶 Preise']},
+  {keys:['leistung','angebot an','was macht','was bietet','service','können sie','koennen sie','macht ihr'],
+   reply:()=>`Das machen wir für Sie:\n• Elektroinstallation & Sanierung\n• Photovoltaik & Speicher\n• Wallbox & E-Mobilität\n• Smart Home\n• E-Check & DGUV V3\n• Netzwerk & Sicherheitstechnik\n• Gewerbe & Wartungsverträge\n• 24/7 Notdienst\n\nWorüber möchten Sie mehr wissen?`,
+   chips:['☀️ Photovoltaik','🔌 Wallbox','🏠 Smart Home','✅ E-Check','🔧 Installation']},
+  {keys:['preis','kost','teuer','günstig','guenstig','euro','€','angebot','festpreis','budget'],
+   reply:()=>`💶 Die Kosten hängen stark vom Projekt ab – deshalb bekommen Sie bei uns ein kostenloses und unverbindliches Festpreis-Angebot, bevor es losgeht. Keine versteckten Kosten.\n\nSoll ich direkt eine Anfrage für Sie aufnehmen?`,
+   chips:['📅 Termin anfragen','📞 Kontakt']},
+  {keys:['förder','foerder','zuschuss','kfw','bafa'],
+   reply:()=>`Fördermöglichkeiten ändern sich regelmäßig und hängen von Ihrem Wohnort ab. Wir prüfen im Beratungsgespräch, welche aktuellen Programme für Ihr Projekt in Frage kommen.`,
+   chips:['📅 Termin anfragen']},
+  {keys:['karriere','job','stelle','bewerb','arbeiten bei','ausbildung','azubi','praktikum','gehalt','lehre'],
+   reply:()=>`💼 Schön, dass Sie sich für uns interessieren! Aktuell suchen wir:\n• Elektroniker/in Energie- & Gebäudetechnik\n• Azubis Elektroniker/in (Start 1. August)\n• Elektromeister/in – Projektleitung\n• Initiativbewerbungen sind immer willkommen\n\nDie Bewerbung dauert nur 2 Minuten – ohne Anschreiben.`,
+   chips:['➡️ Zu den Stellen','📞 Kontakt'], action:null},
+  {keys:['öffnungszeit','oeffnungszeit','geöffnet','geoeffnet','wann erreich','uhrzeit','samstag','sonntag','wochenende','feiertag'],
+   reply:()=>`🕒 ${CONFIG.oeffnungszeiten}`, chips:['📞 Kontakt','⚡ Notdienst']},
+  {keys:['kontakt','telefon','anrufen','nummer','mail','adresse','wo seid','wo sind','standort','whatsapp','erreichen'],
+   reply:()=>`📞 So erreichen Sie uns:\nBüro: <a href="tel:${CONFIG.telefonTel}">${CONFIG.telefon}</a>\nNotdienst 24/7: <a href="tel:${CONFIG.notdienstTel}">${CONFIG.notdienst}</a>\nE-Mail: <a href="mailto:${CONFIG.email}">${CONFIG.email}</a>\nWhatsApp: <a href="https://wa.me/${CONFIG.whatsapp}">Chat öffnen</a>\nAdresse: ${CONFIG.adresse}`,
+   chips:['📅 Termin anfragen','🕒 Öffnungszeiten']},
+  {keys:['einzugsgebiet','umkreis','kommt ihr','fahrt','anfahrt','region','gebiet'],
+   reply:()=>`🚐 Wir sind in der gesamten Region rund um unseren Standort (${CONFIG.adresse}) unterwegs. Nennen Sie mir gern Ihre PLZ in einer Anfrage, dann prüfen wir das sofort.`,
+   chips:['📅 Termin anfragen']},
+  {keys:['termin','beratung','vorbeikommen','besichtig','anfrage'],
+   start:'lead'},
+  {keys:['über euch','ueber euch','über uns','ueber uns','wer seid','firma','meister','erfahrung','team'],
+   reply:()=>`👷 ${CONFIG.firma} ist ein familiengeführter Meisterbetrieb mit über 25 Jahren Erfahrung und einem Team aus Meistern, Gesellen und Azubis. Unser Versprechen: Qualität nach VDE, pünktlich und zum fairen Festpreis.`,
+   chips:['🛠 Leistungen','💼 Karriere']},
+  {keys:['danke','super','perfekt','top','klasse'],
+   reply:()=>`Sehr gern! 😊 Kann ich sonst noch etwas für Sie tun?`, chips:MAIN_CHIPS},
+  {keys:['hallo','hi','hey','guten tag','moin','servus','guten morgen','guten abend'],
+   reply:()=>`Hallo! 👋 Wie kann ich Ihnen helfen?`, chips:MAIN_CHIPS},
+  {keys:['tschüss','tschuess','bye','ciao','auf wiedersehen'],
+   reply:()=>`Vielen Dank für Ihren Besuch – bis bald! ⚡`, chips:[]}
+];
+
+const CHIP_MAP={
+  '⚡ Notdienst':'notdienst','🛠 Leistungen':'leistungen','📅 Termin anfragen':'termin','💶 Preise':'preis',
+  '💼 Karriere':'karriere','📞 Kontakt':'kontakt','🕒 Öffnungszeiten':'öffnungszeiten','☀️ Photovoltaik':'photovoltaik',
+  '🔌 Wallbox':'wallbox','🏠 Smart Home':'smart','✅ E-Check':'e-check','🔧 Installation':'installation'
+};
+
+function addMsg(html, who){
+  const d=document.createElement('div'); d.className='msg '+who;
+  if(who==='user') d.textContent=html; else d.innerHTML=html;
+  body.appendChild(d); body.scrollTop=body.scrollHeight;
+}
+function setChips(list){
+  quick.innerHTML='';
+  (list||[]).forEach(c=>{const b=document.createElement('button');b.type='button';b.textContent=c;b.onclick=()=>handle(c,true);quick.appendChild(b);});
+}
+function botSay(html, chips){
+  const t=document.createElement('div'); t.className='msg bot typing'; t.innerHTML='<span></span><span></span><span></span>';
+  body.appendChild(t); body.scrollTop=body.scrollHeight; setChips([]);
+  setTimeout(()=>{t.remove(); addMsg(html,'bot'); setChips(chips);}, 550+Math.min(html.length*4,700));
+}
+function norm(s){return s.toLowerCase();}
+
+const LEAD_STEPS=[
+  {key:'thema', q:'Gern! Worum geht es bei Ihrem Projekt?', chips:['Elektroinstallation','Photovoltaik','Wallbox','Smart Home','E-Check','Störung/Reparatur','Sonstiges']},
+  {key:'name', q:'Wie ist Ihr Name?'},
+  {key:'telefon', q:'Unter welcher Telefonnummer erreichen wir Sie?'},
+  {key:'plz', q:'In welcher PLZ / welchem Ort soll die Arbeit stattfinden?'},
+  {key:'info', q:'Möchten Sie noch etwas ergänzen? (z. B. Wunschtermin, Details) – oder schreiben Sie einfach „nein“.', chips:['Nein, passt so']}
+];
+function startLead(){ flow={step:0}; lead={}; botSay(LEAD_STEPS[0].q, LEAD_STEPS[0].chips); }
+function continueLead(text){
+  const st=LEAD_STEPS[flow.step];
+  if(st.key==='telefon' && !/\d{4,}/.test(text.replace(/\s/g,''))){
+    botSay('Hm, das sieht nicht nach einer Telefonnummer aus. Können Sie sie bitte noch einmal eingeben?'); return;
+  }
+  lead[st.key]=text; flow.step++;
+  if(flow.step<LEAD_STEPS.length){ const n=LEAD_STEPS[flow.step]; botSay(n.q, n.chips); return; }
+  flow=null;
+  const extra=/^nein/i.test(lead.info)?'-':lead.info;
+  const mailBody=`Anfrage über den Website-Chat\n\nThema: ${lead.thema}\nName: ${lead.name}\nTelefon: ${lead.telefon}\nPLZ/Ort: ${lead.plz}\nErgänzung: ${extra}`;
+  const link=mailto('Chat-Anfrage: '+lead.thema, mailBody);
+  botSay(`Danke, ${lead.name}! Hier Ihre Zusammenfassung:\n\n📋 ${lead.thema}\n📞 ${lead.telefon}\n📍 ${lead.plz}\n📝 ${extra}\n\n👉 <a href="${link}">Hier tippen, um die Anfrage per E-Mail abzusenden</a>.\nOder rufen Sie uns direkt an: <a href="tel:${CONFIG.telefonTel}">${CONFIG.telefon}</a>. Wir melden uns innerhalb von 24 Stunden.`, ['🛠 Leistungen','📞 Kontakt']);
+}
+
+function handle(raw, fromChip){
+  const text=raw.trim(); if(!text) return;
+  addMsg(text,'user'); input.value='';
+  if(text==='➡️ Zu den Stellen'){ toggleChat(false); location.hash='karriere'; return; }
+  if(flow){ continueLead(text.replace(/^Nein, passt so$/,'nein')); return; }
+  const q=norm(fromChip&&CHIP_MAP[text]?CHIP_MAP[text]:text);
+  let best=null, score=0;
+  for(const it of INTENTS){
+    let s=0; for(const k of it.keys){ if(q.includes(k)) s+=k.length; }
+    if(s>score){score=s;best=it;}
+  }
+  if(best && best.start==='lead'){ startLead(); return; }
+  if(best){ botSay(best.reply(), best.chips); return; }
+  botSay(`Das kann ich leider nicht sicher beantworten 🤔 – aber unser Team hilft Ihnen gern persönlich weiter:\n<a href="tel:${CONFIG.telefonTel}">${CONFIG.telefon}</a> oder <a href="mailto:${CONFIG.email}">${CONFIG.email}</a>.\n\nOder wählen Sie ein Thema:`, MAIN_CHIPS);
+}
+
+function toggleChat(open){
+  const o = open===undefined ? !chat.classList.contains('open') : open;
+  chat.classList.toggle('open',o);
+  document.getElementById('teaser').style.display='none';
+  document.getElementById('fabDot').style.display='none';
+  if(o && !started){
+    started=true;
+    botSay(`Hallo! 👋 Ich bin Volti, der digitale Assistent von ${CONFIG.firma}.\n\nIch beantworte Ihre Fragen zu unseren Leistungen, Preisen und Jobs – oder nehme direkt Ihre Anfrage auf. Wie kann ich helfen?`, MAIN_CHIPS);
+  }
+  if(o) setTimeout(()=>input.focus(),300);
+}
+document.getElementById('chatFab').onclick=()=>toggleChat();
+document.getElementById('chatClose').onclick=()=>toggleChat(false);
+document.getElementById('teaser').onclick=()=>toggleChat(true);
+document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefault();handle(input.value,false);});
+setTimeout(()=>{ if(!started) document.getElementById('teaser').style.display='block'; }, 4000);
+</script>
+</body>
+</html>
