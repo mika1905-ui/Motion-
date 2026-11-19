@@ -4,7 +4,8 @@ Alle Bilder liegen in diesem Ordner:
 - `profilbild.png` – Profilbild (nur das Zeichen, damit es auch im kleinen Kreis gut lesbar ist)
 - `highlights/` – 8 Highlight-Cover (Projekte, Spots, Preise, Ablauf, Kunden, Chatbot, Über mich, Karriere)
 - `stories-karriere/` – 5 Stories für das Highlight „Karriere“ (`python3 make_karriere.py` erzeugt sie neu aus den Stellen auf der Website)
-- `posts/01 … 09` – die ersten 9 Beiträge im Format 4:5, **in dieser Reihenfolge posten** (01 zuerst). Dann stehen oben im Profil VÉSTIER, Beschte und Red Bull.
+- `posts-fertig/01 … 09` – die ersten 9 Beiträge als **Karussell** (mehrere Bilder + `caption.txt`), **in dieser Reihenfolge posten** (01 zuerst). Dann stehen oben im Profil VÉSTIER, Beschte und Red Bull.
+- `stories/` – fertige Stories für **alle 8 Highlights** (Bilder + Spot-Videos), `python3 make_stories.py` erzeugt sie neu
 - `reel-cover.png` – Titelbild für den TikTok-/Reel-Spot
 - `vorschau/profil-vorschau.png` – so sieht das Profil am Ende ungefähr aus
 
@@ -50,16 +51,18 @@ Websites & Werbespots, die verkaufen.
 
 **Highlights** (Story posten → als Highlight speichern → Cover = Bild aus `highlights/`):
 
-| Highlight | Cover | Was rein kommt |
-|---|---|---|
-| Projekte | projekte.png | je Projekt 2–3 Screens / kurze Bildschirmaufnahme |
-| Spots | spots.png | BMW, iPhone, Ferrari, Porsche, Claude, GPT-Spot |
-| Preise | preise.png | Post 02 als Story + „Frag mich nach deinem Projekt“ |
-| Ablauf | ablauf.png | Post 03 + Erstgespräch buchen |
-| Kunden | kunden.png | echte Bewertungen (Screenshots, mit Einverständnis) |
-| Chatbot | chatbot.png | Bildschirmaufnahme vom Chatbot |
-| Über mich | ueber-mich.png | Foto, Studium, warum du das machst |
-| Karriere | karriere.png | `stories-karriere/story-1…5.jpg` – auf Story 5 einen Link-Sticker zur Karriere-Seite setzen |
+| Highlight | Cover | Stories (Ordner `stories/…`) | Link-Sticker |
+|---|---|---|---|
+| Projekte | projekte.png | `projekte/` – VÉSTIER, Beschte, La Môme, AURÈNE, Red Bull | jeweils Live-Seite des Projekts |
+| Spots | spots.png | `spots/` – 7 Videos (Scrollwerk, BMW, iPhone, Ferrari, Porsche, Claude, GPT) | – |
+| Preise | preise.png | `preise/` – Preisliste + Branchen-Pakete | Story 2 → `…/portfolio/pakete.html` |
+| Ablauf | ablauf.png | `ablauf/` – 4 Schritte | → `…/portfolio/kontakt.html#termin` |
+| Kunden | kunden.png | `kunden/` – 5 Kundenstimmen | – |
+| Chatbot | chatbot.png | `chatbot/` – Chatbot + „Frag meinen Assistenten“ | Story 2 → Startseite (Chat unten rechts) |
+| Über mich | ueber-mich.png | `ueber-mich/` – Foto + Warum | Story 2 → `…/portfolio/kontakt.html#termin` |
+| Karriere | karriere.png | `karriere/` – 3 Stellen + Bewerbung | Story 5 → `…/portfolio/karriere.html` |
+
+`…` = `https://mika1905-ui.github.io/Motion-` (später deine Domain).
 
 ---
 

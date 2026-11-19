@@ -47,24 +47,27 @@ def md2html(text):
     return '\n'.join(out)
 
 
-posts = sorted(os.listdir(os.path.join(HERE, 'posts')))
-hls = ['projekte', 'spots', 'preise', 'ablauf', 'kunden', 'chatbot', 'ueber-mich']
+posts = sorted(os.listdir(os.path.join(HERE, 'posts-fertig')))
+ST = os.path.join(HERE, 'stories')
+stories = {h: sorted(f for f in os.listdir(os.path.join(ST, h)) if f.endswith('.jpg')) for h in sorted(os.listdir(ST))} if os.path.isdir(ST) else {}
+vids = sorted(os.listdir(os.path.join(ST, 'spots'))) if os.path.isdir(os.path.join(ST, 'spots')) else []
+hls = ['projekte', 'spots', 'preise', 'ablauf', 'kunden', 'chatbot', 'ueber-mich', 'karriere']
 page = f"""<!doctype html><html lang="de"><head><meta charset="utf-8"><title>Scrollwerk – Instagram-Setup</title><style>
 @page {{ size: A4; margin: 16mm 14mm; }}
 body {{ font-family: Inter, 'Helvetica Neue', Arial, sans-serif; color: #141416; font-size: 11pt; line-height: 1.5; }}
-h1 {{ font-size: 26pt; margin: 0 0 6pt; letter-spacing: -.02em; }} h2 {{ font-size: 17pt; margin: 22pt 0 8pt; border-bottom: 3px solid #d4ff3a; padding-bottom: 4pt; }}
+h1 {{ font-size: 26pt; margin: 0 0 6pt; letter-spacing: -.02em; }} h2 {{ font-size: 17pt; margin: 22pt 0 8pt; border-bottom: 3px solid #6A3BFF; padding-bottom: 4pt; }}
 h3 {{ font-size: 13pt; margin: 16pt 0 6pt; }}
-pre {{ background: #f3f4ef; border-left: 4px solid #d4ff3a; padding: 10pt 12pt; white-space: pre-wrap; font-family: inherit; font-size: 10.5pt; border-radius: 6px; break-inside: avoid; }}
+pre {{ background: #f3f4ef; border-left: 4px solid #6A3BFF; padding: 10pt 12pt; white-space: pre-wrap; font-family: inherit; font-size: 10.5pt; border-radius: 6px; break-inside: avoid; }}
 code {{ background: #f0f0ec; padding: 1px 5px; border-radius: 4px; font-size: 10pt; }}
 table {{ border-collapse: collapse; width: 100%; font-size: 10pt; margin: 6pt 0; }} th, td {{ border: 1px solid #ddd; padding: 5pt 7pt; text-align: left; vertical-align: top; }} th {{ background: #f3f4ef; }}
 hr {{ border: 0; }}
 .cover {{ background: #08080a; color: #fff; border-radius: 14px; padding: 30pt; text-align: center; }}
 .cover img {{ width: 52%; }}
-.grid {{ display: grid; gap: 8pt; }} .g3 {{ grid-template-columns: repeat(3, 1fr); }} .g4 {{ grid-template-columns: repeat(4, 1fr); }}
+.grid {{ display: grid; gap: 8pt; }} .g3 {{ grid-template-columns: repeat(3, 1fr); }} .g4 {{ grid-template-columns: repeat(4, 1fr); }} .g5 {{ grid-template-columns: repeat(5, 1fr); }}
 .grid figure {{ margin: 0; break-inside: avoid; }} .grid img {{ width: 100%; border-radius: 8px; display: block; }} figcaption {{ font-size: 9pt; color: #666; margin-top: 3pt; }}
 .pb {{ break-before: page; }} .note {{ color: #555; font-size: 10pt; }}
 </style></head><body>
-<div class="cover"><img src="vorschau/profil-vorschau.png" style="width:60%;border-radius:10px"><h1 style="margin-top:16pt">Instagram-Setup</h1><p>Scrollwerk · Profilbild, Highlights, 9 Start-Posts, Reel-Cover und alle Texte</p></div>
+<div class="cover"><img src="vorschau/profil-vorschau.png" style="width:60%;border-radius:10px"><h1 style="margin-top:16pt">Instagram-Setup</h1><p>Scrollwerk · Profilbild, Highlights mit Stories, 9 Start-Posts, Reel-Cover und alle Texte</p></div>
 <p class="note">Bilder speichern: Die Bilder in voller Auflösung bekommst du zusätzlich einzeln (PNG/JPG) – die in dieser PDF sind zum Anschauen.</p>
 
 <h2 class="pb">Profilbild &amp; Reel-Cover</h2>
@@ -75,8 +78,14 @@ hr {{ border: 0; }}
 <h2>Highlight-Cover</h2>
 <div class="grid g4">{''.join(f'<figure><img src="highlights/{h}.png"><figcaption>{h}.png</figcaption></figure>' for h in hls)}</div>
 
-<h2 class="pb">Die 9 Start-Posts (in dieser Reihenfolge posten)</h2>
-<div class="grid g3">{''.join(f'<figure><img src="posts/{p}"><figcaption>{p}</figcaption></figure>' for p in posts)}</div>
+<h2 class="pb">Die 9 Start-Posts (Karussells, in dieser Reihenfolge posten)</h2>
+<p class="note">Jeder Post ist ein Karussell aus mehreren Bildern (Ordner <code>posts-fertig/</code>). Hier siehst du jeweils das erste Bild.</p>
+<div class="grid g3">{''.join(f'<figure><img src="posts-fertig/{p}/slide-1.jpg"><figcaption>{p}</figcaption></figure>' for p in posts)}</div>
+
+<h2 class="pb">Stories für die Highlights</h2>
+<p class="note">Ordner <code>stories/</code>. Jede Story posten, dann als Highlight speichern. Wo ein Rahmen „Link-Sticker hierhin“ ist, setzt du in Instagram den Link-Sticker drauf.</p>
+{''.join(f'<h3>{h.replace("-", " ").title()}</h3><div class="grid g5">' + ''.join(f'<figure><img src="stories/{h}/{f}"><figcaption>{f}</figcaption></figure>' for f in fs) + '</div>' for h, fs in stories.items() if fs)}
+<h3>Spots</h3><p class="note">Videos im Ordner <code>stories/spots/</code>: {', '.join(vids)}</p>
 
 <div class="pb"></div>
 {md2html(md)}

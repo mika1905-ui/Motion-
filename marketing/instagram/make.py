@@ -131,12 +131,15 @@ def icon(kind, d, cx, cy, s, col):
     elif kind == 'person':
         d.ellipse((cx - s * 0.24, cy - s * 0.6, cx + s * 0.24, cy - s * 0.12), outline=col, width=w)
         d.arc((cx - s * 0.55, cy - s * 0.02, cx + s * 0.55, cy + s * 1.0), 180, 360, fill=col, width=w)
+    elif kind == 'case':
+        from make_karriere import briefcase
+        briefcase(d, cx, cy + s * 0.07, s, col)
     elif kind == 'play':
         d.rounded_rectangle((cx - s * 0.62, cy - s * 0.45, cx + s * 0.62, cy + s * 0.45), s * 0.15, outline=col, width=w)
         d.polygon([(cx - s * 0.15, cy - s * 0.22), (cx - s * 0.15, cy + s * 0.22), (cx + s * 0.25, cy)], fill=col)
 
 HIGHLIGHTS = [('projekte', 'grid', 'Projekte'), ('spots', 'play', 'Spots'), ('preise', 'euro', 'Preise'), ('ablauf', 'steps', 'Ablauf'),
-              ('kunden', 'star', 'Kunden'), ('chatbot', 'chat', 'Chatbot'), ('ueber-mich', 'person', 'Über mich')]
+              ('kunden', 'star', 'Kunden'), ('chatbot', 'chat', 'Chatbot'), ('ueber-mich', 'person', 'Über mich'), ('karriere', 'case', 'Karriere')]
 def highlights():
     covers = []
     for slug, kind, label in HIGHLIGHTS:
@@ -272,7 +275,7 @@ if __name__ == '__main__':
              post_prices(),
              post_process(),
              post_project(4, 'aurene', 'PARFUM-SHOP', 'AURÈNE', 'Maison de Parfum · Online-Shop', (200, 164, 106)),
-             post_project(5, 'katerkit', 'ONLINE-SHOP', 'Kater Kit', 'Shop mit Warenkorb & Konfigurator', (215, 255, 61)),
+             post_project(5, 'lamome', 'GASTRONOMIE', 'La Môme Plage', 'Strandrestaurant · Cannes', (212, 99, 62)),
              post_chatbot(),
              post_project(7, 'redbull', '3D-PRODUKTSEITE', 'Red Bull in 3D', 'Dose dreht sich, Tray füllt sich – beim Scrollen', (61, 107, 255),
                           spec='Unbeauftragte Spec-Arbeit · keine Verbindung zu Red Bull'),
