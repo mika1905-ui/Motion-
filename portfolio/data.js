@@ -166,7 +166,23 @@ window.CATALOG = [
    Beispiel zum Kopieren:
    { title: 'Freelance Motion Designer (m/w/d)', type: 'Freelance · Remote', hours: 'projektbasiert',
      text: 'Du animierst Spots für Kunden aus ...', tasks: ['...'], profile: ['...'], perks: ['...'] }, */
-window.JOBS = [];
+window.JOBS = [
+  { title: 'Vertrieb & Kundenakquise (m/w/d)', type: 'Freiberuflich · auf Provision', hours: 'Flexibel, ab 5 Std./Woche',
+    text: 'Du kennst Betriebe in Bielefeld und OWL, deren Website nicht zeigt, wie gut sie sind? Du bringst den Kontakt, ich baue das Projekt. Für jeden Auftrag, der über dich zustande kommt, bekommst du Provision – ideal neben dem Studium.',
+    tasks: ['Lokale Betriebe finden, die eine neue Website, Spots oder Social Media brauchen', 'Erstkontakt aufnehmen – persönlich, telefonisch oder per Nachricht', 'Erstgespräche vereinbaren und beim Kunden dranbleiben', 'Feedback aus dem Markt an mich zurückgeben'],
+    profile: ['Spaß am Reden mit Menschen und keine Angst vor einem Nein', 'Zuverlässig und selbstständig', 'Idealerweise Studium in BWL, Marketing oder Ähnlichem', 'Gewerbe oder freiberufliche Tätigkeit (melde ich gern mit dir zusammen durch)'],
+    perks: ['10 % Provision vom Auftragswert jedes vermittelten Projekts', 'Fertige Unterlagen: Preise, Pakete, Referenzen, Gesprächsleitfaden', 'Freie Zeiteinteilung, komplett neben Studium oder Job', 'Erfahrung, die sich im Lebenslauf gut macht'] },
+  { title: 'Videograf / Fotograf (m/w/d)', type: 'Freiberuflich · pro Einsatz', hours: 'Projektweise in OWL',
+    text: 'Für Restaurants, Handwerker, Praxen und Makler brauche ich echte Aufnahmen vor Ort. Du drehst und fotografierst, ich mache daraus Websites, Reels und Spots. Bezahlt wird pro Einsatz – Umfang und Honorar stehen vorher fest.',
+    tasks: ['Foto- und Video-Shootings bei Kunden vor Ort (Food, Team, Räume, Objekte, Arbeit in Aktion)', 'Hochformat-Material für Reels und TikTok aufnehmen', 'Rohmaterial sauber benennen und zügig übergeben', 'Optional: Vorschnitt oder Bildauswahl'],
+    profile: ['Eigene Kamera oder ein aktuelles Smartphone mit Gimbal', 'Gutes Auge für Licht und Bildaufbau', 'Portfolio oder Instagram mit eigenen Aufnahmen', 'Mobil in Bielefeld und Umgebung'],
+    perks: ['Honorar pro Einsatz, vorab fest vereinbart', 'Abwechslungsreiche Locations von Strandbar bis Baustelle', 'Deine Aufnahmen landen in professionellen Spots – mit Credit', 'Kurze Wege, direkte Absprachen, kein Agentur-Overhead'] },
+  { title: 'Social-Media-Freelancer (m/w/d)', type: 'Freiberuflich · pro Kunde', hours: 'Ca. 3–6 Std. pro Kunde/Monat',
+    text: 'Du lebst Instagram und TikTok? Dann betreu die Kanäle meiner Social-Media-Kunden: planen, posten, Stories, Community. Konzept, Look und Vorlagen kommen von mir – du sorgst dafür, dass es jeden Tag läuft.',
+    tasks: ['Beiträge und Reels nach Redaktionsplan veröffentlichen', 'Stories begleiten und auf Kommentare und Nachrichten antworten', 'Trends und Sounds im Blick behalten und Ideen einbringen', 'Kurzer Monatsbericht: Was lief gut, was nicht?'],
+    profile: ['Sicher in Instagram, TikTok und CapCut oder einem ähnlichen Tool', 'Gefühl für Sprache und die passende Ansprache je Marke', 'Zuverlässig – Posts gehen pünktlich raus', 'Freiberufliche Tätigkeit oder Bereitschaft, sie anzumelden'],
+    perks: ['Feste Pauschale pro betreutem Kunde und Monat', 'Fertige Vorlagen im Look jedes Kunden', 'Remote und flexibel, Abstimmung per Chat', 'Mehr Kunden, mehr Stunden – du wächst mit'] },
+];
 
 /* Team. Foto: Datei in img/team/ ablegen und Pfad eintragen. */
 window.TEAM = [
