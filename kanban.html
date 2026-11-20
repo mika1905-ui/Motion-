@@ -1,0 +1,356 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<title>Lumyx Projekt-Kanban</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style id="kb-style">
+/* Layout: Kopfzeile mit Fortschritt, darunter vier Spalten (Backlog → To Do → In Arbeit → Erledigt); auf dem Handy untereinander. */
+:root {
+  --bg: #F6F4FB;
+  --col: #ECE8F6;
+  --card: #FFFFFF;
+  --ink: #1A1A2A;
+  --muted: #5E5B72;
+  --line: #DCD6EC;
+  --accent: #9933FF;
+  --accent-ink: #FFFFFF;
+  --navy: #12306E;
+  --soft: #F1E8FF;
+  --warn: #B4232F;
+  --warn-soft: #FCE4E7;
+  --ok: #1E8A5A;
+  --ok-soft: #DDF3E8;
+  --t-analyse: #2F6BFF; --t-analyse-bg: #E2EBFF;
+  --t-definition: #0E8A8A; --t-definition-bg: #DDF3F2;
+  --t-planung: #9933FF; --t-planung-bg: #F1E8FF;
+  --t-ergebnis: #C2410C; --t-ergebnis-bg: #FDE8DC;
+  --t-referat: #12306E; --t-referat-bg: #E3E8F4;
+  --t-linea: #6B6880; --t-linea-bg: #EDEBF3;
+  --shadow: 0 1px 2px rgba(26,26,42,.06), 0 4px 14px rgba(26,26,42,.06);
+  --f-body: "Carlito", "Calibri", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12111C; --col: #1B1A29; --card: #232234; --ink: #ECEAF5; --muted: #A6A2BE; --line: #34324A;
+    --accent: #B97CFF; --accent-ink: #12111C; --navy: #A9B8E8; --soft: #2A2142; --warn: #FF7D8A; --warn-soft: #3B1A22; --ok: #5BD49A; --ok-soft: #173326;
+    --t-analyse: #8DAEFF; --t-analyse-bg: #1D2747; --t-definition: #5FD3D0; --t-definition-bg: #15302F;
+    --t-planung: #C79BFF; --t-planung-bg: #2A2142; --t-ergebnis: #FFA170; --t-ergebnis-bg: #3A2114;
+    --t-referat: #A9B8E8; --t-referat-bg: #1F2640; --t-linea: #B6B3CC; --t-linea-bg: #2A2938;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12111C; --col: #1B1A29; --card: #232234; --ink: #ECEAF5; --muted: #A6A2BE; --line: #34324A;
+  --accent: #B97CFF; --accent-ink: #12111C; --navy: #A9B8E8; --soft: #2A2142; --warn: #FF7D8A; --warn-soft: #3B1A22; --ok: #5BD49A; --ok-soft: #173326;
+  --t-analyse: #8DAEFF; --t-analyse-bg: #1D2747; --t-definition: #5FD3D0; --t-definition-bg: #15302F;
+  --t-planung: #C79BFF; --t-planung-bg: #2A2142; --t-ergebnis: #FFA170; --t-ergebnis-bg: #3A2114;
+  --t-referat: #A9B8E8; --t-referat-bg: #1F2640; --t-linea: #B6B3CC; --t-linea-bg: #2A2938;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.4; }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 40px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+header.top { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: flex-end; justify-content: space-between; margin-bottom: 14px; }
+h1 { margin: 0; font-size: 26px; line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance; }
+h1 span { color: var(--accent); }
+.sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.status { display: inline-flex; align-items: center; gap: 6px; font: 600 12px var(--f-mono); padding: 5px 10px; border-radius: 999px; background: var(--col); color: var(--muted); }
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.status.saved { background: var(--ok-soft); color: var(--ok); }
+.status.saving { background: var(--soft); color: var(--accent); }
+.status.warn { background: var(--warn-soft); color: var(--warn); }
+.tbtn { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 5px 12px; font-size: 13px; }
+.tbtn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--soft); }
+.summary { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; }
+.prog { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 260px; }
+.bar { flex: 1; height: 8px; background: var(--col); border-radius: 99px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+.prog b, .kv b { font-variant-numeric: tabular-nums; }
+.kv { font-size: 13.5px; color: var(--muted); }
+.kv b { color: var(--ink); }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filters button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 3px 10px; font-size: 12.5px; color: var(--muted); }
+.filters button[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); font-weight: 700; }
+.board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; align-items: start; }
+@media (max-width: 980px) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .board { grid-template-columns: 1fr; } }
+.col { background: var(--col); border-radius: 14px; padding: 10px; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.col.over { outline: 2px dashed var(--accent); outline-offset: -2px; }
+.col-h { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 2px 4px 4px; }
+.col-h h2 { margin: 0; font-size: 15px; letter-spacing: .01em; }
+.col-h small { display: block; color: var(--muted); font-size: 12px; font-weight: 400; }
+.count { font: 700 12px var(--f-mono); padding: 2px 8px; border-radius: 99px; background: var(--card); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.count.limit { background: var(--warn-soft); color: var(--warn); }
+.list { display: flex; flex-direction: column; gap: 7px; min-height: 40px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; box-shadow: var(--shadow); display: grid; gap: 5px; }
+.card[draggable="true"] { cursor: grab; }
+.card.dragging { opacity: .45; }
+.card.done .c-title { color: var(--muted); }
+.c-top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.c-title { font-weight: 700; font-size: 14.5px; line-height: 1.25; overflow-wrap: anywhere; }
+.c-note { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.c-meta { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.tag { font: 700 10.5px var(--f-mono); letter-spacing: .03em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; white-space: nowrap; }
+.tag.analyse { color: var(--t-analyse); background: var(--t-analyse-bg); }
+.tag.definition { color: var(--t-definition); background: var(--t-definition-bg); }
+.tag.planung { color: var(--t-planung); background: var(--t-planung-bg); }
+.tag.ergebnis { color: var(--t-ergebnis); background: var(--t-ergebnis-bg); }
+.tag.start { color: var(--t-referat); background: var(--t-referat-bg); }
+.tag.linea { color: var(--t-linea); background: var(--t-linea-bg); }
+.who { font-size: 12px; padding: 1px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+.who.set { border-color: var(--navy); color: var(--navy); font-weight: 700; }
+.due { font: 600 11.5px var(--f-mono); color: var(--warn); }
+.sp { font: 700 11.5px var(--f-mono); color: var(--muted); }
+.c-act { display: flex; gap: 2px; flex: none; }
+.c-act button { border: 0; background: transparent; color: var(--muted); width: 26px; height: 26px; border-radius: 6px; display: grid; place-items: center; font-size: 14px; line-height: 1; }
+.c-act button:hover { background: var(--col); color: var(--ink); }
+.c-act button:disabled { opacity: .25; cursor: default; background: transparent; }
+.compact .c-note, .compact .c-meta .who:not(.set) { display: none; }
+.compact .card { padding: 6px 9px; gap: 3px; }
+.compact .c-title { font-size: 13.5px; }
+.confirm { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; color: var(--warn); }
+.confirm button { border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 2px 9px; font-size: 12.5px; }
+.confirm .yes { border-color: var(--warn); color: var(--warn); }
+.add { border: 1px dashed var(--line); background: transparent; color: var(--muted); border-radius: 10px; padding: 7px; font-size: 13.5px; text-align: left; }
+.add:hover { border-color: var(--accent); color: var(--accent); }
+form.edit { display: grid; gap: 6px; background: var(--card); border: 1px solid var(--accent); border-radius: 10px; padding: 9px; }
+form.edit label { display: grid; gap: 2px; font-size: 12px; color: var(--muted); font-weight: 700; }
+form.edit input, form.edit select, form.edit textarea { border: 1px solid var(--line); background: var(--bg); border-radius: 7px; padding: 6px 8px; font-size: 14px; width: 100%; min-width: 0; }
+form.edit textarea { min-height: 52px; resize: vertical; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.f-act { display: flex; gap: 6px; justify-content: flex-end; }
+.f-act button { border-radius: 8px; padding: 5px 12px; border: 1px solid var(--line); background: var(--card); font-size: 13px; }
+.f-act .primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.err { color: var(--warn); font-size: 12.5px; }
+.note { margin-top: 16px; font-size: 13px; color: var(--muted); max-width: 90ch; }
+.banner { border-radius: 10px; padding: 8px 12px; margin-bottom: 12px; font-size: 13.5px; background: var(--warn-soft); color: var(--ink); border: 1px solid var(--warn); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+<div id="app"></div>
+<script id="kb-state" type="application/json">{"updated": "20.11.2026", "cards": [{"id": "p1", "col": "done", "title": "Projektidee und Projekt-Canvas", "tag": "analyse", "owner": "", "note": "Problem, Lösung, Zielgruppen, KPIs (Folie 3, 6)", "due": "", "sp": ""}, {"id": "p2", "col": "done", "title": "Stakeholderanalyse", "tag": "analyse", "owner": "", "note": "Einfluss-Interesse-Matrix inkl. PVS-Anbieter (Folie 7)", "due": "", "sp": ""}, {"id": "p3", "col": "done", "title": "Risikoanalyse R1–R8", "tag": "analyse", "owner": "", "note": "Maßnahmen und Risikomatrix (Folie 8, Anlage B)", "due": "", "sp": ""}, {"id": "p4", "col": "done", "title": "Methodenwahl: hybrid", "tag": "definition", "owner": "", "note": "Cynefin/Stacey: komplex, feste Leitplanken (Folie 4)", "due": "", "sp": ""}, {"id": "p5", "col": "done", "title": "Ziele und KPIs mit SMART-Check", "tag": "definition", "owner": "", "note": "Qualität vor Zeit vor Kosten (Folie 9)", "due": "", "sp": ""}, {"id": "p6", "col": "done", "title": "Budgetplanung ca. 85.000 €", "tag": "planung", "owner": "", "note": "Entwicklung & Design, Infrastruktur, Testing & Compliance, Reserve (Folie 14)", "due": "", "sp": ""}, {"id": "p7", "col": "done", "title": "Projektstrukturplan mit 5 Teilprojekten", "tag": "planung", "owner": "", "note": "Folie 10, Baum in Anlage E", "due": "", "sp": ""}, {"id": "p8", "col": "done", "title": "Meilensteinplan M1–M6", "tag": "planung", "owner": "", "note": "Vier Gates MS1–MS4 (Folie 11)", "due": "", "sp": ""}, {"id": "p9", "col": "done", "title": "Product Backlog: 9 User Stories", "tag": "planung", "owner": "", "note": "32 Story Points für den MVP (Folie 12)", "due": "", "sp": ""}, {"id": "p10", "col": "done", "title": "Rollen, RACI-Matrix, Definition of Done", "tag": "planung", "owner": "", "note": "Vorschläge (Anlage C, D)", "due": "", "sp": ""}, {"id": "p11", "col": "done", "title": "Klickbarer Prototyp Lumyx", "tag": "ergebnis", "owner": "", "note": "Test-Telefon mit Praxis-Dashboard (Folie 15)", "due": "", "sp": ""}, {"id": "p12", "col": "doing", "title": "Akzeptanz-KPI messbar machen", "tag": "definition", "owner": "", "note": "Kurzbefragung und Abbruchquote als Messgröße", "due": "", "sp": ""}, {"id": "p13", "col": "doing", "title": "Notfall-KPI als prüfbaren Mindestwert formulieren", "tag": "definition", "owner": "", "note": "Testfallkatalog statt 100-%-Absolutwert", "due": "", "sp": ""}, {"id": "p14", "col": "todo", "title": "Rechtliche Einordnung prüfen", "tag": "start", "owner": "", "note": "Medizinprodukt? Hochrisiko-KI? Datenschutz-Folgenabschätzung?", "due": "", "sp": ""}, {"id": "p15", "col": "todo", "title": "Kick-off mit Test-Praxis, Datenschutz und PVS-Anbieter", "tag": "start", "owner": "", "note": "Rollen und Entscheidungswege klären (M1)", "due": "", "sp": ""}, {"id": "p16", "col": "todo", "title": "AP 1.1 Anforderungsanalyse mit Zielgruppen", "tag": "start", "owner": "", "note": "MFAs, Ärzt:innen, ältere Patient:innen (M1)", "due": "", "sp": ""}, {"id": "p17", "col": "todo", "title": "AP 1.2 Datenschutzkonzept (DSGVO)", "tag": "start", "owner": "", "note": "EU-Hosting, Auftragsverarbeitung (M1–M2)", "due": "", "sp": ""}, {"id": "p18", "col": "todo", "title": "AP 4.2 PVS-Schnittstelle klären", "tag": "start", "owner": "", "note": "Freigabe beim Softwareanbieter (M2)", "due": "", "sp": ""}, {"id": "p19", "col": "todo", "title": "Gate MS1: Go für Entwicklung", "tag": "start", "owner": "", "note": "Ende M2: Anforderungen und Datenschutz freigegeben", "due": "", "sp": ""}, {"id": "u1", "col": "backlog", "title": "US-01 Termin telefonisch absagen", "tag": "linea", "owner": "", "note": "Epic E1 Sprachdialog · Sprints M3–M4", "due": "", "sp": "3"}, {"id": "u2", "col": "backlog", "title": "US-02 Folgerezept anfragen", "tag": "linea", "owner": "", "note": "Epic E1 Sprachdialog · Sprints M3–M4", "due": "", "sp": "3"}, {"id": "u3", "col": "backlog", "title": "US-03 Jederzeit zu einer Person wechseln", "tag": "linea", "owner": "", "note": "Epic E1 Sprachdialog · Sprints M3–M4", "due": "", "sp": "2"}, {"id": "u4", "col": "backlog", "title": "US-04 Ruhige Ansprache für Ältere", "tag": "linea", "owner": "", "note": "Epic E1 Sprachdialog · Sprints M3–M4", "due": "", "sp": "3"}, {"id": "u5", "col": "backlog", "title": "US-05 Notfälle sofort durchstellen", "tag": "linea", "owner": "", "note": "Epic E2 Triage & Notfall · Sprints M3–M4", "due": "", "sp": "5"}, {"id": "u6", "col": "backlog", "title": "US-06 Rückrufliste für MFAs", "tag": "linea", "owner": "", "note": "Epic E3 Dashboard · Sprints M3–M4", "due": "", "sp": "3"}, {"id": "u7", "col": "backlog", "title": "US-07 Notiz in unter 30 s in die Akte", "tag": "linea", "owner": "", "note": "Epic E3 Dashboard · Sprints M3–M4", "due": "", "sp": "5"}, {"id": "u8", "col": "backlog", "title": "US-08 Transkriptionsgenauigkeit auswerten", "tag": "linea", "owner": "", "note": "Epic E3 Dashboard · Sprints M3–M4", "due": "", "sp": "3"}, {"id": "u9", "col": "backlog", "title": "US-09 EU-only-Verarbeitung nachweisen", "tag": "linea", "owner": "", "note": "Epic E4 Datenschutz & Betrieb · Sprints M3–M4", "due": "", "sp": "5"}]}</script>
+<script id="kb-code">
+(() => {
+  const SKEL = '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}<\/style><\/head><body>';
+  const CSS = document.getElementById("kb-style").textContent;
+  const CODE = document.getElementById("kb-code").textContent;
+  const TITLE = document.title || "Lumyx Projekt-Kanban";
+  let S;
+  try { S = JSON.parse(document.getElementById("kb-state").textContent); } catch (e) { S = { updated: "", cards: [] }; }
+  if (!Array.isArray(S.cards)) S.cards = [];
+
+  const COLS = [
+    { id: "backlog", name: "Backlog", hint: "User Stories für Sprints M3–M4" },
+    { id: "todo", name: "To Do", hint: "Projektstart M1–M2" },
+    { id: "doing", name: "In Arbeit", hint: "WIP-Limit 3", limit: 3 },
+    { id: "done", name: "Erledigt", hint: "Abgeschlossen" }
+  ];
+  const TAGS = { analyse: "Analyse", definition: "Definition", planung: "Planung", ergebnis: "Ergebnis", start: "Projektstart", linea: "Lumyx-Story" };
+  const OWNERS = ["", "Mika", "Tim", "Beide"];
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const app = document.getElementById("app");
+
+  let filter = "all", compact = false, editing = null, adding = null, confirmDel = null, status = "local", saveTimer = null, readOnly = false;
+  try { compact = localStorage.getItem("kb-compact") === "1"; } catch (e) {}
+
+  /* ---------- Speichern über die Artifact-Fähigkeit ---------- */
+  let art = null;
+  if (window.claude && typeof window.claude.use === "function") {
+    status = "connecting";
+    window.claude.use("artifact").then(a => { art = a; status = a ? "ready" : "local"; render(); }).catch(() => { status = "local"; render(); });
+  } else { readOnly = true; status = "snapshot"; }
+  function buildDoc() {
+    const json = JSON.stringify(S).replace(/</g, "\\u003c");
+    return SKEL + "\n<title>" + esc(TITLE) + "<\/title>\n<meta name=\"claude:viewport-fit-sides\" content=\"cover\">\n<style id=\"kb-style\">" + CSS + "<\/style>\n<div id=\"app\"><\/div>\n<script id=\"kb-state\" type=\"application/json\">" + json + "<\/script>\n<script id=\"kb-code\">" + CODE + "<\/script>\n<\/body><\/html>";
+  }
+  function stamp() { S.updated = new Date().toLocaleString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
+  function commit() {
+    stamp(); render();
+    if (readOnly) return;
+    if (!art) { status = "local"; render(); return; }
+    status = "pending"; render();
+    clearTimeout(saveTimer); saveTimer = setTimeout(save, 900);
+  }
+  async function save() {
+    if (!art) return;
+    status = "saving"; render();
+    try { await art.publish(buildDoc()); status = "saved"; }
+    catch (e) {
+      const code = e && e.code;
+      if (code === "not_granted" || code === "not_writer") { readOnly = true; status = "readonly"; }
+      else if (code === "conflict") { status = "conflict"; }
+      else { status = "error"; }
+    }
+    render();
+  }
+  const STATUS = {
+    local: ["warn", "Nicht gespeichert (Vorschau)"], connecting: ["", "Verbinde …"], ready: ["saved", "Gespeichert"], pending: ["saving", "Änderung …"],
+    saving: ["saving", "Speichert …"], snapshot: ["", "Nur Ansicht"], saved: ["saved", "Gespeichert"], readonly: ["warn", "Nur Ansicht"], conflict: ["warn", "Neuere Version geladen"], error: ["warn", "Speichern fehlgeschlagen"]
+  };
+
+  /* ---------- Aktionen ---------- */
+  const byId = (id) => S.cards.find(c => c.id === id);
+  function move(id, dir) {
+    const c = byId(id); if (!c) return;
+    const i = COLS.findIndex(x => x.id === c.col), j = i + dir;
+    if (j < 0 || j >= COLS.length) return;
+    c.col = COLS[j].id;
+    S.cards = S.cards.filter(x => x !== c); S.cards.push(c);
+    commit();
+  }
+  function dropTo(id, col, beforeId) {
+    const c = byId(id); if (!c) return;
+    c.col = col;
+    S.cards = S.cards.filter(x => x !== c);
+    const idx = beforeId ? S.cards.findIndex(x => x.id === beforeId) : -1;
+    if (idx >= 0) S.cards.splice(idx, 0, c); else S.cards.push(c);
+    commit();
+  }
+  function newId() { return "k" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+
+  /* ---------- Darstellung ---------- */
+  function cardHtml(c) {
+    const ci = COLS.findIndex(x => x.id === c.col);
+    if (editing === c.id) return formHtml(c, c.col);
+    const due = c.due ? new Date(c.due + "T12:00:00").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }) : "";
+    const del = confirmDel === c.id
+      ? `<div class="confirm">Karte löschen? <button type="button" class="yes" data-a="del-yes" data-id="${c.id}">Löschen</button><button type="button" data-a="del-no">Abbrechen</button></div>` : "";
+    return `<article class="card${c.col === "done" ? " done" : ""}" draggable="${readOnly ? "false" : "true"}" data-id="${c.id}">
+      <div class="c-top"><div class="c-title">${esc(c.title)}</div>
+        <div class="c-act">
+          <button type="button" data-a="left" data-id="${c.id}" aria-label="Nach links verschieben" title="Nach links" ${ci === 0 || readOnly ? "disabled" : ""}>&#8592;</button>
+          <button type="button" data-a="right" data-id="${c.id}" aria-label="Nach rechts verschieben" title="Nach rechts" ${ci === COLS.length - 1 || readOnly ? "disabled" : ""}>&#8594;</button>
+          <button type="button" data-a="edit" data-id="${c.id}" aria-label="Bearbeiten" title="Bearbeiten" ${readOnly ? "disabled" : ""}>&#9998;</button>
+          <button type="button" data-a="del" data-id="${c.id}" aria-label="Löschen" title="Löschen" ${readOnly ? "disabled" : ""}>&#215;</button>
+        </div></div>
+      ${c.note ? `<div class="c-note">${esc(c.note)}</div>` : ""}
+      <div class="c-meta"><span class="tag ${esc(c.tag)}">${esc(TAGS[c.tag] || c.tag)}</span>${c.sp ? `<span class="sp">${esc(c.sp)} SP</span>` : ""}<span class="who${c.owner ? " set" : ""}">${c.owner ? esc(c.owner) : "offen"}</span>${due ? `<span class="due">fällig ${due}</span>` : ""}</div>
+      ${del}
+    </article>`;
+  }
+  function formHtml(c, col) {
+    const isNew = !c;
+    c = c || { id: "", title: "", tag: col === "backlog" ? "linea" : "start", owner: "", note: "", due: "", sp: "" };
+    const opt = (o, v, label) => `<option value="${esc(o)}"${o === v ? " selected" : ""}>${esc(label || o || "offen")}</option>`;
+    const pre = isNew ? "new-" + col : "e-" + c.id;
+    return `<form class="edit" data-form="${isNew ? "new" : "edit"}" data-id="${esc(c.id)}" data-col="${esc(col)}">
+      <label for="${pre}-title">Aufgabe<input id="${pre}-title" name="title" value="${esc(c.title)}" maxlength="120" placeholder="z. B. Folien gegenlesen"></label>
+      <div class="row2">
+        <label for="${pre}-tag">Bereich<select id="${pre}-tag" name="tag">${Object.keys(TAGS).map(k => opt(k, c.tag, TAGS[k])).join("")}</select></label>
+        <label for="${pre}-owner">Zuständig<select id="${pre}-owner" name="owner">${OWNERS.map(o => opt(o, c.owner)).join("")}</select></label>
+      </div>
+      <div class="row2">
+        <label for="${pre}-due">Fällig am<input id="${pre}-due" name="due" type="date" value="${esc(c.due)}"></label>
+        <label for="${pre}-sp">Story Points<input id="${pre}-sp" name="sp" inputmode="numeric" value="${esc(c.sp)}" maxlength="3" placeholder="–"></label>
+      </div>
+      <label for="${pre}-note">Notiz<textarea id="${pre}-note" name="note" maxlength="300">${esc(c.note)}</textarea></label>
+      <p class="err" hidden>Bitte eine Aufgabe eintragen.</p>
+      <div class="f-act"><button type="button" data-a="cancel">Abbrechen</button><button type="submit" class="primary">${isNew ? "Hinzufügen" : "Speichern"}</button></div>
+    </form>`;
+  }
+  function render() {
+    const shown = (c) => filter === "all" || c.tag === filter;
+    const work = S.cards.filter(c => c.col !== "backlog");
+    const done = work.filter(c => c.col === "done").length;
+    const pct = work.length ? Math.round(done / work.length * 100) : 0;
+    const doing = S.cards.filter(c => c.col === "doing").length;
+    const sp = S.cards.filter(c => c.col === "backlog").reduce((a, c) => a + (parseInt(c.sp, 10) || 0), 0);
+    const [scls, stxt] = STATUS[status] || STATUS.local;
+    const focusId = document.activeElement && document.activeElement.id;
+    app.innerHTML = `<div class="wrap${compact ? " compact" : ""}">
+      <header class="top">
+        <div><h1>Lumyx <span>Projekt-Kanban</span></h1>
+        <div class="sub">Projekt Lumyx · KI-Telefonassistent für Arztpraxen · Team Mika &amp; Tim · Stand ${esc(S.updated || "–")}</div></div>
+        <div class="tools"><span class="status ${scls}" role="status">${stxt}</span>
+${status === "snapshot" ? `<div class="banner" style="background:var(--soft);border-color:var(--accent)">Öffentliche Ansicht unseres Projekt-Boards Lumyx (Stand ${esc(S.updated || "–")}). Bearbeitet wird es von Mika und Tim.</div>` : ""}
+          <button type="button" class="tbtn" id="kb-compact" aria-pressed="${compact}">Kompakt</button></div>
+      </header>
+      ${status === "readonly" ? `<div class="banner">Du kannst das Board ansehen, aber nicht speichern. Bitte den Besitzer, dir im Teilen-Menü Bearbeitungsrechte zu geben.</div>` : ""}
+      ${status === "error" ? `<div class="banner">Die letzte Änderung wurde nicht gespeichert. Prüfe die Verbindung und verschiebe die Karte noch einmal.</div>` : ""}
+      <div class="summary">
+        <div class="prog"><span class="kv">Fortschritt <b>${done}/${work.length}</b> Aufgaben</span><div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div><b>${pct} %</b></div>
+        <span class="kv">In Arbeit <b>${doing}/3</b></span>
+        <span class="kv">Backlog <b>${sp} SP</b></span>
+        <div class="filters" role="group" aria-label="Nach Bereich filtern">
+          <button type="button" data-f="all" aria-pressed="${filter === "all"}">Alle</button>
+          ${Object.keys(TAGS).map(k => `<button type="button" data-f="${k}" aria-pressed="${filter === k}">${TAGS[k]}</button>`).join("")}
+        </div>
+      </div>
+      <div class="board">
+        ${COLS.map(col => {
+          const cards = S.cards.filter(c => c.col === col.id);
+          const vis = cards.filter(shown);
+          const over = col.limit && cards.length > col.limit;
+          return `<section class="col" data-col="${col.id}" aria-label="${col.name}">
+            <div class="col-h"><h2>${col.name}<small>${col.hint}</small></h2><span class="count${col.limit && cards.length >= col.limit ? " limit" : ""}">${col.limit ? cards.length + "/" + col.limit : cards.length}</span></div>
+            ${over ? `<div class="err">WIP-Limit überschritten: erst etwas abschließen.</div>` : ""}
+            <div class="list" data-col="${col.id}">${vis.map(cardHtml).join("")}</div>
+            ${readOnly ? "" : adding === col.id ? formHtml(null, col.id) : `<button type="button" class="add" data-a="add" data-col="${col.id}">+ Karte hinzufügen</button>`}
+          </section>`;
+        }).join("")}
+      </div>
+      <p class="note">Karten mit der Maus ziehen oder mit den Pfeilen verschieben. Jede Änderung wird für alle gespeichert, die das Board öffnen. „Erledigt“ zeigt die abgeschlossene Analyse-, Definitions- und Planungsphase, „To Do“ die nächsten Schritte laut Meilensteinplan (M1–M2), „Backlog“ die 9 User Stories für die Sprints in M3–M4.</p>
+    </div>`;
+    if (focusId) { const el = document.getElementById(focusId); if (el) el.focus(); }
+    const firstInput = app.querySelector("form.edit input[name=title]");
+    if (firstInput && !focusId) firstInput.focus();
+  }
+
+  /* ---------- Ereignisse ---------- */
+  app.addEventListener("click", (e) => {
+    const f = e.target.closest("[data-f]");
+    if (f) { filter = f.dataset.f; render(); return; }
+    if (e.target.closest("#kb-compact")) { compact = !compact; try { localStorage.setItem("kb-compact", compact ? "1" : "0"); } catch (err) {} render(); return; }
+    const b = e.target.closest("[data-a]"); if (!b) return;
+    const a = b.dataset.a, id = b.dataset.id;
+    if (a === "left") move(id, -1);
+    else if (a === "right") move(id, 1);
+    else if (a === "edit") { editing = id; adding = null; confirmDel = null; render(); }
+    else if (a === "del") { confirmDel = id; render(); }
+    else if (a === "del-no") { confirmDel = null; render(); }
+    else if (a === "del-yes") { S.cards = S.cards.filter(c => c.id !== id); confirmDel = null; commit(); }
+    else if (a === "add") { adding = b.dataset.col; editing = null; render(); }
+    else if (a === "cancel") { adding = null; editing = null; render(); }
+  });
+  app.addEventListener("submit", (e) => {
+    const form = e.target.closest("form.edit"); if (!form) return;
+    e.preventDefault();
+    const fd = new FormData(form);
+    const title = String(fd.get("title") || "").trim();
+    if (!title) { form.querySelector(".err").hidden = false; return; }
+    const data = { title, tag: String(fd.get("tag") || "referat"), owner: String(fd.get("owner") || ""), due: String(fd.get("due") || ""), note: String(fd.get("note") || "").trim(), sp: String(fd.get("sp") || "").replace(/[^0-9]/g, "") };
+    if (form.dataset.form === "new") { S.cards.push(Object.assign({ id: newId(), col: form.dataset.col }, data)); adding = null; }
+    else { const c = byId(form.dataset.id); if (c) Object.assign(c, data); editing = null; }
+    commit();
+  });
+  app.addEventListener("keydown", (e) => { if (e.key === "Escape" && (editing || adding || confirmDel)) { editing = adding = confirmDel = null; render(); } });
+
+  let dragId = null;
+  app.addEventListener("dragstart", (e) => {
+    const card = e.target.closest(".card"); if (!card || readOnly) return;
+    dragId = card.dataset.id; card.classList.add("dragging");
+    try { e.dataTransfer.setData("text/plain", dragId); e.dataTransfer.effectAllowed = "move"; } catch (err) {}
+  });
+  app.addEventListener("dragend", () => { dragId = null; app.querySelectorAll(".dragging, .over").forEach(el => el.classList.remove("dragging", "over")); });
+  app.addEventListener("dragover", (e) => {
+    const col = e.target.closest(".col"); if (!col || !dragId) return;
+    e.preventDefault();
+    app.querySelectorAll(".col.over").forEach(el => { if (el !== col) el.classList.remove("over"); });
+    col.classList.add("over");
+  });
+  app.addEventListener("drop", (e) => {
+    const col = e.target.closest(".col"); if (!col || !dragId) return;
+    e.preventDefault();
+    const cards = Array.from(col.querySelectorAll(".card")).filter(el => el.dataset.id !== dragId);
+    const before = cards.find(el => { const r = el.getBoundingClientRect(); return e.clientY < r.top + r.height / 2; });
+    const id = dragId; dragId = null;
+    dropTo(id, col.dataset.col, before ? before.dataset.id : null);
+  });
+
+  render();
+})();
+</script>
+
+</body></html>
